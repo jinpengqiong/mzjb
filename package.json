@@ -1,0 +1,37 @@
+{
+  "name": "create-next-example-app",
+  "scripts": {
+    "dev": "next",
+    "build": "next build && next export",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@zeit/next-less": "^0.1.2",
+    "all": "^0.0.0",
+    "antd": "^3.4.1",
+    "babel-plugin-import": "^1.6.7",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "create-react-class": "^15.6.3",
+    "express": "^4.16.3",
+    "graphql-request": "^1.5.1",
+    "isomorphic-unfetch": "^2.0.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.1.0",
+    "mobx": "^4.1.1",
+    "mobx-react": "^5.0.0",
+    "moment": "^2.22.0",
+    "next": "^4.2.1",
+    "postcss-loader": "^2.1.3",
+    "prop-types": "^15.6.1",
+    "raw-loader": "^0.5.1",
+    "react": "^16.2.0",
+    "react-color": "^2.14.1",
+    "react-dom": "^16.2.0",
+    "styled-jsx": "^2.2.4",
+    "superagent": "^3.8.2"
+  }
+}
