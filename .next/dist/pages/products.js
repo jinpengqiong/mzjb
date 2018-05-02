@@ -25,6 +25,8 @@ var _inherits2 = require('_babel-runtime@6.26.0@babel-runtime/helpers/inherits')
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _jsxFileName = '/Users/mac/Desktop/mzjb/muzhijubao_web/pages/products.js?entry';
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -41,7 +43,7 @@ var _mobxReact = require('mobx-react');
 
 var _store = require('../store');
 
-var _index = require('_next@4.2.3@next\\dist\\lib\\router\\index.js');
+var _index = require('_next@4.2.3@next/dist/lib/router/index.js');
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -86,10 +88,24 @@ var Products = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_mobxReact.Provider, { store: this.store }, _react2.default.createElement(_MyLayout2.default, null, _react2.default.createElement(_tableComponent2.default, { shopID: this.props.shopID })));
+      return _react2.default.createElement(_mobxReact.Provider, { store: this.store, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 32
+        }
+      }, _react2.default.createElement(_MyLayout2.default, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
+        }
+      }, _react2.default.createElement(_tableComponent2.default, { shopID: this.props.shopID, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        }
+      })));
     }
   }]);
   return Products;
 }(_react2.default.Component);
 
 exports.default = Products;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL3Byb2R1Y3RzLmpzIl0sIm5hbWVzIjpbIlByb2R1Y3RzIiwiaWQiLCJxdWVyeSIsInJlcSIsImlzU2VydmVyIiwic3RvcmUiLCJzaG9wSUQiLCJwcm9wcyIsImxvY2FsU3RvcmFnZSIsImdldEl0ZW0iLCJSb3V0ZXIiLCJwdXNoIiwiZ2V0U2hvcElEIiwicGFyc2VJbnQiLCJSZWFjdCIsIkNvbXBvbmVudCJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFDQTs7QUFDQTs7QUFDQTs7Ozs7Ozs7SUFHcUIsQTs7OzswQ0FDNkI7VUFBYixBQUFhLFVBQXRCLEFBQXNCLE1BQWIsQUFBYTtVQUFQLEFBQU8sV0FBUCxBQUFPLEFBQzlDOztVQUFNLFdBQVcsQ0FBQyxDQUFsQixBQUFtQixBQUNuQjtVQUFNLFFBQVEsc0JBQWQsQUFBYyxBQUFVLEFBQ3hCO2FBQU8sRUFBRSxRQUFGLEFBQVcsSUFBSSxVQUF0QixBQUFPLEFBQ1I7QUFDRDs7O29CQUFBLEFBQWEsT0FBTzt3Q0FBQTs7MElBQUEsQUFDWixBQUNOOztVQUFBLEFBQUssUUFBUSxzQkFBVSxNQUZMLEFBRWxCLEFBQWEsQUFBZ0I7V0FDOUI7Ozs7O3dDQUdrQixBQUNqQjtVQUFHLENBQUMsYUFBQSxBQUFhLFFBQWQsQUFBQyxBQUFxQixrQkFBa0IsYUFBQSxBQUFhLFFBQWIsQUFBcUIsbUJBQWhFLEFBQW1GLE1BQU0sQUFDdkY7d0JBQUEsQUFBTyxLQUFQLEFBQVksQUFDYjtBQUZELGlCQUVTLEtBQUEsQUFBSyxNQUFMLEFBQVcsV0FBZCxBQUF5QixNQUFLLEFBQ2xDO3dCQUFBLEFBQU8sS0FBUCxBQUFZLEFBQ2I7QUFGSyxPQUFBLE1BRUQsQUFDSDthQUFBLEFBQUssTUFBTCxBQUFXLFVBQVUsU0FBUyxLQUFBLEFBQUssTUFBbkMsQUFBcUIsQUFBb0IsQUFDMUM7QUFDRjs7Ozs2QkFDUyxBQUNSOzZCQUNDLHlCQUFELFlBQVUsT0FBTyxLQUFqQixBQUFzQjtvQkFBdEI7c0JBQUEsQUFDRTtBQURGO09BQUEsa0JBQ0cseUJBQUQ7O29CQUFBO3NCQUFBLEFBQ0U7QUFERjtBQUFBLHVDQUNHLGlCQUFELFdBQVcsUUFBUSxLQUFBLEFBQUssTUFBeEIsQUFBOEI7b0JBQTlCO3NCQUhKLEFBQ0EsQUFDRSxBQUNFLEFBSUw7QUFKSzs7Ozs7RUF6QjhCLGdCQUFNLEE7O2tCQUF2QixBIiwiZmlsZSI6InByb2R1Y3RzLmpzP2VudHJ5Iiwic291cmNlUm9vdCI6Ii9Vc2Vycy9tYWMvRGVza3RvcC9tempiL211emhpanViYW9fd2ViIn0=

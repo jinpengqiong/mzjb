@@ -34,7 +34,9 @@ var _inherits2 = require('_babel-runtime@6.26.0@babel-runtime/helpers/inherits')
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _dec, _class;
+var _dec,
+    _class,
+    _jsxFileName = '/Users/mac/Desktop/mzjb/muzhijubao_web/components/DBTable/youzanProdForm.js';
 
 var _antd = require('antd');
 
@@ -73,37 +75,78 @@ var RegistrationForm = (_dec = (0, _mobxReact.inject)('store'), _dec(_class = (0
         }
       };
 
-      return _react2.default.createElement(_antd.Form, null, _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
-        label: '\u5546\u54C1\u540D\u79F0'
+      return _react2.default.createElement(_antd.Form, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 28
+        }
+      }, _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
+        label: '\u5546\u54C1\u540D\u79F0',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 29
+        }
       }), getFieldDecorator('title', {
         rules: [{
           type: 'string', message: '请输入商品名称!'
         }, {
           required: true, message: '请输入商品名称!'
         }]
-      })(_react2.default.createElement(_antd.Input, null))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
-        label: '\u5546\u54C1\u56FE'
+      })(_react2.default.createElement(_antd.Input, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        }
+      }))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
+        label: '\u5546\u54C1\u56FE',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        }
       }), getFieldDecorator('mainImage', {
         rules: [{
           type: 'string', message: '请输入商家名称!'
         }]
-      })(_react2.default.createElement(_youzanUpload2.default, null))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
-        label: '\u4EF7\u683C'
+      })(_react2.default.createElement(_youzanUpload2.default, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 54
+        }
+      }))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
+        label: '\u4EF7\u683C',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 57
+        }
       }), getFieldDecorator('price', {
         rules: [{
           type: 'string', message: '请输入价格!'
         }, {
           required: true, message: '请输入价格!'
         }]
-      })(_react2.default.createElement(_antd.Input, null))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
-        label: '\u7B80\u8981\u63CF\u8FF0'
+      })(_react2.default.createElement(_antd.Input, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 68
+        }
+      }))), _react2.default.createElement(FormItem, (0, _extends3.default)({}, formItemLayout, {
+        label: '\u7B80\u8981\u63CF\u8FF0',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 71
+        }
       }), getFieldDecorator('desc', {
         rules: [{
           type: 'string', message: '请输入简要描述!'
         }, {
           required: true, message: '请输入简要描述!'
         }]
-      })(_react2.default.createElement(_antd.Input, null))));
+      })(_react2.default.createElement(_antd.Input, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 82
+        }
+      }))));
     }
   }]);
   return RegistrationForm;
@@ -111,3 +154,4 @@ var RegistrationForm = (_dec = (0, _mobxReact.inject)('store'), _dec(_class = (0
 
 var YouzanProdForm = _antd.Form.create()(RegistrationForm);
 exports.default = YouzanProdForm;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvREJUYWJsZS95b3V6YW5Qcm9kRm9ybS5qcyJdLCJuYW1lcyI6WyJGb3JtSXRlbSIsIkZvcm0iLCJJdGVtIiwiUmVnaXN0cmF0aW9uRm9ybSIsIm9ic2VydmVyIiwicHJvcHMiLCJnZXRGaWVsZERlY29yYXRvciIsImZvcm0iLCJmb3JtSXRlbUxheW91dCIsImxhYmVsQ29sIiwieHMiLCJzcGFuIiwibWQiLCJ3cmFwcGVyQ29sIiwicnVsZXMiLCJ0eXBlIiwibWVzc2FnZSIsInJlcXVpcmVkIiwiUmVhY3QiLCJDb21wb25lbnQiLCJZb3V6YW5Qcm9kRm9ybSIsImNyZWF0ZSJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBOztBQUVBOztBQUNBOzs7Ozs7OztBQUZBLElBQU0sV0FBVyxXQUFqQixBQUFzQjtJQUtoQixBLDJCQURMLHVCQUFBLEEsQUFBTyw0QkFBVSxXOzRDQUVkOzs0QkFBQSxBQUFZLE9BQU87d0NBQUE7cUpBQUEsQUFDVCxBQUNQOzs7Ozs2QkFFSTtVQUFBLEFBQ0Msb0JBQXNCLEtBQUEsQUFBSyxNQUQ1QixBQUNrQyxLQURsQyxBQUNDLEFBRVI7O1VBQU07O2NBRUUsRUFBRSxNQURFLEFBQ0osQUFBUSxBQUNaO2NBQUksRUFBRSxNQUhhLEFBQ1gsQUFFSixBQUFRLEFBRWQ7QUFKVSxBQUNSOztjQUlJLEVBQUUsTUFESSxBQUNOLEFBQVEsQUFDWjtjQUFJLEVBQUUsTUFQVixBQUF1QixBQUtULEFBRU4sQUFBUSxBQUtoQjtBQVBjLEFBQ1Y7QUFObUIsQUFDckI7OzZCQVlDLG9CQUFEOztvQkFBQTtzQkFBQSxBQUNFO0FBREY7QUFBQSxPQUFBLGtCQUNHLGNBQUQscUNBQUEsQUFDTTtlQUROLEFBRVE7O29CQUZSO3NCQUFBLEFBSUc7QUFKSDtBQUVFLDRCQUVDLEFBQWtCOztnQkFDVCxBQUNBLFVBQVUsU0FEWCxBQUFDLEFBQ21CO0FBRG5CLEFBQ04sU0FESztvQkFFSixBQUNTLE1BQU0sU0FKbkIsQUFBMkIsQUFDbkIsQUFFSixBQUN3QjtBQUR4QixBQUNEO0FBSndCLEFBQzFCLHVDQU9DLE1BQUQ7O29CQUFBO3NCQWJOLEFBQ0UsQUFJRyxBQVFDLEFBR0o7QUFISTtBQUFBLE9BQUEscUJBR0gsY0FBRCxxQ0FBQSxBQUNNO2VBRE4sQUFFUTs7b0JBRlI7c0JBQUEsQUFJRztBQUpIO0FBRUUsNEJBRUMsQUFBa0I7O2dCQUNULEFBQ0EsVUFBVSxTQUZuQixBQUErQixBQUN2QixBQUFDLEFBQ21CO0FBRG5CLEFBQ04sU0FESztBQUR1QixBQUM5Qix1Q0FLQyxlQUFEOztvQkFBQTtzQkExQk4sQUFnQkUsQUFJRyxBQU1DLEFBR0o7QUFISTtBQUFBLE9BQUEscUJBR0gsY0FBRCxxQ0FBQSxBQUNNO2VBRE4sQUFFUTs7b0JBRlI7c0JBQUEsQUFJRztBQUpIO0FBRUUsNEJBRUMsQUFBa0I7O2dCQUNULEFBQ0EsVUFBVSxTQURYLEFBQUMsQUFDbUI7QUFEbkIsQUFDTixTQURLO29CQUVKLEFBQ1MsTUFBTSxTQUpuQixBQUEyQixBQUNuQixBQUVKLEFBQ3dCO0FBRHhCLEFBQ0Q7QUFKd0IsQUFDMUIsdUNBTUMsTUFBRDs7b0JBQUE7c0JBeENOLEFBNkJFLEFBSUcsQUFPQyxBQUdKO0FBSEk7QUFBQSxPQUFBLHFCQUdILGNBQUQscUNBQUEsQUFDTTtlQUROLEFBRVE7O29CQUZSO3NCQUFBLEFBSUc7QUFKSDtBQUVFLDRCQUVDLEFBQWtCOztnQkFDVCxBQUNBLFVBQVUsU0FEWCxBQUFDLEFBQ21CO0FBRG5CLEFBQ04sU0FESztvQkFFSixBQUNTLE1BQU0sU0FKbkIsQUFBMEIsQUFDbEIsQUFFSixBQUN3QjtBQUR4QixBQUNEO0FBSnVCLEFBQ3pCLHVDQU1DLE1BQUQ7O29CQUFBO3NCQXZEUixBQUNFLEFBMkNFLEFBSUcsQUFPQyxBQUtUO0FBTFM7QUFBQSxPQUFBOzs7O0VBM0VtQixnQkFBTSxBOztBQW1GckMsSUFBTSxpQkFBaUIsV0FBQSxBQUFLLFNBQTVCLEFBQXVCLEFBQWM7a0JBQ3JCLEEiLCJmaWxlIjoieW91emFuUHJvZEZvcm0uanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL21hYy9EZXNrdG9wL216amIvbXV6aGlqdWJhb193ZWIifQ==

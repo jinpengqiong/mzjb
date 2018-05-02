@@ -31,6 +31,9 @@ var _inherits2 = require('_babel-runtime@6.26.0@babel-runtime/helpers/inherits')
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _jsxFileName = '/Users/mac/Desktop/mzjb/muzhijubao_web/components/Footer/Footer.js';
+
+
 var _antd = require('antd');
 
 function _interopRequireDefault(obj) {
@@ -50,10 +53,15 @@ var MyFooter = function (_React$Component) {
   (0, _createClass3.default)(MyFooter, [{
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(Footer, { style: { textAlign: 'center' } }, 'Copyright \xA9 2018 \u82F1\u592B\u7F8E\u8FEA\u79D1\u6280\u80A1\u4EFD\u6709\u9650\u516C\u53F8 All rights reserved.');
+      return _react2.default.createElement(Footer, { style: { textAlign: 'center' }, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 7
+        }
+      }, 'Copyright \xA9 2018 \u82F1\u592B\u7F8E\u8FEA\u79D1\u6280\u80A1\u4EFD\u6709\u9650\u516C\u53F8 All rights reserved.');
     }
   }]);
   return MyFooter;
 }(_react2.default.Component);
 
 exports.default = MyFooter;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvRm9vdGVyL0Zvb3Rlci5qcyJdLCJuYW1lcyI6WyJGb290ZXIiLCJMYXlvdXQiLCJNeUZvb3RlciIsInRleHRBbGlnbiIsIlJlYWN0IiwiQ29tcG9uZW50Il0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTs7Ozs7O0ksQUFDUSxTQUFXLE0sT0FBWCxBOztJQUVhLEE7Ozs7Ozs7Ozs7NkJBQ1YsQUFDUDs2QkFDSyxjQUFELFVBQVEsT0FBTyxFQUFFLFdBQWpCLEFBQWUsQUFBYTtvQkFBNUI7c0JBQUE7QUFBQTtPQUFBLEVBREosQUFDSSxBQUlMOzs7O0VBUG1DLGdCQUFNLEE7O2tCQUF2QixBIiwiZmlsZSI6IkZvb3Rlci5qcyIsInNvdXJjZVJvb3QiOiIvVXNlcnMvbWFjL0Rlc2t0b3AvbXpqYi9tdXpoaWp1YmFvX3dlYiJ9

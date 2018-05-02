@@ -31,7 +31,10 @@ var _inherits2 = require('_babel-runtime@6.26.0@babel-runtime/helpers/inherits')
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _link = require('_next@4.2.3@next\\dist\\lib\\link.js');
+var _jsxFileName = '/Users/mac/Desktop/mzjb/muzhijubao_web/pages/shops.js?entry';
+
+
+var _link = require('_next@4.2.3@next/dist/lib/link.js');
 
 var _link2 = _interopRequireDefault(_link);
 
@@ -47,7 +50,7 @@ var _mobxReact = require('mobx-react');
 
 var _store = require('../store');
 
-var _index3 = require('_next@4.2.3@next\\dist\\lib\\router\\index.js');
+var _index3 = require('_next@4.2.3@next/dist/lib/router/index.js');
 
 var _index4 = _interopRequireDefault(_index3);
 
@@ -87,10 +90,25 @@ var MainPage = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_mobxReact.Provider, { store: this.store }, _react2.default.createElement(_MyLayout2.default, null, _react2.default.createElement(_index2.default, null)));
+      return _react2.default.createElement(_mobxReact.Provider, { store: this.store, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 26
+        }
+      }, _react2.default.createElement(_MyLayout2.default, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 27
+        }
+      }, _react2.default.createElement(_index2.default, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 28
+        }
+      })));
     }
   }]);
   return MainPage;
 }(_react2.default.Component);
 
 exports.default = MainPage;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL3Nob3BzLmpzIl0sIm5hbWVzIjpbIk1haW5QYWdlIiwicmVxIiwiaXNTZXJ2ZXIiLCJzdG9yZSIsInByb3BzIiwibG9jYWxTdG9yYWdlIiwiZ2V0SXRlbSIsIlJvdXRlciIsInB1c2giLCJSZWFjdCIsIkNvbXBvbmVudCJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7O0FBQ0E7O0FBQ0E7Ozs7Ozs7O0ksQUFDcUI7Ozs7MENBQ2M7VUFBUCxBQUFPLFdBQVAsQUFBTyxBQUMvQjs7VUFBTSxXQUFXLENBQUMsQ0FBbEIsQUFBbUIsQUFDbkI7VUFBTSxRQUFRLHNCQUFkLEFBQWMsQUFBVSxBQUN4QjthQUFPLEVBQUUsVUFBVCxBQUFPLEFBQ1I7QUFDRDs7O29CQUFBLEFBQWEsT0FBTzt3Q0FBQTs7MElBQUEsQUFDWixBQUNOOztVQUFBLEFBQUssUUFBUSxzQkFBVSxNQUZMLEFBRWxCLEFBQWEsQUFBZ0I7V0FDOUI7Ozs7O3dDQUVrQixBQUNqQjtVQUFHLENBQUMsYUFBQSxBQUFhLFFBQWQsQUFBQyxBQUFxQixrQkFBa0IsYUFBQSxBQUFhLFFBQWIsQUFBcUIsbUJBQWhFLEFBQW1GLE1BQU0sQUFDdkY7d0JBQUEsQUFBTyxLQUFQLEFBQVksQUFDYjtBQUNGOzs7OzZCQUVTLEFBQ1I7NkJBQ0cseUJBQUQsWUFBVSxPQUFPLEtBQWpCLEFBQXNCO29CQUF0QjtzQkFBQSxBQUNFO0FBREY7T0FBQSxrQkFDRyx5QkFBRDs7b0JBQUE7c0JBQUEsQUFDRTtBQURGO0FBQUEsdUNBQ0csUUFBRDs7b0JBQUE7c0JBSE4sQUFDRSxBQUNFLEFBQ0UsQUFJUDtBQUpPO0FBQUE7Ozs7RUFyQjRCLGdCQUFNLEE7O2tCQUF2QixBIiwiZmlsZSI6InNob3BzLmpzP2VudHJ5Iiwic291cmNlUm9vdCI6Ii9Vc2Vycy9tYWMvRGVza3RvcC9tempiL211emhpanViYW9fd2ViIn0=
