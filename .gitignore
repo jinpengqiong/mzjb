@@ -1,5 +1,6 @@
 # Intellij
 .idea
+.next
 *.iml
 *.iws
 

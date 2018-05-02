@@ -1,13 +1,14 @@
 import React from 'react';
 import Router from 'next/router';
 import {Card, Row, Col, Affix, Button, Icon, Modal, Form, Input, message, Tooltip, Radio } from 'antd';
-const { Meta } = Card;
-const FormItem = Form.Item;
-const confirm = Modal.confirm;
+import CreateShopForm from './createShopForm';
 import uri from '../../utils/uri';
 import { GraphQLClient } from 'graphql-request'
 import { inject, observer } from 'mobx-react'
 const RadioGroup = Radio.Group;
+const { Meta } = Card;
+const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 const queryShops = `
       query ($page:Int, $pageSize: Int) {
@@ -132,7 +133,7 @@ class MyShopList extends React.Component {
       },
     })
       const res = await client.request(queryShops, variables);
-      console.log('res',res)
+      // console.log('res',res)
       this.setState({
         data: res.myShops.entries
       })
@@ -144,36 +145,29 @@ class MyShopList extends React.Component {
   }
 
   handleModalOk =() => {
-    if (!this.state.newShopDesc || !this.state.newShopName){
-      this.error('店铺名或描述不能为空哦！');
-    } else {
-      if (this.state.data.length < 5){
-        const client = new GraphQLClient(uri, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        })
-        client.request(addShop, {desc: this.state.newShopDesc, name: this.state.newShopName }).then(
-          (res) => {
-            console.log('abcde',res);
-            this.setState({
-              modalVisible: false,
-              newShopDesc: '',
-              newShopName: '',
-            });
-            this.getData();
+      const client = new GraphQLClient(uri, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      })
+      this.refs.form.validateFields((err, values) => {
+          if (err) {
+              message.error(err);
+          }else{
+              client.request(addShop, {desc: this.state.newShopDesc, name: this.state.newShopName }).then(
+                  (res) => {
+                      console.log('abcde',res);
+                      this.setState({
+                          modalVisible: false,
+                          newShopDesc: '',
+                          newShopName: '',
+                      });
+                      this.getData();
+                  }
+              )
           }
-        )
-      } else {
-        this.error('一个账号最多只能创建5个店铺哦！');
-        this.setState({
-          modalVisible: false,
-          newShopDesc: '',
-          newShopName: '',
-        });
-      }
-    }
-  }
+    })
+  };
 
   showConfirm = (ID) => {
     const client = new GraphQLClient(uri, {
@@ -188,7 +182,7 @@ class MyShopList extends React.Component {
         client.request(deleteShop, { id : ID}).then(
           (res) => {
             if(!res.errors){
-              console.log('res', res);
+              // console.log('res', res);
               self.getData();
               message.success('删除店铺成功！');
             }else { 
@@ -218,7 +212,6 @@ class MyShopList extends React.Component {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     })
-    
   }
 
   showModal = (id) => {
@@ -320,19 +313,20 @@ class MyShopList extends React.Component {
         </Affix>
         }
         <Modal title="新增店铺" visible={this.state.modalVisible} onOk={this.handleModalOk} onCancel={this.hideModal} maskClosable={false} width={550}>
-          <Input
-            placeholder="请输入店铺名"
-            prefix={<Icon type="shop" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            value={this.state.newShopName}
-            onChange={this.onChangeShopName}
-          />
-          <Input
-            placeholder="请输入店铺描述"
-            style={{ marginTop:'13px' }}
-            prefix={<Icon type="idcard" style={{ color: 'rgba(0,0,0,.25)'}} />}
-            value={this.state.newShopDesc}
-            onChange={this.onChangeShopDesc}
-          />
+          {/*<Input*/}
+            {/*placeholder="请输入店铺名"*/}
+            {/*prefix={<Icon type="shop" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
+            {/*value={this.state.newShopName}*/}
+            {/*onChange={this.onChangeShopName}*/}
+          {/*/>*/}
+          {/*<Input*/}
+            {/*placeholder="请输入店铺描述"*/}
+            {/*style={{ marginTop:'13px' }}*/}
+            {/*prefix={<Icon type="idcard" style={{ color: 'rgba(0,0,0,.25)'}} />}*/}
+            {/*value={this.state.newShopDesc}*/}
+            {/*onChange={this.onChangeShopDesc}*/}
+          {/*/>*/}
+          <CreateShopForm ref='form1'/>
         </Modal>
         <Modal title="绑定直播间" visible={this.state.modalVisible1} onOk={this.handleOk1} onCancel={this.handleCancel} maskClosable={false} width={550}>
           可绑定直播间：
