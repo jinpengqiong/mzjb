@@ -1,6 +1,5 @@
 import { Table, Button, Pagination, message, Modal, Radio, Select } from 'antd';
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import Router from 'next/router';
 import moment from 'moment';
@@ -110,18 +109,13 @@ export default class OrderManagement extends React.Component {
     }
   }
   componentDidMount(){
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
     if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
         Router.push('/login')
     }else if(this.props.store.shopID === null){
         Router.push('/shops')
     }else{
         this.queryOrderData(1);
-        client.request(expressList).then(
+        Request.GraphQlRequest(expressList, null,`Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 // console.log('res',res)
                 this.setState({
@@ -133,15 +127,10 @@ export default class OrderManagement extends React.Component {
   }
 
   queryOrderData = (curPage) => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
     const endTime = parseInt(moment().format('X'));
     const startTime = parseInt(moment().subtract(1, 'quarters').format('X'));
     // console.log('startTime',startTime)
-    client.request(queryOrder, {id: this.props.store.shopID, page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime }).then(
+    Request.GraphQlRequest(queryOrder, {id: this.props.store.shopID, page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime },`Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             if(res.errors){
                 message.error('出错了，请重试！')
@@ -176,13 +165,8 @@ export default class OrderManagement extends React.Component {
   }
 
   handleOk = () => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
       if(this.state.isNoExpress === 0 ){
-        client.request(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo, outSid: this.state.DeliveryNum, outStype: this.state.deliveryValue.toString()}).then(
+          Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo, outSid: this.state.DeliveryNum, outStype: this.state.deliveryValue.toString()}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
             if(res.errors){
                 message.error(res.errors[0].message)
@@ -196,7 +180,7 @@ export default class OrderManagement extends React.Component {
             }
         )
       }else{
-        client.request(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo}).then(
+          Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
             if(res.errors){
                 message.error(res.errors[0].message)

@@ -1,5 +1,4 @@
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import { Card, Col, Row, Affix, Button, Icon, Modal, message, Popconfirm, Pagination, Checkbox } from 'antd';
 import AdlistForm from './adlistForm';
@@ -77,12 +76,7 @@ export default class ADList extends React.Component {
   }
 
   queryADListData = (curPage) => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(queryADList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }).then(
+    Request.GraphQlRequest(queryADList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             console.log('res', res);
             this.setState({
@@ -105,13 +99,8 @@ export default class ADList extends React.Component {
         "backgroundColor": this.props.store.backgroundColor
       };
    ;
-    const client = new GraphQLClient(uri, {
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-    })
     const mediaId = parseInt(this.props.store.checkedValues[0]);
-    client.request(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}).then(
+      Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             console.log('res', res);
             this.props.store.getselectedRowKeys(null);
@@ -150,12 +139,7 @@ export default class ADList extends React.Component {
   }
 
   confirm(id) {
-        const client = new GraphQLClient(uri, {
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        })
-        client.request(deleteADMedias, { shopId: this.props.store.shopID, id}).then(
+      Request.GraphQlRequest(deleteADMedias, { shopId: this.props.store.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
                 if(res.errors){
                     message.success('删除失败！');

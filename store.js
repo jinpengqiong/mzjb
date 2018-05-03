@@ -22,6 +22,7 @@ class Store {
   @observable bindRoomData = null;
   @observable checkedValues = '';
   @observable checkedValues1 = '';
+  @observable mainImage = '';
 
   constructor (isServer) {
   }
@@ -98,6 +99,10 @@ class Store {
 
   @action setChecked1 = (data) => {
     this.checkedValues1 = data;
+  }
+
+  @action getMainImage = (data) => {
+      this.mainImage = data;
   }
 
 }

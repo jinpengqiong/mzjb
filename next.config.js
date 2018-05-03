@@ -8,7 +8,6 @@ module.exports = {
       '/shops': { page: '/shops' },
       '/userList': { page: '/userList' },
       '/resources': { page: '/resources' },
-      '/shops': { page: '/shops' },
       '/products': { page: '/products', query: { id: 'shopId' } },
       '/vouchers': { page: '/vouchers', query: { id: 'shopId' } },
     }

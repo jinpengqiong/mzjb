@@ -3,8 +3,8 @@ import Router from 'next/router';
 import {Card, Row, Col, Affix, Button, Icon, Modal, Form, Input, message, Tooltip, Radio } from 'antd';
 import CreateShopForm from './createShopForm';
 import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
-import { inject, observer } from 'mobx-react'
+import { inject, observer } from 'mobx-react';
+import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
 const { Meta } = Card;
 const FormItem = Form.Item;
@@ -22,18 +22,23 @@ const queryShops = `
             id
             name
             owner
+            mainImage
           }
         }
       }
       `;
 
 const addShop = `
-      mutation ($desc: String!, $name: String!){
-        createShop(desc:$desc,name:$name){
+      mutation ($desc: String!, $name: String!, $bizTimeEnd: String, $bizTimeStart: String, $categoryId: ID, $facilities: String, $mainImage: String, $phone: String){
+        createShop(desc:$desc,name:$name, bizTimeEnd:$bizTimeEnd, bizTimeStart:$bizTimeStart, categoryId:$categoryId, facilities:$facilities, mainImage:$mainImage, phone: $phone ){
           desc
           id
           name
-          owner
+          phone
+          mainImage
+          bizTimeEnd
+          bizTimeStart
+          facilities
         }
       }
       `;
@@ -96,8 +101,6 @@ class MyShopList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      newShopName: '',
-      newShopDesc: '',
       id: null,
       data: [],
       modalVisible: false,
@@ -127,16 +130,14 @@ class MyShopList extends React.Component {
       page: 1,
       pageSize: 5,
     };
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
-      const res = await client.request(queryShops, variables);
-      // console.log('res',res)
-      this.setState({
-        data: res.myShops.entries
-      })
+    Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
+          (res) => {
+              console.log('res',res);
+              this.setState({
+                  data: res.myShops.entries
+              })
+          }
+      )
   }
   addShops = () => {
     this.setState({
@@ -144,29 +145,19 @@ class MyShopList extends React.Component {
     });
   }
 
-  handleModalOk =() => {
-      const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-      this.refs.form.validateFields((err, values) => {
-          if (err) {
-              message.error(err);
-          }else{
-              client.request(addShop, {desc: this.state.newShopDesc, name: this.state.newShopName }).then(
-                  (res) => {
-                      console.log('abcde',res);
-                      this.setState({
-                          modalVisible: false,
-                          newShopDesc: '',
-                          newShopName: '',
-                      });
-                      this.getData();
-                  }
-              )
+//create shop submit
+  handleModalOk = () => {
+      this.refs.shopForm.validateFields(
+          (err, values) => {
+              if (err) {
+                  message.error(err);
+              }else{
+                  console.log('111'. values);
+                  this.setState({
+                      modalVisible: false,
+                  });
           }
-    })
+      })
   };
 
   showConfirm = (ID) => {
@@ -179,7 +170,7 @@ class MyShopList extends React.Component {
     confirm({
       title: '确定要删除此店铺吗?',
       onOk() {
-        client.request(deleteShop, { id : ID}).then(
+          Request.GraphQlRequest(deleteShop, { id : ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
             if(!res.errors){
               // console.log('res', res);
@@ -198,8 +189,6 @@ class MyShopList extends React.Component {
   hideModal=() => {
     this.setState({
       modalVisible: false,
-      newShopDesc: '',
-      newShopName: '',
     });
   }
   error = (msg) => {
@@ -207,42 +196,27 @@ class MyShopList extends React.Component {
   };
 
   addStaff = () => {
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
+
   }
 
   showModal = (id) => {
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
     const ID = parseFloat(id)
     this.setState({
       modalVisible1: true,
       shopID: ID
     });
-    client.request(bindableRooms, {shopId: ID}).then(
-      (res) => {
-        console.log('res', res)
-        this.props.store.getBindData(res.bindableRooms)
-      }
+    Request.GraphQlRequest(bindableRooms, {shopId: ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        (res) => {
+            this.props.store.getBindData(res.bindableRooms);
+        }
     )
-  }
+  };
+
   //set room
   handleOk1 = (e) => {
-    console.log(e);
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
     const shopId = parseInt(this.state.shopID);
     const room = parseInt(this.state.RadioValue);
-    client.request(bindRoom, { shopId, room}).then(
+    Request.GraphQlRequest(bindRoom, { shopId, room}, `Bearer ${localStorage.getItem('accessToken')}`).then(
       (res) => {
         // console.log('res', res);
         if(res.errors){
@@ -256,7 +230,6 @@ class MyShopList extends React.Component {
         }
       }
     )
-    
   }
   handleCancel = (e) => {
     console.log(e);
@@ -277,9 +250,9 @@ class MyShopList extends React.Component {
       this.state.data.map(
       (entry) => {
         return (
-          <Col span={4} key={entry.id} >
+          <Col span={4} key={entry.id} style={{ height: 150}}>
               <Card
-                cover={<img alt="example" src="http://image.mzliaoba.com/pic/mzgg/4758068401/20180323/111.png" />}
+                cover={<img alt="example" src={ entry.mainImage?  entry.mainImage : 'http://image.mzliaoba.com/pic/mzgg/4758068401/20180323/111.png' } />}
                 actions={[
                 <Tooltip title="进入店铺"><Icon type="shop" onClick={()=>{Router.push(`/products?id=${entry.id}`); this.props.store.getCurPagePath('店铺商品')}}/></Tooltip >,
                 // <Tooltip title="新增店员"><Icon type="user-add" onClick={ this.addStaff}/></Tooltip >,
@@ -300,7 +273,7 @@ class MyShopList extends React.Component {
           <Radio value={room.id} key={room.id}>{room.name}</Radio>
         )
       }
-    )
+    );
     return (
       <div>
         {
@@ -313,20 +286,7 @@ class MyShopList extends React.Component {
         </Affix>
         }
         <Modal title="新增店铺" visible={this.state.modalVisible} onOk={this.handleModalOk} onCancel={this.hideModal} maskClosable={false} width={550}>
-          {/*<Input*/}
-            {/*placeholder="请输入店铺名"*/}
-            {/*prefix={<Icon type="shop" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
-            {/*value={this.state.newShopName}*/}
-            {/*onChange={this.onChangeShopName}*/}
-          {/*/>*/}
-          {/*<Input*/}
-            {/*placeholder="请输入店铺描述"*/}
-            {/*style={{ marginTop:'13px' }}*/}
-            {/*prefix={<Icon type="idcard" style={{ color: 'rgba(0,0,0,.25)'}} />}*/}
-            {/*value={this.state.newShopDesc}*/}
-            {/*onChange={this.onChangeShopDesc}*/}
-          {/*/>*/}
-          <CreateShopForm ref='form1'/>
+          <CreateShopForm ref="shopForm" />
         </Modal>
         <Modal title="绑定直播间" visible={this.state.modalVisible1} onOk={this.handleOk1} onCancel={this.handleCancel} maskClosable={false} width={550}>
           可绑定直播间：

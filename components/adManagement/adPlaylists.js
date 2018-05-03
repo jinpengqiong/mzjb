@@ -1,6 +1,5 @@
 import { Card, Input, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, Row, Col, Radio } from 'antd';
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import AdPlaylistForm from './adPlaylistForm';
 import moment from 'moment';
@@ -98,12 +97,7 @@ export default class ADPlayList extends React.Component {
   }
 
   queryADPlayListData(curPage){
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(queryADPlayList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }).then(
+      Request.GraphQlRequest(queryADPlayList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             console.log('res', res);
             this.setState({
@@ -114,16 +108,11 @@ export default class ADPlayList extends React.Component {
   }
 
   handleOk = (e) => {
-    const client = new GraphQLClient(uri, {
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-    })
     this.refs.form.validateFields((err, values) => {
         if (err) {
             message.error(err);
         }else{
-            client.request(createAdPlaylist, {adMedias: this.props.store.checkedValues1, shopId: this.props.store.shopID, name: values.name}).then(
+            Request.GraphQlRequest(createAdPlaylist, {adMedias: this.props.store.checkedValues1, shopId: this.props.store.shopID, name: values.name}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
                     console.log('createAdPlaylist', res);
                     this.setState({
@@ -140,12 +129,7 @@ export default class ADPlayList extends React.Component {
   }
   
   confirm = (id) => {
-        const client = new GraphQLClient(uri, {
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        })
-        client.request(deleteAdPlaylist, { shopId: this.props.store.shopID, id}).then(
+      Request.GraphQlRequest(deleteAdPlaylist, { shopId: this.props.store.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
                 if(res.errors){
                     message.success('删除失败！');
@@ -179,13 +163,8 @@ export default class ADPlayList extends React.Component {
     this.setState({
       value: e.target.value,
     });
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
       const playlist = parseInt(e.target.value);
-      client.request(setPlaylist, { shopId: this.props.store.shopID, playlist}).then(
+      Request.GraphQlRequest(setPlaylist, { shopId: this.props.store.shopID, playlist}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
             if(!res.errors){
                 message.success('设置成功！')

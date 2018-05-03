@@ -133,7 +133,7 @@ export default class MyVoucherList extends React.Component {
             modalVisible: true,
           });
     }
-    handleSubmit = (err, values) => {
+    handleSubmit = () => {
         this.refs.form.validateFields((err, values) => {
             if (err) {
                 message.error(err);
@@ -144,7 +144,7 @@ export default class MyVoucherList extends React.Component {
                 values.endTimestamp = parseInt(rangeTimeValue[1].format('X'));
                 values.quantity = parseInt(values.quantity);
                 delete values['range-time-picker'];
-                console.log('111', values);
+                // console.log('111', values);
                 const client = new GraphQLClient(uri, {
                     headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

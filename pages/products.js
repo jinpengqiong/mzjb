@@ -4,7 +4,6 @@ import ProdTable from '../components/DBTable/tableComponent'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { inject, observer } from 'mobx-react'
 
 export default class Products extends React.Component {
   static getInitialProps ({ query: { id }, req }) {

@@ -3,9 +3,8 @@ const RadioGroup = Radio.Group;
 import { Radio, Progress, message } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
-import uri from '../../utils/uri';
+import Request from '../../utils/graphql_request';
 
-import { GraphQLClient } from 'graphql-request'
 const createMediaID = `
   mutation ($shopId: Int!, $type: MediaType!, $url: String!) {
     createMedia(shopId:$shopId, type:$type, url: $url){
@@ -14,14 +13,6 @@ const createMediaID = `
   }
 `;
 
-const createMediaAndUploadYouzan = `
-  mutation ($shopId: Int!, $type: MediaType!, $url: String!, $name: String) {
-    createMediaAndUploadYouzan(shopId:$shopId, type:$type, url: $url, name: $name){
-      imageId
-      id
-    }
-  }
-`;
 
 
 @inject('store') @observer
@@ -43,12 +34,6 @@ class FileUploader extends React.Component {
   }
 
   getOSSPolicy() {
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
-    
     const queryossPolicy = `
       query ($label: String, $type: String!){
         ossPolicy(label: $label, type: $type){
@@ -61,7 +46,7 @@ class FileUploader extends React.Component {
             }
         }
       `;
-      client.request(queryossPolicy, {label:"user", type:"pic"}).then(
+      Request.GraphQlRequest(queryossPolicy, {label:"user", type:"pic"}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
           console.log('oss', res)
           this.setState({
@@ -142,14 +127,9 @@ class FileUploader extends React.Component {
     
         FileUploaded: function(up, file, info) {
           if (info.status == 200){
-              const client = new GraphQLClient(uri, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-              })
               const shopId = parseInt(self.props.store.shopID);
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
-                client.request(createMediaID,{ shopId, type:'PIC', url}).then(
+              Request.GraphQlRequest(createMediaID, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
                   const ID = res.createMedia.id;
                   self.props.store.getUrlIDs(parseInt(ID));

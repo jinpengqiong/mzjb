@@ -1,6 +1,5 @@
 import { Table, Input, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, Tabs, notification, Divider } from 'antd';
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 import YouzanProdForm from './youzanProdForm'
@@ -149,12 +148,7 @@ export default class ProdTable extends React.Component {
   }
 
   queryProdData= (curPage) => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(queryProducts, {page:curPage, pageSize: 10, shopId: this.state.shopID}).then(
+    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 10, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             console.log('res', res)
             this.props.store.getProductData(res.shopProducts.entries);
@@ -180,20 +174,15 @@ export default class ProdTable extends React.Component {
       });
   }
   handleOk = (e) => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-      if(this.props.store.TabOption == '1'){
+      if(this.props.store.TabOption === '1'){
         this.refs.form1.validateFields((err, values) => {
             if (err) {
                 message.error(err);
             }else{ 
                 console.log('values', values);
                 values.images = this.props.store.imgUrlID.join(',');
-                values.price = parseFloat(values.price)*100
-                client.request(addProduct, { baseinfo: values, shopId: this.props.shopID, type: 'LINK' }).then(
+                values.price = parseInt(parseFloat(values.price)*100);
+                Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: this.props.shopID, type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
                         console.log('res', res);
                         this.refs.form1.resetFields();
@@ -215,15 +204,16 @@ export default class ProdTable extends React.Component {
                 )
             }   
         })
-      }else if(this.props.store.TabOption == '2'){
+      }else if(this.props.store.TabOption === '2'){
         this.refs.form2.validateFields((err, values) => {
             if (err) {
                 message.error(err);
             }else{ 
                 console.log('values', values);
                 values.images = this.props.store.imgUrlID.join(',');
-                values.price = parseFloat(values.price)*100;
-                client.request(addProduct, { baseinfo: values, shopId: this.props.shopID, type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}).then(
+                values.price = parseInt(parseFloat(values.price)*100);
+                Request.GraphQlRequest(addProduct,
+                    { baseinfo: values, shopId: this.props.shopID, type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
                         console.log('res', res);
                         if(!res.errors){
@@ -265,12 +255,8 @@ export default class ProdTable extends React.Component {
 
   //删除
   confirm(id) {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(deleteProduct, { shopId: this.state.shopID, id}).then(
+      Request.GraphQlRequest(deleteProduct,
+          { shopId: this.state.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
             if(res.errors){
                 message.success('删除失败！');
@@ -285,13 +271,9 @@ export default class ProdTable extends React.Component {
 
 //发送直播间
 confirm1 = (id) => {
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
       const ID= parseFloat(id);
-      client.request(sendPicadToLive, { shopId: this.state.shopID, id:ID, cartTime:5000}).then(
+    Request.GraphQlRequest(sendPicadToLive,
+        { shopId: this.state.shopID, id:ID, cartTime:5000}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
             if(res.errors){
                 message.success('发送失败！');
@@ -331,7 +313,7 @@ onSelectChange = (selectedRowKeys) => {
                     <TabPane tab="外链商品" key="1">
                         <SelfProdForm ref="form1"/>
                     </TabPane>
-                    <TabPane tab="自由商品" key="2">
+                    <TabPane tab="自有商品" key="2">
                         <YouzanProdForm ref="form2"/>
                     </TabPane>
                 </Tabs>

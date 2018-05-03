@@ -3,9 +3,8 @@ const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { inject, observer } from 'mobx-react'
-import FileUploader from '../FileUploader/index';
-import uri from "../../utils/uri";
-import { GraphQLClient } from 'graphql-request'
+import ShopImgUploader from '../FileUploader/shopImgUpload';
+import Request from '../../utils/graphql_request';
 
 const shopCategories = `
     query($type: CategoryType!) {
@@ -30,14 +29,9 @@ class ShopForm extends React.Component {
         };
     }
     componentDidMount(){
-        const client = new GraphQLClient(uri, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        })
-        client.request(shopCategories, { type: 'PRODUCT'}).then(
+        Request.GraphQlRequest(shopCategories, { type: 'PRODUCT'}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res', res);
+                // console.log('res', res);
                 this.setState({
                     shopCategories: res.categories.entries
                 })
@@ -104,38 +98,14 @@ class ShopForm extends React.Component {
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
-                    label="商家Logo"
-                >
-                    {getFieldDecorator('logo', {
-                        rules: [{
-                            type: 'string', message: '请输入商家Logo!',
-                        }],
-                    })(
-                        <FileUploader />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="封面图片"
+                    label="店铺封面图片"
                 >
                     {getFieldDecorator('mainImage', {
                         rules: [{
                             type: 'string', message: '请输入封面图片!',
                         }],
                     })(
-                        <FileUploader />
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="店铺图片"
-                >
-                    {getFieldDecorator('images', {
-                        rules: [{
-                            type: 'string', message: '请输入店铺图片!',
-                        }],
-                    })(
-                        <FileUploader />
+                        <ShopImgUploader />
                     )}
                 </FormItem>
                 <FormItem
@@ -159,19 +129,19 @@ class ShopForm extends React.Component {
                             type: 'string', message: '请输入营业开始时间!',
                         }],
                     })(
-                        <Input />
+                        <Input placeholder="输入营业开始时间，如8：00"/>
                     )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
                     label="营业结束时间"
                 >
-                    {getFieldDecorator('bizTimeStart', {
+                    {getFieldDecorator('bizTimeEnd', {
                         rules: [{
                             type: 'string', message: '请输入营业结束时间!',
                         }],
                     })(
-                        <Input />
+                        <Input placeholder="输入营业结束时间，如22：00"/>
                     )}
                 </FormItem>
                 <FormItem
@@ -198,7 +168,6 @@ class ShopForm extends React.Component {
                         }],
                     })(
                         <CheckboxGroup options={options} onChange={this.onCheckChange} />
-
                     )}
                 </FormItem>
             </Form>

@@ -2,6 +2,7 @@ import MyLayout from '../components/MyLayout/MyLayout'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
+
 export default class MainPage extends React.Component {
   static getInitialProps ({ req }) {
     const isServer = !!req
