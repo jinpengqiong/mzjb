@@ -112,7 +112,7 @@ export default class OrderManagement extends React.Component {
     if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
         Router.push('/login')
     }else if(this.props.store.shopID === null){
-        Router.push('/shops')
+        Router.push('/')
     }else{
         this.queryOrderData(1);
         Request.GraphQlRequest(expressList, null,`Bearer ${localStorage.getItem('accessToken')}`).then(

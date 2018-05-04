@@ -58,19 +58,11 @@ export default class MyLayout extends React.Component {
           theme="dark" 
           mode="inline" 
           onClick={this.handleClick} 
-          selectedKeys={[this.props.store.curPagePath === ""? "首页" : this.props.store.curPagePath]}>
-            <Menu.Item key="首页" >
-              <div onClick={()=>{
-                Router.prefetch('/'); 
-                Router.push('/')}}>
-                <Icon type="home" />
-                <span >首页</span>
-              </div>
-            </Menu.Item>
+          selectedKeys={[this.props.store.curPagePath === ""? "我的店铺" : this.props.store.curPagePath]}>
             <Menu.Item key="我的店铺">
               <div onClick={()=>{ 
-                Router.prefetch('/shops');
-                Router.push('/shops')}}>
+                Router.prefetch('/');
+                Router.push('/')}}>
                 <Icon type="shop" />
                 <span>我的店铺</span>
               </div>
@@ -81,7 +73,9 @@ export default class MyLayout extends React.Component {
               <Menu.Item key="店铺商品">
                 <div onClick={()=>{ 
                   Router.prefetch(`/products?id=${this.props.store.shopID}`); 
-                  Router.push(`/products?id=${this.props.store.shopID}`)}}>
+                  Router.push(`/products?id=${this.props.store.shopID}`)
+                  this.props.store.getCurPagePath('店铺商品');
+                }}>
                   <Icon type="appstore" />
                   <span>店铺商品</span>
                 </div>

@@ -21,7 +21,7 @@ export default class Products extends React.Component {
     if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
       Router.push('/login')
     }else if(this.props.shopID === null){
-      Router.push('/shops')
+      Router.push('/')
     }else{
       this.store.getShopID(parseInt(this.props.shopID));
     }

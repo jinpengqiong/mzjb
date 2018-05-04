@@ -5,7 +5,6 @@ module.exports = {
       '/ad': { page: '/ad' },
       '/login': { page: '/login' },
       '/order': { page: '/order' },
-      '/shops': { page: '/shops' },
       '/userList': { page: '/userList' },
       '/resources': { page: '/resources' },
       '/products': { page: '/products', query: { id: 'shopId' } },
