@@ -2,7 +2,6 @@ import React from 'react';
 import Router from 'next/router';
 import {Card, Row, Col, Affix, Button, Icon, Modal, Form, Input, message, Tooltip, Radio } from 'antd';
 import CreateShopForm from './createShopForm';
-import uri from '../../utils/uri';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
@@ -106,7 +105,7 @@ class MyShopList extends React.Component {
       modalVisible: false,
       modalVisible1: false,
       RadioValue:null,
-      shopID:null
+      shopID:null,
     };
   }
   componentDidMount() {
@@ -117,14 +116,6 @@ class MyShopList extends React.Component {
     }
   }
 
-  onChangeShopName = (e) => {
-    this.setState({ newShopName: e.target.value });
-  }
-
-  onChangeShopDesc = (e) => {
-    // console.log('newShopDesc', e.target.value);
-    this.setState({ newShopDesc: e.target.value });
-  }
   async getData(){
     const variables = {
       page: 1,
@@ -146,26 +137,29 @@ class MyShopList extends React.Component {
   }
 
 //create shop submit
-  handleModalOk = () => {
-      this.refs.shopForm.validateFields(
+
+    handleOk = () => {
+      this.refs.form.validateFields(
           (err, values) => {
-              if (err) {
-                  message.error(err);
-              }else{
-                  console.log('111'. values);
-                  this.setState({
-                      modalVisible: false,
-                  });
+          if (err) {
+              message.error(err);
+          }else{
+            console.log('aaa', values);
+              Request.GraphQlRequest(
+                  addShop,
+                  { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:values.mainImage, phone: values.phone},
+                  `Bearer ${localStorage.getItem('accessToken')}`).then(
+                  (res) => {
+                      console.log('res', res);
+                      this.props.store.getMainImage(null);
+                  }
+              )
+
           }
       })
   };
 
   showConfirm = (ID) => {
-    const client = new GraphQLClient(uri, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    })
     const self = this;
     confirm({
       title: '确定要删除此店铺吗?',
@@ -190,6 +184,8 @@ class MyShopList extends React.Component {
     this.setState({
       modalVisible: false,
     });
+    this.refs.form.resetFields();
+    this.props.store.getMainImage(null);
   }
   error = (msg) => {
     message.error(msg);
@@ -200,7 +196,7 @@ class MyShopList extends React.Component {
   }
 
   showModal = (id) => {
-    const ID = parseFloat(id)
+    const ID = parseFloat(id);
     this.setState({
       modalVisible1: true,
       shopID: ID
@@ -257,7 +253,7 @@ class MyShopList extends React.Component {
                 <Tooltip title="进入店铺"><Icon type="shop" onClick={()=>{Router.push(`/products?id=${entry.id}`); this.props.store.getCurPagePath('店铺商品')}}/></Tooltip >,
                 // <Tooltip title="新增店员"><Icon type="user-add" onClick={ this.addStaff}/></Tooltip >,
                 <Tooltip title="绑定直播间"><Icon type="team" onClick={ () =>{this.showModal(entry.id)}}/></Tooltip >,
-                // <Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.updateShopInfo(parseInt(entry.id))}}/></Tooltip >, 
+                // <Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.updateShopInfo(parseInt(entry.id))}}/></Tooltip >,
                 <Tooltip title="删除店铺"><Icon type="delete" onClick={() =>{this.showConfirm(parseInt(entry.id))}} /></Tooltip >
               ]}
               >
@@ -285,8 +281,8 @@ class MyShopList extends React.Component {
             </Button>
         </Affix>
         }
-        <Modal title="新增店铺" visible={this.state.modalVisible} onOk={this.handleModalOk} onCancel={this.hideModal} maskClosable={false} width={550}>
-          <CreateShopForm ref="shopForm" />
+        <Modal title="新增店铺" visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.hideModal} maskClosable={false} width={550}>
+          <CreateShopForm ref="form" />
         </Modal>
         <Modal title="绑定直播间" visible={this.state.modalVisible1} onOk={this.handleOk1} onCancel={this.handleCancel} maskClosable={false} width={550}>
           可绑定直播间：

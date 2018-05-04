@@ -38,7 +38,6 @@ class Login extends React.Component {
             width: 300px;
             height: 300px;
           }
-          
           .login p {
             font-family: HiraginoSansGB-W3;
             font-size: 40px;

@@ -107,7 +107,7 @@ class RegistrationForm extends React.Component {
             }],
           })(
             <div>
-            <Button onClick={this.openModal}>{ this.props.store.checkedValues == "" ? "选择视频文件" : "已选好视频文件"}</Button>
+            <Button onClick={this.openModal}>{ this.props.store.checkedValues === "" ? "选择视频文件" : "已选好视频文件"}</Button>
             <Modal
               title="选择视频文件"
               width="60%"

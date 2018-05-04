@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import MyLayout from '../components/MyLayout/MyLayout';
 import MyShopList from '../components/MyShops/index';
 import { Provider } from 'mobx-react'

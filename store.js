@@ -14,15 +14,15 @@ class Store {
   @observable title = '';
   @observable images = '';
   @observable detailUrl = '';
-  @observable position = '';
-  @observable backgroundColor = '';
-  @observable weight = '';
+  @observable position = null;
+  @observable backgroundColor = null;
+  @observable weight = null;
   @observable ADMediaID = null;
   @observable TabOption = "1";
   @observable bindRoomData = null;
   @observable checkedValues = '';
   @observable checkedValues1 = '';
-  @observable mainImage = '';
+  @observable mainImage = null;
 
   constructor (isServer) {
   }

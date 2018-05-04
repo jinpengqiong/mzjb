@@ -1,8 +1,7 @@
 import { Card, Col, Row, Affix, Button, Icon, Modal, message, Popconfirm, Pagination, Divider } from 'antd';
 const { Meta } = Card;
-import uri from '../../utils/uri';
 import WrappedForm from './formComponent'
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import Router from 'next/router';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -113,12 +112,7 @@ export default class MyVoucherList extends React.Component {
       }
 
     queryVouchers = (page) => {
-        const client = new GraphQLClient(uri, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          })
-        client.request(queryVouchers, {page, pageSize:8, shopId: this.state.shopID}).then(
+        Request.GraphQlRequest(queryVouchers, {page, pageSize:8, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 console.log('voucher', res)
                 this.setState({
@@ -144,13 +138,7 @@ export default class MyVoucherList extends React.Component {
                 values.endTimestamp = parseInt(rangeTimeValue[1].format('X'));
                 values.quantity = parseInt(values.quantity);
                 delete values['range-time-picker'];
-                // console.log('111', values);
-                const client = new GraphQLClient(uri, {
-                    headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
-                client.request(addVoucher, {shopId: this.props.store.shopID, baseinfo: values }).then(
+                Request.GraphQlRequest(addVoucher, {shopId: this.props.store.shopID, baseinfo: values }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res) =>{
                         if(res.errors){
                             message.success('卡券创建出错，请检查卡券名或商家名字数是否超出限制！');
@@ -173,12 +161,7 @@ export default class MyVoucherList extends React.Component {
       }
 
     confirm = (id) => {
-        const client = new GraphQLClient(uri, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          })
-        client.request(deleteVoucher, { shopId: this.state.shopID, id}).then(
+        Request.GraphQlRequest(deleteVoucher, { shopId: this.state.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
                 if(res.errors){
                     message.success('删除失败！');
@@ -202,12 +185,7 @@ export default class MyVoucherList extends React.Component {
 
     //send to live room
     confirm1 = (id) => {
-        const client = new GraphQLClient(uri, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          })
-        client.request(sendWxcardToLive, { shopId: this.state.shopID, id, cartTime:5000}).then(
+        Request.GraphQlRequest(sendWxcardToLive, { shopId: this.state.shopID, id, cartTime:5000}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
                 if(res.errors){
                     message.success('发送失败，暂无可绑定直播间！');

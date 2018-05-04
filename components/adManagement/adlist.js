@@ -86,47 +86,53 @@ export default class ADList extends React.Component {
     )
   }
 
-  handleOk = (e) => {
-    let structDesc = {
-        "type": "image",
-        "position": this.props.store.position,
-        "title": this.props.store.title,
-        "images": this.props.store.images,
-        "id": this.props.store.selectedRowKeys[0],
-        "weight": this.props.store.weight,
-        "createAt": moment().format('X'),
-        "detailUrl": this.props.store.detailUrl,
-        "backgroundColor": this.props.store.backgroundColor
-      };
-   ;
+  handleOk = () => {
     const mediaId = parseInt(this.props.store.checkedValues[0]);
-      Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
-            console.log('res', res);
-            this.props.store.getselectedRowKeys(null);
-            this.props.store.getStrucInfo('','','');
-            this.props.store.getWeight('');
-            this.props.store.getPosition('');
-            this.props.store.getColor('');
-            this.props.store.getVideoID('');
-            this.props.store.getVideoID('');
-            this.props.store.setChecked('');
-            this.props.store.setChecked1('')
-            this.setState({
-                modalVisible: false,
-            });
-            message.success('创建成功！');
-            this.queryADListData(1);
-        }
-    )
-    
+    if(this.props.store.weight && this.props.store.position && this.props.store.backgroundColor){
+        let structDesc = {
+            "type": "image",
+            "position": this.props.store.position,
+            "title": this.props.store.title,
+            "images": this.props.store.images,
+            "id": this.props.store.selectedRowKeys[0],
+            "weight": this.props.store.weight,
+            "createAt": moment().format('X'),
+            "detailUrl": this.props.store.detailUrl,
+            "backgroundColor": this.props.store.backgroundColor
+        };
+        ;
+        Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('res', res);
+                this.props.store.getselectedRowKeys(null);
+                this.props.store.getStrucInfo('','','');
+                this.props.store.getWeight(null);
+                this.props.store.getPosition(null);
+                this.props.store.getColor(null);
+                this.props.store.getVideoID('');
+                this.props.store.getVideoID('');
+                this.props.store.setChecked('');
+                this.props.store.setChecked1('');
+                this.refs.form.resetFields();
+                this.setState({
+                    modalVisible: false,
+                });
+                message.success('创建成功！');
+                this.queryADListData(1);
+            }
+        )
+    }else{
+        message.error('有必选项未填写！');
+    }
   }
+
   handleCancel = (e) => {
     console.log(e);
     this.setState({
         modalVisible: false,
     });
-    this.props.store.setChecked();
+    this.props.store.setChecked('');
+    this.refs.form.resetFields();
   }
 
   handleClick = () => {
@@ -206,7 +212,7 @@ export default class ADList extends React.Component {
                 </Button>
             </Affix>
             <Modal title="新增广告" visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.handleCancel} maskClosable={false} width={550}>
-                <AdlistForm />
+                <AdlistForm ref='form'/>
             </Modal>
             <Checkbox.Group style={{ width: '100%' }} onChange={this.handleChcekChange} value={this.props.store.checkedValues1}>
                 <Card title="广告列表" style={{ marginTop: 20 }}>

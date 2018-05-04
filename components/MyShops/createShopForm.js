@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react'
 import ShopImgUploader from '../FileUploader/shopImgUpload';
 import Request from '../../utils/graphql_request';
 
+
 const shopCategories = `
     query($type: CategoryType!) {
     categories(type:$type){
@@ -28,6 +29,7 @@ class ShopForm extends React.Component {
             shopCategories:null
         };
     }
+
     componentDidMount(){
         Request.GraphQlRequest(shopCategories, { type: 'PRODUCT'}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {

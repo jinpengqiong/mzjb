@@ -8,6 +8,7 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 import { inject, observer } from 'mobx-react'
 
+
 @inject('store') @observer
 export default class MyLayout extends React.Component {
   constructor (props){
@@ -42,7 +43,6 @@ export default class MyLayout extends React.Component {
     this.props.store.getRoleInfo('');
   }
   render() {
-    // console.log('state', this.state)
     return (
         <Layout style={{ minHeight: '100vh' }}>
         <Sider

@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta name="version" content="1.0.0" />
           <script src="http://image.mzliaoba.com/lib/plupload.full.min.new.js"></script>
-          <title>拇指聚宝</title>
+            <title>拇指聚宝</title>
         </Head>
         <body>
           {this.props.customValue}

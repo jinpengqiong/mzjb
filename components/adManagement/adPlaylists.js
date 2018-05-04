@@ -107,14 +107,15 @@ export default class ADPlayList extends React.Component {
     )
   }
 
-  handleOk = (e) => {
-    this.refs.form.validateFields((err, values) => {
+  handleOk = () => {
+    this.refs.form.validateFields(
+        (err, values) => {
         if (err) {
             message.error(err);
         }else{
             Request.GraphQlRequest(createAdPlaylist, {adMedias: this.props.store.checkedValues1, shopId: this.props.store.shopID, name: values.name}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('createAdPlaylist', res);
+                    // console.log('createAdPlaylist', res);
                     this.setState({
                         modalVisible: false,
                     });
@@ -134,7 +135,7 @@ export default class ADPlayList extends React.Component {
                 if(res.errors){
                     message.success('删除失败！');
                 }else{
-                    console.log('res', res);
+                    // console.log('res', res);
                     message.success('删除成功！');
                     this.queryADPlayListData(1);
                     this.props.store.getADMediaID('');
@@ -159,11 +160,11 @@ export default class ADPlayList extends React.Component {
   }
 
   handleSetChange = (e) => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
     });
-      const playlist = parseInt(e.target.value);
+      // const playlist = parseInt(e.target.value);
       Request.GraphQlRequest(setPlaylist, { shopId: this.props.store.shopID, playlist}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
             if(!res.errors){

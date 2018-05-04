@@ -1,8 +1,7 @@
 import React from 'react';
 import { Card, Button, Icon, message, Popconfirm, Pagination, Checkbox } from 'antd';
 const { Meta } = Card;
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import VideoUploader from '../FileUploader/videoupload'
 
@@ -46,33 +45,25 @@ class VideoList extends React.Component {
         this.getData(1);
     }
 
-    async getData( page ){
+    getData( page ){
         const variables = {
             page, 
             pageSize:10, 
             shopId: this.props.store.shopID, 
             type:'VIDEO'
         };
-        const client = new GraphQLClient(uri, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        })
-        const res = await client.request(queryShopMedia, variables);
-        // console.log('res',res)
-        this.setState({
-            data: res.shopMedias
-        })
+        Request.GraphQlRequest(queryShopMedia, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                this.setState({
+                    data: res.shopMedias
+                })
+            }
+        )
     }
     
 
     confirm(id) {
-        const client = new GraphQLClient(uri, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          })
-        client.request(deleteMedia, { id, shopId: this.props.store.shopID}).then(
+        Request.GraphQlRequest(deleteMedia, { id, shopId: this.props.store.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 if(!res.errors){
                     message.success('删除成功！');
@@ -81,10 +72,7 @@ class VideoList extends React.Component {
             }
         )
     }
-      
-    cancel() {
-        // message.error('取消删除！');
-      }
+
 
     onChange = (pageNumber) =>  {
     this.getData(pageNumber);
@@ -115,8 +103,7 @@ class VideoList extends React.Component {
                         <Popconfirm 
                         title="确认要删除吗?" 
                         onConfirm={() =>{this.confirm(parseInt(entry.id))}} 
-                        onCancel={this.cancel} 
-                        okText="Yes" 
+                        okText="Yes"
                         cancelText="No" >
                             <a href="#" >删除</a>
                         </Popconfirm>

@@ -1,6 +1,5 @@
 import { Table, Input, Popconfirm, Pagination, message } from 'antd';
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 
 
 const queryUsers = `
@@ -73,12 +72,7 @@ export default class UserList extends React.Component {
   }
 
   queryUserData(curPage){
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(queryUsers, {page:curPage, pageSize: 10 }).then(
+      Request.GraphQlRequest(queryUsers, {page:curPage, pageSize: 10 }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             res.allUsers.entries.map(
                 (entry) =>{
@@ -94,14 +88,8 @@ export default class UserList extends React.Component {
   }
 
   grantUser( userId){
-    const client = new GraphQLClient(uri, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      })
-    client.request(grantUsers, {userId}).then(
+      Request.GraphQlRequest(grantUsers, {userId}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            console.log('res', res)
             message.success('授权成功！');
             this.queryUserData(1);
         }
@@ -111,9 +99,7 @@ export default class UserList extends React.Component {
   confirm(id) {
     this.grantUser(parseInt(id));
   }
-  
-  cancel() {
-  }
+
 
   onChange = (pageNumber) => {
     this.queryUserData(pageNumber);

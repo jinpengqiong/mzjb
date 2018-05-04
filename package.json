@@ -18,7 +18,6 @@
     "create-react-class": "^15.6.3",
     "express": "^4.16.3",
     "graphql-request": "^1.5.1",
-    "isomorphic-unfetch": "^2.0.0",
     "less": "^2.7.3",
     "less-loader": "^4.1.0",
     "mobx": "^4.1.1",
@@ -31,6 +30,7 @@
     "react": "^16.2.0",
     "react-color": "^2.14.1",
     "react-dom": "^16.2.0",
+    "react-icons": "^2.2.7",
     "styled-jsx": "^2.2.4",
     "superagent": "^3.8.2"
   }

@@ -1,27 +1,26 @@
 import React from 'react';
 import { Card, Button, Icon, message, Popconfirm, Pagination } from 'antd';
 const { Meta } = Card;
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import ResourUploader from '../FileUploader/resourcesUpload'
 
 const queryShopMedia = `
-query ($page: Int, $pageSize: Int, $shopId: ID!, $type: MediaType) {
-    shopMedias(page:$page, pageSize:$pageSize, shopId:$shopId, type:$type){
-    totalEntries
-    totalPages
-    pageNumber
-    pageSize
-    entries{
-      id
-      name
-      url
-      type
+    query ($page: Int, $pageSize: Int, $shopId: ID!, $type: MediaType) {
+        shopMedias(page:$page, pageSize:$pageSize, shopId:$shopId, type:$type){
+        totalEntries
+        totalPages
+        pageNumber
+        pageSize
+        entries{
+          id
+          name
+          url
+          type
+        }
+      }
     }
-  }
-}
-`;
+    `;
 
 const deleteMedia = `
     mutation ($id:Int!, $shopId: Int!) {
@@ -52,12 +51,7 @@ class PicList extends React.Component {
             shopId: this.props.store.shopID, 
             type:'PIC'
         };
-        const client = new GraphQLClient(uri, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        })
-        client.request(queryShopMedia, variables).then(
+        Request.GraphQlRequest(queryShopMedia, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 console.log('res',res)
                 this.setState({
@@ -67,12 +61,7 @@ class PicList extends React.Component {
         )
     }
     confirm(id) {
-        const client = new GraphQLClient(uri, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          })
-        client.request(deleteMedia, { id, shopId: this.props.store.shopID}).then(
+        Request.GraphQlRequest(deleteMedia, { id, shopId: this.props.store.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 if(!res.errors){
                     message.success('删除成功！');
@@ -81,11 +70,7 @@ class PicList extends React.Component {
             }
         )
       }
-      
-    cancel(e) {
-        console.log(e);
-        message.error('Click on No');
-      }
+
 
     onChange = (pageNumber) =>  {
     this.getData(pageNumber)
@@ -105,8 +90,7 @@ class PicList extends React.Component {
                     <Popconfirm 
                     title="确认要删除吗?" 
                     onConfirm={() =>{this.confirm(parseInt(entry.id))}} 
-                    onCancel={this.cancel} 
-                    okText="确认" 
+                    okText="确认"
                     cancelText="取消">
                         <a href="#" >删除</a>
                     </Popconfirm>

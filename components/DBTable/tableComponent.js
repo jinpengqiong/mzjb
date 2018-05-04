@@ -133,6 +133,8 @@ export default class ProdTable extends React.Component {
                     <a href="javascript:;" >发送直播间</a>
                 </Popconfirm>
                 <Divider type="vertical" />
+                    <a href="#" >编辑</a>
+                <Divider type="vertical" />
                 <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{this.confirm(record.id)}} okText="确认" cancelText="取消">
                     <a href="#" >删除</a>
                 </Popconfirm>
@@ -148,7 +150,7 @@ export default class ProdTable extends React.Component {
   }
 
   queryProdData= (curPage) => {
-    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 10, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             console.log('res', res)
             this.props.store.getProductData(res.shopProducts.entries);
@@ -278,7 +280,7 @@ confirm1 = (id) => {
             if(res.errors){
                 message.success('发送失败！');
             }else{
-                console.log('res', res);
+                // console.log('res', res);
                 message.success('发送成功！');
                 this.queryProdData(1);
             }

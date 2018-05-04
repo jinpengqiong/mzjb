@@ -143,18 +143,15 @@ export default class OrderManagement extends React.Component {
                         entry.num = entry.items[0].num;
                         delete entry.items;
                     }
-                )
+                );
                 console.log('111', res)
                 this.setState({
                 data: res.shopTradesList
-            })
+                })
             }
-
-            
-            
         }
     ).catch((error)=>{message.error(error)})
-  }
+  };
 
   
   cancel() {
@@ -226,18 +223,13 @@ export default class OrderManagement extends React.Component {
   }
 
   InputDeliveryNum = (e) => {
-    console.log('value', e.target.value)
+    console.log('value', e.target.value);
     this.setState({
         DeliveryNum: e.target.value
     })
   }
 
   render() {
-    //   const Options = this.state.expressList && this.state.expressList.splice(10).map(
-    //       (option) => {
-    //         return (<Option value={option.id} key={option.id}>{option.name}</Option>)
-    //       }
-    //   )
     return (
         <div>
             <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={this.state.columns} pagination={false}/>

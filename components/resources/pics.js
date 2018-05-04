@@ -1,9 +1,4 @@
 import React from 'react';
-import { Card, Button, Icon, message, Form, Popconfirm, Pagination } from 'antd';
-const { Meta } = Card;
-const FormItem = Form.Item;
-import uri from '../../utils/uri';
-import { GraphQLClient } from 'graphql-request'
 import { inject, observer } from 'mobx-react'
 import PicList from './picList'
 
@@ -13,7 +8,7 @@ class MyPICS extends React.Component {
         return (
             <div>
                 <PicList />
-        </div>
+            </div>
         );
     }
 }
