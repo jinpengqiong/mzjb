@@ -180,7 +180,7 @@ class ShopForm extends React.Component {
 const CreateShopForm = Form.create(
     {
         mapPropsToFields(props) {
-            console.log('props', props);
+            // console.log('props', props);
             if(props.shopData){
                 return {
                     name: Form.createFormField({

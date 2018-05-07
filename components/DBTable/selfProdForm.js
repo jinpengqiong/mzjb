@@ -105,5 +105,29 @@ class RegistrationForm extends React.Component {
   }
 }
 
-const SelfProdForm = Form.create()(RegistrationForm);
+const SelfProdForm = Form.create({
+    mapPropsToFields(props) {
+        console.log('props', props);
+        if (props.productData) {
+            return {
+                title: Form.createFormField({
+                    ...props.productData.title,
+                    value: props.productData.title,
+                }),
+                desc: Form.createFormField({
+                    ...props.productData.desc,
+                    value: props.productData.desc,
+                }),
+                price: Form.createFormField({
+                    ...props.productData.price,
+                    value: props.productData.price,
+                }),
+                detailUrl: Form.createFormField({
+                    ...props.productData.detailUrl,
+                    value: props.productData.detailUrl,
+                })
+            };
+        }
+    }
+})(RegistrationForm);
  export default SelfProdForm;

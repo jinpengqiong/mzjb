@@ -45,8 +45,30 @@ mutation (
         }
     }
     }
-`;    
+`;
 
+const UpdateProduct = `
+mutation (
+    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs
+    ) {
+    updateProduct(
+        id:$id,
+        baseinfo:$baseinfo,
+        shopId: $shopId,
+        youzan:$youzan
+    ){
+        id
+        title
+        images
+        price
+        desc
+        detailUrl
+        imagesUrls{
+            url
+        }
+    }
+    }
+`;
 
 const deleteProduct = `
       mutation ($id:ID!,$shopId:ID!){
@@ -77,6 +99,9 @@ export default class ProdTable extends React.Component {
         data: null, 
         visible:false,
         shopID: parseInt(props.shopID),
+        modalName:null,
+        productID:null,
+        productFieldsData:null,
         columns : [
             {
             dataIndex: 'id',
@@ -135,6 +160,8 @@ export default class ProdTable extends React.Component {
                 <Divider type="vertical" />
                     <a href="#" >编辑</a>
                 <Divider type="vertical" />
+                    <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
+                <Divider type="vertical" />
                 <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{this.confirm(record.id)}} okText="确认" cancelText="取消">
                     <a href="#" >删除</a>
                 </Popconfirm>
@@ -173,15 +200,17 @@ export default class ProdTable extends React.Component {
   onClickInsert = () => {
     this.setState({
         visible: true,
+        modalName:"新增商品"
       });
   }
-  handleOk = (e) => {
-      if(this.props.store.TabOption === '1'){
+
+  handleOk = () => {
+      if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
         this.refs.form1.validateFields((err, values) => {
             if (err) {
                 message.error(err);
             }else{ 
-                console.log('values', values);
+                // console.log('values', values);
                 values.images = this.props.store.imgUrlID.join(',');
                 values.price = parseInt(parseFloat(values.price)*100);
                 Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: this.props.shopID, type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -206,12 +235,12 @@ export default class ProdTable extends React.Component {
                 )
             }   
         })
-      }else if(this.props.store.TabOption === '2'){
+      }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
         this.refs.form2.validateFields((err, values) => {
             if (err) {
                 message.error(err);
             }else{ 
-                console.log('values', values);
+                // console.log('values', values);
                 values.images = this.props.store.imgUrlID.join(',');
                 values.price = parseInt(parseFloat(values.price)*100);
                 Request.GraphQlRequest(addProduct,
@@ -240,14 +269,52 @@ export default class ProdTable extends React.Component {
                 )
             }   
         })
+      }else if(this.state.modalName ==='更新商品') {
+          this.refs.form3.validateFields((err, values) => {
+              if (err) {
+                  message.error(err);
+              } else {
+                  console.log('values', values);
+                  values.images = this.props.store.imgUrlID.join(',');
+                  values.price = parseInt(parseFloat(values.price) * 100);
+                  Request.GraphQlRequest(UpdateProduct,
+                      {
+                          baseinfo: values,
+                          shopId: this.props.shopID,
+                          id: this.state.productID
+                      }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                      (res) => {
+                          console.log('res', res);
+                          if (!res.errors) {
+                              this.refs.form3.resetFields();
+                              this.props.store.resetUrlIDs();
+                              res.createProduct.mainImage = res.createProduct.imagesUrls[0].url;
+                              res.createProduct.key = res.createProduct.id;
+                              delete res.createProduct.imagesUrls;
+                              delete res.createProduct.images;
+                              this.queryProdData(1);
+                              document.getElementById('ossfile1').innerHTML = '';
+                              this.setState({
+                                  visible: false
+                              });
+                              notification.success({
+                                  message: '更新成功',
+                                  duration: 3,
+                              });
+                          }
+
+                      }
+                  )
+              }
+          })
       }
   }
 
-  handleCancel = (e) => {
-    console.log(e);
+
+  handleCancel = () => {
     this.setState({
-      visible: false,
-    });
+      visible: false
+    })
   }
 
   callback = (key) => {
@@ -293,6 +360,25 @@ onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.props.store.getselectedRowKeys(selectedRowKeys)
   }
+
+  //updateProduct
+    updateProduct = ( ID ) => {
+        const fieldData = this.state.data.entries.filter(
+            (entry) =>{
+                if(parseInt(entry.id) === ID){
+                    return entry
+                }
+            }
+        );
+        console.log('fieldData',fieldData)
+        this.setState({
+            visible: true,
+            modalName:"更新商品",
+            productID:ID,
+            productFieldsData:fieldData[0]
+        });
+    }
+
   render() {
     const rowSelection = {
         selectedRowKeys:this.props.store.selectedRowKeys,
@@ -306,19 +392,25 @@ onSelectChange = (selectedRowKeys) => {
               </Button>
             </Affix>
             <Modal
-            title="新增"
+            title={this.state.modalName}
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             >
-                <Tabs defaultActiveKey="1" onChange={this.callback}>
-                    <TabPane tab="外链商品" key="1">
-                        <SelfProdForm ref="form1"/>
-                    </TabPane>
-                    <TabPane tab="自有商品" key="2">
-                        <YouzanProdForm ref="form2"/>
-                    </TabPane>
-                </Tabs>
+                {
+                    this.state.modalName ==="新增商品"?
+                        <Tabs defaultActiveKey="1" onChange={this.callback}>
+                            <TabPane tab="外链商品" key="1">
+                                <SelfProdForm ref="form1"/>
+                            </TabPane>
+                            <TabPane tab="自有商品" key="2">
+                                <YouzanProdForm ref="form2"/>
+                            </TabPane>
+                        </Tabs>
+                        :
+                        <SelfProdForm ref="form3" productData={this.state.productFieldsData}/>
+                }
+
             </Modal>
             <Table rowSelection={rowSelection} dataSource = {this.state.data? this.state.data.entries : null } columns={this.state.columns} pagination={false}/>
             {

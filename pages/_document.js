@@ -14,13 +14,16 @@ export default class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <meta name="version" content="1.0.0" />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" key="viewport" />
           <script src="http://image.mzliaoba.com/lib/plupload.full.min.new.js"></script>
-            <title>拇指聚宝</title>
+          <link rel="icon" href="../static/LOGO.png" />
+          <title>拇指聚宝</title>
         </Head>
         <body>
           {this.props.customValue}
           <Main />
           <NextScript />
+
         </body>
       </html>
     )
