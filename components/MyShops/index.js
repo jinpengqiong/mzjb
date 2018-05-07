@@ -147,11 +147,20 @@ class MyShopList extends React.Component {
             console.log('aaa', values);
               Request.GraphQlRequest(
                   addShop,
-                  { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:values.mainImage, phone: values.phone},
+                  { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:this.props.store.mainImage, phone: values.phone},
                   `Bearer ${localStorage.getItem('accessToken')}`).then(
                   (res) => {
-                      console.log('res', res);
-                      this.props.store.getMainImage(null);
+                      if(res.errors){
+                          message.error('创建失败，请联系管理员。')
+                      }else{
+                          console.log('res', res);
+                          this.props.store.getMainImage(null);
+                          message.success('店铺创建成功！');
+                          this.getData();
+                          this.setState({
+                              modalVisible: false,
+                          });
+                      }
                   }
               )
 
