@@ -1,6 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
-import {Card, Row, Col, Affix, Button, Icon, Modal, Form, Input, message, Tooltip, Radio } from 'antd';
+import {Card, Row, Col, Affix, Button, Icon, Modal, Form, Divider, message, Tooltip, Radio } from 'antd';
 import CreateShopForm from './createShopForm';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
@@ -17,11 +17,17 @@ const queryShops = `
           pageNumber
           pageSize
           entries{
-            desc
-            id
-            name
-            owner
-            mainImage
+              desc
+              id
+              name
+              phone
+              mainImage
+              bizTimeEnd
+              bizTimeStart
+              facilities
+              categories{
+                name
+              }
           }
         }
       }
@@ -131,9 +137,14 @@ class MyShopList extends React.Component {
       )
   }
   addShops = () => {
-    this.setState({
-      modalVisible: true,
-    });
+      if(this.state.data.length >4){
+          message.info('最多创建5个店铺！');
+          return;
+      }else {
+          this.setState({
+              modalVisible: true,
+          });
+      }
   }
 
 //create shop submit
@@ -160,6 +171,7 @@ class MyShopList extends React.Component {
                           this.setState({
                               modalVisible: false,
                           });
+                          this.refs.form.resetFields();
                       }
                   }
               )
@@ -255,20 +267,40 @@ class MyShopList extends React.Component {
       this.state.data.map(
       (entry) => {
         return (
-          <Col span={4} key={entry.id} style={{ height: 150}}>
               <Card
-                cover={<img alt="example" src={ entry.mainImage?  entry.mainImage : 'http://image.mzliaoba.com/pic/mzgg/4758068401/20180323/111.png' } />}
-                actions={[
-                <Tooltip title="进入店铺"><Icon type="shop" onClick={()=>{Router.push(`/products?id=${entry.id}`); this.props.store.getCurPagePath('店铺商品')}}/></Tooltip >,
-                // <Tooltip title="新增店员"><Icon type="user-add" onClick={ this.addStaff}/></Tooltip >,
-                <Tooltip title="绑定直播间"><Icon type="team" onClick={ () =>{this.showModal(entry.id)}}/></Tooltip >,
-                // <Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.updateShopInfo(parseInt(entry.id))}}/></Tooltip >,
-                <Tooltip title="删除店铺"><Icon type="delete" onClick={() =>{this.showConfirm(parseInt(entry.id))}} /></Tooltip >
-              ]}
+                  key={entry.id}
+                  hoverable
+                  type="inner"
+                  title={entry.name}
+                  extra={
+                      <div>
+                          <Tooltip title="进入店铺"><Icon type="shop" onClick={()=>{Router.push(`/products?id=${entry.id}`); this.props.store.getCurPagePath('店铺商品')}}/></Tooltip >
+                          <Divider type="vertical" />
+                          {/*<Tooltip title="新增店员"><Icon type="user-add" onClick={ this.addStaff}/></Tooltip >*/}
+                          <Tooltip title="绑定直播间"><Icon type="team" onClick={ () =>{this.showModal(entry.id)}}/></Tooltip >
+                          <Divider type="vertical" />
+                          {/*<Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.updateShopInfo(parseInt(entry.id))}}/></Tooltip >*/}
+                          <Tooltip title="删除店铺"><Icon type="delete" onClick={() =>{this.showConfirm(parseInt(entry.id))}} /></Tooltip >
+                      </div>
+                  }
               >
-                <Meta title={entry.name} description={entry.desc} />
+                  <Row type="flex" justify="space-around">
+                      <Col span={6}>
+                          <img alt="example"
+                           style={{ width: '200px'}}
+                           src={ entry.mainImage?  entry.mainImage : 'http://image.mzliaoba.com/pic/mzgg/4758068401/20180323/111.png' } />
+                      </Col>
+                      <Col span={7}>
+                          <p>店铺名称：{entry.name}</p>
+                          <p>简要描述：{entry.desc}</p>
+                          <p>店铺设施：{entry.facilities}</p>
+                      </Col>
+                      <Col span={6}>
+                          <p>营业开始时间：{entry.bizTimeStart}</p>
+                          <p>营业结束时间：{entry.bizTimeEnd}</p>
+                      </Col>
+                  </Row>
               </Card>
-          </Col>
         )
       }
     );
@@ -300,9 +332,9 @@ class MyShopList extends React.Component {
           </RadioGroup>
           <p>已绑定直播间：{(this.props.store.bindRoomData && this.props.store.bindRoomData.bind)? this.props.store.bindRoomData.bind.name : "暂无"}</p>
         </Modal>
-        <Row style={{ marginTop: 40 }} type="flex" justify="space-around">
+        <Card title="店铺列表" style={{ marginTop:"15px"}}>
           { shopData.length ===0? '暂无创建店铺' : shopData }
-        </Row>
+        </Card>
       </div>
     );
   }
