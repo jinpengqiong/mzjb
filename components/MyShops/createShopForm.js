@@ -177,5 +177,47 @@ class ShopForm extends React.Component {
     }
 }
 
-const CreateShopForm = Form.create()(ShopForm);
+const CreateShopForm = Form.create(
+    {
+        mapPropsToFields(props) {
+            console.log('props', props);
+            if(props.shopData){
+                return {
+                    name: Form.createFormField({
+                        ...props.shopData.name,
+                        value: props.shopData.name,
+                    }),
+                    desc: Form.createFormField({
+                        ...props.shopData.desc,
+                        value: props.shopData.desc,
+                    }),
+                    phone: Form.createFormField({
+                        ...props.shopData.phone,
+                        value: props.shopData.phone,
+                    }),
+                    mainImage: Form.createFormField({
+                        ...props.shopData.mainImage,
+                        value: props.shopData.mainImage,
+                    }),
+                    bizTimeStart: Form.createFormField({
+                        ...props.shopData.bizTimeStart,
+                        value: props.shopData.bizTimeStart,
+                    }),
+                    bizTimeEnd: Form.createFormField({
+                        ...props.shopData.bizTimeEnd,
+                        value: props.shopData.bizTimeEnd,
+                    }),
+                    categoryId: Form.createFormField({
+                        ...props.shopData,
+                        value: props.shopData.categories[0]? props.shopData.categories[0].id : null,
+                    }),
+                    facilities: Form.createFormField({
+                        ...props.shopData.facilities,
+                        value: props.shopData.facilities? props.shopData.facilities.split(','): null,
+                    }),
+                };
+            }
+        }
+    }
+)(ShopForm);
 export default CreateShopForm;

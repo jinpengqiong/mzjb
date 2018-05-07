@@ -130,7 +130,6 @@ class VideoUploader extends React.Component {
               Request.GraphQlRequest(createMediaID, { shopId, type:'VIDEO', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
               (res) => {
                 const ID = res.createMedia.id;
-                self.props.store.getUrlIDs(parseInt(ID));
                 message.success('上传成功！');
                 document.getElementById('ossfile2').innerHTML = '';
                 self.props.refreshData();

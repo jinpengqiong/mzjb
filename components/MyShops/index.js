@@ -27,6 +27,7 @@ const queryShops = `
               facilities
               categories{
                 name
+                id
               }
           }
         }
@@ -36,6 +37,20 @@ const queryShops = `
 const addShop = `
       mutation ($desc: String!, $name: String!, $bizTimeEnd: String, $bizTimeStart: String, $categoryId: ID, $facilities: String, $mainImage: String, $phone: String){
         createShop(desc:$desc,name:$name, bizTimeEnd:$bizTimeEnd, bizTimeStart:$bizTimeStart, categoryId:$categoryId, facilities:$facilities, mainImage:$mainImage, phone: $phone ){
+          desc
+          id
+          name
+          phone
+          mainImage
+          bizTimeEnd
+          bizTimeStart
+          facilities
+        }
+      }
+      `;
+const upDateShop = `
+      mutation ($id:Int!,$desc: String, $name: String, $bizTimeEnd: String, $bizTimeStart: String, $categoryId: ID, $facilities: String, $mainImage: String, $phone: String){
+        updateShop(id:$id, desc:$desc,name:$name, bizTimeEnd:$bizTimeEnd, bizTimeStart:$bizTimeStart, categoryId:$categoryId, facilities:$facilities, mainImage:$mainImage, phone: $phone ){
           desc
           id
           name
@@ -112,6 +127,9 @@ class MyShopList extends React.Component {
       modalVisible1: false,
       RadioValue:null,
       shopID:null,
+      modalName:null,
+      shopField:null,
+      UpdateShopID:null
     };
   }
   componentDidMount() {
@@ -136,6 +154,7 @@ class MyShopList extends React.Component {
           }
       )
   }
+
   addShops = () => {
       if(this.state.data.length >4){
           message.info('最多创建5个店铺！');
@@ -143,6 +162,8 @@ class MyShopList extends React.Component {
       }else {
           this.setState({
               modalVisible: true,
+              modalName:"新增店铺",
+              shopField:null
           });
       }
   }
@@ -150,34 +171,77 @@ class MyShopList extends React.Component {
 //create shop submit
 
     handleOk = () => {
-      this.refs.form.validateFields(
-          (err, values) => {
-          if (err) {
-              message.error(err);
-          }else{
-            console.log('aaa', values);
-              Request.GraphQlRequest(
-                  addShop,
-                  { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:this.props.store.mainImage, phone: values.phone},
-                  `Bearer ${localStorage.getItem('accessToken')}`).then(
-                  (res) => {
-                      if(res.errors){
-                          message.error('创建失败，请联系管理员。')
-                      }else{
-                          console.log('res', res);
-                          this.props.store.getMainImage(null);
-                          message.success('店铺创建成功！');
-                          this.getData();
-                          this.setState({
-                              modalVisible: false,
-                          });
-                          this.refs.form.resetFields();
-                      }
+      if(this.state.modalName==="新增店铺"){
+          this.refs.form.validateFields(
+              (err, values) => {
+                  if (err) {
+                      message.error(err);
+                  }else{
+                      // console.log('aaa', values);
+                      Request.GraphQlRequest(
+                          addShop,
+                          { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:this.props.store.mainImage, phone: values.phone},
+                          `Bearer ${localStorage.getItem('accessToken')}`).then(
+                          (res) => {
+                              if(res.errors){
+                                  message.error('创建失败，请联系管理员。')
+                              }else{
+                                  console.log('res', res);
+                                  this.props.store.getMainImage(null);
+                                  message.success('店铺创建成功！');
+                                  this.getData();
+                                  this.setState({
+                                      modalVisible: false,
+                                  });
+                                  this.refs.form.resetFields();
+                                  document.getElementById('ossfile').innerHTML = '';
+                              }
+                          }
+                      )
                   }
-              )
+              })
+      }else if(this.state.modalName==="更新店铺"){
+          this.refs.form.validateFields(
+              (err, values) => {
+                  if (err) {
+                      message.error(err);
+                  }else{
+                      console.log('aaa', values);
+                      Request.GraphQlRequest(
+                          upDateShop,
+                          {
+                              id:this.state.UpdateShopID,
+                              desc:values.desc, name:values.name,
+                              bizTimeEnd:values.bizTimeEnd,
+                              bizTimeStart:values.bizTimeStart,
+                              categoryId:values.categoryId,
+                              facilities:values.facilities?values.facilities.join(','):undefined,
+                              mainImage:this.props.store.mainImage? this.props.store.mainImage:this.state.shopField.mainImage,
+                              phone: values.phone
+                          },
+                          `Bearer ${localStorage.getItem('accessToken')}`).then(
+                          (res) => {
+                              if(res.errors){
+                                  message.error('创建失败，请联系管理员。')
+                              }else{
+                                  console.log('res', res);
+                                  this.props.store.getMainImage(null);
+                                  message.success('店铺更新成功！');
+                                  this.getData();
+                                  this.setState({
+                                      modalVisible: false,
+                                      UpdateShopID:null,
+                                      shopField:null
+                                  });
+                                  this.refs.form.resetFields();
+                                  document.getElementById('ossfile').innerHTML = '';
+                              }
+                          }
+                      )
+                  }
+              })
+      }
 
-          }
-      })
   };
 
   showConfirm = (ID) => {
@@ -208,6 +272,7 @@ class MyShopList extends React.Component {
     this.refs.form.resetFields();
     this.props.store.getMainImage(null);
   }
+
   error = (msg) => {
     message.error(msg);
   };
@@ -255,12 +320,33 @@ class MyShopList extends React.Component {
     });
   }
   onRadioChange = (e) => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.setState({
       RadioValue: e.target.value,
     });
   }
-  
+
+
+  //update shop
+    UpdateShopInfo = (ID) => {
+        const fieldData = this.state.data.filter(
+            (entry) =>{
+                if(parseInt(entry.id) === ID){
+                    return entry
+                }
+            }
+        );
+        // console.log('fieldData',fieldData)
+        this.setState({
+            modalVisible: true,
+            modalName:"更新店铺",
+            shopField:fieldData[0],
+            UpdateShopID:ID
+        });
+    }
+
+
+
   render() {
     // console.log('state', this.state.data);
     const shopData =  this.state.data &&
@@ -279,7 +365,8 @@ class MyShopList extends React.Component {
                           {/*<Tooltip title="新增店员"><Icon type="user-add" onClick={ this.addStaff}/></Tooltip >*/}
                           <Tooltip title="绑定直播间"><Icon type="team" onClick={ () =>{this.showModal(entry.id)}}/></Tooltip >
                           <Divider type="vertical" />
-                          {/*<Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.updateShopInfo(parseInt(entry.id))}}/></Tooltip >*/}
+                          <Tooltip title="更新店铺"><Icon type="edit" onClick={() =>{this.UpdateShopInfo(parseInt(entry.id))}}/></Tooltip >
+                          <Divider type="vertical" />
                           <Tooltip title="删除店铺"><Icon type="delete" onClick={() =>{this.showConfirm(parseInt(entry.id))}} /></Tooltip >
                       </div>
                   }
@@ -296,6 +383,7 @@ class MyShopList extends React.Component {
                           <p>店铺设施：{entry.facilities}</p>
                       </Col>
                       <Col span={6}>
+                          <p>店铺类型：{(entry.categories && entry.categories[0]!== undefined)? entry.categories[0].name:null}</p>
                           <p>营业开始时间：{entry.bizTimeStart}</p>
                           <p>营业结束时间：{entry.bizTimeEnd}</p>
                       </Col>
@@ -322,8 +410,8 @@ class MyShopList extends React.Component {
             </Button>
         </Affix>
         }
-        <Modal title="新增店铺" visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.hideModal} maskClosable={false} width={550}>
-          <CreateShopForm ref="form" />
+        <Modal title={this.state.modalName} visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.hideModal} maskClosable={false} width={550}>
+          <CreateShopForm ref="form" shopData={this.state.shopField? this.state.shopField: null}/>
         </Modal>
         <Modal title="绑定直播间" visible={this.state.modalVisible1} onOk={this.handleOk1} onCancel={this.handleCancel} maskClosable={false} width={550}>
           可绑定直播间：

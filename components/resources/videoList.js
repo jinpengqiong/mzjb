@@ -122,12 +122,16 @@ class VideoList extends React.Component {
                 {VideoData}
             </div>
             </Checkbox.Group>
-            <Pagination 
-            defaultCurrent={1} 
-            onChange={this.onChange}
-            current={this.state.data? this.state.data.pageNumber : 1}
-            total={this.state.data? this.state.data.totalEntries : 1} 
-            style={{ marginLeft: "80%", marginTop: "10px"}}/>
+            {
+                (this.state.data && this.state.data.totalEntries !==0)
+                &&
+                <Pagination
+                    defaultCurrent={1}
+                    current={this.state.data.pageNumber}
+                    onChange={this.onChange}
+                    total={this.state.data? this.state.data.totalEntries : 1}
+                    style={{ marginLeft: "80%", marginTop: "10px"}}/>
+            }
         </div>
         );
     }
