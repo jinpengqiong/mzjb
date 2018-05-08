@@ -79,7 +79,7 @@ class VideoList extends React.Component {
     }
 
     handleChcekChange = (checkedValues) => {
-        console.log('checked = ', checkedValues);
+        // console.log('checked = ', checkedValues);
         this.props.store.setChecked(checkedValues)
       }
     render() {

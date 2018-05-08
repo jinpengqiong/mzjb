@@ -99,7 +99,7 @@ export default class ADPlayList extends React.Component {
   queryADPlayListData(curPage){
       Request.GraphQlRequest(queryADPlayList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            console.log('res', res);
+            // console.log('res', res);
             this.setState({
                 data: res.adPlaylists
             })
@@ -145,7 +145,7 @@ export default class ADPlayList extends React.Component {
     }
 
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
         modalVisible: false,
     });

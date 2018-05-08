@@ -34,12 +34,12 @@ class RegistrationForm extends React.Component {
   }   
   // position select
   onChange = (e) => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.props.store.getPosition(e.target.value);
   }
   //priority select
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
     this.props.store.getWeight(value);
   }
   openModal = () => {
@@ -75,7 +75,7 @@ class RegistrationForm extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false,
       visible1:false
@@ -93,7 +93,7 @@ class RegistrationForm extends React.Component {
         md: { span: 16 },
       },
     };
-    console.log('state', this.state)
+    // console.log('state', this.state)
     return (
       <Form>
         <FormItem

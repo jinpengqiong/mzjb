@@ -53,7 +53,7 @@ class PicList extends React.Component {
         };
         Request.GraphQlRequest(queryShopMedia, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res',res)
+                // console.log('res',res)
                 this.setState({
                     data: res.shopMedias
                 })

@@ -15,7 +15,7 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
         const mutation = `
           mutation ($phone:String!, $password: String!) {
             login(phone:$phone,password:$password){
@@ -39,7 +39,7 @@ class NormalLoginForm extends React.Component {
           request(uri, mutation, variables).then(
             (res)=>{
               message.success('登录成功！')
-              console.log('res', res);
+              // console.log('res', res);
               localStorage.setItem('accessToken', res.login.accessToken);
               localStorage.setItem('accountid', res.login.user.accountid);
               localStorage.setItem('nickname', res.login.user.nickname);

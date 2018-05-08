@@ -46,7 +46,7 @@ class ResourUploader extends React.Component {
   getOSSPolicy() {
       Request.GraphQlRequest(queryossPolicy, {label:"user", type:"pic"}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          console.log('oss', res)
+          // console.log('oss', res)
           this.setState({
               data: res.ossPolicy,
           })

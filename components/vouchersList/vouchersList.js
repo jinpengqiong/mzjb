@@ -114,7 +114,7 @@ export default class MyVoucherList extends React.Component {
     queryVouchers = (page) => {
         Request.GraphQlRequest(queryVouchers, {page, pageSize:8, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('voucher', res)
+                // console.log('voucher', res)
                 this.setState({
                     data: res.shopWxcards
                 })
@@ -166,7 +166,7 @@ export default class MyVoucherList extends React.Component {
                 if(res.errors){
                     message.success('删除失败！');
                 }else{
-                    console.log('res', res);
+                    // console.log('res', res);
                     message.success('删除成功！');
                     this.queryVouchers(1);
                 }
@@ -190,7 +190,7 @@ export default class MyVoucherList extends React.Component {
                 if(res.errors){
                     message.success('发送失败，暂无可绑定直播间！');
                 }else{
-                    console.log('res', res);
+                    // console.log('res', res);
                     message.success('发送成功！');
                     this.queryVouchers(1);
                 }

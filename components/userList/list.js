@@ -79,7 +79,7 @@ export default class UserList extends React.Component {
                     entry.key = entry.id
                 }
             )
-            console.log('res', res)
+            // console.log('res', res)
             this.setState({
                 data: res.allUsers
             })

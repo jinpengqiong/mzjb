@@ -37,11 +37,11 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
         request(uri, submitByPhone,{ phone: values.phone, code: values.SmsCode}).then(
           (res)=>{
             message.success('登录成功！')
-            console.log('res', res);
+            // console.log('res', res);
             localStorage.setItem('accessToken', res.smsLogin.accessToken);
             localStorage.setItem('accountid', res.smsLogin.user.accountid);
             localStorage.setItem('nickname', res.smsLogin.user.nickname);

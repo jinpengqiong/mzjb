@@ -121,7 +121,7 @@ export default class ProdTable extends React.Component {
             dataIndex: 'mainImage',
             title: '商品图',
             dataType: 'varchar',
-            width: 200,
+            width: 150,
             render: text => <img src={text} style={{ width: 100 }}/>,
             },
             {
@@ -137,7 +137,7 @@ export default class ProdTable extends React.Component {
             dataIndex: 'desc',
             title: '简要描述',
             dataType: 'varchar',
-            width: 150,
+            width: 200,
             validator: [{type: 'string', message: '请输入简要描述',required:true}],
             render: text => `${text}`,
             },
@@ -151,7 +151,7 @@ export default class ProdTable extends React.Component {
             {
             title: '操作',
             key: 'action',
-            width: 150,
+            width: 200,
             render: (text, record) => (
                 <span>
                 <Popconfirm title="确定要发送吗?" onConfirm={()=>{this.confirm1(record.id)}}  okText="确认" cancelText="取消">
@@ -179,7 +179,7 @@ export default class ProdTable extends React.Component {
   queryProdData= (curPage) => {
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            console.log('res', res)
+            // console.log('res', res)
             this.props.store.getProductData(res.shopProducts.entries);
             res.shopProducts.entries.map(
                 (entry) => {
@@ -215,7 +215,7 @@ export default class ProdTable extends React.Component {
                 values.price = parseInt(parseFloat(values.price)*100);
                 Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: this.props.shopID, type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
-                        console.log('res', res);
+                        // console.log('res', res);
                         this.refs.form1.resetFields();
                         this.props.store.resetUrlIDs();
                         res.createProduct.mainImage = res.createProduct.imagesUrls[0].url;
@@ -246,7 +246,7 @@ export default class ProdTable extends React.Component {
                 Request.GraphQlRequest(addProduct,
                     { baseinfo: values, shopId: this.props.shopID, type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
-                        console.log('res', res);
+                        // console.log('res', res);
                         if(!res.errors){
                             this.refs.form2.resetFields();
                             this.props.store.resetUrlIDs();
@@ -274,9 +274,13 @@ export default class ProdTable extends React.Component {
               if (err) {
                   message.error(err);
               } else {
-                  console.log('values', values);
-                  values.images = this.props.store.imgUrlID.join(',');
+                  if(JSON.stringify(this.props.store.imgUrlID) === '[]'){
+                      delete values.images
+                  }else{
+                      values.images = this.props.store.imgUrlID.join(',');
+                  }
                   values.price = parseInt(parseFloat(values.price) * 100);
+                  // console.log('values', values);
                   Request.GraphQlRequest(UpdateProduct,
                       {
                           baseinfo: values,
@@ -284,16 +288,14 @@ export default class ProdTable extends React.Component {
                           id: this.state.productID
                       }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                       (res) => {
-                          console.log('res', res);
+                          // console.log('res', res);
                           if (!res.errors) {
                               this.refs.form3.resetFields();
                               this.props.store.resetUrlIDs();
-                              res.createProduct.mainImage = res.createProduct.imagesUrls[0].url;
-                              res.createProduct.key = res.createProduct.id;
-                              delete res.createProduct.imagesUrls;
-                              delete res.createProduct.images;
+                              res.updateProduct.key = res.updateProduct.id;
+                              delete res.updateProduct.imagesUrls;
+                              delete res.updateProduct.images;
                               this.queryProdData(1);
-                              document.getElementById('ossfile1').innerHTML = '';
                               this.setState({
                                   visible: false
                               });
@@ -301,6 +303,7 @@ export default class ProdTable extends React.Component {
                                   message: '更新成功',
                                   duration: 3,
                               });
+                              document.getElementById('ossfile').innerHTML = '';
                           }
 
                       }
@@ -318,7 +321,7 @@ export default class ProdTable extends React.Component {
   }
 
   callback = (key) => {
-      console.log(key)
+      // console.log(key)
     this.props.store.getTabOption(key)
   }
 
@@ -330,7 +333,7 @@ export default class ProdTable extends React.Component {
             if(res.errors){
                 message.success('删除失败！');
             }else{
-                console.log('res', res);
+                // console.log('res', res);
                 message.success('删除成功！');
                 this.queryProdData(1);
             }
@@ -357,7 +360,7 @@ confirm1 = (id) => {
 
 //control select keys
 onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    // console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.props.store.getselectedRowKeys(selectedRowKeys)
   }
 
@@ -370,7 +373,7 @@ onSelectChange = (selectedRowKeys) => {
                 }
             }
         );
-        console.log('fieldData',fieldData)
+        // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             modalName:"更新商品",

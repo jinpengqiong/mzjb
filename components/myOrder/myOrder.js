@@ -144,7 +144,7 @@ export default class OrderManagement extends React.Component {
                         delete entry.items;
                     }
                 );
-                console.log('111', res)
+                // console.log('111', res)
                 this.setState({
                 data: res.shopTradesList
                 })
@@ -194,14 +194,14 @@ export default class OrderManagement extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false,
     });
   }
 
   onChange = (e) => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     const value = parseInt(e.target.value);
     this.setState({
         isNoExpress: value,
@@ -209,7 +209,7 @@ export default class OrderManagement extends React.Component {
   }
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
     this.setState({
         deliveryValue:value
     })
@@ -223,7 +223,7 @@ export default class OrderManagement extends React.Component {
   }
 
   InputDeliveryNum = (e) => {
-    console.log('value', e.target.value);
+    // console.log('value', e.target.value);
     this.setState({
         DeliveryNum: e.target.value
     })

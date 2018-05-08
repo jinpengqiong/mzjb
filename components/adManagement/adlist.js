@@ -78,7 +78,7 @@ export default class ADList extends React.Component {
   queryADListData = (curPage) => {
     Request.GraphQlRequest(queryADList, {page:curPage, pageSize: 4, shopId: this.props.store.shopID }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            console.log('res', res);
+            // console.log('res', res);
             this.setState({
                 data: res.adMedias
             })
@@ -103,7 +103,7 @@ export default class ADList extends React.Component {
         ;
         Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res', res);
+                // console.log('res', res);
                 this.props.store.getselectedRowKeys(null);
                 this.props.store.getStrucInfo('','','');
                 this.props.store.getWeight(null);
@@ -127,7 +127,7 @@ export default class ADList extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
         modalVisible: false,
     });
@@ -150,7 +150,7 @@ export default class ADList extends React.Component {
                 if(res.errors){
                     message.success('删除失败！');
                 }else{
-                    console.log('res', res);
+                    // console.log('res', res);
                     message.success('删除成功！');
                     this.queryADListData(1);
                 }

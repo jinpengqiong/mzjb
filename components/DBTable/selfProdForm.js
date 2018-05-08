@@ -107,7 +107,7 @@ class RegistrationForm extends React.Component {
 
 const SelfProdForm = Form.create({
     mapPropsToFields(props) {
-        console.log('props', props);
+        // console.log('props', props);
         if (props.productData) {
             return {
                 title: Form.createFormField({
@@ -120,7 +120,7 @@ const SelfProdForm = Form.create({
                 }),
                 price: Form.createFormField({
                     ...props.productData.price,
-                    value: props.productData.price,
+                    value: (parseInt(props.productData.price)/100).toFixed(2),
                 }),
                 detailUrl: Form.createFormField({
                     ...props.productData.detailUrl,

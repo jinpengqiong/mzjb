@@ -41,7 +41,7 @@ class RegistrationForm extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false,
       visible1:false
@@ -59,7 +59,7 @@ class RegistrationForm extends React.Component {
         md: { span: 16 },
       },
     };
-    console.log('state', this.state)
+    // console.log('state', this.state)
     return (
       <Form>
         <FormItem

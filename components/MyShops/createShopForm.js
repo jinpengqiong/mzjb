@@ -41,7 +41,7 @@ class ShopForm extends React.Component {
         )
     }
     onCheckChange = (checkedValues) => {
-        console.log('checked = ', checkedValues);
+        // console.log('checked = ', checkedValues);
     }
 
     render() {

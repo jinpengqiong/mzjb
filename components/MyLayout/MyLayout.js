@@ -31,7 +31,7 @@ export default class MyLayout extends React.Component {
     });
   }
   handleClick = (e) => {
-    console.log('click ', e.key);
+    // console.log('click ', e.key);
     this.props.store.getCurPagePath(e.key)
   }
   handleLogout = () => {
@@ -51,7 +51,8 @@ export default class MyLayout extends React.Component {
         >
           <div className="logo" >
             <h2 style={{ textAlign:'center', color:'white' }}>
-              {this.state.collapsed ? '聚' : '拇指聚宝'}
+              {
+                this.state.collapsed ? <img src='../../static/LOGO.png' style={{ width:20}}/> : '拇指聚宝'}
             </h2>
           </div>
           <Menu 

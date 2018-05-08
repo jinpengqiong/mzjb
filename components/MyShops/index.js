@@ -147,7 +147,7 @@ class MyShopList extends React.Component {
     };
     Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
-              console.log('res',res);
+              // console.log('res',res);
               this.setState({
                   data: res.myShops.entries
               })
@@ -186,7 +186,7 @@ class MyShopList extends React.Component {
                               if(res.errors){
                                   message.error('创建失败，请联系管理员。')
                               }else{
-                                  console.log('res', res);
+                                  // console.log('res', res);
                                   this.props.store.getMainImage(null);
                                   message.success('店铺创建成功！');
                                   this.getData();
@@ -206,7 +206,10 @@ class MyShopList extends React.Component {
                   if (err) {
                       message.error(err);
                   }else{
-                      console.log('aaa', values);
+                      // console.log('aaa', values);
+                      if(!values.categoryId){
+                          delete values.categoryId
+                      }
                       Request.GraphQlRequest(
                           upDateShop,
                           {
@@ -224,7 +227,7 @@ class MyShopList extends React.Component {
                               if(res.errors){
                                   message.error('创建失败，请联系管理员。')
                               }else{
-                                  console.log('res', res);
+                                  // console.log('res', res);
                                   this.props.store.getMainImage(null);
                                   message.success('店铺更新成功！');
                                   this.getData();
@@ -314,7 +317,7 @@ class MyShopList extends React.Component {
     )
   }
   handleCancel = (e) => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       modalVisible1: false,
     });

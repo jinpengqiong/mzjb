@@ -49,7 +49,7 @@ class YouzanUploader extends React.Component {
       `;
       Request.GraphQlRequest(queryossPolicy, {label:"user", type:"pic"}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          console.log('oss', res)
+          // console.log('oss', res)
           this.setState({
               data: res.ossPolicy,
           })
@@ -132,7 +132,7 @@ class YouzanUploader extends React.Component {
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaAndUploadYouzan, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                  console.log('res',res)
+                  // console.log('res',res)
                   if(res.errors){
                     message.error('errors')
                   }else{
