@@ -208,7 +208,7 @@ export default class ADList extends React.Component {
         <div>
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')}>
                 <Button type="primary" onClick={this.handleClick}>
-                <Icon type="plus-circle-createVoucherso" />新增广告
+                    <Icon type="plus-circle-o" />新增广告
                 </Button>
             </Affix>
             <Modal title="新增广告" visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.handleCancel} maskClosable={false} width={550}>

@@ -16,6 +16,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "create-react-class": "^15.6.3",
+    "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "graphql-request": "^1.5.1",
     "less": "^2.7.3",
@@ -31,7 +32,11 @@
     "react-color": "^2.14.1",
     "react-dom": "^16.2.0",
     "react-icons": "^2.2.7",
+    "style-loader": "^0.21.0",
     "styled-jsx": "^2.2.4",
     "superagent": "^3.8.2"
+  },
+  "theme": {
+    "primary-color": "#1DA57A"
   }
 }

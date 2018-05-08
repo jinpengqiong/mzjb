@@ -137,7 +137,9 @@ export default class MyVoucherList extends React.Component {
                 values.beginTimestamp = parseInt(rangeTimeValue[0].format('X'));
                 values.endTimestamp = parseInt(rangeTimeValue[1].format('X'));
                 values.quantity = parseInt(values.quantity);
+                values.logoUrl = this.props.store.mainImage;
                 delete values['range-time-picker'];
+                // console.log('values',values);
                 Request.GraphQlRequest(addVoucher, {shopId: this.props.store.shopID, baseinfo: values }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res) =>{
                         if(res.errors){
@@ -147,6 +149,9 @@ export default class MyVoucherList extends React.Component {
                             message.success('卡券创建成功！');
                             this.hideModal();
                             this.queryVouchers();
+                            this.refs.form.resetFields();
+                            this.props.store.getMainImage(null);
+                            document.getElementById('ossfile').innerHTML = '';
                         }
                     }
                 )
@@ -249,7 +254,7 @@ export default class MyVoucherList extends React.Component {
         <div>
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')}>
                 <Button type="primary" onClick={this.createVouchers}>
-                <Icon type="plus-circle-createVoucherso" />新增卡券
+                    <Icon type="plus-circle-o" />新增卡券
                 </Button>
             </Affix>
             <Modal title="创建卡券" visible={this.state.modalVisible} onOk={this.handleSubmit} onCancel={this.hideModal} maskClosable={false} width={550}>

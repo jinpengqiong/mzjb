@@ -2,7 +2,7 @@ import React from 'react';
 import { message, Tabs, Icon } from 'antd';
 import LoginFormWithPhone from '../components/loginTabs/byPhone';
 import LoginFormWithAccount from '../components/loginTabs/byAccount';
-import stylesheet from '../styles/index.less';
+
 
 
 const TabPane = Tabs.TabPane;
@@ -47,7 +47,6 @@ class Login extends React.Component {
             padding-bottom: 40px;
           }
         ` }</style>
-        <style jsx global="true">{ stylesheet }</style>
       </div>
     );
   }

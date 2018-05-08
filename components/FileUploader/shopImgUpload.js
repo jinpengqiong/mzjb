@@ -1,6 +1,5 @@
 import React from 'react';
-const RadioGroup = Radio.Group;
-import { Radio, Progress, message } from 'antd';
+import { Button, message } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';
@@ -138,39 +137,9 @@ class ShopImgUploader extends React.Component {
                 <div id="ossfile"></div>
                 <br/>
                 <div id="container">
-                    <a id="selectfiles" href="javascript:void(0);" className='btn' style={{ marginRight: "10px"}}>选择文件</a>
-                    <a id="postfiles" href="javascript:void(0);" className='btn'>开始上传</a>
+                    <Button id="selectfiles" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
+                    <Button id="postfiles" href="javascript:void(0);" >开始上传</Button>
                 </div>
-                <style jsx='true'>{`
-          	.btn{
-            color: #fff;
-            background-color: #1890FF;
-            border-color: #2e6da4;
-            display: inline-block;
-            padding: 6px 12px;
-            margin-bottom: 0;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.42857143;
-            text-align: center;
-            white-space: nowrap;
-            text-decoration: none;
-            vertical-align: middle;
-            -ms-touch-action: manipulation;
-            touch-action: manipulation;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-image: none;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            }
-            a.btn:hover{
-                background-color: #40A9FF;
-            }
-          `}</style>
             </div>
         );
     }

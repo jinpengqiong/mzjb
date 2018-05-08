@@ -3,6 +3,7 @@ const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 import { TwitterPicker } from 'react-color'
 import { inject, observer } from 'mobx-react'
+import ShopImgUploader from '../FileUploader/shopImgUpload'
 
 
 
@@ -133,16 +134,14 @@ class RegistrationForm extends React.Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="图片链接"
+          label="商户logo图片"
         >
           {getFieldDecorator('logoUrl', {
             rules: [{
               type: 'string', message: '请输入商户logo图片链接!',
-            }, {
-              required: true, message: '请输入商户logo图片链接!',
             }],
           })(
-            <Input placeholder="商户logo图片链接"/>
+            <ShopImgUploader/>
           )}
         </FormItem>
         <FormItem

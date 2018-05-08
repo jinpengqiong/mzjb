@@ -164,7 +164,7 @@ export default class ADPlayList extends React.Component {
     this.setState({
       value: e.target.value,
     });
-      // const playlist = parseInt(e.target.value);
+      const playlist = parseInt(e.target.value);
       Request.GraphQlRequest(setPlaylist, { shopId: this.props.store.shopID, playlist}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
             if(!res.errors){
@@ -207,7 +207,7 @@ export default class ADPlayList extends React.Component {
         <div>
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')}>
                 <Button type="primary" onClick={this.handleClick}>
-                <Icon type="plus-circle-createVoucherso" />新增播单
+                    <Icon type="plus-circle-o" />新增播单
                 </Button>
             </Affix>
             <Modal title="新增播单" visible={this.state.modalVisible} onOk={this.handleOk} onCancel={this.handleCancel} maskClosable={false} width={550}>

@@ -1,11 +1,9 @@
-import { Layout, Menu, Icon, message } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
 import MyFooter from '../Footer/Footer';
 import MyBreadcrumb from '../breadcrumb/breadcrumb';
 import Router from 'next/router';
-import stylesheet from '../../styles/index.less';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 import { inject, observer } from 'mobx-react'
 
 
@@ -183,7 +181,6 @@ export default class MyLayout extends React.Component {
             margin: 16px;
           }
         `}</style>
-        <style jsx global>{ stylesheet }</style>
       </Layout>
     );
   }

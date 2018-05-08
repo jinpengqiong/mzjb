@@ -381,9 +381,9 @@ class MyShopList extends React.Component {
                            src={ entry.mainImage?  entry.mainImage : 'http://image.mzliaoba.com/pic/mzgg/4758068401/20180323/111.png' } />
                       </Col>
                       <Col span={7}>
-                          <p>店铺名称：{entry.name}</p>
                           <p>简要描述：{entry.desc}</p>
                           <p>店铺设施：{entry.facilities}</p>
+                          <p>手机号：{entry.phone}</p>
                       </Col>
                       <Col span={6}>
                           <p>店铺类型：{(entry.categories && entry.categories[0]!== undefined)? entry.categories[0].name:null}</p>

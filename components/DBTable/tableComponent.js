@@ -317,7 +317,12 @@ export default class ProdTable extends React.Component {
   handleCancel = () => {
     this.setState({
       visible: false
-    })
+    });
+  this.refs.form1.resetFields();
+  this.refs.form2.resetFields();
+  this.refs.form3.resetFields();
+  document.getElementById('ossfile').innerHTML = '';
+  document.getElementById('ossfile1').innerHTML = '';
   }
 
   callback = (key) => {
