@@ -158,8 +158,6 @@ export default class ProdTable extends React.Component {
                     <a href="javascript:;" >发送直播间</a>
                 </Popconfirm>
                 <Divider type="vertical" />
-                    <a href="#" >编辑</a>
-                <Divider type="vertical" />
                     <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
                 <Divider type="vertical" />
                 <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{this.confirm(record.id)}} okText="确认" cancelText="取消">

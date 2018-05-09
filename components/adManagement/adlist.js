@@ -163,9 +163,11 @@ export default class ADList extends React.Component {
       }
 
   render() {
+      console.log('111', this.state.data)
     const voucherData =  this.state.data &&
     this.state.data.entries.map(
     (entry) => {
+
         if(typeof entry.structDesc === 'string'){
             entry.structDesc = JSON.parse(entry.structDesc);
         }
@@ -196,7 +198,7 @@ export default class ADList extends React.Component {
                             <p>广告ID：{entry.id}</p> 
                             <p>视频ID：{entry.media? entry.media.id : null}</p>
                             <p>商品名称：{entry.structDesc.title}</p>
-                            <p><a src={entry.structDesc.images}>商品链接</a></p>
+                            <p><a href={entry.structDesc.detailUrl} target='_blank'>商品链接</a></p>
                             <p>创建时间：{moment(entry.insertedAt).format('YYYY-MM-DD HH:mm')}</p>  
                         </Col>
                     </Row>
