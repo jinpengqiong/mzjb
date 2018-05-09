@@ -142,10 +142,6 @@ export default class MyVoucherList extends React.Component {
                 // console.log('values',values);
                 Request.GraphQlRequest(addVoucher, {shopId: this.props.store.shopID, baseinfo: values }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res) =>{
-                        if(res.errors){
-                            message.success('卡券创建出错，请检查卡券名或商家名字数是否超出限制！');
-                            this.hideModal();
-                        }else{
                             message.success('卡券创建成功！');
                             this.hideModal();
                             this.queryVouchers();
@@ -153,8 +149,7 @@ export default class MyVoucherList extends React.Component {
                             this.props.store.getMainImage(null);
                             document.getElementById('ossfile').innerHTML = '';
                         }
-                    }
-                )
+                ).catch(()=>{message.error('卡券创建出错，请检查卡券名或商家名字数是否超出限制！')})
             }
         });
     }
@@ -168,15 +163,11 @@ export default class MyVoucherList extends React.Component {
     confirm = (id) => {
         Request.GraphQlRequest(deleteVoucher, { shopId: this.state.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
-                if(res.errors){
-                    message.success('删除失败！');
-                }else{
                     // console.log('res', res);
                     message.success('删除成功！');
                     this.queryVouchers(1);
                 }
-            }
-        )
+        ).catch(()=>{message.error('出错了，请重试！')})
     }
     onChange(pageNumber) {
         this.queryVouchers(pageNumber);
@@ -192,15 +183,11 @@ export default class MyVoucherList extends React.Component {
     confirm1 = (id) => {
         Request.GraphQlRequest(sendWxcardToLive, { shopId: this.state.shopID, id, cartTime:5000}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
-                if(res.errors){
-                    message.success('发送失败，暂无可绑定直播间！');
-                }else{
                     // console.log('res', res);
                     message.success('发送成功！');
                     this.queryVouchers(1);
-                }
             }
-        )
+        ).catch(()=>{message.error('出错了，请重试！')})
     }
 
 

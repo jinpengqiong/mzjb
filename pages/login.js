@@ -29,7 +29,7 @@ class Login extends React.Component {
             </TabPane>
           </Tabs>
         </div>
-        <style jsx="true"> { `
+        <style jsx> { `
           .login {
             position: absolute;
             top: 50%;

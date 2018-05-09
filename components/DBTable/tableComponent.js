@@ -245,7 +245,6 @@ export default class ProdTable extends React.Component {
                     { baseinfo: values, shopId: this.props.shopID, type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
                         // console.log('res', res);
-                        if(!res.errors){
                             this.refs.form2.resetFields();
                             this.props.store.resetUrlIDs();
                             res.createProduct.mainImage = res.createProduct.imagesUrls[0].url;
@@ -262,9 +261,7 @@ export default class ProdTable extends React.Component {
                                 duration: 3,
                             });
                         }
-                        
-                    }
-                )
+                ).catch(()=>{message.error('新增失败！')})
             }   
         })
       }else if(this.state.modalName ==='更新商品') {
@@ -287,7 +284,6 @@ export default class ProdTable extends React.Component {
                       }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                       (res) => {
                           // console.log('res', res);
-                          if (!res.errors) {
                               this.refs.form3.resetFields();
                               this.props.store.resetUrlIDs();
                               res.updateProduct.key = res.updateProduct.id;
@@ -303,9 +299,7 @@ export default class ProdTable extends React.Component {
                               });
                               document.getElementById('ossfile').innerHTML = '';
                           }
-
-                      }
-                  )
+                  ).catch(()=>{message.error('更新失败！')})
               }
           })
       }
@@ -333,15 +327,11 @@ export default class ProdTable extends React.Component {
       Request.GraphQlRequest(deleteProduct,
           { shopId: this.state.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
-            if(res.errors){
-                message.success('删除失败！');
-            }else{
                 // console.log('res', res);
                 message.success('删除成功！');
                 this.queryProdData(1);
-            }
         }
-    )
+    ).catch(()=>{message.error('删除失败！')})
 }
 
 //发送直播间
@@ -350,15 +340,11 @@ confirm1 = (id) => {
     Request.GraphQlRequest(sendPicadToLive,
         { shopId: this.state.shopID, id:ID, cartTime:5000}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
-            if(res.errors){
-                message.success('发送失败！');
-            }else{
                 // console.log('res', res);
                 message.success('发送成功！');
                 this.queryProdData(1);
-            }
         }
-    )
+    ).catch(()=>{message.error('发送失败！')})
 }
 
 //control select keys

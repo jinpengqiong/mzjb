@@ -132,9 +132,6 @@ export default class OrderManagement extends React.Component {
     // console.log('startTime',startTime)
     Request.GraphQlRequest(queryOrder, {id: this.props.store.shopID, page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime },`Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            if(res.errors){
-                message.error('出错了，请重试！')
-            }else{
                 res.shopTradesList.trades.map(
                     (entry) => {
                         entry.key = UUIDGen.uuid(8,10);
@@ -148,9 +145,8 @@ export default class OrderManagement extends React.Component {
                 this.setState({
                 data: res.shopTradesList
                 })
-            }
         }
-    ).catch((error)=>{message.error(error)})
+    ).catch(()=>{message.error('出错了，请重试！')})
   };
 
   
@@ -165,30 +161,23 @@ export default class OrderManagement extends React.Component {
       if(this.state.isNoExpress === 0 ){
           Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo, outSid: this.state.DeliveryNum, outStype: this.state.deliveryValue.toString()}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-            if(res.errors){
-                message.error(res.errors[0].message)
-            }else{
+
                 message.success('发货成功！');
                 this.setState({
                     visible: false,
                     });    
                 }
                 this.queryOrderData(1);
-            }
-        )
+        ).catch(()=>{message.error('出错了，请重试！')})
       }else{
           Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-            if(res.errors){
-                message.error(res.errors[0].message)
-            }else{
                 message.success('操作成功！');
                 this.setState({
                     visible: false,
                     });    
                 }
-            }
-        )
+        ).catch(()=>{message.error('出错了，请重试！')})
       }
     
   }

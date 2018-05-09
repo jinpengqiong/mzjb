@@ -132,16 +132,12 @@ export default class ADPlayList extends React.Component {
   confirm = (id) => {
       Request.GraphQlRequest(deleteAdPlaylist, { shopId: this.props.store.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
-                if(res.errors){
-                    message.success('删除失败！');
-                }else{
                     // console.log('res', res);
                     message.success('删除成功！');
                     this.queryADPlayListData(1);
                     this.props.store.getADMediaID('');
-                }
             }
-        )
+        ).catch(()=>{message.error('删除失败！')})
     }
 
   handleCancel = (e) => {
@@ -167,11 +163,9 @@ export default class ADPlayList extends React.Component {
       const playlist = parseInt(e.target.value);
       Request.GraphQlRequest(setPlaylist, { shopId: this.props.store.shopID, playlist}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
-            if(!res.errors){
                 message.success('设置成功！')
             }
-          }
-      )
+      ).catch(()=>{message.error('删除失败！')})
   }
 
   render() {

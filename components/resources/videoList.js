@@ -65,12 +65,10 @@ class VideoList extends React.Component {
     confirm(id) {
         Request.GraphQlRequest(deleteMedia, { id, shopId: this.props.store.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                if(!res.errors){
                     message.success('删除成功！');
                     this.getData(1);
                 } 
-            }
-        )
+        ).catch(()=>{message.error('出错了，请重试！')})
     }
 
 

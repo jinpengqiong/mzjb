@@ -1,7 +1,7 @@
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 import Router from 'next/router';
 const FormItem = Form.Item;
-import { request, GraphQLClient } from 'graphql-request'
+import { request } from 'graphql-request'
 import uri from '../../utils/uri';
 // const uri = 'http://testshop.muzhiyun.cn/api/graphiql';
 
@@ -38,15 +38,16 @@ class NormalLoginForm extends React.Component {
           };
           request(uri, mutation, variables).then(
             (res)=>{
-              message.success('登录成功！')
-              // console.log('res', res);
-              localStorage.setItem('accessToken', res.login.accessToken);
-              localStorage.setItem('accountid', res.login.user.accountid);
-              localStorage.setItem('nickname', res.login.user.nickname);
-              localStorage.setItem('role', res.login.user.role);
-              Router.push('/')
+                if(!res.errors){
+                    message.success('登录成功！');
+                    localStorage.setItem('accessToken', res.login.accessToken);
+                    localStorage.setItem('accountid', res.login.user.accountid);
+                    localStorage.setItem('nickname', res.login.user.nickname);
+                    localStorage.setItem('role', res.login.user.role);
+                    Router.push('/')
+                }
             }
-        )
+        ).catch(()=>{message.error('登录失败！')})
       }
     });
   }

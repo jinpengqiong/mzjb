@@ -183,9 +183,6 @@ class MyShopList extends React.Component {
                           { desc:values.desc, name:values.name, bizTimeEnd:values.bizTimeEnd, bizTimeStart:values.bizTimeStart, categoryId:values.categoryId, facilities:values.facilities?values.facilities.join(','):undefined, mainImage:this.props.store.mainImage, phone: values.phone},
                           `Bearer ${localStorage.getItem('accessToken')}`).then(
                           (res) => {
-                              if(res.errors){
-                                  message.error('创建失败，请联系管理员。')
-                              }else{
                                   // console.log('res', res);
                                   this.props.store.getMainImage(null);
                                   message.success('店铺创建成功！');
@@ -195,9 +192,8 @@ class MyShopList extends React.Component {
                                   });
                                   this.refs.form.resetFields();
                                   document.getElementById('ossfile').innerHTML = '';
-                              }
                           }
-                      )
+                      ).catch(()=>{message.error('创建失败，请联系管理员。')})
                   }
               })
       }else if(this.state.modalName==="更新店铺"){
@@ -224,9 +220,6 @@ class MyShopList extends React.Component {
                           },
                           `Bearer ${localStorage.getItem('accessToken')}`).then(
                           (res) => {
-                              if(res.errors){
-                                  message.error('创建失败，请联系管理员。')
-                              }else{
                                   // console.log('res', res);
                                   this.props.store.getMainImage(null);
                                   message.success('店铺更新成功！');
@@ -239,8 +232,7 @@ class MyShopList extends React.Component {
                                   this.refs.form.resetFields();
                                   document.getElementById('ossfile').innerHTML = '';
                               }
-                          }
-                      )
+                      ).catch(()=>{message.error('创建失败，请联系管理员。')})
                   }
               })
       }
@@ -254,15 +246,11 @@ class MyShopList extends React.Component {
       onOk() {
           Request.GraphQlRequest(deleteShop, { id : ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           (res) => {
-            if(!res.errors){
               // console.log('res', res);
               self.getData();
               message.success('删除店铺成功！');
-            }else { 
-              message.error('删除店铺失败！')
-            }
           } 
-        )
+        ).catch(()=>{message.error('删除店铺失败！')})
       },
       onCancel() {},
     });
@@ -304,18 +292,15 @@ class MyShopList extends React.Component {
     Request.GraphQlRequest(bindRoom, { shopId, room}, `Bearer ${localStorage.getItem('accessToken')}`).then(
       (res) => {
         // console.log('res', res);
-        if(res.errors){
-          message.success("店铺暂无可绑定直播间，绑定失败！");
-        }else{
           message.success("绑定成功！");
           this.setState({
             modalVisible1: false,
             RadioValue:null
           });
-        }
       }
-    )
+    ).catch(()=>{message.error("店铺暂无可绑定直播间，绑定失败！")})
   }
+  
   handleCancel = (e) => {
     // console.log(e);
     this.setState({

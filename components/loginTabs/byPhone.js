@@ -40,15 +40,15 @@ class NormalLoginForm extends React.Component {
         // console.log('Received values of form: ', values);
         request(uri, submitByPhone,{ phone: values.phone, code: values.SmsCode}).then(
           (res)=>{
-            message.success('登录成功！')
-            // console.log('res', res);
-            localStorage.setItem('accessToken', res.smsLogin.accessToken);
-            localStorage.setItem('accountid', res.smsLogin.user.accountid);
-            localStorage.setItem('nickname', res.smsLogin.user.nickname);
-            localStorage.setItem('role', res.smsLogin.user.role);
-            Router.push('/')
-          }
-      )
+                  message.success('登录成功！')
+                  // console.log('res', res);
+                  localStorage.setItem('accessToken', res.smsLogin.accessToken);
+                  localStorage.setItem('accountid', res.smsLogin.user.accountid);
+                  localStorage.setItem('nickname', res.smsLogin.user.nickname);
+                  localStorage.setItem('role', res.smsLogin.user.role);
+                  Router.push('/')
+              }
+        ).catch(()=>{message.error('登录失败！')})
       }
     });
   }

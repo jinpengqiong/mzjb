@@ -147,15 +147,11 @@ export default class ADList extends React.Component {
   confirm(id) {
       Request.GraphQlRequest(deleteADMedias, { shopId: this.props.store.shopID, id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
-                if(res.errors){
-                    message.success('删除失败！');
-                }else{
                     // console.log('res', res);
                     message.success('删除成功！');
                     this.queryADListData(1);
-                }
             }
-        )
+        ).catch(()=>{message.error('删除失败！')})
     }
 
     handleChcekChange = (checkedValues) => {
@@ -198,8 +194,8 @@ export default class ADList extends React.Component {
                             <p>广告ID：{entry.id}</p> 
                             <p>视频ID：{entry.media? entry.media.id : null}</p>
                             <p>商品名称：{entry.structDesc.title}</p>
+                            <p>创建时间：{moment(entry.insertedAt).format('YYYY-MM-DD HH:mm')}</p>
                             <p><a href={entry.structDesc.detailUrl} target='_blank'>商品链接</a></p>
-                            <p>创建时间：{moment(entry.insertedAt).format('YYYY-MM-DD HH:mm')}</p>  
                         </Col>
                     </Row>
                 </Card>

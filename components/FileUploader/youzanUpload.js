@@ -125,15 +125,11 @@ class YouzanUploader extends React.Component {
         },
     
         FileUploaded: function(up, file, info) {
-          if (info.status == 200){
+          if (info.status === 200){
               const shopId = parseInt(self.props.store.shopID);
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaAndUploadYouzan, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                  // console.log('res',res)
-                  if(res.errors){
-                    message.error('errors')
-                  }else{
                     const imgID = res.createMediaAndUploadYouzan.id;
                     self.props.store.getUrlIDs(parseInt(imgID))
                     const imageId = res.createMediaAndUploadYouzan.imageId;
@@ -141,8 +137,7 @@ class YouzanUploader extends React.Component {
                     message.success('上传成功！');
                     // document.getElementById('ossfile').innerHTML = '';
                   }
-                }
-              )
+              ).catch(()=>{message.error('上传失败，请联系管理员！')})
           }
         },
         Error: function(up, err) {
