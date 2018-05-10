@@ -181,7 +181,7 @@ class RegistrationForm extends React.Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="卡券颜色"
+          label="背景颜色"
         >
           {getFieldDecorator('backgroundColor', {
             rules: [{

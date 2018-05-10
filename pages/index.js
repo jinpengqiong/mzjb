@@ -3,6 +3,8 @@ import MyShopList from '../components/MyShops/index';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
+
+
 export default class MainPage extends React.Component {
     static getInitialProps ({ req }) {
         const isServer = !!req

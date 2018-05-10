@@ -133,14 +133,14 @@ class MyShopList extends React.Component {
     };
   }
   componentDidMount() {
-    if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null){
+    if(!localStorage.getItem('accessToken')){
       Router.push('/login')
     }else{
       this.getData();
     }
   }
 
-  async getData(){
+  getData(){
     const variables = {
       page: 1,
       pageSize: 5,

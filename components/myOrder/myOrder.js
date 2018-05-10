@@ -109,7 +109,7 @@ export default class OrderManagement extends React.Component {
     }
   }
   componentDidMount(){
-    if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
+    if(!localStorage.getItem('accessToken')){
         Router.push('/login')
     }else if(this.props.store.shopID === null){
         Router.push('/')
@@ -161,13 +161,12 @@ export default class OrderManagement extends React.Component {
       if(this.state.isNoExpress === 0 ){
           Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo, outSid: this.state.DeliveryNum, outStype: this.state.deliveryValue.toString()}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-
                 message.success('发货成功！');
                 this.setState({
                     visible: false,
-                    });    
-                }
-                this.queryOrderData(1);
+                });
+                this.queryOrderData(1)
+            }
         ).catch(()=>{message.error('出错了，请重试！')})
       }else{
           Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo}, `Bearer ${localStorage.getItem('accessToken')}`).then(

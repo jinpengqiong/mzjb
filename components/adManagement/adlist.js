@@ -100,8 +100,8 @@ export default class ADList extends React.Component {
             "detailUrl": this.props.store.detailUrl,
             "backgroundColor": this.props.store.backgroundColor
         };
-        ;
-        Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+
+    Request.GraphQlRequest(createAD, {mediaId, shopId: this.props.store.shopID, structDesc: JSON.stringify(structDesc)}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 // console.log('res', res);
                 this.props.store.getselectedRowKeys(null);
@@ -140,6 +140,7 @@ export default class ADList extends React.Component {
         modalVisible: true,
       });
   }
+
   onChange = (pageNumber) => {
     this.queryADListData(pageNumber);
   }
@@ -159,7 +160,6 @@ export default class ADList extends React.Component {
       }
 
   render() {
-      console.log('111', this.state.data)
     const voucherData =  this.state.data &&
     this.state.data.entries.map(
     (entry) => {

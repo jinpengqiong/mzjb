@@ -18,7 +18,7 @@ export default class MyOrder extends React.Component {
       }
 
   componentDidMount(){
-    if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
+    if(!localStorage.getItem('accessToken')){
       Router.push('/login')
     }else if(this.store.shopID === null){
       Router.push('/')
