@@ -57,77 +57,41 @@ export default class MyLayout extends React.Component {
           theme="dark" 
           mode="inline" 
           onClick={this.handleClick} 
-          selectedKeys={[this.props.store.curPagePath === ""? "我的店铺" : this.props.store.curPagePath]}>
-            <Menu.Item key="我的店铺">
+          selectedKeys={[this.props.store.curPagePath === ""? "选货专区" : this.props.store.curPagePath]}>
+            <Menu.Item key="选货专区">
               <div onClick={()=>{ 
                 Router.prefetch('/');
                 Router.push('/')}}>
                 <Icon type="shop" />
-                <span>我的店铺</span>
+                <span>选货专区</span>
               </div>
             </Menu.Item>
-            {
-              this.props.store.shopID
-              &&
-              <Menu.Item key="店铺商品">
-                <div onClick={()=>{ 
-                  Router.prefetch(`/products?id=${this.props.store.shopID}`); 
-                  Router.push(`/products?id=${this.props.store.shopID}`)
-                  this.props.store.getCurPagePath('店铺商品');
-                }}>
-                  <Icon type="appstore" />
-                  <span>店铺商品</span>
-                </div>
-              </Menu.Item>
-            }
-            {
-              this.props.store.shopID
-              &&
-              <Menu.Item key="我的卡券">
-                <div onClick={()=>{ 
-                  Router.prefetch(`/vouchers?id=${this.props.store.shopID}`);
-                  Router.push(`/vouchers?id=${this.props.store.shopID}`)}}>
-                  <Icon type="gift" />
-                  <span>我的卡券</span>
-                </div>
-              </Menu.Item>
-            }
-            {
-              this.props.store.shopID
-              &&
-              <Menu.Item key="广告管理">
-                <div onClick={()=>{ 
-                  Router.prefetch('/ad');
-                  Router.push('/ad')}}>
-                <Icon type="video-camera" />
-                  <span>广告管理</span>
-                </div>
-              </Menu.Item>
-            }
-            {
-              this.props.store.shopID
-              &&
-              <Menu.Item key="我的素材">
-                <div onClick={()=>{ 
-                  Router.prefetch('/resources');
-                  Router.push('/resources')}}>
-                  <Icon type="picture" />
-                  <span>我的素材</span>
-                </div>
-              </Menu.Item>
-            }
-            {
-              this.props.store.shopID
-              &&
-              <Menu.Item key="订单管理">
-                <div onClick={()=>{ 
-                  Router.prefetch('/order');
-                  Router.push('/order')}}>
-                  <Icon type="shopping-cart" />
-                  <span>订单管理</span>
-                </div>
-              </Menu.Item>
-            }
+            <Menu.Item key="商品管理">
+              <div onClick={()=>{
+                Router.prefetch(`/products?id=${this.props.store.shopID}`);
+                Router.push(`/products?id=${this.props.store.shopID}`)
+                this.props.store.getCurPagePath('店铺商品');
+              }}>
+                <Icon type="appstore" />
+                <span>商品管理</span>
+              </div>
+            </Menu.Item>
+            <Menu.Item key="我的素材">
+              <div onClick={()=>{
+                Router.prefetch('/resources');
+                Router.push('/resources')}}>
+                <Icon type="picture" />
+                <span>我的素材</span>
+              </div>
+            </Menu.Item>
+            <Menu.Item key="订单管理">
+              <div onClick={()=>{
+                Router.prefetch('/order');
+                Router.push('/order')}}>
+                <Icon type="shopping-cart" />
+                <span>订单管理</span>
+              </div>
+            </Menu.Item>
             {
               (this.props.store.userRole && this.props.store.userRole.indexOf('admin') !== -1)
               &&

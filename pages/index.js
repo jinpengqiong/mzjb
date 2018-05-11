@@ -1,8 +1,10 @@
 import MyLayout from '../components/MyLayout/MyLayout';
-import MyShopList from '../components/MyShops/index';
+import ChooseProducts from '../components/ChooseProducts/index';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
+import { Tabs, Icon } from 'antd';
+const TabPane = Tabs.TabPane;
 
 
 export default class MainPage extends React.Component {
@@ -26,7 +28,14 @@ export default class MainPage extends React.Component {
         return (
             <Provider store={this.store}>
                 <MyLayout>
-                    <MyShopList />
+                    <Tabs defaultActiveKey="1" type="editable-card" hideAdd>
+                        <TabPane tab='选货专区' key="1" closeable={false}>
+                            <ChooseProducts />
+                        </TabPane>
+                        <TabPane tab='商品详情' key="2" closeable={true}>
+
+                        </TabPane>
+                    </Tabs>
                 </MyLayout>
             </Provider>
         )

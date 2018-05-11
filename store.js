@@ -4,7 +4,7 @@ let store = null
 
 class Store {
   @observable imgUrlID = [];
-  @observable shopID = null;
+  @observable shopID = 102;
   @observable userRole = '';
   @observable imageId = '';
   @observable curPagePath = '';
