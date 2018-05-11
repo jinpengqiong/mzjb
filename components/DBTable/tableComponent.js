@@ -307,14 +307,19 @@ export default class ProdTable extends React.Component {
 
 
   handleCancel = () => {
-    this.setState({
-      visible: false
-    });
-  this.refs.form1.resetFields();
-  this.refs.form2.resetFields();
-  this.refs.form3.resetFields();
-  document.getElementById('ossfile').innerHTML = '';
-  document.getElementById('ossfile1').innerHTML = '';
+      this.setState({
+          visible: false
+      });
+      if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
+          document.getElementById('ossfile').innerHTML = '';
+          this.refs.form1.resetFields();
+      }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
+          document.getElementById('ossfile3').innerHTML = '';
+          this.refs.form2.resetFields();
+      }else if(this.state.modalName ==='更新商品'){
+          document.getElementById('ossfile').innerHTML = '';
+          this.refs.form3.resetFields();
+      }
   }
 
   callback = (key) => {

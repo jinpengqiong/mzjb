@@ -42,64 +42,64 @@ query {
     }
 }`;
 
+const columns = [
+            {
+                title: '订单号',
+                dataIndex: 'orderNo',
+                key: 'orderNo',
+            },
+            {
+                title: '商品',
+                dataIndex: 'title',
+                key: 'title',
+            },
+            {
+                title: '单价',
+                dataIndex: 'price',
+                key: 'price',
+            },
+            {
+                title: '数量',
+                dataIndex: 'num',
+                key: 'num',
+            },
+            {
+                title: '手机号',
+                dataIndex: 'phone',
+                key: 'phone',
+            },
+            {
+                title: '下单时间',
+                dataIndex: 'createdAt',
+                key: 'createdAt',
+            },
+            {
+                title: '订单状态',
+                dataIndex: 'state',
+                key: 'state',
+                render: (text, record) => (
+                <div>
+                <p>{text===3? "待付款" :text===5? "已付款" : text===6? "已发货" : text===100? "交易完成" :null}</p>
+                {
+                    text===5
+                    &&
+                    <Button type="primary" onClick={() => {this.handleClick(record.orderNo)}}>发货</Button>
+                }
+                </div>
+                )
+            },
+            {
+                title: '订单总额(元)',
+                dataIndex: 'money',
+                key: 'money',
+            }
+        ];
 @inject('store') @observer
 export default class OrderManagement extends React.Component {
   constructor(props) {
     super(props);
     this.state={
         data:null,
-        columns : [
-            {
-            title: '订单号',
-            dataIndex: 'orderNo',
-            key: 'orderNo',
-            },
-            {
-            title: '商品',
-            dataIndex: 'title',
-            key: 'title',
-            }, 
-            {
-            title: '单价',
-            dataIndex: 'price',
-            key: 'price',
-            }, 
-            {
-            title: '数量',
-            dataIndex: 'num',
-            key: 'num',
-            }, 
-            {
-            title: '手机号',
-            dataIndex: 'phone',
-            key: 'phone',
-            },
-            {
-            title: '下单时间',
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            },
-            {
-            title: '订单状态',
-            dataIndex: 'state',
-            key: 'state',
-            render: (text, record) => (
-                <div>
-                   <p>{text===3? "待付款" :text===5? "已付款" : text===6? "已发货" : text===100? "交易完成" :null}</p>
-                   {
-                       text===5
-                       &&
-                       <Button type="primary" onClick={() => {this.handleClick(record.orderNo)}}>发货</Button>
-                   } 
-                </div> 
-            )
-            },
-            {
-            title: '订单总额(元)',
-            dataIndex: 'money',
-            key: 'money',
-            }
-        ],
         expressList:null,
         visible: false,
         isNoExpress:0,
@@ -218,9 +218,10 @@ export default class OrderManagement extends React.Component {
   }
 
   render() {
+      console.log('data', this.state.data)
     return (
         <div>
-            <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={this.state.columns} pagination={false}/>
+            <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
             <Modal
             title="确认发货"
             visible={this.state.visible}
@@ -252,7 +253,7 @@ export default class OrderManagement extends React.Component {
                 </div>
             </Modal>
             {
-            (this.state.data && this.state.data.totalEntries !==0)
+            (this.state.data && this.state.data.totalResults !==0)
             &&
             <Pagination 
             defaultCurrent={1} 

@@ -21,7 +21,6 @@ export default class MyDocument extends Document {
           <meta name="viewport" content="initial-scale=1.0, width=device-width" key="viewport" />
           <script src="http://image.mzliaoba.com/lib/plupload.full.min.new.js"></script>
           <link rel="icon" href="../static/LOGO.png" />
-          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" />
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
           <title>拇指聚宝</title>
         </Head>

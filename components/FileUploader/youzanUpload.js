@@ -85,7 +85,7 @@ class YouzanUploader extends React.Component {
     let self = this;
     var uploader = new plupload.Uploader({
       runtimes: 'html5,flash,silverlight,html4',
-      browse_button: 'selectfiles1',
+      browse_button: 'selectfiles3',
       container: document.getElementById('container'),
       flash_swf_url: '../../utils/Moxie.swf',
       silverlight_xap_url: '../../utils/Moxie.xap',
@@ -97,8 +97,8 @@ class YouzanUploader extends React.Component {
       },
       init: {
         PostInit: function() {
-          document.getElementById('ossfile1').innerHTML = '';
-          document.getElementById('postfiles1').onclick = function() {
+          document.getElementById('ossfile3').innerHTML = '';
+          document.getElementById('postfiles3').onclick = function() {
             self.set_upload_param(uploader, '', false);
                 return false;
           };
@@ -106,7 +106,7 @@ class YouzanUploader extends React.Component {
     
         FilesAdded: function(up, files) {
           plupload.each(files, function(file) {
-            document.getElementById('ossfile1').innerHTML += 
+            document.getElementById('ossfile3').innerHTML +=
             `<div id=${file.id}>
                 ${file.name} ${plupload.formatSize(file.size)}
                 <b></b>
@@ -152,11 +152,11 @@ class YouzanUploader extends React.Component {
   render() {
     return (
       <div>
-        <div id="ossfile1"></div>
+        <div id="ossfile3"></div>
         <br/>
         <div id="container">
-            <Button id="selectfiles1" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
-            <Button id="postfiles1" href="javascript:void(0);" >开始上传</Button>
+            <Button id="selectfiles3" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
+            <Button id="postfiles3" href="javascript:void(0);" >开始上传</Button>
         </div>
       </div>
               );

@@ -3,10 +3,10 @@ import { GraphQLClient } from 'graphql-request';
 
 module.exports = {
     // GraphQl request
-    GraphQlRequest( action, variables, localStorage){
+    GraphQlRequest( action, variables, localStor){
         const client = new GraphQLClient(uri, {
             headers: {
-                Authorization: localStorage,
+                Authorization: localStor,
             },
         });
         return client.request(action, variables)
