@@ -38,9 +38,7 @@ export default class ChooseProducts extends React.Component {
     //         }
     //     )
     // }
-    onChange(a, b, c) {
-        console.log(a, b, c);
-    }
+  
 
     render() {
         return (
@@ -55,7 +53,13 @@ export default class ChooseProducts extends React.Component {
                             <Card
                                 style={{ width: 200, marginRight:'20px' }}
                                 cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                                extra={<a href="#">商品详情</a>}
+                                extra={<a href="#" 
+                                onClick={ 
+                                    () =>{ 
+                                        this.props.store.changeShown();
+                                        this.props.store.changeKey('2');
+                                    } 
+                                }>商品详情</a>}
                             >
                                 <Meta
                                     title="Europe Street beat"

@@ -23,6 +23,10 @@ class Store {
   @observable checkedValues = '';
   @observable checkedValues1 = '';
   @observable mainImage = null;
+  // wethear show the product detail
+  @observable isShown = false;
+  //product tab will shown
+  @observable activeKey = '1'; 
 
   constructor (isServer) {
   }
@@ -103,6 +107,14 @@ class Store {
 
   @action getMainImage = (data) => {
       this.mainImage = data;
+  }
+
+  @action changeShown = () => {
+    this.isShown = !this.isShown;
+  }
+
+  @action changeKey = (keyID) => {
+    this.activeKey = keyID;
   }
 
 }

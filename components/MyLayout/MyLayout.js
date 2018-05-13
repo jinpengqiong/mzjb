@@ -57,13 +57,13 @@ export default class MyLayout extends React.Component {
           theme="dark" 
           mode="inline" 
           onClick={this.handleClick} 
-          selectedKeys={[this.props.store.curPagePath === ""? "选货专区" : this.props.store.curPagePath]}>
-            <Menu.Item key="选货专区">
+          selectedKeys={[this.props.store.curPagePath === ""? "选货" : this.props.store.curPagePath]}>
+            <Menu.Item key="选货">
               <div onClick={()=>{ 
                 Router.prefetch('/');
                 Router.push('/')}}>
                 <Icon type="shop" />
-                <span>选货专区</span>
+                <span>选货</span>
               </div>
             </Menu.Item>
             <Menu.Item key="商品管理">
