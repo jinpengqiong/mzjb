@@ -49,6 +49,32 @@ const queryYouxuanPROD = `
       }
       `;
 
+const querySpecificPROD = `
+      query ($shopId: Int!, $itemId:String!) {
+        getYouxuanProduct(shopId:$shopId, itemId:$itemId){
+            alreayExist
+            item{
+              price
+              itemId
+              itemType
+              detailUrl
+              itemNo
+              itemType
+              quantity
+              title
+              itemImgs{
+                combine
+                created
+                medium
+                thumbnail
+                url
+              }
+            }
+          }
+        }
+      `;
+
+
 @inject('store') @observer
 export default class ChooseProducts extends React.Component {
     constructor(props) {
@@ -95,7 +121,6 @@ export default class ChooseProducts extends React.Component {
     render() {
         const youzanPROD = this.state.data && this.state.data.items.map(
             (item) => {
-                const ID= item.itemId
                 return (
                     <div className='card_entity' style={{ marginRight:'40px'}}>
                         <Card
@@ -109,9 +134,16 @@ export default class ChooseProducts extends React.Component {
                         </Card>
                         <div className="cover">
                             <Button onClick={
-                                (ID) =>{
-                                this.props.store.changeShown();
-                                this.props.store.changeKey('2');
+                                () =>{
+                                Request.GraphQlRequest(querySpecificPROD, { shopId:parseInt(localStorage.getItem('shopID')), itemId:(item.itemId).toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                                    (res) => {
+                                        console.log('res',res);
+                                        this.props.store.changeShown();
+                                        this.props.store.changeKey('2');
+                                        this.props.store.getProdDetailData(res.getYouxuanProduct)
+                                    }
+                                )
+
                             }}>查看详情</Button>
                             <h4>{item.title}</h4>
                         </div>

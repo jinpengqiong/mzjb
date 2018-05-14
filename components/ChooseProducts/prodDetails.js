@@ -39,19 +39,33 @@ export default class ProdDetails extends React.Component {
     // }
 
     render() {
-        return (
-            <div>
-                <Row>
-                    <Col span={6} offset={2}>
-                        <img src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" style={{ width:"200px"}}/>
-                    </Col>
-                    <Col span={16}>
-                        <h3>韩国mog one电子声波驱蚊手环 模拟蚊子讨厌的声音丨多项安全认证丨长时续航</h3>
-                        <Button type="primary" style={{ marginRight: '15px'}}>上架到店铺</Button>
-                        <Button type="primary">添加到仓库</Button>
-                    </Col>
-                </Row>
-            </div>
-        )
+        if(this.props.store.ProdDetailData){
+            return (
+                <div>
+                    <Row>
+                        <Col span={6} offset={2}>
+                            <img src={this.props.store.ProdDetailData.item.itemImgs[0].url} style={{ width:"260px"}}/>
+                        </Col>
+                        <Col span={16}>
+                            <h3>{this.props.store.ProdDetailData.item.title}</h3>
+                            <p>价格：{'¥'+this.props.store.ProdDetailData.item.price}</p>
+                            <p>总库存：{this.props.store.ProdDetailData.item.quantity}</p>
+                            {
+                                this.props.store.ProdDetailData.alreayExist !==null?
+                                    <Button type="primary" disabled>已添加到店铺</Button>
+                                    :
+                                    <div>
+                                        <Button type="primary" style={{ marginRight: '15px'}}>上架到店铺</Button>
+                                        <Button type="primary">添加到仓库</Button>
+                                    </div>
+                            }
+
+                        </Col>
+                    </Row>
+                </div>
+            )
+        }else{
+            return
+        }
     }
 }
