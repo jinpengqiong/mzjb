@@ -10,7 +10,7 @@ export default class MyBreadcrumb extends React.Component {
     // console.log('props', this.props)
     return (
         <Breadcrumb style={{ margin: '16px' }}>
-              <Breadcrumb.Item>{this.props.store.curPagePath === ""?'选货专区' : this.props.store.curPagePath}</Breadcrumb.Item>
+              <Breadcrumb.Item>{this.props.store.curPagePath === ""?'选货' : this.props.store.curPagePath}</Breadcrumb.Item>
         </Breadcrumb> 
     );
   }

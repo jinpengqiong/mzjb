@@ -42,10 +42,11 @@ export default class MyLayout extends React.Component {
   }
   render() {
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout >
         <Sider
           trigger={null}
           collapsed={this.state.collapsed}
+          style={{ height:'100%', position:'fixed' }}
         >
           <div className="logo" >
             <h2 style={{ textAlign:'center', color:'white' }}>
@@ -57,39 +58,39 @@ export default class MyLayout extends React.Component {
           theme="dark" 
           mode="inline" 
           onClick={this.handleClick} 
-          selectedKeys={[this.props.store.curPagePath === ""? "选货专区" : this.props.store.curPagePath]}>
-            <Menu.Item key="选货专区">
+          selectedKeys={[this.props.store.curPagePath === ""? "选货" : this.props.store.curPagePath]}>
+            <Menu.Item key="选货">
               <div onClick={()=>{ 
                 Router.prefetch('/');
                 Router.push('/')}}>
                 <Icon type="shop" />
-                <span>选货专区</span>
+                <span>选货</span>
               </div>
             </Menu.Item>
-            <Menu.Item key="商品管理">
+            <Menu.Item key="商品">
               <div onClick={()=>{
-                Router.prefetch(`/products?id=${this.props.store.shopID}`);
-                Router.push(`/products?id=${this.props.store.shopID}`)
-                this.props.store.getCurPagePath('店铺商品');
+                Router.prefetch('/products');
+                Router.push('/products')
+                this.props.store.getCurPagePath('店铺');
               }}>
                 <Icon type="appstore" />
-                <span>商品管理</span>
+                <span>商品</span>
               </div>
             </Menu.Item>
-            <Menu.Item key="我的素材">
+            <Menu.Item key="素材">
               <div onClick={()=>{
                 Router.prefetch('/resources');
                 Router.push('/resources')}}>
                 <Icon type="picture" />
-                <span>我的素材</span>
+                <span>素材</span>
               </div>
             </Menu.Item>
-            <Menu.Item key="订单管理">
+            <Menu.Item key="订单">
               <div onClick={()=>{
                 Router.prefetch('/order');
                 Router.push('/order')}}>
                 <Icon type="shopping-cart" />
-                <span>订单管理</span>
+                <span>订单</span>
               </div>
             </Menu.Item>
             {
@@ -100,14 +101,14 @@ export default class MyLayout extends React.Component {
                   Router.prefetch('/userList');
                   Router.push('/userList')}}>
                   <Icon type="user" />
-                  <span>用户列表</span>
+                  <span>用户</span>
                 </div>
               </Menu.Item>
             }
           </Menu>
         </Sider>
-        <Layout>
-          <Header style={{ background: '#fff', padding: 16 }}>
+        <Layout style={{  marginLeft: this.state.collapsed? '100px' :'200px' }}>
+          <Header style={{ background: '#fff', padding: 16,marginLeft: this.state.collapsed? 15:0 }}>
             <Icon
               className="trigger"
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}

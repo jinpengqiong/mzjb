@@ -1,11 +1,10 @@
-import { Table, Button, Pagination, message, Modal, Radio, Select } from 'antd';
+import { Table, Pagination, message } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import Router from 'next/router';
 import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
-const RadioGroup = Radio.Group;
-const Option = Select.Option;
+
 
 
 const queryOrder = `
@@ -27,20 +26,6 @@ const queryOrder = `
         }
     }`;
 
-const confirmLogistics = `
-    mutation ($isNoExpress: Int!, $outSid: String, $outStype: String, $tid: String!) {
-            confirmSendProduct(isNoExpress: $isNoExpress, outSid: $outSid, outStype: $outStype, tid: $tid ){
-                status
-        }
-    }`;
-
-const expressList = `
-query {
-    expressList{
-        id
-        name
-    }
-}`;
 
 const columns = [
             {
@@ -80,11 +65,6 @@ const columns = [
                 render: (text, record) => (
                 <div>
                 <p>{text===3? "待付款" :text===5? "已付款" : text===6? "已发货" : text===100? "交易完成" :null}</p>
-                {
-                    text===5
-                    &&
-                    <Button type="primary" onClick={() => {this.handleClick(record.orderNo)}}>发货</Button>
-                }
                 </div>
                 )
             },
@@ -94,6 +74,7 @@ const columns = [
                 key: 'money',
             }
         ];
+
 @inject('store') @observer
 export default class OrderManagement extends React.Component {
   constructor(props) {
@@ -222,36 +203,6 @@ export default class OrderManagement extends React.Component {
     return (
         <div>
             <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
-            <Modal
-            title="确认发货"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            >
-                <div>
-                    发货方式：<RadioGroup defaultValue={0} onChange={this.onChange}>
-                        <Radio value={0}>需要物流</Radio>
-                        <Radio value={1}>无需物流</Radio>
-                    </RadioGroup>
-                    <br/>
-                    <div style={{ marginTop: 15}}>
-                        物流公司：<Select defaultValue="default" style={{ width: 120 }} style={{ marginRight: 15}} onChange={this.handleChange}>
-                                    <Option value="default" key="-1">请选择物流公司</Option>
-                                    <Option value={1}>申通快递</Option>
-                                    <Option value={2}>圆通速递</Option>
-                                    <Option value={3}>中通快递</Option>
-                                    <Option value={4}>韵达快递</Option>
-                                    <Option value={5}>天天快递</Option>
-                                    <Option value={6}>百世快递</Option>
-                                    <Option value={7}>顺丰速运</Option>
-                                    <Option value={8}>邮政快递包裹</Option>
-                                    <Option value={9}>EMS经济快递</Option>
-                                    <Option value={10}>EMS</Option>
-                                </Select>
-                        运单编号：<input onChange={this.InputDeliveryNum}/>
-                    </div>
-                </div>
-            </Modal>
             {
             (this.state.data && this.state.data.totalResults !==0)
             &&

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Spin } from 'antd';
 const TabPane = Tabs.TabPane;
 import MyLayout from '../components/MyLayout/MyLayout';
 import MyPICS from '../components/resources/pics';
@@ -17,12 +17,19 @@ export default class Products extends React.Component {
   constructor (props) {
     super(props)
     this.store = initStore(props.isServer)
+    this.state = {
+        loading:true
+    }
   }
   componentDidMount(){
     if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
       Router.push('/login')
     }else if(this.store.shopID === null){
       Router.push('/')
+    }else{
+        this.setState({
+            loading:false
+        })
     }
   }
   callback(key) {
@@ -31,16 +38,18 @@ export default class Products extends React.Component {
   render () {
     return (
     <Provider store={this.store}>
-      <MyLayout>
-        <Tabs onChange={this.callback} type="card">
-            <TabPane tab="图片文件" key="1">
-              <MyPICS />
-            </TabPane>
-            <TabPane tab="视频文件" key="2">
-              <MyVideo />
-            </TabPane>
-        </Tabs>
-      </MyLayout>
+        <Spin spinning={this.state.loading} size="large">
+            <MyLayout>
+              <Tabs onChange={this.callback} type="card">
+                  <TabPane tab="图片文件" key="1">
+                    <MyPICS />
+                  </TabPane>
+                  <TabPane tab="视频文件" key="2">
+                    <MyVideo />
+                  </TabPane>
+              </Tabs>
+            </MyLayout>
+          </Spin>
     </Provider>  
     )
   }

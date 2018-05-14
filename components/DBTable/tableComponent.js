@@ -98,7 +98,6 @@ export default class ProdTable extends React.Component {
     this.state = {
         data: null, 
         visible:false,
-        shopID: parseInt(props.shopID),
         modalName:null,
         productID:null,
         productFieldsData:null,
@@ -175,9 +174,9 @@ export default class ProdTable extends React.Component {
   }
 
   queryProdData= (curPage) => {
-    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: this.state.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            // console.log('res', res)
+            console.log('res', res)
             this.props.store.getProductData(res.shopProducts.entries);
             res.shopProducts.entries.map(
                 (entry) => {

@@ -1,67 +1,128 @@
 import React from 'react';
 import Router from 'next/router';
-import {Card, Carousel, Tag } from 'antd';
+import {Card, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
 const { Meta } = Card;
 
+const queryShops = `
+      query ($page:Int, $pageSize: Int) {
+        myShops(page:$page,pageSize:$pageSize){
+          totalEntries
+          totalPages
+          pageNumber
+          pageSize
+          entries{
+              desc
+              id
+              name
+              phone
+              mainImage
+              bizTimeEnd
+              bizTimeStart
+              facilities
+              categories{
+                name
+                id
+              }
+          }
+        }
+      }
+      `;
+
+const queryYouxuanPROD = `
+      query ($orderBy: String, $pageNo: Int, $pageSize: Int, $q: String) {
+        youxuanProducts(orderBy:$orderBy,pageNo:$pageNo, pageSize:$pageSize, q:$q){
+          count
+          items{
+              itemId
+              item_no
+              price
+              title
+              quantity
+              itemImgs{
+                thumbnail
+                url
+              }
+          }
+        }
+      }
+      `;
 
 @inject('store') @observer
 export default class ChooseProducts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            data:null
         };
     }
 
     componentDidMount() {
         if (!localStorage.getItem('accessToken')) {
             Router.push('/login')
+        } else{
+          this.getData();
+          this.queryYouxuanProd(1)
         }
-        // else{
-        //   this.getData();
-        // }
     }
 
-    // getData() {
-    //     const variables = {
-    //         page: 1,
-    //         pageSize: 5,
-    //     };
-    //     Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
-    //         (res) => {
-    //             // console.log('res',res);
-    //             this.setState({
-    //                 data: res.myShops.entries
-    //             })
-    //         }
-    //     )
-    // }
-    onChange(a, b, c) {
-        console.log(a, b, c);
+    getData = () => {
+        const variables = {
+            page: 1,
+            pageSize: 5,
+        };
+        Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                // console.log('res',res);
+                this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
+                localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
+            }
+        )
+    }
+
+    queryYouxuanProd = (page) => {
+        Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('res',res);
+                this.setState({
+                    data: res.youxuanProducts
+                })
+            }
+        )
     }
 
     render() {
+        const youzanPROD = this.state.data && this.state.data.items.map(
+            (item) => {
+                const ID= item.itemId
+                return (
+                    <div className='card_entity' style={{ marginRight:'40px'}}>
+                        <Card
+                            style={{ width: '220px', height: '320px' }}
+                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'220px'}}/>}
+                        >
+                            <Meta
+                                title={item.title}
+                                description={'¥'+item.price}
+                            />
+                        </Card>
+                        <div className="cover">
+                            <Button onClick={
+                                (ID) =>{
+                                this.props.store.changeShown();
+                                this.props.store.changeKey('2');
+                            }}>查看详情</Button>
+                            <h4>{item.title}</h4>
+                        </div>
+                    </div>
+                )
+            }
+        )
         return (
             <div>
-                <Carousel afterChange={this.onChange}>
-                    <div><h3>1</h3></div>
-                    <div><h3>2</h3></div>
-                    <div><h3>3</h3></div>
-                    <div><h3>4</h3></div>
-                </Carousel>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
-                            <Card
-                                style={{ width: 200, marginRight:'20px' }}
-                                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                                extra={<a href="#">商品详情</a>}
-                            >
-                                <Meta
-                                    title="Europe Street beat"
-                                />
-                                <Tag color="green" style={{ float:"right", marginTop:"10px"}}>已添加</Tag>
-                            </Card>
+                    {youzanPROD}
                     </div>
                 <style jsx>{
                     `
@@ -76,6 +137,11 @@ export default class ChooseProducts extends React.Component {
                     .ant-carousel .slick-slide h3 {
                       color: #fff;
                     }
+                    .card_entity{ float: left; width: 220px; height: 320px;position: relative; overflow: hidden; }
+                    .cover Button { margin: 30px auto; }
+                    .cover { width: 220px; height: 320px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
+                    .cover p { margin-top: 10px; font-size: 14px; }
+                    .card_entity:hover .cover { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
                     `
                 }
                 </style>

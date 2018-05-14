@@ -3,13 +3,11 @@ module.exports = {
     exportPathMap: () => {
         return {
             '/': { page: '/' },
-            '/ad': { page: '/ad' },
             '/login': { page: '/login' },
             '/order': { page: '/order' },
             '/userList': { page: '/userList' },
             '/resources': { page: '/resources' },
-            '/products': { page: '/products', query: { id: 'shopId' } },
-            '/vouchers': { page: '/vouchers', query: { id: 'shopId' } },
+            '/products': { page: '/products' },
         }
     },
     webpack: (config, { dev }) => {

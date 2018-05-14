@@ -97,6 +97,7 @@ export default class UserList extends React.Component {
   }
 
   confirm(id) {
+      console.log(id)
     this.grantUser(parseInt(id));
   }
 

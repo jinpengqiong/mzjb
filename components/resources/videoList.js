@@ -49,7 +49,7 @@ class VideoList extends React.Component {
         const variables = {
             page, 
             pageSize:10, 
-            shopId: this.props.store.shopID, 
+            shopId: localStorage.getItem('shopID'),
             type:'VIDEO'
         };
         Request.GraphQlRequest(queryShopMedia, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -63,7 +63,7 @@ class VideoList extends React.Component {
     
 
     confirm(id) {
-        Request.GraphQlRequest(deleteMedia, { id, shopId: this.props.store.shopID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(deleteMedia, { id, shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                     message.success('删除成功！');
                     this.getData(1);
