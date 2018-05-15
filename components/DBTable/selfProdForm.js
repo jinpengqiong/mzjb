@@ -1,7 +1,7 @@
 import { Form, Input, Button } from 'antd';
 const FormItem = Form.Item;
 import { inject, observer } from 'mobx-react'
-import FileUploader from '../FileUploader/index'
+import ShopImgUploader from '../FileUploader/shopImgUpload'
 
 @inject('store') @observer
 class RegistrationForm extends React.Component {
@@ -55,7 +55,7 @@ class RegistrationForm extends React.Component {
             }
           ],
           })(
-            <FileUploader />
+            <ShopImgUploader />
           )}
         </FormItem>
         <FormItem

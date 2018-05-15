@@ -124,6 +124,10 @@ class Store {
       this.ProdDetailData = data;
   }
 
+  @action changeIsExisted = () => {
+      this.ProdDetailData.alreadyExist = true;
+  }
+
 }
 
 export function initStore (isServer) {

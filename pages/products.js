@@ -1,6 +1,7 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
 import ProdTable from '../components/DBTable/tableComponent'
+import InStock from '../components/DBTable/inStock'
 import GroupProduct from '../components/DBTable/groupProduct'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -42,9 +43,19 @@ export default class Products extends React.Component {
                   // onChange={this.onChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="1">
-                      <ProdTable />
+                      <Tabs
+                          type="line"
+                          hideAdd>
+                          <TabPane tab='出售中' key='出售中'>
+                              <ProdTable />
+                          </TabPane>
+                          <TabPane tab='仓库中' key='仓库中'>
+                            <InStock />
+                          </TabPane>
+                      </Tabs>
+
                   </TabPane>
-                  <TabPane tab='商品分类' key="2" >
+                  <TabPane tab='商品分组' key="2" >
                       <GroupProduct />
                   </TabPane>
               </Tabs>

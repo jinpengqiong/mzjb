@@ -52,7 +52,7 @@ const queryYouxuanPROD = `
 const querySpecificPROD = `
       query ($shopId: Int!, $itemId:String!) {
         getYouxuanProduct(shopId:$shopId, itemId:$itemId){
-            alreayExist
+            alreadyExist
             item{
               price
               itemId
@@ -62,6 +62,7 @@ const querySpecificPROD = `
               itemType
               quantity
               title
+              origin
               itemImgs{
                 combine
                 created
@@ -73,6 +74,8 @@ const querySpecificPROD = `
           }
         }
       `;
+
+
 
 
 @inject('store') @observer
@@ -122,8 +125,9 @@ export default class ChooseProducts extends React.Component {
         const youzanPROD = this.state.data && this.state.data.items.map(
             (item) => {
                 return (
-                    <div className='card_entity' style={{ marginRight:'40px'}}>
+                    <div className='card_entity' style={{ marginRight:'40px', marginBottom:'20px'}}>
                         <Card
+                            key={item.itemId}
                             style={{ width: '220px', height: '320px' }}
                             cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'220px'}}/>}
                         >
@@ -143,7 +147,6 @@ export default class ChooseProducts extends React.Component {
                                         this.props.store.getProdDetailData(res.getYouxuanProduct)
                                     }
                                 )
-
                             }}>查看详情</Button>
                             <h4>{item.title}</h4>
                         </div>
@@ -154,8 +157,22 @@ export default class ChooseProducts extends React.Component {
         return (
             <div>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
-                    {youzanPROD}
-                    </div>
+                    {
+                        this.state.data?
+                            youzanPROD
+                            :
+                            '暂无'
+                    }
+                </div>
+                {/*{*/}
+                {/*(this.state.data && this.state.data.totalEntries !==0)*/}
+                {/*&&*/}
+                {/*<Pagination*/}
+                {/*defaultCurrent={1}*/}
+                {/*onChange={this.onChange}*/}
+                {/*total={this.state.data? this.state.data.totalEntries : 1}*/}
+                {/*style={{ float: "right", marginTop: "10px"}}/>*/}
+                {/*}*/}
                 <style jsx>{
                     `
                     .ant-carousel .slick-slide {

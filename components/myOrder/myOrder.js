@@ -96,14 +96,6 @@ export default class OrderManagement extends React.Component {
         Router.push('/')
     }else{
         this.queryOrderData(1);
-        Request.GraphQlRequest(expressList, null,`Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                // console.log('res',res)
-                this.setState({
-                    expressList:res.expressList
-                })
-            }
-        )
     }
   }
 
@@ -111,7 +103,7 @@ export default class OrderManagement extends React.Component {
     const endTime = parseInt(moment().format('X'));
     const startTime = parseInt(moment().subtract(1, 'quarters').format('X'));
     // console.log('startTime',startTime)
-    Request.GraphQlRequest(queryOrder, {id: this.props.store.shopID, page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime },`Bearer ${localStorage.getItem('accessToken')}`).then(
+    Request.GraphQlRequest(queryOrder, {id: localStorage.getItem('shopID'), page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime },`Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
                 res.shopTradesList.trades.map(
                     (entry) => {
