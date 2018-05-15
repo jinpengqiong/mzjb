@@ -45,19 +45,23 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="商品图"
-        >
-          {getFieldDecorator('mainImage', {
-            rules: [{
-              type: 'string', message: '请输入商家名称!',
-            }
-          ],
-          })(
-            <ShopImgUploader />
-          )}
-        </FormItem>
+        {
+          !this.props.productData
+          &&
+          <FormItem
+            {...formItemLayout}
+            label="商品图"
+          >
+            {getFieldDecorator('mainImage', {
+              rules: [{
+                type: 'string', message: '请输入商家名称!',
+              }
+            ],
+            })(
+              <ShopImgUploader />
+            )}
+          </FormItem>
+        }
         <FormItem
           {...formItemLayout}
           label="价格"
@@ -86,7 +90,10 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
-        <FormItem
+        {
+          !this.props.productData
+          &&
+          <FormItem
           {...formItemLayout}
           label="链接地址"
         >
@@ -100,6 +107,7 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
+        } 
       </Form>
     );
   }

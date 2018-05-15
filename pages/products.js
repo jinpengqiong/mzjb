@@ -6,7 +6,7 @@ import GroupProduct from '../components/DBTable/groupProduct'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, Button } from 'antd';
 const TabPane = Tabs.TabPane;
 
 
@@ -15,7 +15,8 @@ export default class Products extends React.Component {
     super(props)
     this.store = initStore(props.isServer);
       this.state = {
-          loading:true
+          loading:true,
+          isShown:true
       }
   }
 
@@ -32,6 +33,19 @@ export default class Products extends React.Component {
         })
     }
   }
+
+  showSell = () => {
+    this.setState({
+        isShown:true
+    })
+  }
+
+  showStock = () => {
+    this.setState({
+        isShown:false
+    })
+  }
+
   render () {
     return (
     <Provider store={this.store}>
@@ -43,17 +57,16 @@ export default class Products extends React.Component {
                   // onChange={this.onChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="1">
-                      <Tabs
-                          type="line"
-                          hideAdd>
-                          <TabPane tab='出售中' key='出售中'>
-                              <ProdTable />
-                          </TabPane>
-                          <TabPane tab='仓库中' key='仓库中'>
-                            <InStock />
-                          </TabPane>
-                      </Tabs>
-
+                  <Button.Group style={{ float:'right'}}>
+                    <Button type="primary" onClick={this.showSell} style={{ width:'150px'}}>出售中</Button>
+                    <Button type="primary" onClick={this.showStock} style={{ width:'150px'}}>仓库中</Button>
+                  </Button.Group>
+                  {
+                      this.state.isShown?
+                      <ProdTable />
+                      :
+                      <InStock />
+                  }
                   </TabPane>
                   <TabPane tab='商品分组' key="2" >
                       <GroupProduct />
