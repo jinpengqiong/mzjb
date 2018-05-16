@@ -6,7 +6,7 @@ import GroupProduct from '../components/DBTable/groupProduct'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, Radio } from 'antd';
 const TabPane = Tabs.TabPane;
 
 
@@ -15,7 +15,9 @@ export default class Products extends React.Component {
     super(props)
     this.store = initStore(props.isServer);
       this.state = {
-          loading:true
+          loading:true,
+          isShown:true,
+          tagName:'出售中'
       }
   }
 
@@ -32,6 +34,13 @@ export default class Products extends React.Component {
         })
     }
   }
+    onChange = (e) => {
+      console.log('e',e.target.value)
+        this.setState({
+            tagName:e.target.value
+        })
+   }
+
   render () {
     return (
     <Provider store={this.store}>
@@ -43,17 +52,18 @@ export default class Products extends React.Component {
                   // onChange={this.onChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="1">
-                      <Tabs
-                          type="line"
-                          hideAdd>
-                          <TabPane tab='出售中' key='出售中'>
+                      <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
+                          <Radio.Button value="出售中">出售中</Radio.Button>
+                          <Radio.Button value="仓库中">仓库中</Radio.Button>
+                      </Radio.Group>
+                      {
+                          this.state.tagName ==='出售中'?
                               <ProdTable />
-                          </TabPane>
-                          <TabPane tab='仓库中' key='仓库中'>
-                            <InStock />
-                          </TabPane>
-                      </Tabs>
-
+                              :
+                          this.state.tagName ==='仓库中'?
+                              <InStock />
+                              :null
+                      }
                   </TabPane>
                   <TabPane tab='商品分组' key="2" >
                       <GroupProduct />

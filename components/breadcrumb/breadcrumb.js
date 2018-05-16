@@ -3,9 +3,6 @@ import { inject, observer } from 'mobx-react'
 
 @inject('store') @observer
 export default class MyBreadcrumb extends React.Component {
-  constructor (props){
-    super(props);
-  }
   render() {
     // console.log('props', this.props)
     return (

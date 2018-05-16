@@ -44,7 +44,7 @@ export default class MainPage extends React.Component {
                         type="card"
                         onChange={this.onChange}
                         hideAdd>
-                            <TabPane tab='严选商品' key="1">
+                            <TabPane tab='优选商品' key="1">
                                 <ChooseProducts />
                             </TabPane>
                             {

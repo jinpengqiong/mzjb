@@ -1,6 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
-import {Card, Button } from 'antd';
+import {Card, Button, Pagination } from 'antd';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
 const { Meta } = Card;
@@ -91,15 +91,15 @@ export default class ChooseProducts extends React.Component {
         if (!localStorage.getItem('accessToken')) {
             Router.push('/login')
         } else{
-          this.getData();
+          this.getData(1);
           this.queryYouxuanProd(1)
         }
     }
 
-    getData = () => {
+    getData = (page) => {
         const variables = {
-            page: 1,
-            pageSize: 5,
+            page,
+            pageSize: 20,
         };
         Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
@@ -121,11 +121,16 @@ export default class ChooseProducts extends React.Component {
         )
     }
 
+    onChange = (page) => {
+        console.log('page', page)
+        this.getData(page);
+    }
+
     render() {
         const youzanPROD = this.state.data && this.state.data.items.map(
             (item) => {
                 return (
-                    <div className='card_entity' style={{ marginRight:'40px', marginBottom:'20px'}}>
+                    <div className='card_entity' style={{ marginRight:'20px', marginBottom:'20px'}}>
                         <Card
                             key={item.itemId}
                             style={{ width: '220px', height: '320px' }}
@@ -164,15 +169,15 @@ export default class ChooseProducts extends React.Component {
                             '暂无'
                     }
                 </div>
-                {/*{*/}
-                {/*(this.state.data && this.state.data.totalEntries !==0)*/}
-                {/*&&*/}
-                {/*<Pagination*/}
-                {/*defaultCurrent={1}*/}
-                {/*onChange={this.onChange}*/}
-                {/*total={this.state.data? this.state.data.totalEntries : 1}*/}
-                {/*style={{ float: "right", marginTop: "10px"}}/>*/}
-                {/*}*/}
+                {
+                (this.state.data && this.state.data.count !==0)
+                &&
+                <Pagination
+                defaultCurrent={1}
+                onChange={this.onChange}
+                total={this.state.data? this.state.data.count : 1}
+                style={{ float: "right", marginTop: "10px"}}/>
+                }
                 <style jsx>{
                     `
                     .ant-carousel .slick-slide {
