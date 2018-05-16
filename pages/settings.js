@@ -3,7 +3,8 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import UserList from '../components/userList/list'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
-import { Spin } from 'antd';
+import { Spin, Tabs } from 'antd';
+const TabPane = Tabs.TabPane;
 
 
 export default class Settings extends React.Component {
@@ -15,6 +16,9 @@ export default class Settings extends React.Component {
     constructor (props) {
         super(props)
         this.store = initStore(props.isServer)
+        this.state = {
+            loading:true
+        }
     }
 
     componentDidMount(){
@@ -23,7 +27,7 @@ export default class Settings extends React.Component {
         }else{
             this.setState({
                 loading:false
-            })
+            });
             this.store.getCurPagePath('设置');
         }
     }
@@ -32,7 +36,18 @@ export default class Settings extends React.Component {
             <Provider store={this.store}>
                 <Spin spinning={this.state.loading} size="large">
                     <MyLayout>
-                        <UserList />
+                        <Tabs
+                            // activeKey={this.store.activeKey}
+                            type="card"
+                            // onChange={this.onTabsChange}
+                            hideAdd>
+                            <TabPane tab='绑定直播间' key="1">
+                                111
+                            </TabPane>
+                            <TabPane tab='自动回复设置' key="2" >
+                                222
+                            </TabPane>
+                        </Tabs>
                     </MyLayout>
                 </Spin>
             </Provider>
