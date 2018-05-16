@@ -1,10 +1,9 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, Tabs, notification, Divider } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
-
+const RadioGroup = Radio.Group;
 const queryProducts = `
       query ($page:Int, $pageSize: Int, $shopId:Int, $isDisplay:Boolean) {
         shopProducts(page:$page,pageSize:$pageSize,shopId:$shopId, isDisplay:$isDisplay){
@@ -87,6 +86,14 @@ const deleteProduct = `
       }
     `;
 
+const changeProductTag = `
+      mutation ($id:ID!,$shopId:ID!, $tagId:ID!){
+        changeProductTag(id:$id, shopId:$shopId, tagId:$tagId){
+          status
+        }
+      }
+    `;
+
 const addProduct = `
 mutation (
     $baseinfo:ProductBaseinfo!, $shopId: Int!, $type:ProductType!, $youzan:ProductYouzanArgs
@@ -111,76 +118,78 @@ mutation (
 `;
 
 @inject('store') @observer
-export default class InStock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        data: null,
-        tagData:null, 
-        visible:false,
-        productID:null,
-        productFieldsData:null,
-        modalName:null,
-        totalEntries:null,
-        columns : [
-            {
-                dataIndex: 'id',
-                title: 'ID',
-                dataType: 'int',
-                width: 60,
-                primary: true,
-            },
-            {
-                dataIndex: 'title',
-                title: '商品名称',
-                dataType: 'varchar',
-                validator: [{type: 'string', message: '请输入商品名称',required:true}],
-                width: 150,
-            },
-            {
-                dataIndex: 'mainImage',
-                title: '商品图',
-                dataType: 'varchar',
-                width: 150,
-                render: text => <img src={text} style={{ width: 100 }}/>,
-            },
-            {
-                dataIndex: 'price',
-                title: '价格',
-                dataType: 'varchar',
-                width: 100,
-                validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
-                render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
-            },
-            {
-                // 文件上传和图片上传其实是很类似的
-                dataIndex: 'desc',
-                title: '简要描述',
-                dataType: 'varchar',
-                width: 130,
-                validator: [{type: 'string', message: '请输入简要描述',required:true}],
-                render: text => `${text}`,
-            },
-            {
-                dataIndex: 'type',
-                title: '商品类型',
-                dataType: 'varchar',
-                width: 100,
-            },
-            {
-                dataIndex: 'detailUrl',
-                title: '链接',
-                dataType: 'varchar',
-                width: 200,
-                render: text => <a href={text}>{text}</a>,
-            },
-            {
-                title: '操作',
-                key: 'action',
-                width: 240,
-                render: (text, record) => (
-                    <span>
-                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.ShlfConfirm(parseInt(record.id))}} okText="确认" cancelText="取消">
+export default class ProdTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: null,
+            tagData:null,
+            visible:false,
+            productID:null,
+            productFieldsData:null,
+            modalName:null,
+            totalEntries:null,
+            groupModalVisible:false,
+            radioValue:null,
+            columns : [
+                {
+                    dataIndex: 'id',
+                    title: 'ID',
+                    dataType: 'int',
+                    width: 60,
+                    primary: true,
+                },
+                {
+                    dataIndex: 'title',
+                    title: '商品名称',
+                    dataType: 'varchar',
+                    validator: [{type: 'string', message: '请输入商品名称',required:true}],
+                    width: 150,
+                },
+                {
+                    dataIndex: 'mainImage',
+                    title: '商品图',
+                    dataType: 'varchar',
+                    width: 150,
+                    render: text => <img src={text} style={{ width: 100 }}/>,
+                },
+                {
+                    dataIndex: 'price',
+                    title: '价格',
+                    dataType: 'varchar',
+                    width: 100,
+                    validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
+                    render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
+                },
+                {
+                    // 文件上传和图片上传其实是很类似的
+                    dataIndex: 'desc',
+                    title: '简要描述',
+                    dataType: 'varchar',
+                    width: 130,
+                    validator: [{type: 'string', message: '请输入简要描述',required:true}],
+                    render: text => `${text}`,
+                },
+                {
+                    dataIndex: 'type',
+                    title: '商品类型',
+                    dataType: 'varchar',
+                    width: 100,
+                },
+                {
+                    dataIndex: 'detailUrl',
+                    title: '链接',
+                    dataType: 'varchar',
+                    width: 200,
+                    render: text => <a href={text}>{text}</a>,
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 240,
+                    render: (text, record) => (
+                        <span>
+                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} okText="确认" cancelText="取消">
                         <a href="#">上架</a>
                         </Popconfirm>
                     <Divider type="vertical" />
@@ -192,54 +201,54 @@ export default class InStock extends React.Component {
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
-                ),
-            }
-        ]
-    }
-  }
-
-  componentDidMount(){
-    this.queryProdData(1);
-    this.queryTags();
-  }
-
-  queryTags = () =>{
-    Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
-            // console.log('111', res)
-            this.setState({
-                tagData: res.shopTags
-            })
-        }
-    )
-}
-  queryProdData= (curPage) => {
-    Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
-            console.log('111', res)
-            res.shopProducts.entries.map(
-                (entry) => {
-                    entry.key = entry.id;
-                    if(entry.type === 'youxuan'){
-                        entry.type ="优选商品"
-                    }
-                    if(entry.type === 'link'){
-                        entry.type ="自有商品"
-                    }
+                    ),
                 }
-            )
-            this.props.store.getProductData(res.shopProducts.entries);
-            this.setState({
-                data: res.shopProducts.entries,
-                totalEntries:res.shopProducts.totalEntries
-            });
+            ]
         }
-    )
-  }
+    }
 
-  onPageChange = (pageNumber) => {
-    this.queryProdData(pageNumber);
-  }
+    componentDidMount(){
+        this.queryProdData(1);
+        this.queryTags();
+    }
+
+    queryTags = () =>{
+        Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('111', res)
+                this.setState({
+                    tagData: res.shopTags
+                })
+            }
+        )
+    }
+    queryProdData= (curPage) => {
+        Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('111', res)
+                res.shopProducts.entries.map(
+                    (entry) => {
+                        entry.key = entry.id;
+                        if(entry.type === 'youxuan'){
+                            entry.type ="优选商品"
+                        }
+                        if(entry.type === 'link'){
+                            entry.type ="自有商品"
+                        }
+                    }
+                )
+                this.props.store.getProductData(res.shopProducts.entries);
+                this.setState({
+                    data: res.shopProducts.entries,
+                    totalEntries:res.shopProducts.totalEntries
+                });
+            }
+        )
+    }
+
+    onPageChange = (pageNumber) => {
+        this.queryProdData(pageNumber);
+    }
 
     handleOk = () => {
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
@@ -321,36 +330,36 @@ export default class InStock extends React.Component {
         document.getElementById('ossfile').innerHTML = '';
     }
 
-  callback = (key) => {
-    this.props.store.getTabOption(key)
-  }
+    callback = (key) => {
+        this.props.store.getTabOption(key)
+    }
 
-  //删除
-  confirm(id) {
-      Request.GraphQlRequest(deleteProduct,
-          { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) =>{
+    //删除
+    confirm(id) {
+        Request.GraphQlRequest(deleteProduct,
+            { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) =>{
                 message.success('删除成功！');
                 this.queryProdData(1);
-        }
-    ).catch(()=>{message.error('删除失败！')})
-}
+            }
+        ).catch(()=>{message.error('删除失败！')})
+    }
 
 
 //control select keys
     onSelectChange = (selectedRowKeys) => {
-    // console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.props.store.getselectedRowKeys(selectedRowKeys)
-  }
+        // console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.props.store.getselectedRowKeys(selectedRowKeys)
+    }
 
-  onClickInsert = () => {
+    onClickInsert = () => {
         this.setState({
             visible: true,
             modalName:"新增商品"
         });
     }
 
-  //updateProduct
+    //updateProduct
     updateProduct = ( ID ) => {
         const fieldData = this.state.data.filter(
             (entry) =>{
@@ -369,22 +378,22 @@ export default class InStock extends React.Component {
     }
 
     handleChange = (key) => {
-      console.log('key', key)
-      if(key==='-1'){
-        this.queryProdData(1);
-      }else{
-        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                console.log('111', res)
-                this.setState({
-                    data: res.tagProducts.products
-                })
-            }
-        )
-      }
+        console.log('key', key)
+        if(key==='-1'){
+            this.queryProdData(1);
+        }else{
+            Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                (res) => {
+                    console.log('111', res)
+                    this.setState({
+                        data: res.tagProducts.products
+                    })
+                }
+            )
+        }
     }
 
-    ShlfConfirm = (ID) => {
+    unShlfConfirm = (ID) => {
         let fieldData = this.state.data.filter(
             (entry) =>{
                 if(parseInt(entry.id) === ID){
@@ -405,54 +414,111 @@ export default class InStock extends React.Component {
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 console.log('2223', res)
-                  message.success('上架成功！');
-                  this.queryProdData(1);
-          }
-      ).catch(()=>{message.error('上架失败！')})
-    }
-  render() {
-    const rowSelection = {
-        selectedRowKeys:this.props.store.selectedRowKeys,
-        onChange: this.onSelectChange,
-      };
-      const Tags = this.state.tagData && this.state.tagData.map(
-          (tag) => {
-            return (
-                <Option value={tag.id} key={tag.id}>{tag.name}</Option>
-            )
-          }
-      ) 
-    return (
-        <div>
-            <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"10px", }}>
-                <Button type="primary" onClick={this.onClickInsert}>
-                    <Icon type="plus-circle-o"/> 新增商品
-                </Button>
-                <Select defaultValue="-1" style={{ marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
-                    <Option value="-1" key='-1'>所有分组</Option>
-                    {Tags}
-                </Select>
-            </Affix>
-            <Modal
-            title={ this.state.modalName}
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            >
-                <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
-            </Modal>
-
-            <Table rowSelection={rowSelection} dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
-            {
-            (this.state.data && JSON.stringify(this.state.data) !=='[]')
-            &&
-            <Pagination 
-            defaultCurrent={1} 
-            onChange={this.onPageChange}
-            total={this.state.data? this.state.totalEntries : 1} 
-            style={{ marginLeft: "80%", marginTop: "10px"}}/>
+                message.success('上架成功！');
+                this.queryProdData(1);
             }
-        </div>
-    )
-  }
+        ).catch(()=>{message.error('上架失败！')})
+    }
+
+
+    //add to group
+    changeProductTag = (ID) => {
+        console.log('ID',ID)
+        this.setState({
+            productID:ID,
+            groupModalVisible:true
+        })
+    }
+
+    //select Radio to group
+    onRadioChange = (e) => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            radioValue: e.target.value,
+        });
+    }
+    handleRadioCancel = () => {
+        this.setState({
+            radioValue: null,
+            groupModalVisible:false
+        });
+    }
+
+    handleGroupModalOk = () => {
+        if(this.state.radioValue){
+            Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                (res) => {
+                    console.log('OK', res)
+                    this.setState({
+                        radioValue: null,
+                        groupModalVisible:false,
+                        productID:''
+                    });
+                    this.queryProdData(1);
+                }
+            )
+        }
+    }
+
+    render() {
+        const rowSelection = {
+            selectedRowKeys:this.props.store.selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
+        const Tags = this.state.tagData && this.state.tagData.map(
+            (tag) => {
+                return (
+                    <Option value={tag.id} key={tag.id}>{tag.name}</Option>
+                )
+            }
+        )
+        const TagRadios = this.state.tagData && this.state.tagData.map(
+            (tag) => {
+                return (
+                    <Radio value={tag.id}>{tag.name}</Radio>
+                )
+            }
+        )
+        return (
+            <div>
+                <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"10px"}}>
+                    <Button type="primary" onClick={this.onClickInsert}>
+                        <Icon type="plus-circle-o"/> 新增商品
+                    </Button>
+                    <Select defaultValue="-1" style={{marginLeft:'5px',width: 120, float:'right' }} onChange={this.handleChange}>
+                        <Option value="-1" key='-1'>所有分组</Option>
+                        {Tags}
+                    </Select>
+                </Affix>
+                <Modal
+                    title={ this.state.modalName}
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
+                </Modal>
+                <Modal
+                    title='加入分组'
+                    visible={this.state.groupModalVisible}
+                    onOk={this.handleGroupModalOk}
+                    onCancel={this.handleRadioCancel}
+                >
+                    <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+                        {TagRadios}
+                    </RadioGroup>
+                </Modal>
+                <Table rowSelection={rowSelection} dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
+                {
+                    (this.state.data && JSON.stringify(this.state.data) !=='[]')
+                    &&
+                    <Pagination
+                        defaultCurrent={1}
+                        onChange={this.onPageChange}
+                        total={this.state.data? this.state.totalEntries : 1}
+                        style={{ marginLeft: "80%", marginTop: "10px"}}/>
+                }
+            </div>
+        )
+    }
 }

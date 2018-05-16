@@ -1,10 +1,9 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, Tabs, notification, Divider } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
-
+const RadioGroup = Radio.Group;
 const queryProducts = `
       query ($page:Int, $pageSize: Int, $shopId:Int, $isDisplay:Boolean) {
         shopProducts(page:$page,pageSize:$pageSize,shopId:$shopId, isDisplay:$isDisplay){
@@ -87,6 +86,14 @@ const deleteProduct = `
       }
     `;
 
+const changeProductTag = `
+      mutation ($id:ID!,$shopId:ID!, $tagId:ID!){
+        changeProductTag(id:$id, shopId:$shopId, tagId:$tagId){
+          status
+        }
+      }
+    `;
+
 const addProduct = `
 mutation (
     $baseinfo:ProductBaseinfo!, $shopId: Int!, $type:ProductType!, $youzan:ProductYouzanArgs
@@ -122,6 +129,8 @@ export default class ProdTable extends React.Component {
         productFieldsData:null,
         modalName:null,
         totalEntries:null,
+        groupModalVisible:false,
+        radioValue:null,
         columns : [
             {
                 dataIndex: 'id',
@@ -206,7 +215,7 @@ export default class ProdTable extends React.Component {
   queryTags = () =>{
     Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            // console.log('111', res)
+            console.log('111', res)
             this.setState({
                 tagData: res.shopTags
             })
@@ -410,6 +419,47 @@ export default class ProdTable extends React.Component {
           }
       ).catch(()=>{message.error('下架失败！')})
     }
+
+
+    //add to group
+    changeProductTag = (ID) => {
+      console.log('ID',ID)
+        this.setState({
+            productID:ID,
+            groupModalVisible:true
+        })
+    }
+
+    //select Radio to group
+    onRadioChange = (e) => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            radioValue: e.target.value,
+        });
+    }
+    handleRadioCancel = () => {
+        this.setState({
+            radioValue: null,
+            groupModalVisible:false
+        });
+    }
+
+    handleGroupModalOk = () => {
+      if(this.state.radioValue){
+          Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+              (res) => {
+                  console.log('OK', res)
+                  this.setState({
+                      radioValue: null,
+                      groupModalVisible:false,
+                      productID:''
+                  });
+                  this.queryProdData(1);
+              }
+          )
+      }
+    }
+
   render() {
     const rowSelection = {
         selectedRowKeys:this.props.store.selectedRowKeys,
@@ -421,7 +471,14 @@ export default class ProdTable extends React.Component {
                 <Option value={tag.id} key={tag.id}>{tag.name}</Option>
             )
           }
-      ) 
+      )
+      const TagRadios = this.state.tagData && this.state.tagData.map(
+          (tag) => {
+              return (
+                  <Radio value={tag.id}>{tag.name}</Radio>
+              )
+          }
+      )
     return (
         <div>
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"10px"}}>
@@ -441,7 +498,16 @@ export default class ProdTable extends React.Component {
             >
                 <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
             </Modal>
-
+            <Modal
+                title='加入分组'
+                visible={this.state.groupModalVisible}
+                onOk={this.handleGroupModalOk}
+                onCancel={this.handleRadioCancel}
+            >
+                <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+                    {TagRadios}
+                </RadioGroup>
+            </Modal>
             <Table rowSelection={rowSelection} dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
             {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')
