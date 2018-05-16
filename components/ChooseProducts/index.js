@@ -113,7 +113,7 @@ export default class ChooseProducts extends React.Component {
     queryYouxuanProd = (page) => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res',res);
+                // console.log('res',res);
                 this.setState({
                     data: res.youxuanProducts
                 })
@@ -122,7 +122,7 @@ export default class ChooseProducts extends React.Component {
     }
 
     onChange = (page) => {
-        console.log('page', page)
+        // console.log('page', page)
         this.getData(page);
     }
 
@@ -146,7 +146,7 @@ export default class ChooseProducts extends React.Component {
                                 () =>{
                                 Request.GraphQlRequest(querySpecificPROD, { shopId:parseInt(localStorage.getItem('shopID')), itemId:(item.itemId).toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                                     (res) => {
-                                        console.log('res',res);
+                                        // console.log('res',res);
                                         this.props.store.changeShown();
                                         this.props.store.changeKey('2');
                                         this.props.store.getProdDetailData(res.getYouxuanProduct)

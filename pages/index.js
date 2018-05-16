@@ -13,6 +13,7 @@ import { observer } from 'mobx-react'
 export default class MainPage extends React.Component {
     constructor (props) {
         super(props)
+        console.log('props', props)
         this.store = initStore(props.isServer)
         this.state = {
             loading:true
@@ -26,6 +27,7 @@ export default class MainPage extends React.Component {
             this.setState({
                 loading:false
             })
+            this.store.getCurPagePath('选货');
         }
     }
 

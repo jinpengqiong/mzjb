@@ -29,6 +29,7 @@ export default class MyOrder extends React.Component {
         this.setState({
             loading:false
         })
+        this.store.getCurPagePath('订单');
     }
   }
 

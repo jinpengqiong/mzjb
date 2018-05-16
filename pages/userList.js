@@ -27,6 +27,7 @@ export default class MyVouchers extends React.Component {
           this.setState({
               loading:false
           })
+          this.store.getCurPagePath('用户');
       }
     }
   render () {

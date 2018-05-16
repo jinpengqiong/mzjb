@@ -7,9 +7,19 @@ import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
 import { Tabs, Spin, Radio } from 'antd';
+import Request from "../utils/graphql_request";
 const TabPane = Tabs.TabPane;
 
-
+const shopTags = `
+    query ($shopId:ID!) {
+        shopTags(shopId:$shopId){
+          id
+          insertedAt
+          name
+          weight
+        }
+      }
+`;
 export default class Products extends React.Component {
   constructor (props) {
     super(props)
@@ -17,7 +27,8 @@ export default class Products extends React.Component {
       this.state = {
           loading:true,
           isShown:true,
-          tagName:'出售中'
+          tagName:'出售中',
+          tagData:null
       }
   }
 
@@ -32,6 +43,8 @@ export default class Products extends React.Component {
         this.setState({
             loading:false
         })
+        this.store.getCurPagePath('商品');
+        this.queryTags();
     }
   }
     onChange = (e) => {
@@ -41,6 +54,22 @@ export default class Products extends React.Component {
         })
    }
 
+   onTabsChange = (key) => {
+       // console.log(key);
+        this.queryTags();
+   }
+
+    queryTags = () =>{
+        Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                // console.log('111', res)
+                this.setState({
+                    tagData: res.shopTags
+                })
+            }
+        )
+    }
+    
   render () {
     return (
     <Provider store={this.store}>
@@ -49,7 +78,7 @@ export default class Products extends React.Component {
               <Tabs
                   // activeKey={this.store.activeKey}
                   type="card"
-                  // onChange={this.onChange}
+                  onChange={this.onTabsChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="1">
                       <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
@@ -58,7 +87,7 @@ export default class Products extends React.Component {
                       </Radio.Group>
                       {
                           this.state.tagName ==='出售中'?
-                              <ProdTable />
+                              <ProdTable shopTags={this.state.tagData}/>
                               :
                           this.state.tagName ==='仓库中'?
                               <InStock />

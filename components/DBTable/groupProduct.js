@@ -102,7 +102,7 @@ export default class GroupProduct extends React.Component {
     queryTags = () =>{
         Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res', res)
+                // console.log('res', res)
                 this.setState({
                     data: res.shopTags
                 })
@@ -224,15 +224,6 @@ export default class GroupProduct extends React.Component {
                     <StockProdForm ref='form' GroupData={this.state.groupFieldsData}  />
                 </Modal>
                 <Table bordered dataSource={this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
-                {/*{*/}
-                    {/*(this.state.data && this.state.data.totalEntries !==0)*/}
-                    {/*&&*/}
-                    {/*<Pagination*/}
-                        {/*defaultCurrent={1}*/}
-                        {/*onChange={this.onChange}*/}
-                        {/*total={this.state.data? this.state.data.totalEntries : 1}*/}
-                        {/*style={{ float: "right", marginTop: "10px"}}/>*/}
-                {/*}*/}
             </div>
         )
     }

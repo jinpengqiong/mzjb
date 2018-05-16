@@ -30,6 +30,7 @@ export default class Products extends React.Component {
         this.setState({
             loading:false
         })
+        this.store.getCurPagePath('素材');
     }
   }
   callback(key) {

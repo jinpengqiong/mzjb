@@ -11,7 +11,7 @@ import { inject, observer } from 'mobx-react'
 export default class MyLayout extends React.Component {
   constructor (props){
     super(props);
-    this.state = {
+      this.state = {
       collapsed: false,
       curPagePath:'首页'
     };
@@ -93,6 +93,14 @@ export default class MyLayout extends React.Component {
                 <span>订单</span>
               </div>
             </Menu.Item>
+            <Menu.Item key="设置">
+                <div onClick={()=>{
+                    Router.prefetch('/settings');
+                    Router.push('/settings')}}>
+                    <Icon type="setting" />
+                    <span>设置</span>
+                </div>
+            </Menu.Item>
             {
               (this.props.store.userRole && this.props.store.userRole.indexOf('admin') !== -1)
               &&
@@ -135,7 +143,7 @@ export default class MyLayout extends React.Component {
             line-height: 64px;
             cursor: pointer;
             transition: color .3s;
-          }
+          }bgy  cv
           .trigger:hover {
             color: #1890ff;
           }

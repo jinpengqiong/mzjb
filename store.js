@@ -30,8 +30,7 @@ class Store {
   //Youxuan Product detail data
   @observable ProdDetailData = null;
 
-  constructor (isServer,curPagePath) {
-    this.curPagePath = curPagePath
+  constructor (isServer) {
   }
 
   @action getUrlIDs = (ID) => {

@@ -215,7 +215,7 @@ export default class ProdTable extends React.Component {
     queryTags = () =>{
         Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('111', res)
+                // console.log('111', res)
                 this.setState({
                     tagData: res.shopTags
                 })
@@ -225,7 +225,7 @@ export default class ProdTable extends React.Component {
     queryProdData= (curPage) => {
         Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('111', res)
+                // console.log('111', res)
                 res.shopProducts.entries.map(
                     (entry) => {
                         entry.key = entry.id;
@@ -256,7 +256,7 @@ export default class ProdTable extends React.Component {
                 if (err) {
                     message.error(err);
                 }else{
-                    console.log('1112', values);
+                    // console.log('1112', values);
                     values.mainImage = this.props.store.mainImage;
                     values.price = parseInt(parseFloat(values.price)*100);
                     values.isDisplay = false;
@@ -288,7 +288,7 @@ export default class ProdTable extends React.Component {
                 } else {
                     values.mainImage = this.state.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
-                    console.log('values', values);
+                    // console.log('values', values);
                     Request.GraphQlRequest(UpdateProduct,
                         {
                             baseinfo: values,
@@ -296,7 +296,7 @@ export default class ProdTable extends React.Component {
                             id: this.state.productID
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
-                            console.log('res', res);
+                            // console.log('res', res);
                             this.refs.form.resetFields();
                             this.props.store.resetUrlIDs();
                             res.updateProduct.key = res.updateProduct.id;
@@ -378,13 +378,13 @@ export default class ProdTable extends React.Component {
     }
 
     handleChange = (key) => {
-        console.log('key', key)
+        // console.log('key', key)
         if(key==='-1'){
             this.queryProdData(1);
         }else{
             Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('111', res)
+                    // console.log('111', res)
                     this.setState({
                         data: res.tagProducts.products
                     })
@@ -405,7 +405,7 @@ export default class ProdTable extends React.Component {
         delete fieldData[0].key;
         delete fieldData[0].id;
         delete fieldData[0].type;
-        console.log('fieldData',fieldData)
+        // console.log('fieldData',fieldData)
         Request.GraphQlRequest(UpdateProduct,
             {
                 baseinfo: fieldData[0],
@@ -413,7 +413,7 @@ export default class ProdTable extends React.Component {
                 id: ID
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('2223', res)
+                // console.log('2223', res)
                 message.success('上架成功！');
                 this.queryProdData(1);
             }
@@ -423,7 +423,7 @@ export default class ProdTable extends React.Component {
 
     //add to group
     changeProductTag = (ID) => {
-        console.log('ID',ID)
+        // console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true
@@ -432,7 +432,7 @@ export default class ProdTable extends React.Component {
 
     //select Radio to group
     onRadioChange = (e) => {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         this.setState({
             radioValue: e.target.value,
         });
@@ -448,7 +448,7 @@ export default class ProdTable extends React.Component {
         if(this.state.radioValue){
             Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('OK', res)
+                    // console.log('OK', res)
                     this.setState({
                         radioValue: null,
                         groupModalVisible:false,
@@ -483,7 +483,7 @@ export default class ProdTable extends React.Component {
             <div>
                 <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"10px"}}>
                     <Button type="primary" onClick={this.onClickInsert}>
-                        <Icon type="plus-circle-o"/> 新增商品
+                        <Icon type="plus-circle-o"/>新增自有商品
                     </Button>
                     <Select defaultValue="-1" style={{marginLeft:'5px',width: 120, float:'right' }} onChange={this.handleChange}>
                         <Option value="-1" key='-1'>所有分组</Option>
