@@ -24,10 +24,10 @@ export default class MyVouchers extends React.Component {
       if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
         Router.push('/login')
       }else{
+          this.store.getCurPagePath('用户');
           this.setState({
               loading:false
           })
-          this.store.getCurPagePath('用户');
       }
     }
   render () {

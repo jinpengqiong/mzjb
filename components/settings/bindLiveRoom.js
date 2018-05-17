@@ -58,7 +58,7 @@ export default class BindLiveRoom extends React.Component {
     queryLiveRooms(){
         Request.GraphQlRequest(listShoproom, {shopId:parseInt(localStorage.getItem('shopID'))}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listShoproom', res)
+                // console.log('listShoproom', res)
                 this.setState({
                     listShopRoom:res.listShoproom
                 })
@@ -73,7 +73,7 @@ export default class BindLiveRoom extends React.Component {
         })
         Request.GraphQlRequest(ownedRooms, {shopId:localStorage.getItem('shopID') }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('ownedRooms', res.ownedRooms)
+                // console.log('ownedRooms', res.ownedRooms)
                 this.setState({
                     ownedRoom:res.ownedRooms
                 })

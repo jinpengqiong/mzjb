@@ -90,13 +90,7 @@ export default class OrderManagement extends React.Component {
     }
   }
   componentDidMount(){
-    if(!localStorage.getItem('accessToken')){
-        Router.push('/login')
-    }else if(this.props.store.shopID === null){
-        Router.push('/')
-    }else{
         this.queryOrderData(1);
-    }
   }
 
   queryOrderData = (curPage) => {

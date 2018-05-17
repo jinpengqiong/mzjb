@@ -59,6 +59,7 @@ const querySpecificPROD = `
               itemType
               detailUrl
               itemNo
+              createTime
               itemType
               quantity
               title

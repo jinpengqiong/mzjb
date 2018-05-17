@@ -76,13 +76,14 @@ export default class ProdDetails extends React.Component {
             return (
                 <div>
                     <Row>
-                        <Col span={6} offset={2}>
-                            <img src={this.props.store.ProdDetailData.item.itemImgs[0].url} style={{ width:"260px"}}/>
+                        <Col span={10} offset={2}>
+                            <img src={this.props.store.ProdDetailData.item.itemImgs[0].url} style={{ width:"350px"}}/>
                         </Col>
-                        <Col span={16}>
+                        <Col span={12}>
                             <h3>{this.props.store.ProdDetailData.item.title}</h3>
                             <p>价格：{'¥'+this.props.store.ProdDetailData.item.price}</p>
                             <p>总库存：{this.props.store.ProdDetailData.item.quantity}</p>
+                            {/*<p>创建时间：{this.props.store.ProdDetailData.item.createTime}</p>*/}
                             {
                                 (this.props.store.ProdDetailData && this.props.store.ProdDetailData.alreadyExist)?
                                     <Button type="primary" disabled>已添加到店铺</Button>
