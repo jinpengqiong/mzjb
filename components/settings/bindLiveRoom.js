@@ -106,7 +106,7 @@ export default class BindLiveRoom extends React.Component {
                     radioValue:null
                 });
                 this.queryLiveRooms();
-                console.log('res', res)
+                // console.log('res', res)
             }
         ).catch(() =>{message.info('此直播间已绑定, 请选择其他直播间。')})
     }
@@ -162,10 +162,10 @@ export default class BindLiveRoom extends React.Component {
                     <p>直播间列表：</p>
                     <RadioGroup onChange={this.onChange} value={this.state.radioValue}>
                         {
-                            bindableRooms && bindableRooms[0]===undefined?
-                                '暂无'
-                                :
+                            this.state.ownedRoom?
                             bindableRooms
+                                :
+                            '暂无'
                         }
                     </RadioGroup>
                 </Modal>
