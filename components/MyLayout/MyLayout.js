@@ -104,7 +104,7 @@ export default class MyLayout extends React.Component {
             {
               (this.props.store.userRole && this.props.store.userRole.indexOf('admin') !== -1)
               &&
-              <Menu.Item key="用户列表">
+              <Menu.Item key="用户">
                 <div onClick={()=>{ 
                   Router.prefetch('/userList');
                   Router.push('/userList')}}>

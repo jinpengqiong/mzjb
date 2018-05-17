@@ -1,6 +1,6 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
-import UserList from '../components/userList/list'
+import BindLiveRoom from '../components/settings/bindLiveRoom'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin, Tabs } from 'antd';
@@ -42,7 +42,7 @@ export default class Settings extends React.Component {
                             // onChange={this.onTabsChange}
                             hideAdd>
                             <TabPane tab='绑定直播间' key="1">
-                                111
+                                <BindLiveRoom />
                             </TabPane>
                             <TabPane tab='自动回复设置' key="2" >
                                 222
