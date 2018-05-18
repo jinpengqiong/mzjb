@@ -44,9 +44,9 @@ export default class Settings extends React.Component {
                             <TabPane tab='绑定直播间' key="1">
                                 <BindLiveRoom />
                             </TabPane>
-                            <TabPane tab='自动回复设置' key="2" >
-                                222
-                            </TabPane>
+                            {/*<TabPane tab='自动回复' key="2" >*/}
+                                {/*222*/}
+                            {/*</TabPane>*/}
                         </Tabs>
                     </MyLayout>
                 </Spin>

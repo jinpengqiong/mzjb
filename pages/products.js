@@ -55,7 +55,7 @@ export default class Products extends React.Component {
    }
 
    onTabsChange = (key) => {
-       // console.log(key);
+       console.log(key);
         this.queryTags();
    }
 

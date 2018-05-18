@@ -213,7 +213,6 @@ export default class ProdTable extends React.Component {
   queryProdData= (curPage) => {
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-            // console.log('111', res)
             res.shopProducts.entries.map(
                 (entry) => {
                     entry.key = entry.id;
@@ -225,6 +224,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
+            console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -286,7 +286,6 @@ export default class ProdTable extends React.Component {
                         (res) => {
                             // console.log('res', res);
                             this.refs.form.resetFields();
-                            this.props.store.resetUrlIDs();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;
@@ -333,12 +332,6 @@ export default class ProdTable extends React.Component {
     ).catch(()=>{message.error('删除失败！')})
 }
 
-
-//control select keys
-    onSelectChange = (selectedRowKeys) => {
-    // console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.props.store.getselectedRowKeys(selectedRowKeys)
-  }
 
   onClickInsert = () => {
         this.setState({
@@ -453,6 +446,7 @@ export default class ProdTable extends React.Component {
                       groupModalVisible:false,
                       productID:''
                   });
+                  message.success('添加成功！')
                   this.queryProdData(1);
               }
           )
@@ -460,10 +454,6 @@ export default class ProdTable extends React.Component {
     }
 
   render() {
-    const rowSelection = {
-        selectedRowKeys:this.props.store.selectedRowKeys,
-        onChange: this.onSelectChange,
-      };
       const Tags = this.props.shopTags && this.props.shopTags.map(
           (tag) => {
             return (
@@ -474,7 +464,7 @@ export default class ProdTable extends React.Component {
       const TagRadios = this.props.shopTags && this.props.shopTags.map(
           (tag) => {
               return (
-                  <Radio value={tag.id}>{tag.name}</Radio>
+                  <Radio value={tag.id} key={tag.id}>{tag.name}</Radio>
               )
           }
       )
@@ -507,7 +497,7 @@ export default class ProdTable extends React.Component {
                     {TagRadios}
                 </RadioGroup>
             </Modal>
-            <Table rowSelection={rowSelection} dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
+            <Table dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
             {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')
             &&

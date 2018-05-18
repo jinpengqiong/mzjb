@@ -29,7 +29,7 @@ export default class ProdDetails extends React.Component {
     addToShop = () => {
         const baseinfo = {
             desc: this.props.store.ProdDetailData.item.title,
-            detailUrl:this.props.store.ProdDetailData.item.itemImgs[0].url,
+            detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:true,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
             price:this.props.store.ProdDetailData.item.price,
@@ -51,7 +51,7 @@ export default class ProdDetails extends React.Component {
     addToStock  = () => {
         const baseinfo = {
             desc: this.props.store.ProdDetailData.item.title,
-            detailUrl:this.props.store.ProdDetailData.item.itemImgs[0].url,
+            detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:false,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
             price:this.props.store.ProdDetailData.item.price,
