@@ -143,18 +143,21 @@ export default class AutoReply extends React.Component {
                 </Row>
                 <style jsx>{
                     `
-                    .main{ float: left; width: 300px; height: 220px;position: relative; overflow: hidden}
+                    .main{ float: left; width: 300px; height: 220px; position: relative; overflow: hidden}
                     .cover Button { margin: 60px auto; }
-                    .cover { width: 300px; height: 220px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; translateX(0px);  transition: all 0.35s; }
+                    .cover { width: 300px; height: 220px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
                     .main:hover .cover { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
+
                     .sub1{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
                     .subCover1 Button { margin: 25px auto; }
                     .subCover1 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
                     .sub1:hover .subCover1 { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
+
                     .sub2{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
                     .subCover2 Button { margin: 25px auto; }
                     .subCover2 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
                     .sub2:hover .subCover2 { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
+
                     .sub3{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
                     .subCover3 Button { margin: 25px auto; }
                     .subCover3 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
