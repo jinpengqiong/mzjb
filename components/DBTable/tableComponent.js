@@ -36,8 +36,8 @@ const shopTags = `
 `;
 
 const tagProducts = `
-    query ($shopId:ID!, $tagId:ID!) {
-        tagProducts(shopId:$shopId, tagId:$tagId){
+    query ($shopId:ID!, $tagId:ID!, $isDisplay:Boolean!) {
+        tagProducts(shopId:$shopId, tagId:$tagId, isDisplay:$isDisplay){
             products{
                 id
                 title
@@ -224,7 +224,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            console.log('111', res)
+            // console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -363,9 +363,9 @@ export default class ProdTable extends React.Component {
       if(key==='-1'){
         this.queryProdData(1);
       }else{
-        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('111', res)
+                // console.log('111', res)
                 res.tagProducts.products.map(
                     (prod) => {
                         prod.key = prod.id;

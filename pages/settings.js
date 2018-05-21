@@ -1,6 +1,7 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
+import AutoReply from '../components/settings/autoReply'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin, Tabs } from 'antd';
@@ -44,9 +45,9 @@ export default class Settings extends React.Component {
                             <TabPane tab='绑定直播间' key="1">
                                 <BindLiveRoom />
                             </TabPane>
-                            {/*<TabPane tab='自动回复' key="2" >*/}
-                                {/*222*/}
-                            {/*</TabPane>*/}
+                            <TabPane tab='自动回复' key="2" >
+                                <AutoReply />
+                            </TabPane>
                         </Tabs>
                     </MyLayout>
                 </Spin>

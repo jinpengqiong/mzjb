@@ -13,7 +13,7 @@ import { observer } from 'mobx-react'
 export default class MainPage extends React.Component {
     constructor (props) {
         super(props)
-        console.log('props', props)
+        // console.log('props', props)
         this.store = initStore(props.isServer)
         this.state = {
             loading:true
@@ -36,7 +36,7 @@ export default class MainPage extends React.Component {
     }
 
     render () {
-        console.log('store', this.store)
+        // console.log('store', this.store)
         return (
             <Provider store={this.store}>
                 <Spin spinning={this.state.loading} size="large">

@@ -115,7 +115,7 @@ export default class ChooseProducts extends React.Component {
     queryYouxuanProd = (page) => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('res',res);
+                // console.log('res',res);
                 this.setState({
                     data: res.youxuanProducts
                 })

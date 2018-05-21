@@ -8,6 +8,7 @@ module.exports = {
             '/userList': { page: '/userList' },
             '/resources': { page: '/resources' },
             '/products': { page: '/products' },
+            '/settings': { page: '/settings' },
         }
     },
     webpack: (config, { dev }) => {

@@ -36,8 +36,8 @@ const shopTags = `
 `;
 
 const tagProducts = `
-    query ($shopId:ID!, $tagId:ID!) {
-        tagProducts(shopId:$shopId, tagId:$tagId){
+    query ($shopId:ID!, $tagId:ID!, $isDisplay:Boolean!) {
+        tagProducts(shopId:$shopId, tagId:$tagId, isDisplay:$isDisplay){
             products{
                 id
                 title
@@ -374,7 +374,7 @@ export default class ProdTable extends React.Component {
         if(key==='-1'){
             this.queryProdData(1);
         }else{
-            Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
                     // console.log('111', res)
                     this.setState({
