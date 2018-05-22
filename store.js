@@ -18,6 +18,9 @@ class Store {
   @observable ProdDetailData = null;
   //autpreply add subTitle tag
   @observable subTitleArr = [];
+  // replyBody saved here
+  @observable replyBody = [];
+
 
   constructor (isServer) {
   }
@@ -73,6 +76,15 @@ class Store {
   @action addSUbtitle = (data) => {
       this.subTitleArr.push(data);
   }
+
+  @action addReplyBody = (data) => {
+    this.replyBody.push(data);
+  }
+
+  @action deleteReplyBody = (index) => {
+    this.replyBody.splice(index,1);
+  }
+
 }
 
 export function initStore (isServer) {

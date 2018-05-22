@@ -49,7 +49,6 @@ export default class AutoReply extends React.Component {
             visible:false,
             hiddenAdd:false,
             autoReplyData:null,
-            position:null
         }
     }
 
@@ -78,15 +77,13 @@ export default class AutoReply extends React.Component {
     handleMainTitle = () => {
         this.setState({
             visible:true,
-            position:0
         })
     }
 
     //set SubTitle1
-    handleSubTitle1 = (pos) => {
+    handleSubTitle1 = () => {
         this.setState({
             visible:true,
-            position:pos
         })
     }
 
@@ -97,24 +94,25 @@ export default class AutoReply extends React.Component {
                 message.error(err);
             }else{
                 console.log('values', values)
-                const replyBody = [{
+                const replyBody = {
                     "title": values.title,
                     "description": values.description,
                     "url": values.url,
                     "picurl": this.props.store.mainImage
-                }];
-                Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:values.keyWord, replyBody:JSON.stringify(replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                    (res) => {
-                        // console.log('Autoreply', res)
-                        message.success('设置成功！')
-                        this.queryAutoReply()
-                        this.refs.form.resetFields();
-                        document.getElementById('ossfile').innerHTML = '';
-                        this.setState({
-                            visible:false
-                        })
-                    }
-                )
+                };
+                this.props.store.addReplyBody(replyBody); 
+                this.refs.form.resetFields();
+                document.getElementById('ossfile').innerHTML = ''; 
+                this.setState({
+                    visible:false
+                })   
+                // Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:values.keyWord, replyBody:JSON.stringify(replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                //     (res) => {
+                //         // console.log('Autoreply', res)
+                //         message.success('设置成功！')
+                //         this.queryAutoReply()                                
+                //     }
+                // )
             }
         })
     }
@@ -129,19 +127,22 @@ export default class AutoReply extends React.Component {
     // add subtitle
     addSubTitle = () => {
         const position = this.props.store.subTitleArr.length+2;
-        const ID= (this.state.autoReplyData && this.state.autoReplyData.entries[position]) &&  this.state.autoReplyData.entries[position].id
         console.log('position',position)
         const subs = (
             <div className='sub1' key={ UUIDGen.uuid(8, 10) }>
                 <img style={{width: '100px', textAlign: "left"}}
-                     src={ (this.state.autoReplyData.entries && this.state.autoReplyData.entries[position])? (JSON.parse(this.state.autoReplyData.entries[position].replyBody))[0].picurl : "http://iph.href.lu/100x100?text=副图片"}
+                     src={ 
+                        this.props.store.replyBody.toJS.length===position?  this.props.store.replyBody[position].picurl : "http://iph.href.lu/300x200?text=副标题" 
+                        }
                      alt="封面"/>
                 <span>
-                    { (this.state.autoReplyData.entries && this.state.autoReplyData.entries[position])? (JSON.parse(this.state.autoReplyData.entries[position].replyBody))[0].title : "副标题"}
+                    { 
+                         this.props.store.replyBody.toJS.length===position?  this.props.store.replyBody[position].title : "副标题"
+                    }
                 </span>
                 <span className='subCover1'>
                     <Button type='primary' onClick={()=>{this.handleSubTitle1(position)}}>设置副标题</Button>
-                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(ID)}}>删除</Button>
+                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(position)}}>删除</Button>
                 </span>
             </div>
         );
@@ -172,25 +173,26 @@ export default class AutoReply extends React.Component {
                             <p>关键词：<Input/></p>
                             <div className='main' key='main'>
                                 <img style={{ width:'300px', height:"200px"}}
-                                     src="http://iph.href.lu/300x200?text=封面" alt="封面"/>
+                                     src={(this.props.store.replyBody.toJS.length===0 && this.props.store.replyBody[0])? this.props.store.replyBody[0].picurl :"http://iph.href.lu/300x200?text=封面"  } 
+                                     alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
-                                    { (this.state.autoReplyData && this.state.autoReplyData.entries[0])? (JSON.parse(this.state.autoReplyData.entries[0].replyBody))[0].title : "封面标题"}
+                                    { (this.props.store.replyBody.toJS.length===0 && this.props.store.replyBody[0])? this.props.store.replyBody[0].title :"封面"}
                                 </span>
                                 <span className='cover'>
                                     <Button type='primary' onClick={this.handleMainTitle}>设置主标题</Button>
-                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(this.state.autoReplyData.entries[0] ?this.state.autoReplyData.entries[0].id:null)}}>删除</Button>
+                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(0)}}>删除</Button>
                                 </span>
                             </div>
                             <div className='sub1' key='sub1'>
                                 <img style={{ width:'100px', textAlign:"left"}}
-                                     src={ (this.state.autoReplyData && this.state.autoReplyData.entries[1])? (JSON.parse(this.state.autoReplyData.entries[1].replyBody))[0].picurl : "http://iph.href.lu/100x100?text=副图片"}
-                                     alt="封面"/>
+                                     src={(this.props.store.replyBody.toJS.length===1&&this.props.store.replyBody[1] )?  this.props.store.replyBody[1].picurl : "http://iph.href.lu/300x200?text=副标题"}
+                                     alt="副标题"/>
                                 <span>
-                                    { (this.state.autoReplyData && this.state.autoReplyData.entries[1])? (JSON.parse(this.state.autoReplyData.entries[1].replyBody))[0].title : "副标题"}
+                                { (this.props.store.replyBody.toJS.length===1&&this.props.store.replyBody[1] )? this.props.store.replyBody[1].title:"副标题"}
                                 </span>
                                 <span className='subCover1'>
                                     <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
-                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(this.state.autoReplyData.entries[1] ?this.state.autoReplyData.entries[0].id:null)}}>删除</Button>
+                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(1)}}>删除</Button>
                                 </span>
                             </div>
                             {

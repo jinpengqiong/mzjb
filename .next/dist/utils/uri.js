@@ -5,4 +5,4 @@ Object.defineProperty(exports, "__esModule", {
 });
 var uri = 'http://testshop.muzhiyun.cn/api/graphiql';
 exports.default = uri;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInV0aWxzL3VyaS5qcyJdLCJuYW1lcyI6WyJ1cmkiXSwibWFwcGluZ3MiOiI7Ozs7O0FBQUEsSUFBTSxNQUFNLEFBQVo7a0JBQ2UsQSIsImZpbGUiOiJ1cmkuanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL21hYy9EZXNrdG9wL216amIvbXV6aGlqdWJhb193ZWIifQ==
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInV0aWxzXFx1cmkuanMiXSwibmFtZXMiOlsidXJpIl0sIm1hcHBpbmdzIjoiOzs7OztBQUFBLElBQU0sTUFBTSxBQUFaO2tCQUNlLEEiLCJmaWxlIjoidXJpLmpzIiwic291cmNlUm9vdCI6IkM6L1VzZXJzL0FkbWluaXN0cmF0b3IvRGVza3RvcC9teiJ9

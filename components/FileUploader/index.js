@@ -129,7 +129,6 @@ class FileUploader extends React.Component {
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaID, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                  const ID = res.createMedia.id;
                   self.props.store.getUrlIDs(parseInt(ID));
                   message.success('上传成功');
                 }

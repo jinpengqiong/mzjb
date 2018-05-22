@@ -12,7 +12,7 @@ var _classCallCheck2 = require('_babel-runtime@6.26.0@babel-runtime/helpers/clas
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27;
 
 exports.initStore = initStore;
 
@@ -68,9 +68,9 @@ function _initializerWarningHelper(descriptor, context) {
 var store = null;
 
 var Store = (_class =
-//Youxuan Product detail data
+//autpreply add subTitle tag
 
-// wethear show the product detail
+//product tab will shown
 function Store(isServer) {
   (0, _classCallCheck3.default)(this, Store);
 
@@ -96,35 +96,43 @@ function Store(isServer) {
 
   _initDefineProp(this, 'subTitleArr', _descriptor11, this);
 
-  _initDefineProp(this, 'getShopID', _descriptor12, this);
+  _initDefineProp(this, 'replyBody', _descriptor12, this);
 
-  _initDefineProp(this, 'getRoleInfo', _descriptor13, this);
+  _initDefineProp(this, 'getShopID', _descriptor13, this);
 
-  _initDefineProp(this, 'getCurPagePath', _descriptor14, this);
+  _initDefineProp(this, 'getRoleInfo', _descriptor14, this);
 
-  _initDefineProp(this, 'getProductData', _descriptor15, this);
+  _initDefineProp(this, 'getCurPagePath', _descriptor15, this);
 
-  _initDefineProp(this, 'getTabOption', _descriptor16, this);
+  _initDefineProp(this, 'getProductData', _descriptor16, this);
 
-  _initDefineProp(this, 'getADMediaID', _descriptor17, this);
+  _initDefineProp(this, 'getTabOption', _descriptor17, this);
 
-  _initDefineProp(this, 'getBindData', _descriptor18, this);
+  _initDefineProp(this, 'getADMediaID', _descriptor18, this);
 
-  _initDefineProp(this, 'getMainImage', _descriptor19, this);
+  _initDefineProp(this, 'getBindData', _descriptor19, this);
 
-  _initDefineProp(this, 'changeShown', _descriptor20, this);
+  _initDefineProp(this, 'getMainImage', _descriptor20, this);
 
-  _initDefineProp(this, 'changeKey', _descriptor21, this);
+  _initDefineProp(this, 'changeShown', _descriptor21, this);
 
-  _initDefineProp(this, 'getProdDetailData', _descriptor22, this);
+  _initDefineProp(this, 'changeKey', _descriptor22, this);
 
-  _initDefineProp(this, 'changeIsExisted', _descriptor23, this);
+  _initDefineProp(this, 'getProdDetailData', _descriptor23, this);
 
-  _initDefineProp(this, 'addSUbtitle', _descriptor24, this);
+  _initDefineProp(this, 'changeIsExisted', _descriptor24, this);
+
+  _initDefineProp(this, 'addSUbtitle', _descriptor25, this);
+
+  _initDefineProp(this, 'addReplyBody', _descriptor26, this);
+
+  _initDefineProp(this, 'deleteReplyBody', _descriptor27, this);
 }
-//autpreply add subTitle tag
+// replyBody saved here
 
-//product tab will shown
+//Youxuan Product detail data
+
+// wethear show the product detail
 , (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'shopID', [_mobx.observable], {
   enumerable: true,
   initializer: function initializer() {
@@ -180,7 +188,12 @@ function Store(isServer) {
   initializer: function initializer() {
     return [];
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'getShopID', [_mobx.action], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'replyBody', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return [];
+  }
+}), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, 'getShopID', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -189,7 +202,7 @@ function Store(isServer) {
       _this.shopID = ID;
     };
   }
-}), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, 'getRoleInfo', [_mobx.action], {
+}), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, 'getRoleInfo', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -198,7 +211,7 @@ function Store(isServer) {
       _this2.userRole = info;
     };
   }
-}), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, 'getCurPagePath', [_mobx.action], {
+}), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, 'getCurPagePath', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this3 = this;
@@ -207,7 +220,7 @@ function Store(isServer) {
       _this3.curPagePath = path;
     };
   }
-}), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, 'getProductData', [_mobx.action], {
+}), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, 'getProductData', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this4 = this;
@@ -216,7 +229,7 @@ function Store(isServer) {
       _this4.ProductData = data;
     };
   }
-}), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, 'getTabOption', [_mobx.action], {
+}), _descriptor17 = _applyDecoratedDescriptor(_class.prototype, 'getTabOption', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this5 = this;
@@ -225,7 +238,7 @@ function Store(isServer) {
       _this5.TabOption = option;
     };
   }
-}), _descriptor17 = _applyDecoratedDescriptor(_class.prototype, 'getADMediaID', [_mobx.action], {
+}), _descriptor18 = _applyDecoratedDescriptor(_class.prototype, 'getADMediaID', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this6 = this;
@@ -234,7 +247,7 @@ function Store(isServer) {
       _this6.ADMediaID = data;
     };
   }
-}), _descriptor18 = _applyDecoratedDescriptor(_class.prototype, 'getBindData', [_mobx.action], {
+}), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, 'getBindData', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this7 = this;
@@ -243,7 +256,7 @@ function Store(isServer) {
       _this7.bindRoomData = data;
     };
   }
-}), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, 'getMainImage', [_mobx.action], {
+}), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, 'getMainImage', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this8 = this;
@@ -252,7 +265,7 @@ function Store(isServer) {
       _this8.mainImage = data;
     };
   }
-}), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, 'changeShown', [_mobx.action], {
+}), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, 'changeShown', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this9 = this;
@@ -261,7 +274,7 @@ function Store(isServer) {
       _this9.isShown = true;
     };
   }
-}), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, 'changeKey', [_mobx.action], {
+}), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, 'changeKey', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this10 = this;
@@ -270,7 +283,7 @@ function Store(isServer) {
       _this10.activeKey = keyID;
     };
   }
-}), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, 'getProdDetailData', [_mobx.action], {
+}), _descriptor23 = _applyDecoratedDescriptor(_class.prototype, 'getProdDetailData', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this11 = this;
@@ -279,7 +292,7 @@ function Store(isServer) {
       _this11.ProdDetailData = data;
     };
   }
-}), _descriptor23 = _applyDecoratedDescriptor(_class.prototype, 'changeIsExisted', [_mobx.action], {
+}), _descriptor24 = _applyDecoratedDescriptor(_class.prototype, 'changeIsExisted', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this12 = this;
@@ -288,13 +301,31 @@ function Store(isServer) {
       _this12.ProdDetailData.alreadyExist = true;
     };
   }
-}), _descriptor24 = _applyDecoratedDescriptor(_class.prototype, 'addSUbtitle', [_mobx.action], {
+}), _descriptor25 = _applyDecoratedDescriptor(_class.prototype, 'addSUbtitle', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this13 = this;
 
     return function (data) {
       _this13.subTitleArr.push(data);
+    };
+  }
+}), _descriptor26 = _applyDecoratedDescriptor(_class.prototype, 'addReplyBody', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this14 = this;
+
+    return function (data) {
+      _this14.replyBody.push(data);
+    };
+  }
+}), _descriptor27 = _applyDecoratedDescriptor(_class.prototype, 'deleteReplyBody', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this15 = this;
+
+    return function (index) {
+      _this15.replyBody.splice(index, 1);
     };
   }
 })), _class);
@@ -308,4 +339,4 @@ function initStore(isServer) {
     return store;
   }
 }
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0b3JlLmpzIl0sIm5hbWVzIjpbImluaXRTdG9yZSIsInN0b3JlIiwiU3RvcmUiLCJpc1NlcnZlciIsIm9ic2VydmFibGUiLCJhY3Rpb24iLCJJRCIsInNob3BJRCIsImluZm8iLCJ1c2VyUm9sZSIsInBhdGgiLCJjdXJQYWdlUGF0aCIsImRhdGEiLCJQcm9kdWN0RGF0YSIsIm9wdGlvbiIsIlRhYk9wdGlvbiIsIkFETWVkaWFJRCIsImJpbmRSb29tRGF0YSIsIm1haW5JbWFnZSIsImlzU2hvd24iLCJrZXlJRCIsImFjdGl2ZUtleSIsIlByb2REZXRhaWxEYXRhIiwiYWxyZWFkeUV4aXN0Iiwic3ViVGl0bGVBcnIiLCJwdXNoIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7O1FBNkVnQixBLFlBQUEsQTs7QUE3RWhCOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBRUEsSUFBSSxRQUFRLEFBQVo7O0lBRU0sQTtBQVlKOztBQUpBO0FBU0EsZUFBYSxBQUFiLFVBQXVCO3NDQUFBOzsrQ0FBQTs7a0RBQUE7O3FEQUFBOztxREFBQTs7bURBQUE7O3NEQUFBOzttREFBQTs7aURBQUE7O21EQUFBOzt5REFBQTs7c0RBQUE7O29EQUFBOztzREFBQTs7eURBQUE7O3lEQUFBOzt1REFBQTs7dURBQUE7O3NEQUFBOzt1REFBQTs7c0RBQUE7O29EQUFBOzs0REFBQTs7MERBQUE7O3NEQUN0Qjs7QUFKRDs7QUFKQTt3RUFUQyxNOzs7V0FBb0IsQTs7NEVBQ3BCLE07OztXQUFzQixBOzsrRUFDdEIsTTs7O1dBQXlCLEE7OytFQUN6QixNOzs7V0FBeUIsQTs7NkVBQ3pCLE07OztXQUF1QixBOztnRkFDdkIsTTs7O1dBQTBCLEE7OzZFQUMxQixNOzs7V0FBdUIsQTs7MkVBRXZCLE07OztXQUFxQixBOzs2RUFFckIsTTs7O1dBQXVCLEE7O21GQUV2QixNOzs7V0FBNEIsQTs7Z0ZBRTVCLE07OztXQUF5QixBOzs4RUFLekIsTTs7Ozs7V0FBbUIsVUFBQyxBQUFELElBQVEsQUFDMUI7WUFBSyxBQUFMLFNBQWMsQUFBZCxBQUNEO0E7O2dGQUVBLE07Ozs7O1dBQXFCLFVBQUMsQUFBRCxNQUFVLEFBQzlCO2FBQUssQUFBTCxXQUFnQixBQUFoQixBQUNEO0E7O21GQUVBLE07Ozs7O1dBQXdCLFVBQUMsQUFBRCxNQUFVLEFBQ2pDO2FBQUssQUFBTCxjQUFtQixBQUFuQixBQUNEO0E7O21GQUVBLE07Ozs7O1dBQXdCLFVBQUMsQUFBRCxNQUFVLEFBQ2pDO2FBQUssQUFBTCxjQUFtQixBQUFuQixBQUNEO0E7O2lGQUVBLE07Ozs7O1dBQXNCLFVBQUMsQUFBRCxRQUFZLEFBQ2pDO2FBQUssQUFBTCxZQUFpQixBQUFqQixBQUNEO0E7O2lGQUVBLE07Ozs7O1dBQXNCLFVBQUMsQUFBRCxNQUFVLEFBQy9CO2FBQUssQUFBTCxZQUFpQixBQUFqQixBQUNEO0E7O2dGQUVBLE07Ozs7O1dBQXFCLFVBQUMsQUFBRCxNQUFVLEFBQzlCO2FBQUssQUFBTCxlQUFvQixBQUFwQixBQUNEO0E7O2lGQUVBLE07Ozs7O1dBQXNCLFVBQUMsQUFBRCxNQUFVLEFBQzdCO2FBQUssQUFBTCxZQUFpQixBQUFqQixBQUNIO0E7O2dGQUVBLE07Ozs7O1dBQXFCLFlBQU0sQUFDMUI7YUFBSyxBQUFMLFVBQWUsQUFBZixBQUNEO0E7OzhFQUVBLE07Ozs7O1dBQW1CLFVBQUMsQUFBRCxPQUFXLEFBQzdCO2NBQUssQUFBTCxZQUFpQixBQUFqQixBQUNEO0E7O3NGQUVBLE07Ozs7O1dBQTJCLFVBQUMsQUFBRCxNQUFVLEFBQ2xDO2NBQUssQUFBTCxpQkFBc0IsQUFBdEIsQUFDSDtBOztvRkFFQSxNOzs7OztXQUF5QixZQUFNLEFBQzVCO2NBQUssQUFBTCxlQUFvQixBQUFwQixlQUFtQyxBQUFuQyxBQUNIO0E7O2dGQUVBLE07Ozs7O1dBQXFCLFVBQUMsQUFBRCxNQUFVLEFBQzVCO2NBQUssQUFBTCxZQUFpQixBQUFqQixLQUFzQixBQUF0QixBQUNIO0E7OztBQUdJLFNBQVMsQUFBVCxVQUFvQixBQUFwQixVQUE4QixBQUNuQztNQUFJLEFBQUosVUFBYyxBQUNaO1dBQU8sSUFBSSxBQUFKLE1BQVUsQUFBVixBQUFQLEFBQ0Q7QUFGRCxTQUVPLEFBQ0w7UUFBSSxVQUFVLEFBQWQsTUFBb0IsQUFDbEI7Y0FBUSxJQUFJLEFBQUosTUFBVSxBQUFWLEFBQVIsQUFDRDtBQUNEO1dBQU8sQUFBUCxBQUNEO0FBQ0YiLCJmaWxlIjoic3RvcmUuanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL21hYy9EZXNrdG9wL216amIvbXV6aGlqdWJhb193ZWIifQ==
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0b3JlLmpzIl0sIm5hbWVzIjpbImluaXRTdG9yZSIsInN0b3JlIiwiU3RvcmUiLCJpc1NlcnZlciIsIm9ic2VydmFibGUiLCJhY3Rpb24iLCJJRCIsInNob3BJRCIsImluZm8iLCJ1c2VyUm9sZSIsInBhdGgiLCJjdXJQYWdlUGF0aCIsImRhdGEiLCJQcm9kdWN0RGF0YSIsIm9wdGlvbiIsIlRhYk9wdGlvbiIsIkFETWVkaWFJRCIsImJpbmRSb29tRGF0YSIsIm1haW5JbWFnZSIsImlzU2hvd24iLCJrZXlJRCIsImFjdGl2ZUtleSIsIlByb2REZXRhaWxEYXRhIiwiYWxyZWFkeUV4aXN0Iiwic3ViVGl0bGVBcnIiLCJwdXNoIiwicmVwbHlCb2R5IiwiaW5kZXgiLCJzcGxpY2UiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7UUF5RmdCLEEsWUFBQSxBOztBQXpGaEI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFQSxJQUFJLFFBQVEsQUFBWjs7SUFFTSxBO0FBY0o7O0FBSkE7QUFVQSxlQUFhLEFBQWIsVUFBdUI7c0NBQUE7OytDQUFBOztrREFBQTs7cURBQUE7O3FEQUFBOzttREFBQTs7c0RBQUE7O21EQUFBOztpREFBQTs7bURBQUE7O3lEQUFBOztzREFBQTs7b0RBQUE7O29EQUFBOztzREFBQTs7eURBQUE7O3lEQUFBOzt1REFBQTs7dURBQUE7O3NEQUFBOzt1REFBQTs7c0RBQUE7O29EQUFBOzs0REFBQTs7MERBQUE7O3NEQUFBOzt1REFBQTs7MERBQ3RCOztBQUxEOztBQUpBOztBQUpBO3dFQVBDLE07OztXQUFvQixBOzs0RUFDcEIsTTs7O1dBQXNCLEE7OytFQUN0QixNOzs7V0FBeUIsQTs7K0VBQ3pCLE07OztXQUF5QixBOzs2RUFDekIsTTs7O1dBQXVCLEE7O2dGQUN2QixNOzs7V0FBMEIsQTs7NkVBQzFCLE07OztXQUF1QixBOzsyRUFFdkIsTTs7O1dBQXFCLEE7OzZFQUVyQixNOzs7V0FBdUIsQTs7bUZBRXZCLE07OztXQUE0QixBOztnRkFFNUIsTTs7O1dBQXlCLEE7OzhFQUV6QixNOzs7V0FBdUIsQTs7OEVBTXZCLE07Ozs7O1dBQW1CLFVBQUMsQUFBRCxJQUFRLEFBQzFCO1lBQUssQUFBTCxTQUFjLEFBQWQsQUFDRDtBOztnRkFFQSxNOzs7OztXQUFxQixVQUFDLEFBQUQsTUFBVSxBQUM5QjthQUFLLEFBQUwsV0FBZ0IsQUFBaEIsQUFDRDtBOzttRkFFQSxNOzs7OztXQUF3QixVQUFDLEFBQUQsTUFBVSxBQUNqQzthQUFLLEFBQUwsY0FBbUIsQUFBbkIsQUFDRDtBOzttRkFFQSxNOzs7OztXQUF3QixVQUFDLEFBQUQsTUFBVSxBQUNqQzthQUFLLEFBQUwsY0FBbUIsQUFBbkIsQUFDRDtBOztpRkFFQSxNOzs7OztXQUFzQixVQUFDLEFBQUQsUUFBWSxBQUNqQzthQUFLLEFBQUwsWUFBaUIsQUFBakIsQUFDRDtBOztpRkFFQSxNOzs7OztXQUFzQixVQUFDLEFBQUQsTUFBVSxBQUMvQjthQUFLLEFBQUwsWUFBaUIsQUFBakIsQUFDRDtBOztnRkFFQSxNOzs7OztXQUFxQixVQUFDLEFBQUQsTUFBVSxBQUM5QjthQUFLLEFBQUwsZUFBb0IsQUFBcEIsQUFDRDtBOztpRkFFQSxNOzs7OztXQUFzQixVQUFDLEFBQUQsTUFBVSxBQUM3QjthQUFLLEFBQUwsWUFBaUIsQUFBakIsQUFDSDtBOztnRkFFQSxNOzs7OztXQUFxQixZQUFNLEFBQzFCO2FBQUssQUFBTCxVQUFlLEFBQWYsQUFDRDtBOzs4RUFFQSxNOzs7OztXQUFtQixVQUFDLEFBQUQsT0FBVyxBQUM3QjtjQUFLLEFBQUwsWUFBaUIsQUFBakIsQUFDRDtBOztzRkFFQSxNOzs7OztXQUEyQixVQUFDLEFBQUQsTUFBVSxBQUNsQztjQUFLLEFBQUwsaUJBQXNCLEFBQXRCLEFBQ0g7QTs7b0ZBRUEsTTs7Ozs7V0FBeUIsWUFBTSxBQUM1QjtjQUFLLEFBQUwsZUFBb0IsQUFBcEIsZUFBbUMsQUFBbkMsQUFDSDtBOztnRkFFQSxNOzs7OztXQUFxQixVQUFDLEFBQUQsTUFBVSxBQUM1QjtjQUFLLEFBQUwsWUFBaUIsQUFBakIsS0FBc0IsQUFBdEIsQUFDSDtBOztpRkFFQSxNOzs7OztXQUFzQixVQUFDLEFBQUQsTUFBVSxBQUMvQjtjQUFLLEFBQUwsVUFBZSxBQUFmLEtBQW9CLEFBQXBCLEFBQ0Q7QTs7b0ZBRUEsTTs7Ozs7V0FBeUIsVUFBQyxBQUFELE9BQVcsQUFDbkM7Y0FBSyxBQUFMLFVBQWUsQUFBZixPQUFzQixBQUF0QixPQUE0QixBQUE1QixBQUNEO0E7OztBQUlJLFNBQVMsQUFBVCxVQUFvQixBQUFwQixVQUE4QixBQUNuQztNQUFJLEFBQUosVUFBYyxBQUNaO1dBQU8sSUFBSSxBQUFKLE1BQVUsQUFBVixBQUFQLEFBQ0Q7QUFGRCxTQUVPLEFBQ0w7UUFBSSxVQUFVLEFBQWQsTUFBb0IsQUFDbEI7Y0FBUSxJQUFJLEFBQUosTUFBVSxBQUFWLEFBQVIsQUFDRDtBQUNEO1dBQU8sQUFBUCxBQUNEO0FBQ0YiLCJmaWxlIjoic3RvcmUuanMiLCJzb3VyY2VSb290IjoiQzovVXNlcnMvQWRtaW5pc3RyYXRvci9EZXNrdG9wL216In0=
