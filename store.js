@@ -16,6 +16,8 @@ class Store {
   @observable activeKey = '1';
   //Youxuan Product detail data
   @observable ProdDetailData = null;
+  //autpreply add subTitle tag
+  @observable subTitleArr = [];
 
   constructor (isServer) {
   }
@@ -68,6 +70,9 @@ class Store {
       this.ProdDetailData.alreadyExist = true;
   }
 
+  @action addSUbtitle = (data) => {
+      this.subTitleArr.push(data);
+  }
 }
 
 export function initStore (isServer) {

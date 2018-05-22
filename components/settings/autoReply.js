@@ -1,81 +1,119 @@
-import { Col, Row, Button, Modal, Input } from 'antd';
+import { Col, Row, Button, Modal, message, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import {MegadraftEditor, editorStateFromRaw} from "megadraft";
-import ShopImgUploader from '../FileUploader/shopImgUpload'
+import SelfReplyForm from './setAutoreplyForm'
+import { inject, observer } from 'mobx-react'
+import UUIDGen from '../../utils/uuid_generator'
 
-const ownedRooms = `
+const listAutoreply = `
     query ($shopId: ID!) {
-        ownedRooms(shopId:$shopId){
-            desc
+        listAutoreply(shopId:$shopId){
+            entries{
+              replyBody
+              keyWord
+              id
+            }
+            pageNumber
+            pageSize
+            totalPages
+                }
+            }
+`;
+
+const addAutoreply = `
+    mutation ($shopId: Int!,$keyWord:String!, $replyBody: String!) {
+        addAutoreply(shopId:$shopId, keyWord:$keyWord, replyBody:$replyBody){
             id
-            name
+            insertedAt
+            keyWord
+            replyBody
+            updatedAt
         }
     }
 `;
 
-const listShoproom = `
-    query ($shopId: Int!) {
-        listShoproom(shopId:$shopId){
-            roomId
-            roomName
-            id
-        }
-    }
-`;
-
-const addShoproom = `
-    mutation ($shopId: Int!,$roomId:Int!) {
-        addShoproom(shopId:$shopId, roomId:$roomId){
-            id
-            roomId
-        }
-    }
-`;
-
-const delShoproom = `
+const delAutoreply = `
     mutation ($shopId: Int!,$id:ID!) {
-        delShoproom(shopId:$shopId, id:$id){
+        delAutoreply(shopId:$shopId, id:$id){
             id
-            roomId
+            replyBody
         }
     }
 `;
 
+@inject('store') @observer
 export default class AutoReply extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible:false
+            visible:false,
+            hiddenAdd:false,
+            autoReplyData:null,
+            count:2
         }
     }
 
     componentDidMount(){
+        this.queryAutoReply()
+        if(this.state.autoReplyData && this.state.autoReplyData.entries.length ===5){
+            this.setState({
+                hiddenAdd: true,
+            })
+        }
+    }
 
+    //query autoReply list
+    queryAutoReply = () => {
+        Request.GraphQlRequest(listAutoreply, {shopId:parseInt(localStorage.getItem('shopID'))}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('listAutoreply', res)
+                this.setState({
+                    autoReplyData: res.listAutoreply
+                })
+            }
+        )
     }
 
     //set MainTitle
-    handlMainTitle = () => {
+    handleMainTitle = () => {
         this.setState({
             visible:true
         })
     }
 
     //set SubTitle1
-    handlSubTitle1 = () => {
+    handleSubTitle1 = () => {
         this.setState({
             visible:true
         })
     }
-    //set SubTitle2
-    handlSubTitle2 = () => {
-        this.setState({
-            visible:true
-        })
-    }
-    //set SubTitle3
-    handlSubTitle3 = () => {
-        this.setState({
-            visible:true
+
+    //modal OK action
+    handleOk = () => {
+        this.refs.form.validateFields((err, values) => {
+            if (err) {
+                message.error(err);
+            }else{
+                console.log('values', values)
+                const replyBody = [{
+                    "title": values.title,
+                    "description": values.description,
+                    "url": values.url,
+                    "picurl": this.props.store.mainImage
+                }];
+                Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:values.keyWord, replyBody:JSON.stringify(replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    (res) => {
+                        // console.log('Autoreply', res)
+                        message.success('设置成功！')
+                        this.queryAutoReply()
+                        this.refs.form.resetFields();
+                        document.getElementById('ossfile').innerHTML = '';
+                        this.setState({
+                            visible:false
+                        })
+                    }
+                )
+            }
         })
     }
 
@@ -86,82 +124,108 @@ export default class AutoReply extends React.Component {
         })
     }
 
+    // add subtitle
+    addSubTitle = () => {
+        const position = this.props.store.subTitleArr.length+2;
+        const ID= (this.state.autoReplyData && this.state.autoReplyData.entries[position]) &&  this.state.autoReplyData.entries[position].id
+        console.log('position',position)
+        const subs = (
+            <div className='sub1' key={ UUIDGen.uuid(8, 10) }>
+                <img style={{width: '100px', textAlign: "left"}}
+                     src={ (this.state.autoReplyData.entries && this.state.autoReplyData.entries[position])? (JSON.parse(this.state.autoReplyData.entries[position].replyBody))[0].picurl : "http://iph.href.lu/100x100?text=副图片"}
+                     alt="封面"/>
+                <span>
+                    { (this.state.autoReplyData.entries && this.state.autoReplyData.entries[position])? (JSON.parse(this.state.autoReplyData.entries[position].replyBody))[0].title : "副标题"}
+                </span>
+                <span className='subCover1'>
+                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(ID)}}>删除</Button>
+                </span>
+            </div>
+        );
+        this.props.store.addSUbtitle(subs)
+        if (this.props.store.subTitleArr.length === 3) {
+            this.setState({
+                hiddenAdd: true,
+            })
+        }
+    }
+
+    //delete one autoreply
+    deleteSubTitle1 = (ID) =>{
+        Request.GraphQlRequest(delAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                // console.log('Autoreply', res)
+                message.success('删除成功！')
+                this.queryAutoReply()
+            }
+        )
+    }
     render() {
+
         return (
             <div>
                 <Row>
                     <Col span={6} offset={4}>
-                        <div style={{ width:'300px', height:"520px"}}>
-                            <div className='main'>
-                                <img style={{ width:'300px', height:"200px"}} src="https://img.yzcdn.cn/upload_files/2017/06/19/Ftop_OvaetEyGl2LcpzH4IAqzGYy.png?imageView2/2/w/290/h/290/q/75/format/jpg" alt="封面"/>
-                                <span style={{ height:"10px", textAlign:"center",position:"absolute", top:"168px", left:"7px"}}>封面示例</span>
+                        <div style={{ width:'300px'}}>
+                            <div className='main' key='main'>
+                                <img style={{ width:'300px', height:"200px"}}
+                                     src={ (this.state.autoReplyData && this.state.autoReplyData.entries[0])? (JSON.parse(this.state.autoReplyData.entries[0].replyBody))[0].picurl : "http://iph.href.lu/300x200?text=封面"} alt="封面"/>
+                                <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
+                                    { (this.state.autoReplyData && this.state.autoReplyData.entries[0])? (JSON.parse(this.state.autoReplyData.entries[0].replyBody))[0].title : "封面标题"}
+                                </span>
                                 <span className='cover'>
-                                    <Button type='primary' onClick={this.handlMainTitle}>设置主标题</Button>
+                                    <Button type='primary' onClick={this.handleMainTitle}>设置主标题</Button>
+                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(this.state.autoReplyData.entries[0] ?this.state.autoReplyData.entries[0].id:null)}}>删除</Button>
                                 </span>
                             </div>
-                                <div className='sub1'>
-                                    <img style={{ width:'100px', textAlign:"left"}} src="https://img.yzcdn.cn/upload_files/2017/06/19/Ftop_OvaetEyGl2LcpzH4IAqzGYy.png?imageView2/2/w/290/h/290/q/75/format/jpg" alt="封面"/>
-                                    <span>副标题一</span>
-                                    <span className='subCover1'>
-                                        <Button type='primary' onClick={this.handlSubTitle1}>设置副标题</Button>
-                                    </span>
+                            <div className='sub1' key='sub1'>
+                                <img style={{ width:'100px', textAlign:"left"}}
+                                     src={ (this.state.autoReplyData && this.state.autoReplyData.entries[1])? (JSON.parse(this.state.autoReplyData.entries[1].replyBody))[0].picurl : "http://iph.href.lu/100x100?text=副图片"}
+                                     alt="封面"/>
+                                <span>
+                                    { (this.state.autoReplyData && this.state.autoReplyData.entries[1])? (JSON.parse(this.state.autoReplyData.entries[1].replyBody))[0].title : "副标题"}
+                                </span>
+                                <span className='subCover1'>
+                                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(this.state.autoReplyData.entries[1] ?this.state.autoReplyData.entries[0].id:null)}}>删除</Button>
+                                </span>
+                            </div>
+                            {
+                                this.props.store.subTitleArr.toJS()
+                            }
+                            {
+                                !this.state.hiddenAdd
+                                &&
+                                <div
+                                    onClick={this.addSubTitle}
+                                    style={{ float: "left",width:'300px', textAlign:"center", lineHeight:"100px", height:'100px', border:"1px dashed black"}}
+                                >
+                                    <Icon type="plus" />
                                 </div>
-                                <div className='sub2'>
-                                    <img style={{ width:'100px'}} src="https://img.yzcdn.cn/upload_files/2017/06/19/Ftop_OvaetEyGl2LcpzH4IAqzGYy.png?imageView2/2/w/290/h/290/q/75/format/jpg" alt="封面"/>
-                                    <span>副标题二</span>
-                                    <span className='subCover2'>
-                                        <Button type='primary' onClick={this.handlSubTitle2}>设置副标题</Button>
-                                    </span>
-                                </div>
-                                <div className='sub3'>
-                                    <img style={{ width:'100px'}} src="https://img.yzcdn.cn/upload_files/2017/06/19/Ftop_OvaetEyGl2LcpzH4IAqzGYy.png?imageView2/2/w/290/h/290/q/75/format/jpg" alt="封面"/>
-                                    <span>副标题三</span>
-                                    <span className='subCover3'>
-                                        <Button type='primary' onClick={this.handlSubTitle3}>设置副标题</Button>
-                                    </span>
-                                </div>
+                            }
                         </div>
                     </Col>
                     <Modal
-                        title="标题设置"
+                        title="设置"
                         visible={this.state.visible}
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
                     >
-                        封面上传：
-                        <ShopImgUploader />
-                        <br/>
-                        <p>标题：<Input type="text" style={{ width:'300px'}}/></p>
-                        <br/>
-                        <p>URL: <Input type="text" style={{ width:'300px', marginLeft:"8px"}}/></p>
+                        <SelfReplyForm ref='form'/>
                     </Modal>
-                </Row>
-                <Row>
-                    <Col span={10} offset={10}>
-                        <Button type='primary'>提交设置</Button>
-                    </Col>
                 </Row>
                 <style jsx>{
                     `
-                    .main{ float: left; width: 300px; height: 220px; position: relative; overflow: hidden}
+                    .main{ width: 300px; height: 220px; position: relative; overflow: hidden}
                     .cover Button { margin: 60px auto; }
                     .cover { width: 300px; height: 220px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
                     .main:hover .cover { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
 
-                    .sub1{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
+                    .sub1{ width: 300px; height: 100px; position: relative; overflow: hidden}
                     .subCover1 Button { margin: 25px auto; }
                     .subCover1 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
                     .sub1:hover .subCover1 { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
-
-                    .sub2{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
-                    .subCover2 Button { margin: 25px auto; }
-                    .subCover2 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
-                    .sub2:hover .subCover2 { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
-
-                    .sub3{ float: left; width: 300px; height: 100px;position: relative; overflow: hidden}
-                    .subCover3 Button { margin: 25px auto; }
-                    .subCover3 { width: 300px; height: 100px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
-                    .sub3:hover .subCover3 { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
                     `
                 }
                 </style>

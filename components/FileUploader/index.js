@@ -125,7 +125,7 @@ class FileUploader extends React.Component {
     
         FileUploaded: function(up, file, info) {
           if (info.status == 200){
-              const shopId = parseInt(self.props.store.shopID);
+              const shopId = localStorage.getItem('shopID');
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaID, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
