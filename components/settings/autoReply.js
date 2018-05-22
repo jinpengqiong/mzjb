@@ -1,4 +1,4 @@
-import { Col, Row, Button, Modal, message, Icon } from 'antd';
+import { Col, Row, Button, Modal, message, Icon, Input } from 'antd';
 import Request from '../../utils/graphql_request';
 import {MegadraftEditor, editorStateFromRaw} from "megadraft";
 import SelfReplyForm from './setAutoreplyForm'
@@ -49,7 +49,7 @@ export default class AutoReply extends React.Component {
             visible:false,
             hiddenAdd:false,
             autoReplyData:null,
-            count:2
+            position:null
         }
     }
 
@@ -77,14 +77,16 @@ export default class AutoReply extends React.Component {
     //set MainTitle
     handleMainTitle = () => {
         this.setState({
-            visible:true
+            visible:true,
+            position:0
         })
     }
 
     //set SubTitle1
-    handleSubTitle1 = () => {
+    handleSubTitle1 = (pos) => {
         this.setState({
-            visible:true
+            visible:true,
+            position:pos
         })
     }
 
@@ -138,7 +140,7 @@ export default class AutoReply extends React.Component {
                     { (this.state.autoReplyData.entries && this.state.autoReplyData.entries[position])? (JSON.parse(this.state.autoReplyData.entries[position].replyBody))[0].title : "副标题"}
                 </span>
                 <span className='subCover1'>
-                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                    <Button type='primary' onClick={()=>{this.handleSubTitle1(position)}}>设置副标题</Button>
                     <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.deleteSubTitle1(ID)}}>删除</Button>
                 </span>
             </div>
@@ -162,15 +164,15 @@ export default class AutoReply extends React.Component {
         )
     }
     render() {
-
         return (
             <div>
                 <Row>
-                    <Col span={6} offset={4}>
+                    <Col span={6}>
                         <div style={{ width:'300px'}}>
+                            <p>关键词：<Input/></p>
                             <div className='main' key='main'>
                                 <img style={{ width:'300px', height:"200px"}}
-                                     src={ (this.state.autoReplyData && this.state.autoReplyData.entries[0])? (JSON.parse(this.state.autoReplyData.entries[0].replyBody))[0].picurl : "http://iph.href.lu/300x200?text=封面"} alt="封面"/>
+                                     src="http://iph.href.lu/300x200?text=封面" alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
                                     { (this.state.autoReplyData && this.state.autoReplyData.entries[0])? (JSON.parse(this.state.autoReplyData.entries[0].replyBody))[0].title : "封面标题"}
                                 </span>
@@ -205,6 +207,7 @@ export default class AutoReply extends React.Component {
                                 </div>
                             }
                         </div>
+                        <Button type='primary' style={{ marginLeft:"100px", marginTop:"15px"}}>提交</Button>
                     </Col>
                     <Modal
                         title="设置"
@@ -214,6 +217,9 @@ export default class AutoReply extends React.Component {
                     >
                         <SelfReplyForm ref='form'/>
                     </Modal>
+                    <Col span={6} offset={1}>
+                        <p>已创建的回复列表：</p>
+                    </Col>
                 </Row>
                 <style jsx>{
                     `

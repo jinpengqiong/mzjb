@@ -73,20 +73,6 @@ class RegistrationForm extends React.Component {
                         <Input/>
                     )}
                 </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="关键词"
-                >
-                    {getFieldDecorator('keyWord', {
-                        rules: [{
-                            type: 'string', message: '请输入关键词!',
-                        }, {
-                            required: true, message: '请输入关键词!',
-                        }],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
             </Form>
         );
     }
