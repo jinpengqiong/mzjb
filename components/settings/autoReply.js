@@ -1,4 +1,4 @@
-import { Col, Row, Button, Modal, message, Icon, Input } from 'antd';
+import { Col, Row, Button, Modal, message, Icon, Input, Pagination, Popconfirm,Tooltip } from 'antd';
 import Request from '../../utils/graphql_request';
 import {MegadraftEditor, editorStateFromRaw} from "megadraft";
 import SelfReplyForm from './setAutoreplyForm'
@@ -6,16 +6,16 @@ import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator'
 
 const listAutoreply = `
-    query ($shopId: ID!) {
-        listAutoreply(shopId:$shopId){
+    query ($shopId: ID!,$page: Int, $pageSize: Int) {
+        listAutoreply(shopId:$shopId, page:$page, pageSize:$pageSize){
             entries{
               replyBody
               keyWord
               id
             }
             pageNumber
-            pageSize
             totalPages
+            totalEntries
                 }
             }
 `;
@@ -49,11 +49,12 @@ export default class AutoReply extends React.Component {
             visible:false,
             hiddenAdd:false,
             autoReplyData:null,
+            keyWord:''
         }
     }
 
     componentDidMount(){
-        this.queryAutoReply()
+        this.queryAutoReply(1)
         if(this.state.autoReplyData && this.state.autoReplyData.entries.length ===5){
             this.setState({
                 hiddenAdd: true,
@@ -62,10 +63,10 @@ export default class AutoReply extends React.Component {
     }
 
     //query autoReply list
-    queryAutoReply = () => {
-        Request.GraphQlRequest(listAutoreply, {shopId:parseInt(localStorage.getItem('shopID'))}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+    queryAutoReply = (page) => {
+        Request.GraphQlRequest(listAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 3}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listAutoreply', res)
+                // console.log('listAutoreply', res.listAutoreply)
                 this.setState({
                     autoReplyData: res.listAutoreply
                 })
@@ -82,9 +83,13 @@ export default class AutoReply extends React.Component {
 
     //set SubTitle1
     handleSubTitle1 = () => {
-        this.setState({
-            visible:true,
-        })
+        if(JSON.stringify(this.props.store.replyBody)==="[]"){
+            message.error('请先设置封面图文！')
+        }else{
+            this.setState({
+                visible:true,
+            })
+        }
     }
 
     //modal OK action
@@ -105,18 +110,31 @@ export default class AutoReply extends React.Component {
                 document.getElementById('ossfile').innerHTML = ''; 
                 this.setState({
                     visible:false
-                })   
-                // Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:values.keyWord, replyBody:JSON.stringify(replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                //     (res) => {
-                //         // console.log('Autoreply', res)
-                //         message.success('设置成功！')
-                //         this.queryAutoReply()                                
-                //     }
-                // )
+                })
             }
         })
     }
 
+    //handle submit
+    handleSubmit = () => {
+        if(this.state.keyWord==='' ){
+            message.error('请输入关键词后，再提交！')
+        }else if( JSON.stringify(this.props.store.replyBody)==='[]'){
+            message.error('请设置图文后，再提交！')
+        }else{
+            Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:this.state.keyWord, replyBody:JSON.stringify(this.props.store.replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                (res) => {
+                    console.log('Autoreply', res)
+                    message.success('设置成功！')
+                    this.setState({
+                        keyWord: ''
+                    })
+                    this.queryAutoReply(1)
+                    this.props.store.clearReplyBody()
+                }
+            )
+        }
+    }
     //modal cancel action
     handleCancel = () => {
         this.setState({
@@ -124,92 +142,215 @@ export default class AutoReply extends React.Component {
         })
     }
 
-    // add subtitle
-    addSubTitle = () => {
-        const position = this.props.store.subTitleArr.length+2;
-        console.log('position',position)
-        const subs = (
-            <div className='sub1' key={ UUIDGen.uuid(8, 10) }>
-                <img style={{width: '100px', textAlign: "left"}}
-                     src={ 
-                        this.props.store.replyBody.toJS.length===position?  this.props.store.replyBody[position].picurl : "http://iph.href.lu/300x200?text=副标题" 
-                        }
-                     alt="封面"/>
-                <span>
-                    { 
-                         this.props.store.replyBody.toJS.length===position?  this.props.store.replyBody[position].title : "副标题"
-                    }
-                </span>
-                <span className='subCover1'>
-                    <Button type='primary' onClick={()=>{this.handleSubTitle1(position)}}>设置副标题</Button>
-                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(position)}}>删除</Button>
-                </span>
-            </div>
-        );
-        this.props.store.addSUbtitle(subs)
-        if (this.props.store.subTitleArr.length === 3) {
-            this.setState({
-                hiddenAdd: true,
-            })
-        }
-    }
-
     //delete one autoreply
-    deleteSubTitle1 = (ID) =>{
+    confirm = (ID) =>{
         Request.GraphQlRequest(delAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 // console.log('Autoreply', res)
                 message.success('删除成功！')
-                this.queryAutoReply()
+                this.queryAutoReply(1)
             }
         )
     }
+
+    // save keyword
+    onKeywordChange = (e) => {
+        this.setState({
+            keyWord: e.target.value
+        })
+    }
+    //query paged qutoreply list
+    onPageChange = (page) => {
+        console.log('page', page)
+        this.queryAutoReply(page)
+    }
+
     render() {
+        const rBodies = JSON.stringify(this.props.store.replyBody)!=="[]"?  this.props.store.replyBody.toJS(): null;
+        console.log('111',this.state.autoReplyData);
+        const autoReplyLists = this.state.autoReplyData && this.state.autoReplyData.entries.map(
+            (item) => {
+                const ReplyBody = JSON.parse(item.replyBody)
+                return (
+                    <div style={{ width:'300px', marginLeft:"30px"}} id={item.id} key={UUIDGen.uuid(8, 10)}>
+                        <p>关键词：<span style={{color:"red"}}>{item.keyWord}</span>
+                            <Tooltip title="删除">
+                                <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
+                                    <Icon type="delete" style={{float:"right"}}/>
+                                </Popconfirm>
+                            </Tooltip>
+                        </p>
+                        <div className='main' key={UUIDGen.uuid(8, 10)}>
+                            <img style={{ width:'300px', height:"200px"}}
+                                 src={ReplyBody[0].picurl}
+                                 alt="封面"/>
+                            <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
+                                    { ReplyBody[0].title}
+                            </span>
+                        </div>
+                        {
+                            ReplyBody[1]
+                            &&
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={ReplyBody[1].picurl}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { ReplyBody[1].title}
+                                        </span>
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
+                        {
+                            ReplyBody[2]
+                            &&
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={ReplyBody[2].picurl}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { ReplyBody[2].title}
+                                        </span>
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
+                        {
+                            ReplyBody[3]
+                            &&
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={ReplyBody[3].picurl}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { ReplyBody[3].title}
+                                        </span>
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
+                        {
+                            ReplyBody[4]
+                            &&
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={ReplyBody[4].picurl}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { ReplyBody[4].title}
+                                        </span>
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
+                   </div>
+                )
+            }
+        )
         return (
             <div>
                 <Row>
                     <Col span={6}>
                         <div style={{ width:'300px'}}>
-                            <p>关键词：<Input/></p>
-                            <div className='main' key='main'>
+                            <p>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
+                            <div className='main' key={UUIDGen.uuid(8, 10)}>
                                 <img style={{ width:'300px', height:"200px"}}
-                                     src={(this.props.store.replyBody.toJS.length===0 && this.props.store.replyBody[0])? this.props.store.replyBody[0].picurl :"http://iph.href.lu/300x200?text=封面"  } 
+                                     src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://iph.href.lu/300x200?text=封面" }
                                      alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
-                                    { (this.props.store.replyBody.toJS.length===0 && this.props.store.replyBody[0])? this.props.store.replyBody[0].title :"封面"}
+                                    { (rBodies && rBodies[0])? rBodies[0].title :"封面"}
                                 </span>
                                 <span className='cover'>
                                     <Button type='primary' onClick={this.handleMainTitle}>设置主标题</Button>
-                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(0)}}>删除</Button>
                                 </span>
                             </div>
-                            <div className='sub1' key='sub1'>
-                                <img style={{ width:'100px', textAlign:"left"}}
-                                     src={(this.props.store.replyBody.toJS.length===1&&this.props.store.replyBody[1] )?  this.props.store.replyBody[1].picurl : "http://iph.href.lu/300x200?text=副标题"}
-                                     alt="副标题"/>
-                                <span>
-                                { (this.props.store.replyBody.toJS.length===1&&this.props.store.replyBody[1] )? this.props.store.replyBody[1].title:"副标题"}
-                                </span>
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={(rBodies && rBodies[1])?  rBodies[1].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { (rBodies && rBodies[1])? rBodies[1].title:"副标题"}
+                                        </span>
+                                    </Col>
+                                </Row>
                                 <span className='subCover1'>
                                     <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
-                                    <Button type='primary' style={{ marginLeft:"10px"}} onClick={()=>{this.props.store.deleteReplyBody(1)}}>删除</Button>
                                 </span>
                             </div>
-                            {
-                                this.props.store.subTitleArr.toJS()
-                            }
-                            {
-                                !this.state.hiddenAdd
-                                &&
-                                <div
-                                    onClick={this.addSubTitle}
-                                    style={{ float: "left",width:'300px', textAlign:"center", lineHeight:"100px", height:'100px', border:"1px dashed black"}}
-                                >
-                                    <Icon type="plus" />
-                                </div>
-                            }
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={(rBodies && rBodies[2])?  rBodies[2].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { (rBodies && rBodies[2])? rBodies[2].title:"副标题"}
+                                        </span>
+                                    </Col>
+                                </Row>
+                                <span className='subCover1'>
+                                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                                </span>
+                            </div>
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={(rBodies && rBodies[3])?  rBodies[3].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { (rBodies && rBodies[3])? rBodies[3].title:"副标题"}
+                                        </span>
+                                    </Col>
+                                </Row>
+                                <span className='subCover1'>
+                                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                                </span>
+                            </div>
+                            <div className='sub1' key={UUIDGen.uuid(8, 10)}>
+                                <Row>
+                                    <Col span={8}>
+                                        <img style={{ width:'100px', textAlign:"left"}}
+                                             src={(rBodies && rBodies[4])?  rBodies[4].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             alt="副标题"/>
+                                    </Col>
+                                    <Col span={15} offset={1}>
+                                        <span>
+                                            { (rBodies && rBodies[4])? rBodies[4].title:"副标题"}
+                                        </span>
+                                    </Col>
+                                </Row>
+                                <span className='subCover1'>
+                                    <Button type='primary' onClick={this.handleSubTitle1}>设置副标题</Button>
+                                </span>
+                            </div>
                         </div>
-                        <Button type='primary' style={{ marginLeft:"100px", marginTop:"15px"}}>提交</Button>
+                        <Button type='primary' style={{ marginLeft:"100px", marginTop:"15px"}} onClick={this.handleSubmit}>提交</Button>
                     </Col>
                     <Modal
                         title="设置"
@@ -219,8 +360,22 @@ export default class AutoReply extends React.Component {
                     >
                         <SelfReplyForm ref='form'/>
                     </Modal>
-                    <Col span={6} offset={1}>
+                    <Col span={17} offset={1}>
                         <p>已创建的回复列表：</p>
+                        <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
+                            { this.state.autoReplyData && autoReplyLists}
+                        </div>
+                        {
+                            (this.state.autoReplyData && this.state.autoReplyData.totalEntries !==0)
+                                &&
+                            <Pagination
+                                current={this.state.autoReplyData.pageNumber}
+                                onChange={this.onPageChange}
+                                pageSize={3}
+                                total={ this.state.autoReplyData.totalEntries }
+                                style={{ float: "right", marginTop: "10px"}}
+                            />
+                        }
                     </Col>
                 </Row>
                 <style jsx>{
