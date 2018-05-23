@@ -172,7 +172,7 @@ export default class AutoReply extends React.Component {
             (item) => {
                 const ReplyBody = JSON.parse(item.replyBody)
                 return (
-                    <div style={{ width:'300px', marginLeft:"30px"}} id={item.id} key={UUIDGen.uuid(8, 10)}>
+                    <div style={{ width:'300px', marginLeft:"30px", marginTop:"25px"}} id={item.id} key={UUIDGen.uuid(8, 10)}>
                         <p>关键词：<span style={{color:"red"}}>{item.keyWord}</span>
                             <Tooltip title="删除">
                                 <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
