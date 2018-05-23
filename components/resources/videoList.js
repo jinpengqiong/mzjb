@@ -125,6 +125,7 @@ class VideoList extends React.Component {
                 &&
                 <Pagination
                     defaultCurrent={1}
+                    pageSize={10}
                     current={this.state.data.pageNumber}
                     onChange={this.onChange}
                     total={this.state.data? this.state.data.totalEntries : 1}

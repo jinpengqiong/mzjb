@@ -110,6 +110,7 @@ class PicList extends React.Component {
                 defaultCurrent={1} 
                 current={this.state.data.pageNumber}
                 onChange={this.onChange}
+                pageSize={10}
                 total={this.state.data.totalEntries}
                 style={{ marginLeft: "80%", marginTop: "10px"}}/>
                 }

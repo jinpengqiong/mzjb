@@ -176,6 +176,7 @@ export default class ChooseProducts extends React.Component {
                 &&
                 <Pagination
                 defaultCurrent={1}
+                pageSize={20}
                 onChange={this.onChange}
                 total={this.state.data? this.state.data.count : 1}
                 style={{ float: "right", marginTop: "10px"}}/>
