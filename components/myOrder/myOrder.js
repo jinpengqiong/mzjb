@@ -113,7 +113,7 @@ export default class OrderManagement extends React.Component {
                 data: res.shopTradesList
                 })
         }
-    ).catch(()=>{message.error('出错了，请重试！')})
+    ).catch(()=>{message.error('你还未授权为店主，请联系管理员！')})
   };
 
   

@@ -275,7 +275,7 @@ export default class AutoReply extends React.Component {
                                      src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://iph.href.lu/300x200?text=封面" }
                                      alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
-                                    { (rBodies && rBodies[0])? rBodies[0].title :"封面"}
+                                    { (rBodies && rBodies[0])? rBodies[0].title :"主标题"}
                                 </span>
                                 <span className='cover'>
                                     <Button type='primary' onClick={this.handleMainTitle}>设置主标题</Button>
@@ -365,19 +365,19 @@ export default class AutoReply extends React.Component {
                         <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                             { this.state.autoReplyData && autoReplyLists}
                         </div>
-                        {
-                            (this.state.autoReplyData && this.state.autoReplyData.totalEntries !==0)
-                                &&
-                            <Pagination
-                                current={this.state.autoReplyData.pageNumber}
-                                onChange={this.onPageChange}
-                                pageSize={3}
-                                total={ this.state.autoReplyData.totalEntries }
-                                style={{ float: "right", marginTop: "10px"}}
-                            />
-                        }
                     </Col>
                 </Row>
+                {
+                    (this.state.autoReplyData && this.state.autoReplyData.totalEntries !==0)
+                    &&
+                    <Pagination
+                        current={this.state.autoReplyData.pageNumber}
+                        onChange={this.onPageChange}
+                        pageSize={3}
+                        total={ this.state.autoReplyData.totalEntries }
+                        style={{ float: "right", marginTop: "10px"}}
+                    />
+                }
                 <style jsx>{
                     `
                     .main{ width: 300px; height: 220px; position: relative; overflow: hidden}

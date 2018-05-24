@@ -4,6 +4,13 @@ import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';
 
+const createMediaID = `
+  mutation ($shopId: Int!, $type: MediaType!, $url: String!) {
+    createMedia(shopId:$shopId, type:$type, url: $url){
+      id
+    }
+  }
+`;
 
 @inject('store') @observer
 class ShopImgUploader extends React.Component {
@@ -119,7 +126,11 @@ class ShopImgUploader extends React.Component {
                     if (info.status == 200){
                         const url = self.state.data.host + '/' + file._options.multipart_params.key;
                         self.props.store.getMainImage(url);
-                        message.success("上传成功！")
+                        Request.GraphQlRequest(createMediaID, { shopId:localStorage.getItem('shopID'), type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                            (res) => {
+                                message.success('上传成功');
+                            }
+                        )
                     }
                 },
                 Error: function(up, err) {
