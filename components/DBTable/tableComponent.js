@@ -24,17 +24,6 @@ const queryProducts = `
       }
     `;
 
-const shopTags = `
-    query ($shopId:ID!) {
-        shopTags(shopId:$shopId){
-          id
-          insertedAt
-          name
-          weight
-        }
-      }
-`;
-
 const tagProducts = `
     query ($shopId:ID!, $tagId:ID!, $isDisplay:Boolean!) {
         tagProducts(shopId:$shopId, tagId:$tagId, isDisplay:$isDisplay){
@@ -180,7 +169,7 @@ export default class ProdTable extends React.Component {
                 title: '链接',
                 dataType: 'varchar',
                 width: 200,
-                render: text => <a href={text}>{text}</a>,
+                render: text => <a href={text} target="_blank">{text}</a>,
             },
             {
                 title: '操作',
@@ -224,7 +213,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            // console.log('111', res)
+            console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,

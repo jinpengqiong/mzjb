@@ -1,7 +1,6 @@
 import { Table, Pagination, message } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
-import Router from 'next/router';
 import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
 
@@ -81,12 +80,6 @@ export default class OrderManagement extends React.Component {
     super(props);
     this.state={
         data:null,
-        expressList:null,
-        visible: false,
-        isNoExpress:0,
-        deliveryValue:"",
-        orderNo:"",
-        DeliveryNum:""
     }
   }
   componentDidMount(){
@@ -113,76 +106,13 @@ export default class OrderManagement extends React.Component {
                 data: res.shopTradesList
                 })
         }
-    ).catch(()=>{message.error('你还未授权为店主，请联系管理员！')})
+    ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
   };
-
-  
-  cancel() {
-  }
 
   onChange(pageNumber) {
     this.queryUserData(pageNumber);
   }
 
-  handleOk = () => {
-      if(this.state.isNoExpress === 0 ){
-          Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo, outSid: this.state.DeliveryNum, outStype: this.state.deliveryValue.toString()}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                message.success('发货成功！');
-                this.setState({
-                    visible: false,
-                });
-                this.queryOrderData(1)
-            }
-        ).catch(()=>{message.error('出错了，请重试！')})
-      }else{
-          Request.GraphQlRequest(confirmLogistics, {isNoExpress: this.state.isNoExpress, tid: this.state.orderNo}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                message.success('操作成功！');
-                this.setState({
-                    visible: false,
-                    });    
-                }
-        ).catch(()=>{message.error('出错了，请重试！')})
-      }
-    
-  }
-
-  handleCancel = (e) => {
-    // console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-
-  onChange = (e) => {
-    // console.log('radio checked', e.target.value);
-    const value = parseInt(e.target.value);
-    this.setState({
-        isNoExpress: value,
-    });
-  }
-
-  handleChange = (value) => {
-    // console.log(`selected ${value}`);
-    this.setState({
-        deliveryValue:value
-    })
-  }
-  
-  handleClick = (ID) => {
-    this.setState({
-        orderNo: ID,
-        visible: true
-    })
-  }
-
-  InputDeliveryNum = (e) => {
-    // console.log('value', e.target.value);
-    this.setState({
-        DeliveryNum: e.target.value
-    })
-  }
 
   render() {
       console.log('data', this.state.data)

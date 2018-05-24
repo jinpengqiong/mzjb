@@ -66,7 +66,7 @@ export default class AutoReply extends React.Component {
     queryAutoReply = (page) => {
         Request.GraphQlRequest(listAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 3}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('listAutoreply', res.listAutoreply)
+                console.log('listAutoreply', res.listAutoreply)
                 this.setState({
                     autoReplyData: res.listAutoreply
                 })
@@ -363,7 +363,7 @@ export default class AutoReply extends React.Component {
                     <Col span={17} offset={1}>
                         <p>已创建的回复列表：</p>
                         <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
-                            { this.state.autoReplyData && autoReplyLists}
+                            { ( this.state.autoReplyData &&JSON.stringify(this.state.autoReplyData.entries) !=="[]" )? autoReplyLists : "暂无" }
                         </div>
                     </Col>
                 </Row>
