@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select } from 'antd';
+import { Table, Pagination, message, Select, Button, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -80,7 +80,9 @@ export default class OrderManagement extends React.Component {
     super(props);
     this.state={
         data:null,
-        optionValue:"7days"
+        optionValue:"7days",
+        isSpin:false
+
     }
   }
   componentDidMount(){
@@ -102,9 +104,9 @@ export default class OrderManagement extends React.Component {
                         delete entry.items;
                     }
                 );
-                // console.log('111', res)
                 this.setState({
-                data: res.shopTradesList
+                data: res.shopTradesList,
+                isSpin: false
                 })
         }
     ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
@@ -147,20 +149,31 @@ export default class OrderManagement extends React.Component {
         }
     }
 
+    refresh = ()=>{
+        this.setState({
+            optionValue: "7days",
+            isSpin:true
+        })
+        const startTime = parseInt(moment().subtract(7, 'days').format('X'));
+        this.queryOrderData(1, startTime);
+    }
+
   render() {
       // console.log('data', this.state.data)
     return (
         <div>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
-                <Select defaultValue="7days" style={{ width: 120 }} onChange={this.handleChange}>
+                <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}>刷新</Button>
+                <Select value={this.state.optionValue} style={{ width: 120 }} onChange={this.handleChange}>
                     <Option value="7days">近七天</Option>
                     <Option value="30days">近30天</Option>
                     <Option value="90days">近90天</Option>
                     <Option value="365days">近一年</Option>
                 </Select>
             </div>
-
-            <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
+            <Spin spinning={this.state.isSpin}>
+                <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
+            </Spin>
             {
             (this.state.data && this.state.data.totalResults !==0)
             &&

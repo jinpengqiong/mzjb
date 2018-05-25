@@ -1,7 +1,6 @@
-import { Table, Pagination, message } from 'antd';
+import { Table, Pagination, message, Button, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
-import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
 
 
@@ -78,6 +77,7 @@ export default class SelfOrder extends React.Component {
         super(props);
         this.state={
             data:null,
+            isSpin:false
         }
     }
     componentDidMount(){
@@ -96,7 +96,8 @@ export default class SelfOrder extends React.Component {
                 );
                 // console.log('111', res)
                 this.setState({
-                    data: res.searchTradesList
+                    data: res.searchTradesList,
+                    isSpin:false
                 })
             }
         ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
@@ -105,13 +106,23 @@ export default class SelfOrder extends React.Component {
     onChange(pageNumber) {
         this.queryUserData(pageNumber);
     }
-
+    refresh =() => {
+        this.setState({
+            isSpin:true
+        })
+        this.queryOrderData(1);
+    }
 
     render() {
         console.log('data', this.state.data)
         return (
             <div>
-                <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
+                <div style={{ textAlign:"right", marginBottom:"10px"}}>
+                    <Button type="primary" onClick={this.refresh}>刷新</Button>
+                </div>
+                <Spin spinning={this.state.isSpin}>
+                    <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
+                </Spin>
                 {
                     (this.state.data && this.state.data.totalResults !==0)
                     &&

@@ -45,7 +45,7 @@ class NormalLoginForm extends React.Component {
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
                     localStorage.setItem('role', res.login.user.role);
-                    localStorage.setItem('phone', res.smsLogin.user.phone);
+                    localStorage.setItem('phone', res.login.user.phone);
                     Router.push('/')
                 }
             }
