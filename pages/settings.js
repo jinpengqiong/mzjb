@@ -39,7 +39,7 @@ export default class Settings extends React.Component {
                     <MyLayout>
                         <Tabs
                             // activeKey={this.store.activeKey}
-                            type="card"
+                            tabPosition="left"
                             // onChange={this.onTabsChange}
                             hideAdd>
                             <TabPane tab='绑定直播间' key="1">

@@ -99,7 +99,7 @@ class PicList extends React.Component {
         );
         return (
             <div>
-                <ResourUploader refreshData={()=>{ this.getData(1)}}/>
+                <ResourUploader refreshData={()=>{ this.getData(1)}} />
                 <div style={{ marginTop: 40 , display: 'flex', justifyContent: 'flex-start', alignContent: 'space-between', flexWrap:'wrap'}} >
                     { PicData }
                 </div>

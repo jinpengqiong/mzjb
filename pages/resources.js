@@ -39,7 +39,7 @@ export default class Products extends React.Component {
     <Provider store={this.store}>
         <Spin spinning={this.state.loading} size="large">
             <MyLayout>
-              <Tabs onChange={this.callback} type="card">
+              <Tabs onChange={this.callback} tabPosition="left">
                   <TabPane tab="图片文件" key="1">
                     <MyPICS />
                   </TabPane>

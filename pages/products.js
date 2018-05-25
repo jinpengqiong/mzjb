@@ -77,7 +77,7 @@ export default class Products extends React.Component {
           <MyLayout>
               <Tabs
                   // activeKey={this.store.activeKey}
-                  type="card"
+                  tabPosition="left"
                   onChange={this.onTabsChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="1">

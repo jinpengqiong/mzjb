@@ -459,11 +459,11 @@ export default class ProdTable extends React.Component {
       )
     return (
         <div>
-            <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"10px"}}>
-                <Button type="primary" onClick={this.onClickInsert}>
+            <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px",float:'right' }}>
+                <Button type="primary" onClick={this.onClickInsert} >
                     <Icon type="plus-circle-o"/>新增自有商品
                 </Button>
-                <Select defaultValue="-1" style={{marginLeft:'5px',width: 120, float:'right' }} onChange={this.handleChange}>
+                <Select defaultValue="-1" style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
                     <Option value="-1" key='-1'>所有分组</Option>
                     {Tags}
                 </Select>

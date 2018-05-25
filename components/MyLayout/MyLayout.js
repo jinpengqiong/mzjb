@@ -1,7 +1,6 @@
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
 import MyFooter from '../Footer/Footer';
-import MyBreadcrumb from '../breadcrumb/breadcrumb';
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
 import { inject, observer } from 'mobx-react'
@@ -45,13 +44,13 @@ export default class MyLayout extends React.Component {
         <Layout >
         <Sider
           trigger={null}
+          width="140px"
           collapsed={this.state.collapsed}
           style={{ height:'100%', position:'fixed' }}
         >
           <div className="logo" >
             <h2 style={{ textAlign:'center', color:'white' }}>
-              {
-                this.state.collapsed ? <img src='../../static/LOGO.png' style={{ width:20}}/> : '拇指聚宝'}
+              <img src='../../static/LOGO.png' style={{ width:20}}/>
             </h2>
           </div>
           <Menu 
@@ -115,7 +114,7 @@ export default class MyLayout extends React.Component {
             }
           </Menu>
         </Sider>
-        <Layout style={{  marginLeft: this.state.collapsed? '100px' :'200px' }}>
+        <Layout style={{  marginLeft: this.state.collapsed? '100px' :'140px' }}>
           <Header style={{ background: '#fff', padding: 16,marginLeft: this.state.collapsed? 15:0 }}>
             <Icon
               className="trigger"
@@ -131,7 +130,6 @@ export default class MyLayout extends React.Component {
                 </SubMenu>
             </Menu>
           </Header>
-          <MyBreadcrumb />
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }}>
             {this.props.children}
           </Content>
@@ -150,7 +148,6 @@ export default class MyLayout extends React.Component {
 
           .logo {
             height: 32px;
-            background: rgba(255,255,255,.2);
             margin: 16px;
           }
         `}</style>

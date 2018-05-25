@@ -43,7 +43,7 @@ export default class MainPage extends React.Component {
                     <MyLayout>
                         <Tabs
                         activeKey={this.store.activeKey}
-                        type="card"
+                        tabPosition="left"
                         onChange={this.onChange}
                         hideAdd>
                             <TabPane tab='优选商品' key="1">

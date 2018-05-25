@@ -151,7 +151,7 @@ export default class BindLiveRoom extends React.Component {
         return (
             <div>
                 <Affix>
-                    <Button type="primary" onClick={this.openModal}>新增绑定</Button>
+                    <Button type="primary" onClick={this.openModal} >新增绑定</Button>
                 </Affix>
                 <Modal
                     title="新增绑定"

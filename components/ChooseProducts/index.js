@@ -196,9 +196,9 @@ export default class ChooseProducts extends React.Component {
                     }
                     .card_entity{ float: left; width: 220px; height: 320px;position: relative; overflow: hidden; }
                     .cover Button { margin: 30px auto; }
-                    .cover { width: 220px; height: 320px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transform-origin: right bottom; -webkit-transform-origin: right bottom; -moz-transform-origin: right bottom; transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); transition: all 0.35s; -webkit-transition: all 0.35s; -moz-transition: all 0.35s; }
+                    .cover { width: 220px; height: 320px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transition:all 0.5s ease 0s; -webkit-transition:all 0.5s ease 0s; -moz-transition:all 0.5s ease 0s;transform:translateY(320px); -webkit-transform:translateY(320px); -moz-transform:translateY(320px);}
                     .cover p { margin-top: 10px; font-size: 14px; }
-                    .card_entity:hover .cover { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
+                    .card_entity:hover .cover { transform:translateY(0px); -webkit-transform:translateY(0px); -moz-transform:translateY(0px)}
                     `
                 }
                 </style>
