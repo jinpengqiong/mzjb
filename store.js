@@ -18,6 +18,8 @@ class Store {
   @observable ProdDetailData = null;
   // replyBody saved here
   @observable replyBody = [];
+  // sidebar isCollapse
+  @observable collapsed = false;
 
 
   constructor (isServer) {
@@ -77,6 +79,10 @@ class Store {
 
   @action clearReplyBody = () => {
     this.replyBody=[];
+  }
+
+  @action changeCollapse = () => {
+      this.collapsed = !this.collapsed;
   }
 
 }
