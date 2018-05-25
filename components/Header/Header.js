@@ -24,8 +24,7 @@ export default class MyHeader extends React.Component {
     }
     handleLogout = () => {
         const stor = this.state.localStor;
-        // console.log('stor', stor)
-        stor!= null && this.props.stor.clear();
+        stor!= null && stor.clear();
         Router.push('/login');
         this.props.store.getShopID('');
         this.props.store.getRoleInfo('');

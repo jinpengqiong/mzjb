@@ -1,10 +1,13 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
 import OrderManagement from '../components/myOrder/myOrder'
+import SelfOrder from '../components/myOrder/selfOrder'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { Spin } from 'antd';
+import { Spin, Tabs } from 'antd';
+const TabPane = Tabs.TabPane;
+
 
 export default class MyOrder extends React.Component {
     static getInitialProps ({ req }) {
@@ -31,12 +34,25 @@ export default class MyOrder extends React.Component {
     }
   }
 
+  callback = (key) =>{
+      console.log(key);
+  }
   render () {
     return (
     <Provider store={this.store}>
         <Spin spinning={this.state.loading} size="large">
           <MyLayout>
-              <OrderManagement />
+              <Tabs
+                  tabPosition="left"
+                  onChange={this.callback}
+                  hideAdd>
+                  <TabPane tab='客户订单' key="1">
+                      <OrderManagement />
+                  </TabPane>
+                  <TabPane tab='个人订单' key="2" >
+                      <SelfOrder />
+                  </TabPane>
+              </Tabs>
           </MyLayout>
         </Spin>
     </Provider>  

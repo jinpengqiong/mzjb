@@ -46,6 +46,7 @@ class NormalLoginForm extends React.Component {
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
                   localStorage.setItem('role', res.smsLogin.user.role);
+                  localStorage.setItem('phone', res.smsLogin.user.phone);
                   Router.push('/')
               }
         ).catch(()=>{message.error('登录失败！')})

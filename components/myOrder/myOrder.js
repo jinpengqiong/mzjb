@@ -1,9 +1,9 @@
-import { Table, Pagination, message } from 'antd';
+import { Table, Pagination, message, Select } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
-
+const Option = Select.Option;
 
 
 const queryOrder = `
@@ -80,15 +80,16 @@ export default class OrderManagement extends React.Component {
     super(props);
     this.state={
         data:null,
+        optionValue:"7days"
     }
   }
   componentDidMount(){
-        this.queryOrderData(1);
+      const startTime = parseInt(moment().subtract(7, 'days').format('X'));
+      this.queryOrderData(1, startTime);
   }
 
-  queryOrderData = (curPage) => {
+  queryOrderData = (curPage, startTime) => {
     const endTime = parseInt(moment().format('X'));
-    const startTime = parseInt(moment().subtract(1, 'quarters').format('X'));
     // console.log('startTime',startTime)
     Request.GraphQlRequest(queryOrder, {id: localStorage.getItem('shopID'), page: curPage, pageSize: 10, startTimestamp:startTime, endTimestamp:endTime },`Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
@@ -110,14 +111,55 @@ export default class OrderManagement extends React.Component {
   };
 
   onChange(pageNumber) {
-    this.queryUserData(pageNumber);
+      if(this.state.optionValue==="7days"){
+          const startTime = parseInt(moment().subtract(7, 'days').format('X'));
+          this.queryOrderData(pageNumber, startTime);
+      }else if(value==="30days"){
+          const startTime = parseInt(moment().subtract(30, 'days').format('X'));
+          this.queryOrderData(pageNumber, startTime);
+      }else if(value==="90days"){
+          const startTime = parseInt(moment().subtract(90, 'days').format('X'));
+          this.queryOrderData(pageNumber, startTime);
+      }else if(value==="365days"){
+          const startTime = parseInt(moment().subtract(365, 'days').format('X'));
+          this.queryOrderData(pageNumber, startTime);
+      }
   }
 
+  //handle select change
+    handleChange = (value) => {
+        // console.log(`selected ${value}`);
+        this.setState({
+            optionValue: value
+        })
+        if(this.state.optionValue==="7days"){
+            const startTime = parseInt(moment().subtract(7, 'days').format('X'));
+            this.queryOrderData(1, startTime);
+        }else if(value==="30days"){
+            const startTime = parseInt(moment().subtract(30, 'days').format('X'));
+            this.queryOrderData(1, startTime);
+        }else if(value==="90days"){
+            const startTime = parseInt(moment().subtract(90, 'days').format('X'));
+            this.queryOrderData(1, startTime);
+        }else if(value==="365days"){
+            const startTime = parseInt(moment().subtract(365, 'days').format('X'));
+            this.queryOrderData(1, startTime);
+        }
+    }
 
   render() {
-      console.log('data', this.state.data)
+      // console.log('data', this.state.data)
     return (
         <div>
+            <div style={{ textAlign:"right", marginBottom:"10px"}}>
+                <Select defaultValue="7days" style={{ width: 120 }} onChange={this.handleChange}>
+                    <Option value="7days">近七天</Option>
+                    <Option value="30days">近30天</Option>
+                    <Option value="90days">近90天</Option>
+                    <Option value="365days">近一年</Option>
+                </Select>
+            </div>
+
             <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
             {
             (this.state.data && this.state.data.totalResults !==0)

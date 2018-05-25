@@ -459,7 +459,7 @@ export default class ProdTable extends React.Component {
       )
     return (
         <div>
-            <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px",float:'right' }}>
+            <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px", textAlign:"right" }}>
                 <Button type="primary" onClick={this.onClickInsert} >
                     <Icon type="plus-circle-o"/>新增自有商品
                 </Button>

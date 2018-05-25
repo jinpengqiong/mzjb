@@ -38,12 +38,14 @@ class NormalLoginForm extends React.Component {
           };
           request(uri, mutation, variables).then(
             (res)=>{
+                // console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
                     localStorage.setItem('role', res.login.user.role);
+                    localStorage.setItem('phone', res.smsLogin.user.phone);
                     Router.push('/')
                 }
             }
