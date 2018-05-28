@@ -6,7 +6,9 @@ import MyHeader from '../Header/Header';
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
 import { inject, observer } from 'mobx-react'
-
+import { LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
+import 'moment/locale/zh-cn';
 
 @inject('store') @observer
 export default class MyLayout extends React.Component {
@@ -26,16 +28,18 @@ export default class MyLayout extends React.Component {
 
   render() {
     return (
+      <LocaleProvider locale={zh_CN}>
         <Layout >
           <MySider />
-        <Layout style={{  marginLeft: this.props.store.collapsed? '100px' :'140px' }}>
-          <MyHeader />
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }}>
-            {this.props.children}
-          </Content>
-          <MyFooter/> 
+          <Layout style={{  marginLeft: this.props.store.collapsed? '100px' :'140px' }}>
+            <MyHeader />
+              <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }}>
+                {this.props.children}
+              </Content>
+            <MyFooter/> 
+          </Layout>
         </Layout>
-      </Layout>
+      </LocaleProvider>
     );
   }
 }

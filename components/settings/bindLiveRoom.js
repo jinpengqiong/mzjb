@@ -73,7 +73,7 @@ export default class BindLiveRoom extends React.Component {
         })
         Request.GraphQlRequest(ownedRooms, {shopId:localStorage.getItem('shopID') }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('ownedRooms', res.ownedRooms)
+                console.log('ownedRooms', res.ownedRooms)
                 this.setState({
                     ownedRoom:res.ownedRooms
                 })
@@ -159,13 +159,13 @@ export default class BindLiveRoom extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <p>直播间列表：</p>
+                    <h4>直播间列表：</h4>
                     <RadioGroup onChange={this.onChange} value={this.state.radioValue}>
                         {
-                            this.state.ownedRoom?
-                            bindableRooms
-                                :
+                            (!this.state.ownedRoom || JSON.stringify(this.state.ownedRoom) ==="[]")?
                             '暂无'
+                                :
+                            bindableRooms
                         }
                     </RadioGroup>
                 </Modal>
