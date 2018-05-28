@@ -5,6 +5,7 @@ let store = null
 class Store {
   @observable shopID = null;
   @observable userRole = '';
+  @observable imageId = '';
   @observable curPagePath = '';
   @observable ProductData = [];
   @observable TabOption = "1";
@@ -27,6 +28,10 @@ class Store {
 
   @action getShopID = (ID) => {
     this.shopID = ID;
+  }
+
+  @action getimageId = (ID) => {
+      this.imageId = ID;
   }
 
   @action getRoleInfo = (info) => {

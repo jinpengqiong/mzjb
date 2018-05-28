@@ -1,9 +1,11 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
+import YouzanProdForm from './youzanProdForm'
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
+const TabPane = Tabs.TabPane;
 const queryProducts = `
       query ($page:Int, $pageSize: Int, $shopId:Int, $isDisplay:Boolean) {
         shopProducts(page:$page,pageSize:$pageSize,shopId:$shopId, isDisplay:$isDisplay){
@@ -23,17 +25,6 @@ const queryProducts = `
         }
       }
     `;
-
-const shopTags = `
-    query ($shopId:ID!) {
-        shopTags(shopId:$shopId){
-          id
-          insertedAt
-          name
-          weight
-        }
-      }
-`;
 
 const tagProducts = `
     query ($shopId:ID!, $tagId:ID!, $isDisplay:Boolean!) {
@@ -123,7 +114,6 @@ export default class ProdTable extends React.Component {
         super(props);
         this.state = {
             data: null,
-            tagData:null,
             visible:false,
             productID:null,
             productFieldsData:null,
@@ -181,7 +171,7 @@ export default class ProdTable extends React.Component {
                     title: '链接',
                     dataType: 'varchar',
                     width: 200,
-                    render: text => <a href={text}>{text}</a>,
+                    render: text => <a href={text} target="_blank">{text}</a>,
                 },
                 {
                     title: '操作',
@@ -209,34 +199,23 @@ export default class ProdTable extends React.Component {
 
     componentDidMount(){
         this.queryProdData(1);
-        this.queryTags();
     }
 
-    queryTags = () =>{
-        Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                // console.log('111', res)
-                this.setState({
-                    tagData: res.shopTags
-                })
-            }
-        )
-    }
     queryProdData= (curPage) => {
         Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('111', res)
                 res.shopProducts.entries.map(
                     (entry) => {
                         entry.key = entry.id;
                         if(entry.type === 'youxuan'){
                             entry.type ="优选商品"
                         }
-                        if(entry.type === 'link'){
+                        if(entry.type === 'link' || entry.type === 'youzan'){
                             entry.type ="自有商品"
                         }
                     }
                 )
+                console.log('111', res)
                 this.props.store.getProductData(res.shopProducts.entries);
                 this.setState({
                     data: res.shopProducts.entries,
@@ -257,28 +236,70 @@ export default class ProdTable extends React.Component {
                     message.error(err);
                 }else{
                     // console.log('1112', values);
-                    values.mainImage = this.props.store.mainImage;
-                    values.price = parseInt(parseFloat(values.price)*100);
-                    values.isDisplay = false;
-                    Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                        (res)=>{
-                            // console.log('res', res);
-                            this.refs.form.resetFields();
-                            res.createProduct.mainImage = this.props.store.mainImage;
-                            res.createProduct.key = res.createProduct.id;
-                            delete res.createProduct.imagesUrls;
-                            delete res.createProduct.images;
-                            this.queryProdData(1);
-                            this.setState({
-                                visible: false
-                            });
-                            document.getElementById('ossfile').innerHTML = '';
-                            notification.success({
-                                message: '新增成功',
-                                duration: 3,
-                            });
-                        }
-                    )
+                    if(!this.props.store.mainImage){
+                        message.error('请先上传图片，再提交！')
+                    }else{
+                        values.mainImage = this.props.store.mainImage;
+                        values.price = parseInt(parseFloat(values.price)*100);
+                        values.isDisplay = false;
+                        Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                            (res)=>{
+                                // console.log('res', res);
+                                this.refs.form.resetFields();
+                                res.createProduct.mainImage = this.props.store.mainImage;
+                                res.createProduct.key = res.createProduct.id;
+                                delete res.createProduct.imagesUrls;
+                                delete res.createProduct.images;
+                                this.queryProdData(1);
+                                this.setState({
+                                    visible: false
+                                });
+                                document.getElementById('ossfile').innerHTML = '';
+                                this.props.store.getMainImage('')
+                                notification.success({
+                                    message: '新增成功',
+                                    duration: 3,
+                                });
+                            }
+                        )
+                    }
+                }
+            })
+        }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
+            this.refs.form1.validateFields((err, values) => {
+                if (err) {
+                    message.error(err);
+                }else{
+                    if(!this.props.store.mainImage){
+                        message.error('请先上传图片，再提交！')
+                    }else{
+                        console.log('values', values);
+                        values.mainImage = this.props.store.mainImage;
+                        values.price = parseInt(parseFloat(values.price)*100);
+                        values.isDisplay = false;
+                        Request.GraphQlRequest(addProduct,
+                            { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                            (res)=>{
+                                console.log('res', res);
+                                this.refs.form1.resetFields();
+                                res.createProduct.mainImage = this.props.store.mainImage;
+                                res.createProduct.key = res.createProduct.id;
+                                delete res.createProduct.imagesUrls;
+                                delete res.createProduct.images;
+                                this.queryProdData(1);
+                                document.getElementById('ossfile3').innerHTML = '';
+                                this.setState({
+                                    visible: false
+                                });
+                                this.props.store.getMainImage('')
+                                this.props.store.getimageId('')
+                                notification.success({
+                                    message: '新增成功',
+                                    duration: 3,
+                                });
+                            }
+                        ).catch(()=>{message.error('新增失败！')})
+                    }
                 }
             })
         }else if(this.state.modalName ==='更新商品') {
@@ -344,6 +365,7 @@ export default class ProdTable extends React.Component {
         ).catch(()=>{message.error('删除失败！')})
     }
 
+
     onClickInsert = () => {
         this.setState({
             visible: true,
@@ -377,6 +399,17 @@ export default class ProdTable extends React.Component {
             Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
                     // console.log('111', res)
+                    res.tagProducts.products.map(
+                        (prod) => {
+                            prod.key = prod.id;
+                            if(prod.type === 'youxuan'){
+                                prod.type ="优选商品"
+                            }
+                            if(prod.type === 'link'){
+                                prod.type ="自有商品"
+                            }
+                        }
+                    )
                     this.setState({
                         data: res.tagProducts.products
                     })
@@ -393,7 +426,7 @@ export default class ProdTable extends React.Component {
                 }
             }
         );
-        fieldData[0].isDisplay = true;
+        fieldData[0].isDisplay = false;
         delete fieldData[0].key;
         delete fieldData[0].id;
         delete fieldData[0].type;
@@ -446,6 +479,7 @@ export default class ProdTable extends React.Component {
                         groupModalVisible:false,
                         productID:''
                     });
+                    message.success('添加成功！')
                     this.queryProdData(1);
                 }
             )
@@ -453,14 +487,14 @@ export default class ProdTable extends React.Component {
     }
 
     render() {
-        const Tags = this.state.tagData && this.state.tagData.map(
+        const Tags = this.props.shopTags && this.props.shopTags.map(
             (tag) => {
                 return (
                     <Option value={tag.id} key={tag.id}>{tag.name}</Option>
                 )
             }
         )
-        const TagRadios = this.state.tagData && this.state.tagData.map(
+        const TagRadios = this.props.shopTags && this.props.shopTags.map(
             (tag) => {
                 return (
                     <Radio value={tag.id} key={tag.id}>{tag.name}</Radio>
@@ -469,11 +503,11 @@ export default class ProdTable extends React.Component {
         )
         return (
             <div>
-                <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px",float:'right' }}>
-                    <Button type="primary" onClick={this.onClickInsert}>
-                        <Icon type="plus-circle-o"/>新增自有商品
+                <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px", textAlign:"right" }}>
+                    <Button type="primary" onClick={this.onClickInsert} >
+                        <Icon type="plus-circle-o"/>新增商品
                     </Button>
-                    <Select defaultValue="-1" style={{marginLeft:'5px',width: 120, float:'right' }} onChange={this.handleChange}>
+                    <Select defaultValue="-1" style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
                         <Option value="-1" key='-1'>所有分组</Option>
                         {Tags}
                     </Select>
@@ -484,7 +518,19 @@ export default class ProdTable extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
+                    {
+                        this.state.modalName ==="新增商品"?
+                            <Tabs defaultActiveKey="1" onChange={this.callback}>
+                                <TabPane tab="外链商品" key="1">
+                                    <SelfProdForm ref="form"/>
+                                </TabPane>
+                                <TabPane tab="自有商品" key="2">
+                                    <YouzanProdForm ref="form1"/>
+                                </TabPane>
+                            </Tabs>
+                            :
+                            <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
+                    }
                 </Modal>
                 <Modal
                     title='加入分组'

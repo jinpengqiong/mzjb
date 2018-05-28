@@ -126,12 +126,12 @@ class YouzanUploader extends React.Component {
     
         FileUploaded: function(up, file, info) {
           if (info.status === 200){
-              const shopId = parseInt(self.props.store.shopID);
+              const shopId = localStorage.getItem('shopID');
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaAndUploadYouzan, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    const imgID = res.createMediaAndUploadYouzan.id;
-                    self.props.store.getUrlIDs(parseInt(imgID))
+                    console.log('res',res)
+                    self.props.store.getMainImage(url);
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);
                     message.success('上传成功！');
