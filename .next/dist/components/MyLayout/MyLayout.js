@@ -55,6 +55,12 @@ var _index2 = _interopRequireDefault(_index);
 
 var _mobxReact = require('mobx-react');
 
+var _zh_CN = require('antd/lib/locale-provider/zh_CN');
+
+var _zh_CN2 = _interopRequireDefault(_zh_CN);
+
+require('moment/locale/zh-cn');
+
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -89,38 +95,42 @@ var MyLayout = (_dec = (0, _mobxReact.inject)('store'), _dec(_class = (0, _mobxR
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_antd.Layout, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 29
-        }
-      }, _react2.default.createElement(_Sider2.default, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 30
-        }
-      }), _react2.default.createElement(_antd.Layout, { style: { marginLeft: this.props.store.collapsed ? '100px' : '140px' }, __source: {
+      return _react2.default.createElement(_antd.LocaleProvider, { locale: _zh_CN2.default, __source: {
           fileName: _jsxFileName,
           lineNumber: 31
         }
-      }, _react2.default.createElement(_Header2.default, {
+      }, _react2.default.createElement(_antd.Layout, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 32
         }
-      }), _react2.default.createElement(Content, { style: { margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }, __source: {
+      }, _react2.default.createElement(_Sider2.default, {
+        __source: {
           fileName: _jsxFileName,
           lineNumber: 33
+        }
+      }), _react2.default.createElement(_antd.Layout, { style: { marginLeft: this.props.store.collapsed ? '100px' : '140px' }, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        }
+      }, _react2.default.createElement(_Header2.default, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        }
+      }), _react2.default.createElement(Content, { style: { margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }, __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
         }
       }, this.props.children), _react2.default.createElement(_Footer2.default, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 36
+          lineNumber: 39
         }
-      })));
+      }))));
     }
   }]);
   return MyLayout;
 }(_react2.default.Component)) || _class) || _class);
 exports.default = MyLayout;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvTXlMYXlvdXQvTXlMYXlvdXQuanMiXSwibmFtZXMiOlsiSGVhZGVyIiwiTGF5b3V0IiwiU2lkZXIiLCJDb250ZW50IiwiU3ViTWVudSIsIk1lbnUiLCJNeUxheW91dCIsIm9ic2VydmVyIiwicHJvcHMiLCJzdGF0ZSIsImxvY2FsU3RvciIsInNldFN0YXRlIiwibG9jYWxTdG9yYWdlIiwic3RvcmUiLCJnZXRSb2xlSW5mbyIsImdldEl0ZW0iLCJtYXJnaW5MZWZ0IiwiY29sbGFwc2VkIiwibWFyZ2luIiwicGFkZGluZyIsImJhY2tncm91bmQiLCJtaW5IZWlnaHQiLCJjaGlsZHJlbiIsIlJlYWN0IiwiQ29tcG9uZW50Il0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7O0FBRUE7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFFQTs7Ozs7O0ksQUFOUSxTQUEyQixNLE9BQTNCLEE7SSxBQUFRLFFBQW1CLE0sT0FBbkIsQTtJLEFBQU8sVUFBWSxNLE9BQVosQTs7QUFLdkIsSUFBTSxVQUFVLFdBQWhCLEFBQXFCO0ksQUFLQSxtQkFEcEIsdUJBQUEsQSxBQUFPLDRCQUFVLFc7b0NBRWhCOztvQkFBQSxBQUFhLE9BQU07d0NBQUE7OzBJQUFBLEFBQ1gsQUFDSjs7VUFBQSxBQUFLO2lCQUZVLEFBRWYsQUFBVyxBQUNHO0FBREgsQUFDUDtXQUVQOzs7Ozt3Q0FFbUIsQUFDbEI7V0FBQSxBQUFLO21CQUFMLEFBQWMsQUFDQSxBQUVkO0FBSGMsQUFDWjtXQUVGLEFBQUssTUFBTCxBQUFXLE1BQVgsQUFBaUIsWUFBWSxhQUFBLEFBQWEsUUFBMUMsQUFBNkIsQUFBcUIsQUFDbkQ7Ozs7NkJBRVEsQUFDUDs2QkFDSyxvQkFBRDs7b0JBQUE7c0JBQUEsQUFDRTtBQURGO0FBQUEsT0FBQSxnQ0FDRyxRQUFEOztvQkFBQTtzQkFERixBQUNFLEFBQ0Y7QUFERTtBQUFBLDBCQUNELG9CQUFELFVBQVEsT0FBTyxFQUFHLFlBQVksS0FBQSxBQUFLLE1BQUwsQUFBVyxNQUFYLEFBQWlCLFlBQWpCLEFBQTRCLFVBQTFELEFBQWUsQUFBb0Q7b0JBQW5FO3NCQUFBLEFBQ0U7QUFERjt1Q0FDRyxTQUFEOztvQkFBQTtzQkFERixBQUNFLEFBQ0E7QUFEQTtBQUFBLDBCQUNDLGNBQUQsV0FBUyxPQUFPLEVBQUUsUUFBRixBQUFVLGFBQWEsU0FBdkIsQUFBZ0MsSUFBSSxZQUFwQyxBQUFnRCxRQUFRLFdBQXhFLEFBQWdCLEFBQW1FO29CQUFuRjtzQkFBQSxBQUNHO0FBREg7Y0FDRyxBQUFLLE1BSFYsQUFFRSxBQUNjLEFBRWQseUNBQUMsU0FBRDs7b0JBQUE7c0JBUk4sQUFDSSxBQUVBLEFBS0UsQUFJUDtBQUpPO0FBQUE7Ozs7RUF4QjRCLGdCQUFNLEE7a0JBQXZCLEEiLCJmaWxlIjoiTXlMYXlvdXQuanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL21hYy9EZXNrdG9wL216amIvbXV6aGlqdWJhb193ZWIifQ==
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvTXlMYXlvdXQvTXlMYXlvdXQuanMiXSwibmFtZXMiOlsiSGVhZGVyIiwiTGF5b3V0IiwiU2lkZXIiLCJDb250ZW50IiwiU3ViTWVudSIsIk1lbnUiLCJNeUxheW91dCIsIm9ic2VydmVyIiwicHJvcHMiLCJzdGF0ZSIsImxvY2FsU3RvciIsInNldFN0YXRlIiwibG9jYWxTdG9yYWdlIiwic3RvcmUiLCJnZXRSb2xlSW5mbyIsImdldEl0ZW0iLCJ6aF9DTiIsIm1hcmdpbkxlZnQiLCJjb2xsYXBzZWQiLCJtYXJnaW4iLCJwYWRkaW5nIiwiYmFja2dyb3VuZCIsIm1pbkhlaWdodCIsImNoaWxkcmVuIiwiUmVhY3QiLCJDb21wb25lbnQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTs7QUFFQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUVBOztBQUVBOzs7O0FBQ0E7Ozs7OztJQVRRLEEsU0FBMkIsTSxPLEFBQTNCO0ksQUFBUSxRQUFtQixNLE9BQW5CLEE7SSxBQUFPLFVBQVksTSxPQUFaLEE7O0FBS3ZCLElBQU0sVUFBVSxXQUFoQixBQUFxQjtJLEFBT0EsbUJBRHBCLHVCQUFBLEFBQU8sQSw0QkFBVSxXO29DQUVoQjs7b0JBQUEsQUFBYSxPQUFNO3dDQUFBOzswSUFBQSxBQUNYLEFBQ0o7O1VBQUEsQUFBSztpQkFGVSxBQUVmLEFBQVcsQUFDRztBQURILEFBQ1A7V0FFUDs7Ozs7d0NBRW1CLEFBQ2xCO1dBQUEsQUFBSzttQkFBTCxBQUFjLEFBQ0EsQUFFZDtBQUhjLEFBQ1o7V0FFRixBQUFLLE1BQUwsQUFBVyxNQUFYLEFBQWlCLFlBQVksYUFBQSxBQUFhLFFBQTFDLEFBQTZCLEFBQXFCLEFBQ25EOzs7OzZCQUVRLEFBQ1A7NkJBQ0csb0JBQUQsa0JBQWdCLFFBQVEsUUFBeEI7b0JBQUE7c0JBQUEsQUFDRTtBQURGO09BQUEsa0JBQ0csb0JBQUQ7O29CQUFBO3NCQUFBLEFBQ0U7QUFERjtBQUFBLHVDQUNHLFFBQUQ7O29CQUFBO3NCQURGLEFBQ0UsQUFDQTtBQURBO0FBQUEsMEJBQ0Msb0JBQUQsVUFBUSxPQUFPLEVBQUcsWUFBWSxLQUFBLEFBQUssTUFBTCxBQUFXLE1BQVgsQUFBaUIsWUFBakIsQUFBNEIsVUFBMUQsQUFBZSxBQUFvRDtvQkFBbkU7c0JBQUEsQUFDRTtBQURGO3VDQUNHLFNBQUQ7O29CQUFBO3NCQURGLEFBQ0UsQUFDRTtBQURGO0FBQUEsMEJBQ0csY0FBRCxXQUFTLE9BQU8sRUFBRSxRQUFGLEFBQVUsYUFBYSxTQUF2QixBQUFnQyxJQUFJLFlBQXBDLEFBQWdELFFBQVEsV0FBeEUsQUFBZ0IsQUFBbUU7b0JBQW5GO3NCQUFBLEFBQ0c7QUFESDtjQUNHLEFBQUssTUFIWixBQUVJLEFBQ2MsQUFFaEIseUNBQUMsU0FBRDs7b0JBQUE7c0JBVFIsQUFDRSxBQUNFLEFBRUUsQUFLRSxBQUtUO0FBTFM7QUFBQTs7OztFQXpCMEIsZ0JBQU0sQTtrQkFBdkIsQSIsImZpbGUiOiJNeUxheW91dC5qcyIsInNvdXJjZVJvb3QiOiIvVXNlcnMvbWFjL0Rlc2t0b3AvbXpqYi9tdXpoaWp1YmFvX3dlYiJ9

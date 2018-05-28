@@ -187,7 +187,7 @@ export default class ProdTable extends React.Component {
                     <Divider type="vertical" />
                     <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{this.confirm(record.id)}} okText="确认" cancelText="取消">
+                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}} okText="确认" cancelText="取消">
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
@@ -359,6 +359,7 @@ export default class ProdTable extends React.Component {
 
   //删除
   confirm(id) {
+      console.log('id', id)
       Request.GraphQlRequest(deleteProduct,
           { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
@@ -451,7 +452,7 @@ export default class ProdTable extends React.Component {
 
     //add to group
     changeProductTag = (ID) => {
-      // console.log('ID',ID)
+      console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true
