@@ -126,6 +126,7 @@ export default class BindLiveRoom extends React.Component {
             (room) => {
                 return (
                     <Card title={room.roomName}
+                          hoverable
                           key={room.id}
                           extra={
                                 <Popconfirm title="确定要取消绑定吗?"
@@ -133,7 +134,7 @@ export default class BindLiveRoom extends React.Component {
                                     <a href="#">取消绑定</a>
                                 </Popconfirm>
                             }
-                          style={{ width: 200 }}>
+                          style={{ width: 300 , marginRight:"10px"}}>
                         <p>房间ID：{room.roomId}</p>
                         <p>简要描述：{room.desc}</p>
                     </Card>

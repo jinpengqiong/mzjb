@@ -116,7 +116,6 @@ export default class ProdTable extends React.Component {
         data: null,
         visible:false,
         productID:null,
-        productFieldsData:null,
         modalName:null,
         totalEntries:null,
         groupModalVisible:false,
@@ -185,9 +184,9 @@ export default class ProdTable extends React.Component {
                     <Divider type="vertical" />
                         <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
                     <Divider type="vertical" />
-                    <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
+                        <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}} okText="确认" cancelText="取消">
+                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
@@ -251,8 +250,6 @@ export default class ProdTable extends React.Component {
                                 this.refs.form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
-                                delete res.createProduct.imagesUrls;
-                                delete res.createProduct.images;
                                 this.queryProdData(1);
                                 this.setState({
                                     visible: false
@@ -287,8 +284,6 @@ export default class ProdTable extends React.Component {
                                 this.refs.form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
-                                delete res.createProduct.imagesUrls;
-                                delete res.createProduct.images;
                                 this.queryProdData(1);
                                 document.getElementById('ossfile3').innerHTML = '';
                                 this.setState({
@@ -310,7 +305,7 @@ export default class ProdTable extends React.Component {
                 if (err) {
                     message.error(err);
                 } else {
-                    values.mainImage = this.state.productFieldsData.mainImage;
+                    values.mainImage = this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
                     // console.log('values', values);
                     Request.GraphQlRequest(UpdateProduct,
@@ -328,9 +323,9 @@ export default class ProdTable extends React.Component {
                             this.queryProdData(1);
                             this.setState({
                                 visible: false,
-                                productFieldsData:null,
                                 modalName:null
                             });
+                            this.props.store.getProductFieldsData(null);
                             notification.success({
                                 message: '更新成功',
                                 duration: 3,
@@ -347,9 +342,9 @@ export default class ProdTable extends React.Component {
         this.refs.form.resetFields();
         this.setState({
             visible: false,
-            productFieldsData:null,
             modalName:null
         });
+        this.props.store.getProductFieldsData(null)
         document.getElementById('ossfile').innerHTML = '';
     }
 
@@ -386,13 +381,14 @@ export default class ProdTable extends React.Component {
                 }
             }
         );
+        this.props.store.getProductFieldsData(fieldData[0])
         // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
             modalName:"更新商品",
-            productFieldsData:fieldData[0]
         });
+
     }
 
     handleChange = (key) => {
@@ -415,7 +411,7 @@ export default class ProdTable extends React.Component {
                     }
                 )
                 this.setState({
-                    data: res.tagProducts.products
+                    data: res.tagProducts.products,
                 })
             }
         )
@@ -431,10 +427,10 @@ export default class ProdTable extends React.Component {
             }
         );
         fieldData[0].isDisplay = false;
-        delete fieldData[0].key;
-        delete fieldData[0].id;
-        delete fieldData[0].type;
         console.log('fieldData',fieldData)
+        fieldData[0].key && delete fieldData[0].key;
+        fieldData[0].id && delete fieldData[0].id;
+        fieldData[0].type && delete fieldData[0].type;
         Request.GraphQlRequest(UpdateProduct,
             {
                 baseinfo: fieldData[0],
@@ -533,7 +529,10 @@ export default class ProdTable extends React.Component {
                             </TabPane>
                         </Tabs>
                         :
-                        <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
+                    this.state.modalName ==="更新商品"?
+                        <SelfProdForm ref="form" />
+                        :
+                        null
                 }
             </Modal>
             <Modal

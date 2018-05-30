@@ -21,6 +21,8 @@ class Store {
   @observable replyBody = [];
   // sidebar isCollapse
   @observable collapsed = false;
+  //product update fields
+  @observable productFieldsData = null;
 
 
   constructor (isServer) {
@@ -88,6 +90,10 @@ class Store {
 
   @action changeCollapse = () => {
       this.collapsed = !this.collapsed;
+  }
+
+  @action getProductFieldsData = (data) => {
+      this.productFieldsData = data;
   }
 
 }

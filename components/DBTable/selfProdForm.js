@@ -7,13 +7,11 @@ import ShopImgUploader from '../FileUploader/shopImgUpload'
 class RegistrationForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-          color: '',
-        };
       }
 
 
   render() {
+      console.log('props', this.props)
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
@@ -46,7 +44,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         {
-          !this.props.productData
+          !this.props.store.productFieldsData
           &&
           <FormItem
             {...formItemLayout}
@@ -91,7 +89,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         {
-          !this.props.productData
+          !this.props.store.productFieldsData
           &&
           <FormItem
           {...formItemLayout}
@@ -129,10 +127,6 @@ const SelfProdForm = Form.create({
                 price: Form.createFormField({
                     ...props.productData.price,
                     value: (parseInt(props.productData.price)/100).toFixed(2),
-                }),
-                detailUrl: Form.createFormField({
-                    ...props.productData.detailUrl,
-                    value: props.productData.detailUrl,
                 })
             };
         }

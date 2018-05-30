@@ -28,7 +28,7 @@ module.exports = {
             ,
             {
                 test: /\.less/,
-                loader: `babel-loader!raw-loader!less-loader`
+                loader: `babel-loader!raw-loader!postcss-loader!less-loader`
             }
         );
         return config;
