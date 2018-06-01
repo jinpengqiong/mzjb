@@ -8,6 +8,7 @@ import { initStore } from '../store'
 import Router from 'next/router';
 import { Tabs, Spin, Radio } from 'antd';
 import Request from "../utils/graphql_request";
+import { observer } from 'mobx-react'
 const TabPane = Tabs.TabPane;
 
 const shopTags = `
@@ -20,6 +21,8 @@ const shopTags = `
         }
       }
 `;
+
+@observer
 export default class Products extends React.Component {
   constructor (props) {
     super(props)
@@ -39,16 +42,14 @@ export default class Products extends React.Component {
     }else if(this.props.shopID === null){
       Router.push('/')
     }else{
-        this.store.getShopID(parseInt(this.props.shopID));
         this.setState({
             loading:false
         })
-        this.store.getCurPagePath('商品');
         this.queryTags();
     }
   }
     onChange = (e) => {
-      console.log('e',e.target.value)
+      // console.log('e',e.target.value)
         this.setState({
             tagName:e.target.value
         })
@@ -72,12 +73,13 @@ export default class Products extends React.Component {
     }
     
   render () {
+      console.log('store', this.store)
     return (
     <Provider store={this.store}>
         <Spin spinning={this.state.loading} size="large">
           <MyLayout>
               <Tabs
-                  activeKey={this.store.activeKey}
+                  activeKey={this.store.prodActiveKey}
                   tabPosition="left"
                   onChange={this.onTabsChange}
                   hideAdd>
@@ -98,9 +100,20 @@ export default class Products extends React.Component {
                   <TabPane tab='商品分组' key="2" >
                       <GroupProduct />
                   </TabPane>
-                  <TabPane tab='新增商品' key="3" >
-                      1111
-                  </TabPane>
+                  {
+                      this.store.prodActiveKey === "3"
+                      &&
+                      <TabPane tab='新增商品' key="3" >
+                          1111
+                      </TabPane>
+                  }
+                  {
+                      this.store.prodActiveKey === "4"
+                      &&
+                      <TabPane tab='更新自有商品' key="4" >
+                          22222
+                      </TabPane>
+                  }
               </Tabs>
           </MyLayout>
         </Spin>

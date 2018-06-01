@@ -203,7 +203,7 @@ export default class ProdTable extends React.Component {
                         <a href="#" onClick={
                             ()=>{
                                 if(record.type ==='自有商品') {
-                                    this.props.store.changeActiveKey('3')
+                                    this.props.store.changeActiveKey('4')
                                 }else{
                                     this.updateProduct(parseInt(record.id), record.type)
                                 }
@@ -391,10 +391,7 @@ export default class ProdTable extends React.Component {
 
 
   onClickInsert = () => {
-        this.setState({
-            visible: true,
-            modalName:"新增商品"
-        });
+      this.props.store.changeActiveKey('3')
     }
 
   //updateProduct
