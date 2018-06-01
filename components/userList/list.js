@@ -55,7 +55,7 @@ export default class UserList extends React.Component {
             key: 'role',
             }, 
             {
-            title: 'Action',
+            title: '操作',
             key: 'action',
             render: (text, record) => (
                 <span>

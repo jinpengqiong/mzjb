@@ -11,7 +11,7 @@ class RegistrationForm extends React.Component {
 
 
   render() {
-      console.log('props', this.props)
+      // console.log('props', this.props)
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
@@ -24,8 +24,8 @@ class RegistrationForm extends React.Component {
         md: { span: 19 },
       },
     };
-    
-    
+
+
     return (
       <Form>
         <FormItem
@@ -44,7 +44,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         {
-          !this.props.store.productFieldsData
+          !this.props.productData
           &&
           <FormItem
             {...formItemLayout}
@@ -89,7 +89,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         {
-          !this.props.store.productFieldsData
+          !this.props.productData
           &&
           <FormItem
           {...formItemLayout}
@@ -105,7 +105,7 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
-        } 
+        }
       </Form>
     );
   }
@@ -113,7 +113,7 @@ class RegistrationForm extends React.Component {
 
 const SelfProdForm = Form.create({
     mapPropsToFields(props) {
-        // console.log('props', props);
+        console.log('props', props);
         if (props.productData) {
             return {
                 title: Form.createFormField({

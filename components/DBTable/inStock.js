@@ -43,13 +43,14 @@ const tagProducts = `
 `;
 const UpdateProduct = `
 mutation (
-    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs
+    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
     ) {
     updateProduct(
         id:$id,
         baseinfo:$baseinfo,
         shopId: $shopId,
-        youzan:$youzan
+        youzan:$youzan,
+        type:$type
     ){
         id
         title
@@ -62,6 +63,21 @@ mutation (
         }
     }
     }
+`;
+
+const setDisplayProduct = `
+mutation (
+    $id:ID!, $isDisplay: Boolean!, $shopId: Int!
+    ) {
+    setDisplayProduct(
+        id:$id,
+        isDisplay:$isDisplay,
+        shopId: $shopId,
+    ){
+        id
+        title
+    }
+}
 `;
 
 const deleteProduct = `
@@ -109,14 +125,13 @@ mutation (
 `;
 
 @inject('store') @observer
-export default class ProdTable extends React.Component {
+export default class InStock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
             visible:false,
             productID:null,
-            productFieldsData:null,
             modalName:null,
             totalEntries:null,
             groupModalVisible:false,
@@ -179,15 +194,15 @@ export default class ProdTable extends React.Component {
                     width: 240,
                     render: (text, record) => (
                         <span>
-                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} okText="确认" cancelText="取消">
+                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
                         <a href="#">上架</a>
                         </Popconfirm>
                     <Divider type="vertical" />
                         <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
                     <Divider type="vertical" />
-                    <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
+                        <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id), record.type)}}>更新</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{this.confirm(record.id)}} okText="确认" cancelText="取消">
+                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
@@ -210,7 +225,10 @@ export default class ProdTable extends React.Component {
                         if(entry.type === 'youxuan'){
                             entry.type ="优选商品"
                         }
-                        if(entry.type === 'link' || entry.type === 'youzan'){
+                        if(entry.type === 'link'){
+                            entry.type ="外链商品"
+                        }
+                        if(entry.type === 'youzan'){
                             entry.type ="自有商品"
                         }
                     }
@@ -231,7 +249,7 @@ export default class ProdTable extends React.Component {
 
     handleOk = () => {
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
-            this.refs.form.validateFields((err, values) => {
+            this.refs.Form.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 }else{
@@ -245,11 +263,9 @@ export default class ProdTable extends React.Component {
                         Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 // console.log('res', res);
-                                this.refs.form.resetFields();
+                                this.refs.Form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
-                                delete res.createProduct.imagesUrls;
-                                delete res.createProduct.images;
                                 this.queryProdData(1);
                                 this.setState({
                                     visible: false
@@ -266,7 +282,7 @@ export default class ProdTable extends React.Component {
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
-            this.refs.form1.validateFields((err, values) => {
+            this.refs.Form1.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 }else{
@@ -281,11 +297,9 @@ export default class ProdTable extends React.Component {
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 console.log('res', res);
-                                this.refs.form1.resetFields();
+                                this.refs.Form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
-                                delete res.createProduct.imagesUrls;
-                                delete res.createProduct.images;
                                 this.queryProdData(1);
                                 document.getElementById('ossfile3').innerHTML = '';
                                 this.setState({
@@ -303,37 +317,38 @@ export default class ProdTable extends React.Component {
                 }
             })
         }else if(this.state.modalName ==='更新商品') {
-            this.refs.form.validateFields((err, values) => {
+            this.refs.Form.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 } else {
-                    values.mainImage = this.state.productFieldsData.mainImage;
+                    values.mainImage = this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
                     // console.log('values', values);
                     Request.GraphQlRequest(UpdateProduct,
                         {
                             baseinfo: values,
                             shopId: localStorage.getItem('shopID'),
-                            id: this.state.productID
+                            id: this.state.productID,
+                            type:this.props.store.prodType
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
-                            this.refs.form.resetFields();
+                            this.refs.Form.resetFields();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;
                             this.queryProdData(1);
                             this.setState({
                                 visible: false,
-                                productFieldsData:null,
                                 modalName:null
                             });
+                            this.props.store.getProductFieldsData(null);
                             notification.success({
                                 message: '更新成功',
                                 duration: 3,
                             });
                         }
-                    ).catch(()=>{message.error('更新失败！')})
+                    ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
                 }
             })
         }
@@ -341,12 +356,12 @@ export default class ProdTable extends React.Component {
 
 
     handleCancel = () => {
-        this.refs.form.resetFields();
+        this.refs.Form.resetFields();
         this.setState({
             visible: false,
-            productFieldsData:null,
             modalName:null
         });
+        this.props.store.getProductFieldsData(null)
         document.getElementById('ossfile').innerHTML = '';
     }
 
@@ -356,6 +371,7 @@ export default class ProdTable extends React.Component {
 
     //删除
     confirm(id) {
+        console.log('id', id)
         Request.GraphQlRequest(deleteProduct,
             { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
@@ -374,21 +390,29 @@ export default class ProdTable extends React.Component {
     }
 
     //updateProduct
-    updateProduct = ( ID ) => {
+    updateProduct = ( ID, type ) => {
         const fieldData = this.state.data.filter(
-            (entry) =>{
+            entry =>{
                 if(parseInt(entry.id) === ID){
                     return entry
                 }
             }
         );
-        // console.log('fieldData',fieldData)
+        if(type ==='自有商品'){
+            this.props.store.getProdType('YOUZAN')
+        }else if(type ==='优选商品'){
+            this.props.store.getProdType('YOUXUAN')
+        }else if(type ==='外链商品'){
+            this.props.store.getProdType('LINK')
+        }
+        this.props.store.getProductFieldsData(fieldData[0])
+        console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
             modalName:"更新商品",
-            productFieldsData:fieldData[0]
         });
+
     }
 
     handleChange = (key) => {
@@ -397,7 +421,7 @@ export default class ProdTable extends React.Component {
             this.queryProdData(1);
         }else{
             Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                (res) => {
+                res => {
                     // console.log('111', res)
                     res.tagProducts.products.map(
                         (prod) => {
@@ -411,7 +435,7 @@ export default class ProdTable extends React.Component {
                         }
                     )
                     this.setState({
-                        data: res.tagProducts.products
+                        data: res.tagProducts.products,
                     })
                 }
             )
@@ -419,21 +443,9 @@ export default class ProdTable extends React.Component {
     }
 
     unShlfConfirm = (ID) => {
-        let fieldData = this.state.data.filter(
-            (entry) =>{
-                if(parseInt(entry.id) === ID){
-                    return entry
-                }
-            }
-        );
-        fieldData[0].isDisplay = false;
-        delete fieldData[0].key;
-        delete fieldData[0].id;
-        delete fieldData[0].type;
-        // console.log('fieldData',fieldData)
-        Request.GraphQlRequest(UpdateProduct,
+        Request.GraphQlRequest(setDisplayProduct,
             {
-                baseinfo: fieldData[0],
+                isDisplay: true,
                 shopId: localStorage.getItem('shopID'),
                 id: ID
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -448,7 +460,7 @@ export default class ProdTable extends React.Component {
 
     //add to group
     changeProductTag = (ID) => {
-        // console.log('ID',ID)
+        console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true
@@ -522,14 +534,17 @@ export default class ProdTable extends React.Component {
                         this.state.modalName ==="新增商品"?
                             <Tabs defaultActiveKey="1" onChange={this.callback}>
                                 <TabPane tab="外链商品" key="1">
-                                    <SelfProdForm ref="form"/>
+                                    <SelfProdForm ref="Form"/>
                                 </TabPane>
                                 <TabPane tab="自有商品" key="2">
-                                    <YouzanProdForm ref="form1"/>
+                                    <YouzanProdForm ref="Form1"/>
                                 </TabPane>
                             </Tabs>
                             :
-                            <SelfProdForm ref="form" productData={this.state.productFieldsData}/>
+                            this.state.modalName ==="更新商品"?
+                                <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
+                                :
+                                null
                     }
                 </Modal>
                 <Modal
@@ -542,7 +557,12 @@ export default class ProdTable extends React.Component {
                         {TagRadios}
                     </RadioGroup>
                 </Modal>
-                <Table dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
+                <Table
+                    dataSource = {this.state.data? this.state.data : null }
+                    columns={this.state.columns}
+                    pagination={false}
+                    scroll={{ y: 550 }}
+                />
                 {
                     (this.state.data && JSON.stringify(this.state.data) !=='[]')
                     &&

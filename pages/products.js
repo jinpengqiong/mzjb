@@ -55,7 +55,8 @@ export default class Products extends React.Component {
    }
 
    onTabsChange = (key) => {
-       console.log(key);
+       // console.log(key);
+        this.store.changeActiveKey(key)
         this.queryTags();
    }
 
@@ -76,7 +77,7 @@ export default class Products extends React.Component {
         <Spin spinning={this.state.loading} size="large">
           <MyLayout>
               <Tabs
-                  // activeKey={this.store.activeKey}
+                  activeKey={this.store.activeKey}
                   tabPosition="left"
                   onChange={this.onTabsChange}
                   hideAdd>
@@ -90,12 +91,15 @@ export default class Products extends React.Component {
                               <ProdTable shopTags={this.state.tagData}/>
                               :
                           this.state.tagName ==='仓库中'?
-                              <InStock />
+                              <InStock shopTags={this.state.tagData}/>
                               :null
                       }
                   </TabPane>
                   <TabPane tab='商品分组' key="2" >
                       <GroupProduct />
+                  </TabPane>
+                  <TabPane tab='新增商品' key="3" >
+                      1111
                   </TabPane>
               </Tabs>
           </MyLayout>

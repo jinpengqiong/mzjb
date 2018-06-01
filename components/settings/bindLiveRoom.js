@@ -134,7 +134,7 @@ export default class BindLiveRoom extends React.Component {
                                     <a href="#">取消绑定</a>
                                 </Popconfirm>
                             }
-                          style={{ width: 300 , marginRight:"10px"}}>
+                          style={{ width: 300 , marginRight:"10px", marginBottom:"10px"}}>
                         <p>房间ID：{room.roomId}</p>
                         <p>简要描述：{room.desc}</p>
                     </Card>

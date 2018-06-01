@@ -43,13 +43,14 @@ const tagProducts = `
 `;
 const UpdateProduct = `
 mutation (
-    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs
+    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
     ) {
     updateProduct(
         id:$id,
         baseinfo:$baseinfo,
         shopId: $shopId,
-        youzan:$youzan
+        youzan:$youzan,
+        type:$type
     ){
         id
         title
@@ -62,6 +63,21 @@ mutation (
         }
     }
     }
+`;
+
+const setDisplayProduct = `
+mutation (
+    $id:ID!, $isDisplay: Boolean!, $shopId: Int!
+    ) {
+    setDisplayProduct(
+        id:$id,
+        isDisplay:$isDisplay,
+        shopId: $shopId,
+    ){
+        id
+        title
+    }
+}
 `;
 
 const deleteProduct = `
@@ -184,7 +200,15 @@ export default class ProdTable extends React.Component {
                     <Divider type="vertical" />
                         <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
                     <Divider type="vertical" />
-                        <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id))}}>更新</a>
+                        <a href="#" onClick={
+                            ()=>{
+                                if(record.type ==='自有商品') {
+                                    this.props.store.changeActiveKey('3')
+                                }else{
+                                    this.updateProduct(parseInt(record.id), record.type)
+                                }
+                            }
+                        }>更新</a>
                     <Divider type="vertical" />
                     <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
@@ -312,7 +336,8 @@ export default class ProdTable extends React.Component {
                         {
                             baseinfo: values,
                             shopId: localStorage.getItem('shopID'),
-                            id: this.state.productID
+                            id: this.state.productID,
+                            type:this.props.store.prodType
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
@@ -331,7 +356,7 @@ export default class ProdTable extends React.Component {
                                 duration: 3,
                             });
                         }
-                    ).catch(()=>{message.error('更新失败！')})
+                    ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
                 }
             })
         }
@@ -373,16 +398,23 @@ export default class ProdTable extends React.Component {
     }
 
   //updateProduct
-    updateProduct = ( ID ) => {
+    updateProduct = ( ID, type ) => {
         const fieldData = this.state.data.filter(
-            (entry) =>{
+            entry =>{
                 if(parseInt(entry.id) === ID){
                     return entry
                 }
             }
         );
+        if(type ==='自有商品'){
+            this.props.store.getProdType('YOUZAN')
+        }else if(type ==='优选商品'){
+            this.props.store.getProdType('YOUXUAN')
+        }else if(type ==='外链商品'){
+            this.props.store.getProdType('LINK')
+        }
         this.props.store.getProductFieldsData(fieldData[0])
-        // console.log('fieldData',fieldData)
+        console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
@@ -397,7 +429,7 @@ export default class ProdTable extends React.Component {
         this.queryProdData(1);
       }else{
         Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('111', res)
                 res.tagProducts.products.map(
                     (prod) => {
@@ -419,21 +451,9 @@ export default class ProdTable extends React.Component {
     }
 
     unShlfConfirm = (ID) => {
-        let fieldData = this.state.data.filter(
-            (entry) =>{
-                if(parseInt(entry.id) === ID){
-                    return entry
-                }
-            }
-        );
-        fieldData[0].isDisplay = false;
-        console.log('fieldData',fieldData)
-        fieldData[0].key && delete fieldData[0].key;
-        fieldData[0].id && delete fieldData[0].id;
-        fieldData[0].type && delete fieldData[0].type;
-        Request.GraphQlRequest(UpdateProduct,
+        Request.GraphQlRequest(setDisplayProduct,
             {
-                baseinfo: fieldData[0],
+                isDisplay: false,
                 shopId: localStorage.getItem('shopID'),
                 id: ID
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -530,7 +550,7 @@ export default class ProdTable extends React.Component {
                         </Tabs>
                         :
                     this.state.modalName ==="更新商品"?
-                        <SelfProdForm ref="form" />
+                        <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
                         :
                         null
                 }
@@ -545,7 +565,12 @@ export default class ProdTable extends React.Component {
                     {TagRadios}
                 </RadioGroup>
             </Modal>
-            <Table dataSource = {this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
+            <Table
+                dataSource = {this.state.data? this.state.data : null }
+                columns={this.state.columns}
+                pagination={false}
+                scroll={{ y: 550 }}
+            />
             {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')
             &&
