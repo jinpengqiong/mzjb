@@ -7,35 +7,14 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
 
-const addProduct = `
-mutation (
-    $baseinfo:ProductBaseinfo!, $shopId: Int!, $type:ProductType!, $youzan:ProductYouzanArgs
-    ) {
-    createProduct(
-        baseinfo:$baseinfo,
-        shopId: $shopId,
-        type:$type,
-        youzan:$youzan
-    ){
-        id
-        title
-        images
-        price
-        desc
-        detailUrl
-        imagesUrls{
-            url
-        }
-    }
-    }
-`;
+
 
 @inject('store') @observer
 export default class CreateProd extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            radioValue:"新增外链商品"
         }
     }
 
@@ -44,7 +23,7 @@ export default class CreateProd extends React.Component {
 
     //select Radio to group
     onRadioChange = (e) => {
-        // console.log('radio checked', e.target.value);
+        console.log('radio checked', e.target.value);
         this.setState({
             radioValue: e.target.value,
         });
@@ -76,10 +55,19 @@ export default class CreateProd extends React.Component {
     render() {
         return (
             <div>
-                <Radio.Group value={this.state.tagName} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
-                    <Radio.Button value="创建外链商品">出售中</Radio.Button>
-                    <Radio.Button value="创建自有商品">仓库中</Radio.Button>
+                <Radio.Group value={this.state.radioValue} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
+                    <Radio.Button value="新增外链商品">创建外链商品</Radio.Button>
+                    <Radio.Button value="新增自有商品">创建自有商品</Radio.Button>
                 </Radio.Group>
+                {
+                    this.state.radioValue ==='新增外链商品'?
+                        <SelfProdForm />
+                            :
+                    this.state.radioValue ==='新增自有商品'?
+                        <YouzanProdForm />
+                            :
+                            null
+                }
             </div>
         )
     }

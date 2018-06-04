@@ -3,6 +3,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import ProdTable from '../components/DBTable/tableComponent'
 import InStock from '../components/DBTable/inStock'
 import GroupProduct from '../components/DBTable/groupProduct'
+import CreateProd from '../components/DBTable/createProd'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
@@ -56,7 +57,7 @@ export default class Products extends React.Component {
    }
 
    onTabsChange = (key) => {
-       // console.log(key);
+       console.log(key);
         this.store.changeActiveKey(key)
         this.queryTags();
    }
@@ -73,7 +74,7 @@ export default class Products extends React.Component {
     }
     
   render () {
-      console.log('store', this.store)
+      // console.log('store', this.store)
     return (
     <Provider store={this.store}>
         <Spin spinning={this.state.loading} size="large">
@@ -104,13 +105,13 @@ export default class Products extends React.Component {
                       this.store.prodActiveKey === "3"
                       &&
                       <TabPane tab='新增商品' key="3" >
-                          1111
+                          <CreateProd />
                       </TabPane>
                   }
                   {
                       this.store.prodActiveKey === "4"
                       &&
-                      <TabPane tab='更新自有商品' key="4" >
+                      <TabPane tab='更新商品' key="4" >
                           22222
                       </TabPane>
                   }

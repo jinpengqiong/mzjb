@@ -272,7 +272,7 @@ export default class AutoReply extends React.Component {
                             <p>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
                             <div className='main' key={UUIDGen.uuid(8, 10)}>
                                 <img style={{ width:'300px', height:"200px"}}
-                                     src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://iph.href.lu/300x200?text=封面" }
+                                     src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://via.placeholder.com/350x150?text=cover" }
                                      alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
                                     { (rBodies && rBodies[0])? rBodies[0].title :"主标题"}
@@ -285,7 +285,7 @@ export default class AutoReply extends React.Component {
                                 <Row>
                                     <Col span={8}>
                                         <img style={{ width:'100px', textAlign:"left"}}
-                                             src={(rBodies && rBodies[1])?  rBodies[1].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             src={(rBodies && rBodies[1])?  rBodies[1].picurl : "http://via.placeholder.com/300x200?text=subcover"}
                                              alt="副标题"/>
                                     </Col>
                                     <Col span={15} offset={1}>
@@ -302,7 +302,7 @@ export default class AutoReply extends React.Component {
                                 <Row>
                                     <Col span={8}>
                                         <img style={{ width:'100px', textAlign:"left"}}
-                                             src={(rBodies && rBodies[2])?  rBodies[2].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             src={(rBodies && rBodies[2])?  rBodies[2].picurl : "http://via.placeholder.com/300x200?text=subcover"}
                                              alt="副标题"/>
                                     </Col>
                                     <Col span={15} offset={1}>
@@ -319,7 +319,7 @@ export default class AutoReply extends React.Component {
                                 <Row>
                                     <Col span={8}>
                                         <img style={{ width:'100px', textAlign:"left"}}
-                                             src={(rBodies && rBodies[3])?  rBodies[3].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             src={(rBodies && rBodies[3])?  rBodies[3].picurl : "http://via.placeholder.com/300x200?text=subcover"}
                                              alt="副标题"/>
                                     </Col>
                                     <Col span={15} offset={1}>
@@ -336,7 +336,7 @@ export default class AutoReply extends React.Component {
                                 <Row>
                                     <Col span={8}>
                                         <img style={{ width:'100px', textAlign:"left"}}
-                                             src={(rBodies && rBodies[4])?  rBodies[4].picurl : "http://iph.href.lu/300x200?text=副图"}
+                                             src={(rBodies && rBodies[4])?  rBodies[4].picurl : "http://via.placeholder.com/300x200?text=subcover"}
                                              alt="副标题"/>
                                     </Col>
                                     <Col span={15} offset={1}>

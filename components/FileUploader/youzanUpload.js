@@ -135,7 +135,6 @@ class YouzanUploader extends React.Component {
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);
                     message.success('上传成功！');
-                    // document.getElementById('ossfile').innerHTML = '';
                   }
               ).catch(()=>{message.error('上传失败，请联系管理员！')})
           }
