@@ -26,7 +26,7 @@ class Store {
   //prod type for prod update
   @observable prodType = null;
   //activeKey for prod
-  @observable prodActiveKey = '1';
+  @observable activeKey = '1';
 
   constructor (isServer) {
   }
@@ -104,7 +104,7 @@ class Store {
   }
 
   @action changeActiveKey = (data) => {
-      this.prodActiveKey = data;
+      this.activeKey = data;
   }
 
 }

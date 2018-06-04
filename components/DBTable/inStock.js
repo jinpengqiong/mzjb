@@ -202,7 +202,7 @@ export default class InStock extends React.Component {
                     <Divider type="vertical" />
                         <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id), record.type)}}>更新</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}}>
+                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
@@ -317,7 +317,7 @@ export default class InStock extends React.Component {
                 }
             })
         }else if(this.state.modalName ==='更新商品') {
-            this.refs.Form.validateFields((err, values) => {
+            this.refs.form1.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 } else {
@@ -333,7 +333,7 @@ export default class InStock extends React.Component {
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
-                            this.refs.Form.resetFields();
+                            this.refs.form1.resetFields();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;
@@ -356,13 +356,13 @@ export default class InStock extends React.Component {
 
 
     handleCancel = () => {
-        this.refs.Form.resetFields();
         this.setState({
             visible: false,
             modalName:null
         });
         this.props.store.getProductFieldsData(null)
         document.getElementById('ossfile').innerHTML = '';
+        this.refs.form1.resetFields();
     }
 
     callback = (key) => {
@@ -542,7 +542,7 @@ export default class InStock extends React.Component {
                             </Tabs>
                             :
                             this.state.modalName ==="更新商品"?
-                                <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
+                                <SelfProdForm ref="form1" productData={this.props.store.productFieldsData}/>
                                 :
                                 null
                     }
