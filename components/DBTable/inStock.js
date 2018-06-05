@@ -263,14 +263,14 @@ export default class InStock extends React.Component {
                         Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 // console.log('res', res);
-                                this.refs.Form.resetFields();
+                                // this.refs.Form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
                                 this.setState({
                                     visible: false
                                 });
-                                document.getElementById('ossfile').innerHTML = '';
+                                // document.getElementById('ossfile').innerHTML = '';
                                 this.props.store.getMainImage('')
                                 notification.success({
                                     message: '新增成功',
@@ -297,11 +297,11 @@ export default class InStock extends React.Component {
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 console.log('res', res);
-                                this.refs.Form1.resetFields();
+                                // this.refs.Form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
-                                document.getElementById('ossfile3').innerHTML = '';
+                                // document.getElementById('ossfile3').innerHTML = '';
                                 this.setState({
                                     visible: false
                                 });
@@ -333,7 +333,7 @@ export default class InStock extends React.Component {
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
-                            this.refs.form1.resetFields();
+                            // this.refs.form1.resetFields();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;
@@ -361,8 +361,7 @@ export default class InStock extends React.Component {
             modalName:null
         });
         this.props.store.getProductFieldsData(null)
-        document.getElementById('ossfile').innerHTML = '';
-        this.refs.form1.resetFields();
+        // document.getElementById('ossfile').innerHTML = '';
     }
 
     callback = (key) => {
@@ -529,6 +528,7 @@ export default class InStock extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    destroyOnClose={true}
                 >
                     {
                         this.state.modalName ==="新增商品"?
@@ -552,6 +552,7 @@ export default class InStock extends React.Component {
                     visible={this.state.groupModalVisible}
                     onOk={this.handleGroupModalOk}
                     onCancel={this.handleRadioCancel}
+                    destroyOnClose={true}
                 >
                     <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
                         {TagRadios}

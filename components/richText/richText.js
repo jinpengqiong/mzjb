@@ -1,30 +1,58 @@
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
+import ReactQuill from 'react-quill';
 
-
-class ControlledEditor extends Component {
-    constructor(props) {
-        super(props);
+export default class Editor extends React.Component {
+    constructor (props) {
+        super(props)
         this.state = {
-            editorState: EditorState.createEmpty(),
-        };
+            editorHtml: '',
+            modules: {
+                toolbar: [
+                    [{'header': '1'}, {'header': '2'}, {'font': []}],
+                    [{size: []}],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{'list': 'ordered'}, {'list': 'bullet'},
+                        {'indent': '-1'}, {'indent': '+1'}],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ],
+                clipboard: {
+                    // toggle to add extra line breaks when pasting HTML:
+                    matchVisual: false,
+                },
+            },
+            formats: [
+                'header', 'font', 'size',
+                'bold', 'italic', 'underline', 'strike', 'blockquote',
+                'list', 'bullet', 'indent',
+                'link', 'image', 'video'
+            ]
+            }
+        }
+
+    componentDidMount(){
+        if(typeof window !== 'undefined'){
+            require('react-quill/dist/quill.snow.css');
+        }
     }
 
-    onEditorStateChange: Function = (editorState) => {
-        this.setState({
-            editorState,
-        });
-    };
+    handleChange = (html) => {
+        this.setState({ editorHtml: html });
+    }
 
-    render() {
-        const { editorState } = this.state;
+    render (){
+        console.log(this.state.editorHtml)
         return (
-            <Editor
-                editorState={editorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={this.onEditorStateChange}
-            />
+            <div>
+                <ReactQuill
+                    theme='snow'
+                    onChange={this.handleChange}
+                    value={this.state.editorHtml}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
+                    bounds={'.app'}
+                    placeholder='在这里编辑商品详情哦。。。'
+                />
+            </div>
         )
     }
 }

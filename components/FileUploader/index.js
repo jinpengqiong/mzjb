@@ -3,6 +3,7 @@ import { message, Button } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';
+
 const createMediaID = `
   mutation ($shopId: Int!, $type: MediaType!, $url: String!) {
     createMedia(shopId:$shopId, type:$type, url: $url){

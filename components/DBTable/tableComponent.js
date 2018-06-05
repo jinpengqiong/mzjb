@@ -265,14 +265,14 @@ export default class ProdTable extends React.Component {
                         Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 // console.log('res', res);
-                                this.refs.form.resetFields();
+                                // this.refs.form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
                                 this.setState({
                                     visible: false
                                 });
-                                document.getElementById('ossfile').innerHTML = '';
+                                // document.getElementById('ossfile').innerHTML = '';
                                 this.props.store.getMainImage('')
                                 notification.success({
                                     message: '新增成功',
@@ -299,11 +299,11 @@ export default class ProdTable extends React.Component {
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 console.log('res', res);
-                                this.refs.form1.resetFields();
+                                // this.refs.form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
-                                document.getElementById('ossfile3').innerHTML = '';
+                                // document.getElementById('ossfile3').innerHTML = '';
                                 this.setState({
                                     visible: false
                                 });
@@ -335,7 +335,7 @@ export default class ProdTable extends React.Component {
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
-                            this.refs.form.resetFields();
+                            // this.refs.form.resetFields();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;
@@ -363,8 +363,8 @@ export default class ProdTable extends React.Component {
             modalName:null
         });
         this.props.store.getProductFieldsData(null)
-        document.getElementById('ossfile').innerHTML = '';
-        this.refs.form.resetFields();
+        // document.getElementById('ossfile').innerHTML = '';
+        // this.refs.form.resetFields();
     }
 
   callback = (key) => {
@@ -432,6 +432,9 @@ export default class ProdTable extends React.Component {
                             prod.type ="优选商品"
                         }
                         if(prod.type === 'link'){
+                            prod.type ="外链商品"
+                        }
+                        if(prod.type === 'youzan'){
                             prod.type ="自有商品"
                         }
                     }
@@ -451,7 +454,7 @@ export default class ProdTable extends React.Component {
                 shopId: localStorage.getItem('shopID'),
                 id: ID
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('2223', res)
                   message.success('下架成功！');
                   this.queryProdData(1);
@@ -531,6 +534,8 @@ export default class ProdTable extends React.Component {
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
+            destroyOnClose={true}
+            width = {this.props.store.TabOption === '1'? "600px" : "1200px"}
             >
                 {
                     this.state.modalName ==="新增商品"?
@@ -554,6 +559,7 @@ export default class ProdTable extends React.Component {
                 visible={this.state.groupModalVisible}
                 onOk={this.handleGroupModalOk}
                 onCancel={this.handleRadioCancel}
+                destroyOnClose={true}
             >
                 <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
                     {TagRadios}

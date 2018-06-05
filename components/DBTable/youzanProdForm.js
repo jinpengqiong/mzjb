@@ -1,9 +1,8 @@
-import { Form, Input, Button } from 'antd';
+import { Form, Input } from 'antd';
 const FormItem = Form.Item;
 import { inject, observer } from 'mobx-react'
 import YouzanUploader from '../FileUploader/youzanUpload'
-// import { Editor } from 'react-draft-wysiwyg';
-// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import RichText from '../richText/richText'
 
 
 @inject('store') @observer
@@ -85,26 +84,14 @@ class RegistrationForm extends React.Component {
                         <Input/>
                     )}
                 </FormItem>
-                {/*<FormItem*/}
-                    {/*{...formItemLayout}*/}
-                    {/*label="详情"*/}
-                {/*>*/}
-                    {/*{getFieldDecorator('desc', {*/}
-                        {/*rules: [{*/}
-                            {/*type: 'string', message: '请输入详情!',*/}
-                        {/*}, {*/}
-                            {/*required: true, message: '请输入详情!',*/}
-                        {/*}],*/}
-                    {/*})(*/}
-                        {/*<Editor*/}
-                            {/*// editorState={editorState}*/}
-                            {/*toolbarClassName="toolbarClassName"*/}
-                            {/*wrapperClassName="wrapperClassName"*/}
-                            {/*editorClassName="editorClassName"*/}
-                            {/*// onEditorStateChange={this.onEditorStateChange}*/}
-                        {/*/>*/}
-                    {/*)}*/}
-                {/*</FormItem>*/}
+                <FormItem
+                    {...formItemLayout}
+                    label="详情"
+                >
+                    {getFieldDecorator('details')(
+                        <RichText />
+                    )}
+                </FormItem>
             </Form>
         );
     }
