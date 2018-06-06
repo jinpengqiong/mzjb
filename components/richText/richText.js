@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 @inject('store') @observer
 export default class RichText extends React.Component {
     componentDidMount(){
-        if(typeof window !== "undefined"){
+        if(typeof window !== 'undefined'){
             require('braft-editor/dist/braft.css');
         }
     }
