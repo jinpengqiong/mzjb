@@ -27,6 +27,8 @@ class Store {
   @observable prodType = null;
   //activeKey for prod
   @observable activeKey = '1';
+  //rich text content
+  @observable richTextContent = null;
 
   constructor (isServer) {
   }
@@ -105,6 +107,10 @@ class Store {
 
   @action changeActiveKey = (data) => {
       this.activeKey = data;
+  }
+
+  @action getRichTextContent = (data) => {
+      this.richTextContent = data;
   }
 
 }

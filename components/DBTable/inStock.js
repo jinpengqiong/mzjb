@@ -167,15 +167,6 @@ export default class InStock extends React.Component {
                     render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
                 },
                 {
-                    // 文件上传和图片上传其实是很类似的
-                    dataIndex: 'desc',
-                    title: '简要描述',
-                    dataType: 'varchar',
-                    width: 130,
-                    validator: [{type: 'string', message: '请输入简要描述',required:true}],
-                    render: text => `${text}`,
-                },
-                {
                     dataIndex: 'type',
                     title: '商品类型',
                     dataType: 'varchar',
@@ -361,7 +352,7 @@ export default class InStock extends React.Component {
             modalName:null
         });
         this.props.store.getProductFieldsData(null)
-        // document.getElementById('ossfile').innerHTML = '';
+        this.props.store.getTabOption('1')
     }
 
     callback = (key) => {
@@ -529,6 +520,7 @@ export default class InStock extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
+                    width = {this.props.store.TabOption === '1'? "600px" : "1200px"}
                 >
                     {
                         this.state.modalName ==="新增商品"?

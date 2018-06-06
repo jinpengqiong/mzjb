@@ -167,15 +167,6 @@ export default class ProdTable extends React.Component {
                 render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
             },
             {
-                // 文件上传和图片上传其实是很类似的
-                dataIndex: 'desc',
-                title: '简要描述',
-                dataType: 'varchar',
-                width: 130,
-                validator: [{type: 'string', message: '请输入简要描述',required:true}],
-                render: text => `${text}`,
-            },
-            {
                 dataIndex: 'type',
                 title: '商品类型',
                 dataType: 'varchar',
@@ -214,9 +205,9 @@ export default class ProdTable extends React.Component {
     }
   }
 
-  componentDidMount(){
-    this.queryProdData(1);
-  }
+    componentDidMount(){
+        this.queryProdData(1);
+    }
 
   queryProdData= (curPage) => {
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -295,6 +286,9 @@ export default class ProdTable extends React.Component {
                         values.mainImage = this.props.store.mainImage;
                         values.price = parseInt(parseFloat(values.price)*100);
                         values.isDisplay = true;
+                        if(this.props.store.richTextContent){
+                            values.desc = this.props.store.richTextContent;
+                        }
                         Request.GraphQlRequest(addProduct,
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
@@ -363,8 +357,8 @@ export default class ProdTable extends React.Component {
             modalName:null
         });
         this.props.store.getProductFieldsData(null)
-        // document.getElementById('ossfile').innerHTML = '';
-        // this.refs.form.resetFields();
+        this.props.store.getTabOption('1')
+
     }
 
   callback = (key) => {

@@ -23,7 +23,7 @@ module.exports = {
             ,
             {
                 test: /\.css$/,
-                loader: `babel-loader!raw-loader`
+                loader: `style-loader!css-loader`
             }
             ,
             {

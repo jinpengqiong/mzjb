@@ -1,58 +1,37 @@
-import ReactQuill from 'react-quill';
+import React from 'react'
+import BraftEditor from 'braft-editor';
+import { inject, observer } from 'mobx-react'
 
-export default class Editor extends React.Component {
-    constructor (props) {
-        super(props)
-        this.state = {
-            editorHtml: '',
-            modules: {
-                toolbar: [
-                    [{'header': '1'}, {'header': '2'}, {'font': []}],
-                    [{size: []}],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{'list': 'ordered'}, {'list': 'bullet'},
-                        {'indent': '-1'}, {'indent': '+1'}],
-                    ['link', 'image', 'video'],
-                    ['clean']
-                ],
-                clipboard: {
-                    // toggle to add extra line breaks when pasting HTML:
-                    matchVisual: false,
-                },
-            },
-            formats: [
-                'header', 'font', 'size',
-                'bold', 'italic', 'underline', 'strike', 'blockquote',
-                'list', 'bullet', 'indent',
-                'link', 'image', 'video'
-            ]
-            }
-        }
 
+@inject('store') @observer
+export default class RichText extends React.Component {
     componentDidMount(){
-        if(typeof window !== 'undefined'){
-            require('react-quill/dist/quill.snow.css');
+        if(typeof window !== "undefined"){
+            require('braft-editor/dist/braft.css');
         }
     }
+    render () {
+        const editorProps = {
+            height: 260,
+            contentFormat: 'html',
+            initialContent: '<p>Hello World!</p>',
+            onChange: this.handleChange,
+            media:[
 
-    handleChange = (html) => {
-        this.setState({ editorHtml: html });
-    }
+            ]
+        }
 
-    render (){
-        console.log(this.state.editorHtml)
         return (
-            <div>
-                <ReactQuill
-                    theme='snow'
-                    onChange={this.handleChange}
-                    value={this.state.editorHtml}
-                    modules={this.state.modules}
-                    formats={this.state.formats}
-                    bounds={'.app'}
-                    placeholder='在这里编辑商品详情哦。。。'
-                />
+            <div className="demo">
+                <BraftEditor {...editorProps}/>
             </div>
         )
+
     }
+
+    handleChange = (content) => {
+        console.log(content);
+        this.props.store.getRichTextContent(content)
+    }
+
 }

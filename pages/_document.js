@@ -20,7 +20,6 @@ export default class MyDocument extends Document {
           <meta httpEquiv="Cache-Control" content="no-siteapp" />
           <meta name="viewport" content="initial-scale=1.0, width=device-width" key="viewport" />
           <script src="http://image.mzliaoba.com/lib/plupload.full.min.new.js" />
-          <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css" />
           <link rel="icon" href="../static/LOGO.png" />
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
           <title>拇指聚宝</title>
