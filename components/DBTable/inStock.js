@@ -21,6 +21,7 @@ const queryProducts = `
             desc
             detailUrl
             type
+            itemId
           }
         }
       }
@@ -315,7 +316,7 @@ export default class InStock extends React.Component {
                 if (err) {
                     message.error(err);
                 } else {
-                    values.mainImage = this.props.store.productFieldsData.mainImage;
+                    values.mainImage = this.props.store.mainImage? this.props.store.mainImage : this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
                     if(this.props.store.richTextContent){
                         values.desc = this.props.store.richTextContent;
@@ -325,7 +326,8 @@ export default class InStock extends React.Component {
                             baseinfo: values,
                             shopId: localStorage.getItem('shopID'),
                             id: this.state.productID,
-                            type:this.props.store.prodType
+                            type:this.props.store.prodType,
+                            youzan:{itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null}
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
@@ -526,7 +528,7 @@ export default class InStock extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
-                    width = {this.props.store.TabOption === '1'? "600px" : "1200px"}
+                    width = "1000px"
                 >
                     {
                         this.state.modalName ==="新增商品"?
