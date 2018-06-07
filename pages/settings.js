@@ -48,6 +48,9 @@ export default class Settings extends React.Component {
                             <TabPane tab='自动回复' key="2" >
                                 <AutoReply />
                             </TabPane>
+                            <TabPane tab='商品页模版' key="3" >
+                                111
+                            </TabPane>
                         </Tabs>
                     </MyLayout>
                 </Spin>

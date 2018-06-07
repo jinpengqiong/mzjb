@@ -2,8 +2,8 @@ import { Form, Input } from 'antd';
 const FormItem = Form.Item;
 import { inject, observer } from 'mobx-react'
 import YouzanUploader from '../FileUploader/youzanUpload'
-import RichText from '../richText/richText'
-
+import dynamic from 'next/dynamic'
+const RichText = dynamic(import('../richText/richText'))
 
 @inject('store') @observer
 class RegistrationForm extends React.Component {
@@ -88,9 +88,11 @@ class RegistrationForm extends React.Component {
                     {...formItemLayout}
                     label="详情"
                 >
-                    {getFieldDecorator('details')(
-                        <RichText />
-                    )}
+                        {
+                        (typeof window !== 'undefined')
+                            &&
+                            <RichText />
+                        }
                 </FormItem>
             </Form>
         );

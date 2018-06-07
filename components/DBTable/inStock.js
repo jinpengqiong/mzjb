@@ -280,15 +280,17 @@ export default class InStock extends React.Component {
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                     }else{
-                        console.log('values', values);
                         values.mainImage = this.props.store.mainImage;
                         values.price = parseInt(parseFloat(values.price)*100);
                         values.isDisplay = false;
+                        if(this.props.store.richTextContent){
+                            values.desc = this.props.store.richTextContent;
+                        }
                         Request.GraphQlRequest(addProduct,
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 console.log('res', res);
-                                // this.refs.Form1.resetFields();
+                                // this.refs.form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
@@ -298,6 +300,7 @@ export default class InStock extends React.Component {
                                 });
                                 this.props.store.getMainImage('')
                                 this.props.store.getimageId('')
+                                this.props.store.getRichTextContent(null)
                                 notification.success({
                                     message: '新增成功',
                                     duration: 3,

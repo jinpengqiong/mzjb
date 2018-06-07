@@ -282,7 +282,7 @@ export default class ProdTable extends React.Component {
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                     }else{
-                        console.log('values', values);
+                        // console.log('values', values);
                         values.mainImage = this.props.store.mainImage;
                         values.price = parseInt(parseFloat(values.price)*100);
                         values.isDisplay = true;
@@ -303,6 +303,7 @@ export default class ProdTable extends React.Component {
                                 });
                                 this.props.store.getMainImage('')
                                 this.props.store.getimageId('')
+                                this.props.store.getRichTextContent(null)
                                 notification.success({
                                     message: '新增成功',
                                     duration: 3,
@@ -529,24 +530,24 @@ export default class ProdTable extends React.Component {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             destroyOnClose={true}
-            width = {this.props.store.TabOption === '1'? "600px" : "1200px"}
+            width = {this.props.store.TabOption === '1'? "600px" : "1000px"}
             >
-                {
-                    this.state.modalName ==="新增商品"?
-                        <Tabs defaultActiveKey="1" onChange={this.callback}>
-                            <TabPane tab="外链商品" key="1">
-                                <SelfProdForm ref="form"/>
-                            </TabPane>
-                            <TabPane tab="自有商品" key="2">
-                                <YouzanProdForm ref="form1"/>
-                            </TabPane>
-                        </Tabs>
-                        :
-                    this.state.modalName ==="更新商品"?
-                        <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
-                        :
-                        null
-                }
+            {
+                this.state.modalName ==="新增商品"?
+                    <Tabs defaultActiveKey="1" onChange={this.callback}>
+                        <TabPane tab="外链商品" key="1">
+                            <SelfProdForm ref="form"/>
+                        </TabPane>
+                        <TabPane tab="自有商品" key="2">
+                            <YouzanProdForm ref="form1"/>
+                        </TabPane>
+                    </Tabs>
+                    :
+                this.state.modalName ==="更新商品"?
+                    <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
+                    :
+                    null
+            }
             </Modal>
             <Modal
                 title='加入分组'

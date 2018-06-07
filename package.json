@@ -32,6 +32,7 @@
     "react": "^16.2.0",
     "react-color": "^2.14.1",
     "react-dom": "^16.2.0",
+    "react-draft-wysiwyg": "^1.12.13",
     "react-icons": "^2.2.7",
     "style-loader": "^0.21.0",
     "styled-jsx": "^2.2.4"

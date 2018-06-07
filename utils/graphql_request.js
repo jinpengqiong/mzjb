@@ -11,5 +11,14 @@ module.exports = {
         });
         return client.request(action, variables)
 
+    },
+
+    get_suffix(filename) {
+        const pos = filename.lastIndexOf('.');
+        let suffix = '';
+        if (pos !== -1) {
+            suffix = filename.substring(pos)
+        }
+        return suffix;
     }
 };
