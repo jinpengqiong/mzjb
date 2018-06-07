@@ -44,7 +44,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
         {
-          !this.props.productData
+          this.props.updateState !== '更新商品'
           &&
           <FormItem
             {...formItemLayout}
@@ -74,8 +74,22 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
+          <FormItem
+              {...formItemLayout}
+              label="简要描述"
+          >
+              {getFieldDecorator('desc', {
+                  rules: [{
+                      type: 'string', message: '请输入简要描述!',
+                  }, {
+                      required: true, message: '请输入简要描述!',
+                  }],
+              })(
+                  <Input/>
+              )}
+          </FormItem>
           {
-              !this.props.productData
+              this.props.updateState !== '更新商品'
               &&
               <FormItem
                   {...formItemLayout}
@@ -93,7 +107,7 @@ class RegistrationForm extends React.Component {
               </FormItem>
           }
         {
-          !this.props.productData
+        this.props.updateState !== '更新商品'
           &&
           <FormItem
           {...formItemLayout}

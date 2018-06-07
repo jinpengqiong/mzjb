@@ -10,6 +10,12 @@ class RegistrationForm extends React.Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount(){
+        // console.log('www',this.props.productData.desc)
+        if(this.props.productData){
+            this.props.store.getRichTextContent(this.props.productData.desc)
+        }
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -70,34 +76,54 @@ class RegistrationForm extends React.Component {
                         <Input/>
                     )}
                 </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="简要描述"
-                >
-                    {getFieldDecorator('desc', {
-                        rules: [{
-                            type: 'string', message: '请输入简要描述!',
-                        }, {
-                            required: true, message: '请输入简要描述!',
-                        }],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
+                {
+                    this.props.updateState !== '更新商品'
+                    &&
+                    <FormItem
+                        {...formItemLayout}
+                        label="简要描述"
+                    >
+                        {getFieldDecorator('desc', {
+                            rules: [{
+                                type: 'string', message: '请输入简要描述!',
+                            }, {
+                                required: true, message: '请输入简要描述!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                }
                 <FormItem
                     {...formItemLayout}
                     label="详情"
                 >
-                        {
-                        (typeof window !== 'undefined')
-                            &&
-                            <RichText />
-                        }
+                    {getFieldDecorator('detail_Info')(
+                        <RichText />
+                    )}
                 </FormItem>
             </Form>
         );
     }
 }
 
-const YouzanProdForm = Form.create()(RegistrationForm);
+const YouzanProdForm = Form.create(
+    {
+        mapPropsToFields(props) {
+            console.log('props', props);
+            if (props.productData) {
+                return {
+                    title: Form.createFormField({
+                        ...props.productData.title,
+                        value: props.productData.title,
+                    }),
+                    price: Form.createFormField({
+                        ...props.productData.price,
+                        value: (parseInt(props.productData.price)/100).toFixed(2),
+                    })
+                };
+            }
+        }
+    }
+)(RegistrationForm);
 export default YouzanProdForm;

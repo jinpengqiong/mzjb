@@ -62,7 +62,7 @@ export default class RichText extends React.Component {
         const successFn = (response) => {
             // 假设服务端直接返回文件上传后的地址
             // 上传成功后调用param.success并传入上传后的文件地址
-            console.log('res',response)
+            // console.log('res',response)
             param.success({
                 url: serverURL + '/'+key,
             })
@@ -76,7 +76,7 @@ export default class RichText extends React.Component {
         const errorFn = (response) => {
             // 上传发生错误时调用param.error
             param.error({
-                msg: 'unable to upload.'
+                msg: '上传出错，请联系管理员！'
             })
         }
 
@@ -94,7 +94,7 @@ export default class RichText extends React.Component {
         const editorProps = {
             height: 180,
             contentFormat: 'html',
-            initialContent: '',
+            initialContent: this.props.store.richTextContent,
             onChange: this.handleChange,
             placeholder: '请输入商品详情...',
             media:
@@ -102,7 +102,7 @@ export default class RichText extends React.Component {
                     allowPasteImage: true, // 是否允许直接粘贴剪贴板图片（例如QQ截图等）到编辑器
                     image: true, // 开启图片插入功能
                     video: false, // 开启视频插入功能
-                    audio: true, // 开启音频插入功能
+                    audio: false, // 开启音频插入功能
                     validateFn: this.validateFn, // 指定本地校验函数，说明见下文
                     uploadFn: this.uploadFn, // 指定上传函数，说明见下文
                     removeConfirmFn: null, // 指定删除前的确认函数，说明见下文

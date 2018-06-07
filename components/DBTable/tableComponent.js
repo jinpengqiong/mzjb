@@ -21,6 +21,7 @@ const queryProducts = `
             desc
             detailUrl
             type
+            itemId
           }
         }
       }
@@ -282,7 +283,7 @@ export default class ProdTable extends React.Component {
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                     }else{
-                        // console.log('values', values);
+                        console.log('values', values);
                         values.mainImage = this.props.store.mainImage;
                         values.price = parseInt(parseFloat(values.price)*100);
                         values.isDisplay = true;
@@ -318,15 +319,19 @@ export default class ProdTable extends React.Component {
                 if (err) {
                     message.error(err);
                 } else {
-                    values.mainImage = this.props.store.productFieldsData.mainImage;
+                    values.mainImage = this.props.store.mainImage? this.props.store.mainImage : this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
-                    // console.log('values', values);
+                    if(this.props.store.richTextContent){
+                        values.desc = this.props.store.richTextContent;
+                    }
+                    console.log('values', values);
                     Request.GraphQlRequest(UpdateProduct,
                         {
                             baseinfo: values,
                             shopId: localStorage.getItem('shopID'),
                             id: this.state.productID,
-                            type:this.props.store.prodType
+                            type:this.props.store.prodType,
+                            youzan:{itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null}
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
@@ -340,6 +345,7 @@ export default class ProdTable extends React.Component {
                                 modalName:null
                             });
                             this.props.store.getProductFieldsData(null);
+                            this.props.store.getMainImage('')
                             notification.success({
                                 message: '更新成功',
                                 duration: 3,
@@ -359,6 +365,7 @@ export default class ProdTable extends React.Component {
         });
         this.props.store.getProductFieldsData(null)
         this.props.store.getTabOption('1')
+        this.props.store.getRichTextContent(null)
 
     }
 
@@ -530,7 +537,7 @@ export default class ProdTable extends React.Component {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             destroyOnClose={true}
-            width = {this.props.store.TabOption === '1'? "600px" : "1000px"}
+            width = "1000px"
             >
             {
                 this.state.modalName ==="新增商品"?
@@ -543,10 +550,10 @@ export default class ProdTable extends React.Component {
                         </TabPane>
                     </Tabs>
                     :
-                this.state.modalName ==="更新商品"?
-                    <SelfProdForm ref="form" productData={this.props.store.productFieldsData}/>
+                this.state.modalName ==="更新商品" && this.props.store.prodType !=='YOUZAN' ?
+                    <SelfProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
                     :
-                    null
+                    <YouzanProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
             }
             </Modal>
             <Modal
@@ -570,7 +577,7 @@ export default class ProdTable extends React.Component {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')
             &&
             <Pagination 
-            defaultCurrent={1} 
+            defaultCurrent={1}
             onChange={this.onPageChange}
             total={this.state.data? this.state.totalEntries : 1} 
             style={{ marginLeft: "80%", marginTop: "10px"}}/>

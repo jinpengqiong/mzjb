@@ -240,7 +240,7 @@ export default class InStock extends React.Component {
 
     handleOk = () => {
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
-            this.refs.Form.validateFields((err, values) => {
+            this.refs.form.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 }else{
@@ -273,7 +273,7 @@ export default class InStock extends React.Component {
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
-            this.refs.Form1.validateFields((err, values) => {
+            this.refs.form1.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 }else{
@@ -317,7 +317,9 @@ export default class InStock extends React.Component {
                 } else {
                     values.mainImage = this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
-                    // console.log('values', values);
+                    if(this.props.store.richTextContent){
+                        values.desc = this.props.store.richTextContent;
+                    }
                     Request.GraphQlRequest(UpdateProduct,
                         {
                             baseinfo: values,
@@ -356,6 +358,7 @@ export default class InStock extends React.Component {
         });
         this.props.store.getProductFieldsData(null)
         this.props.store.getTabOption('1')
+        this.props.store.getRichTextContent(null)
     }
 
     callback = (key) => {
@@ -529,17 +532,17 @@ export default class InStock extends React.Component {
                         this.state.modalName ==="新增商品"?
                             <Tabs defaultActiveKey="1" onChange={this.callback}>
                                 <TabPane tab="外链商品" key="1">
-                                    <SelfProdForm ref="Form"/>
+                                    <SelfProdForm ref="form1"/>
                                 </TabPane>
                                 <TabPane tab="自有商品" key="2">
-                                    <YouzanProdForm ref="Form1"/>
+                                    <YouzanProdForm ref="form1"/>
                                 </TabPane>
                             </Tabs>
                             :
-                            this.state.modalName ==="更新商品"?
-                                <SelfProdForm ref="form1" productData={this.props.store.productFieldsData}/>
+                            this.state.modalName ==="更新商品" && this.props.store.prodType !=='YOUZAN' ?
+                                <SelfProdForm ref="form1" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
                                 :
-                                null
+                                <YouzanProdForm ref="form1" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
                     }
                 </Modal>
                 <Modal
