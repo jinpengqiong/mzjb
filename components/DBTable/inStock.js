@@ -225,7 +225,6 @@ export default class InStock extends React.Component {
                         }
                     }
                 )
-                console.log('111', res)
                 this.props.store.getProductData(res.shopProducts.entries);
                 this.setState({
                     data: res.shopProducts.entries,
@@ -245,7 +244,6 @@ export default class InStock extends React.Component {
                 if (err) {
                     message.error(err);
                 }else{
-                    // console.log('1112', values);
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                     }else{
@@ -255,14 +253,13 @@ export default class InStock extends React.Component {
                         Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
                                 // console.log('res', res);
-                                // this.refs.Form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
                                 this.setState({
                                     visible: false
                                 });
-                                // document.getElementById('ossfile').innerHTML = '';
+                                this.props.store.getRichTextContent(null)
                                 this.props.store.getMainImage('')
                                 notification.success({
                                     message: '新增成功',
@@ -290,7 +287,7 @@ export default class InStock extends React.Component {
                         Request.GraphQlRequest(addProduct,
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
-                                console.log('res', res);
+                                // console.log('res', res);
                                 // this.refs.form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
@@ -369,7 +366,7 @@ export default class InStock extends React.Component {
 
     //删除
     confirm(id) {
-        console.log('id', id)
+        // console.log('id', id)
         Request.GraphQlRequest(deleteProduct,
             { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) =>{
@@ -404,7 +401,7 @@ export default class InStock extends React.Component {
             this.props.store.getProdType('LINK')
         }
         this.props.store.getProductFieldsData(fieldData[0])
-        console.log('fieldData',fieldData)
+        // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
@@ -458,7 +455,7 @@ export default class InStock extends React.Component {
 
     //add to group
     changeProductTag = (ID) => {
-        console.log('ID',ID)
+        // console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true

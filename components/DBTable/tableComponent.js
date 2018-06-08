@@ -196,7 +196,7 @@ export default class ProdTable extends React.Component {
                             ()=>{ this.updateProduct(parseInt(record.id), record.type) }
                         }>更新</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ console.log('record', record);this.confirm(parseInt(record.id))}}>
+                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
                     </Popconfirm>
                     </span>
@@ -227,7 +227,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            console.log('111', res)
+            // console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -266,6 +266,7 @@ export default class ProdTable extends React.Component {
                                 });
                                 // document.getElementById('ossfile').innerHTML = '';
                                 this.props.store.getMainImage('')
+                                this.props.store.getRichTextContent(null)
                                 notification.success({
                                     message: '新增成功',
                                     duration: 3,
@@ -283,7 +284,7 @@ export default class ProdTable extends React.Component {
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                     }else{
-                        console.log('values', values);
+                        // console.log('values', values);
                         values.mainImage = this.props.store.mainImage;
                         values.price = parseInt(parseFloat(values.price)*100);
                         values.isDisplay = true;
@@ -293,7 +294,7 @@ export default class ProdTable extends React.Component {
                         Request.GraphQlRequest(addProduct,
                             { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
-                                console.log('res', res);
+                                // console.log('res', res);
                                 // this.refs.form1.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
@@ -324,7 +325,7 @@ export default class ProdTable extends React.Component {
                     if(this.props.store.richTextContent){
                         values.desc = this.props.store.richTextContent;
                     }
-                    console.log('values', values);
+                    // console.log('values', values);
                     Request.GraphQlRequest(UpdateProduct,
                         {
                             baseinfo: values,
@@ -375,7 +376,7 @@ export default class ProdTable extends React.Component {
 
   //删除
   confirm(id) {
-      console.log('id', id)
+      // console.log('id', id)
       Request.GraphQlRequest(deleteProduct,
           { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) =>{
@@ -410,7 +411,7 @@ export default class ProdTable extends React.Component {
             this.props.store.getProdType('LINK')
         }
         this.props.store.getProductFieldsData(fieldData[0])
-        console.log('fieldData',fieldData)
+        // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
@@ -467,7 +468,7 @@ export default class ProdTable extends React.Component {
 
     //add to group
     changeProductTag = (ID) => {
-      console.log('ID',ID)
+      // console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true

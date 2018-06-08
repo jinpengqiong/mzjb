@@ -161,11 +161,12 @@ export default class ChooseProducts extends React.Component {
                 )
             }
         )
+        console.log('2222', this.state.data)
         return (
             <div>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                     {
-                        this.state.data?
+                        (this.state.data && JSON.stringify(this.state.data.items) !== '[]')?
                             youzanPROD
                             :
                             '暂无'

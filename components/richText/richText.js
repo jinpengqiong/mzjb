@@ -2,6 +2,7 @@ import React from 'react'
 import BraftEditor from 'braft-editor';
 import { inject, observer } from 'mobx-react'
 import Request from "../../utils/graphql_request";
+import 'braft-editor/dist/braft.css'
 
 const queryossPolicy = `
       query ($label: String, $type: String!){
@@ -25,7 +26,6 @@ export default class RichText extends React.Component {
         }
     }
     componentDidMount(){
-        require('braft-editor/dist/braft.css');
         this.getOSSPolicy()
     }
 
@@ -50,44 +50,40 @@ export default class RichText extends React.Component {
     }
 
     uploadFn = (param) => {
-        const serverURL = this.state.data.host
-        const xhr = new XMLHttpRequest
-        const fd = new FormData()
-        const key = this.state.data.dir + '/' + param.file.name
-        fd.append('key', key )
-        fd.append('OSSAccessKeyId', this.state.data.accessid)
-        fd.append('policy', this.state.data.policy)
-        fd.append('signature', this.state.data.signature)
-        fd.append('success_action_status', '200')
-        const successFn = (response) => {
-            // 假设服务端直接返回文件上传后的地址
-            // 上传成功后调用param.success并传入上传后的文件地址
-            // console.log('res',response)
-            param.success({
-                url: serverURL + '/'+key,
-            })
-        }
+            const serverURL = this.state.data.host;
+            const xhr = new XMLHttpRequest;
+            const fd = new FormData();
+            const key = this.state.data.dir + '/' + param.file.name;
+            fd.append('key', key );
+            fd.append('OSSAccessKeyId', this.state.data.accessid);
+            fd.append('policy', this.state.data.policy);
+            fd.append('signature', this.state.data.signature);
+            fd.append('success_action_status', '200');
+            const successFn = (response) => {
+                param.success({
+                    url: serverURL + '/' + key,
+                })
+            }
 
-        const progressFn = (event) => {
-            // 上传进度发生变化时调用param.progress
-            param.progress(event.loaded / event.total * 100)
-        }
+            const progressFn = (event) => {
+                // 上传进度发生变化时调用param.progress
+                param.progress(event.loaded / event.total * 100)
+            }
 
-        const errorFn = (response) => {
-            // 上传发生错误时调用param.error
-            param.error({
-                msg: '上传出错，请联系管理员！'
-            })
-        }
+            const errorFn = (response) => {
+                // 上传发生错误时调用param.error
+                param.error({
+                    msg: '上传出错，请联系管理员！'
+                })
+            }
 
-        xhr.upload.addEventListener("progress", progressFn, false)
-        xhr.addEventListener("load", successFn, false)
-        xhr.addEventListener("error", errorFn, false)
-        xhr.addEventListener("abort", errorFn, false)
-        fd.append('file', param.file)
-        xhr.open('POST', serverURL, true)
-        xhr.send(fd)
-
+            xhr.upload.addEventListener("progress", progressFn, false)
+            xhr.addEventListener("load", successFn, false)
+            xhr.addEventListener("error", errorFn, false)
+            xhr.addEventListener("abort", errorFn, false)
+            fd.append('file', param.file)
+            xhr.open('POST', serverURL, true)
+            xhr.send(fd)
     }
 
     render () {
@@ -121,7 +117,7 @@ export default class RichText extends React.Component {
     }
 
     handleChange = (content) => {
-        console.log(content);
+        // console.log(content);
         this.props.store.getRichTextContent(content)
     }
 

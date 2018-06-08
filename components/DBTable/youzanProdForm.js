@@ -110,7 +110,7 @@ class RegistrationForm extends React.Component {
 const YouzanProdForm = Form.create(
     {
         mapPropsToFields(props) {
-            console.log('props', props);
+            // console.log('props', props);
             if (props.productData) {
                 return {
                     title: Form.createFormField({
