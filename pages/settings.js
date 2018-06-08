@@ -2,6 +2,8 @@ import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
+import dynamic from 'next/dynamic'
+const ProdMoudule = dynamic(import('../components/settings/prodMouduleSet'))
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin, Tabs } from 'antd';
@@ -49,7 +51,7 @@ export default class Settings extends React.Component {
                                 <AutoReply />
                             </TabPane>
                             <TabPane tab='商品页模版' key="3" >
-                                111
+                                <ProdMoudule />
                             </TabPane>
                         </Tabs>
                     </MyLayout>

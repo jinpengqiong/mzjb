@@ -5,13 +5,12 @@ import whitespaceConf from 'zent/lib/design/components/whitespace';
 import lineConf from 'zent/lib/design/components/line';
 import richtextConf from 'zent/lib/design/components/richtext';
 import imageAdConf from 'zent/lib/design/components/image-ad';
-
-// 我们仅仅提供了少数几个 Design 组件作为示例，更多业务组件需要根据你的业务需求自己实现。
-// If you use these two default design components, you have to
-// manually include the styles in your own code:
-// import 'zent/css/design-config.css';
-// import 'zent/css/design-whitespace.css';
-// import 'zent/css/design-line.css';
+import 'zent/css/index.css';
+import 'zent/css/design-config.css';
+import 'zent/css/design-whitespace.css';
+import 'zent/css/design-line.css';
+import 'zent/css/design-image-ad.css';
+import 'zent/css/design-richtext.css';
 
 const { Row, Col } = Layout;
 
@@ -43,10 +42,10 @@ const components = [
 const groupedComponents = [
     Object.assign({}, configConf, {
         // 是否可以拖拽
-        dragable: false,
+        dragable: true,
 
         // 是否出现在底部的添加组件区域
-        appendable: false,
+        appendable: true,
 
         // 是否可以编辑，UMP里面有些地方config是不能编辑的
         // editable: true,
@@ -65,7 +64,7 @@ const groupedComponents = [
     Object.assign({ limit: 2 }, lineConf)
 ];
 
-class Simple extends Component {
+export default class ProdMoudule extends React.Component {
     state = {
         grouped: true,
         value: [
