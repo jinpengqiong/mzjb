@@ -324,7 +324,10 @@ export default class InStock extends React.Component {
                             shopId: localStorage.getItem('shopID'),
                             id: this.state.productID,
                             type:this.props.store.prodType,
-                            youzan:{itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null}
+                            youzan:{
+                                itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
+                                imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                            }
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);

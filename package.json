@@ -35,7 +35,8 @@
     "react-draft-wysiwyg": "^1.12.13",
     "react-icons": "^2.2.7",
     "style-loader": "^0.21.0",
-    "styled-jsx": "^2.2.4"
+    "styled-jsx": "^2.2.4",
+    "zent": "^5.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^8.5.1",

@@ -332,7 +332,10 @@ export default class ProdTable extends React.Component {
                             shopId: localStorage.getItem('shopID'),
                             id: this.state.productID,
                             type:this.props.store.prodType,
-                            youzan:{itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null}
+                            youzan:{
+                                itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
+                                imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                            }
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
                             // console.log('res', res);
@@ -346,6 +349,7 @@ export default class ProdTable extends React.Component {
                                 modalName:null
                             });
                             this.props.store.getProductFieldsData(null);
+                            this.props.store.getimageId('');
                             this.props.store.getMainImage('')
                             notification.success({
                                 message: '更新成功',

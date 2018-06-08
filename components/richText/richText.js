@@ -92,7 +92,7 @@ export default class RichText extends React.Component {
             contentFormat: 'html',
             initialContent: this.props.store.richTextContent,
             onChange: this.handleChange,
-            placeholder: '请输入商品详情...',
+            placeholder: '请在此编辑...',
             media:
                 {
                     allowPasteImage: true, // 是否允许直接粘贴剪贴板图片（例如QQ截图等）到编辑器
