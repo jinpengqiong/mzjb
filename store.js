@@ -29,6 +29,8 @@ class Store {
   @observable activeKey = '1';
   //rich text content
   @observable richTextContent = null;
+  //mouduleSetting isShown
+  @observable isShown = false;
 
   constructor (isServer) {
   }
@@ -111,6 +113,10 @@ class Store {
 
   @action getRichTextContent = (data) => {
       this.richTextContent = data;
+  }
+
+  @action changeSettingDisplay = () => {
+      this.isShown = !this.isShown;
   }
 
 }

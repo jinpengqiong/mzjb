@@ -36,6 +36,7 @@
     "react-icons": "^2.2.7",
     "style-loader": "^0.21.0",
     "styled-jsx": "^2.2.4",
+    "zan-design": "^4.10.2",
     "zent": "^5.1.1"
   },
   "devDependencies": {

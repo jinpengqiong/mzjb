@@ -1,6 +1,5 @@
 import { Col, Row, Button, Modal, message, Icon, Input, Pagination, Popconfirm,Tooltip } from 'antd';
 import Request from '../../utils/graphql_request';
-import {MegadraftEditor, editorStateFromRaw} from "megadraft";
 import SelfReplyForm from './setAutoreplyForm'
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator'

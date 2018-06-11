@@ -3,7 +3,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
 import dynamic from 'next/dynamic'
-const ProdMoudule = dynamic(import('../components/settings/prodMouduleSet'))
+const ProdMoudule = dynamic(import('../components/settings/prodMoudule'))
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin, Tabs } from 'antd';

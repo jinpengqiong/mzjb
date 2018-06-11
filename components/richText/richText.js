@@ -59,7 +59,7 @@ export default class RichText extends React.Component {
             fd.append('policy', this.state.data.policy);
             fd.append('signature', this.state.data.signature);
             fd.append('success_action_status', '200');
-            const successFn = (response) => {
+            const successFn = response => {
                 param.success({
                     url: serverURL + '/' + key,
                 })

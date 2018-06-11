@@ -1,20 +1,44 @@
 import { Design, Button, Layout, Notify } from 'zent';
 import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
-import whitespaceConf from 'zent/lib/design/components/whitespace';
-import lineConf from 'zent/lib/design/components/line';
-import richtextConf from 'zent/lib/design/components/richtext';
-import imageAdConf from 'zent/lib/design/components/image-ad';
+
+import whitespaceConf from 'zan-design/lib/components/whitespace';
+// import noticeConf from 'zan-design/lib/components/notice';
+// import storeConf from 'zan-design/lib/components/store';
+import lineConf from 'zan-design/lib/components/line';
+import imageAdConf from 'zan-design/lib/components/image-ad';
+// import linkConf from 'zan-design/lib/components/link';
+import goodsConf from 'zan-design/lib/components/goods';
+// import goodsListConf from 'zan-design/lib/components/goods-list';
+// import tagListConf from 'zan-design/lib/components/tag-list';
+// import titleConf from 'zan-design/lib/components/title';
+// import showcaseConf from 'zan-design/lib/components/showcase';
+// import textNavConf from 'zan-design/lib/components/text-nav';
+// import cubeConf from 'zan-design/lib/components/cube';
+// import navConf from 'zan-design/lib/components/nav';
+// import richtextConf from 'zan-design/lib/components/richtext';
+
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
-import 'zent/css/design-whitespace.css';
-import 'zent/css/design-line.css';
-import 'zent/css/design-image-ad.css';
-import 'zent/css/design-richtext.css';
-
+import 'zan-design/css/index.css';
+import 'zan-design/css/whitespace/index.css';
+import 'zan-design/css/notice/index.css';
+import 'zan-design/css/store/index.css';
+import 'zan-design/css/line/index.css';
+import 'zan-design/css/image-ad/index.css';
+import 'zan-design/css/link/index.css';
+import 'zan-design/css/goods/index.css';
+// import 'zan-design/css/goods-list/index.css';
+// import 'zan-design/css/tag-list/index.css';
+// import 'zan-design/css/text-nav/index.css';
+// import 'zan-design/css/showcase/index.css';
+// import 'zan-design/css/cube/index.css';
+// import 'zan-design/css/nav/index.css';
+import 'zan-design/css/richtext/index.css';
+import 'zan-design/css/title/index.css';
 const { Row, Col } = Layout;
 
-const components = [
+const groupedComponents = [
     Object.assign({}, configConf, {
         // 是否可以拖拽
         dragable: false,
@@ -30,43 +54,17 @@ const components = [
         highlightWhenSelect: false
     }),
 
-    richtextConf,
-
+    Design.group('基础组件'),
     imageAdConf,
-
-    Object.assign({ limit: 1 }, whitespaceConf),
-
-    Object.assign({ limit: 2 }, lineConf)
-];
-
-const groupedComponents = [
-    Object.assign({}, configConf, {
-        // 是否可以拖拽
-        dragable: true,
-
-        // 是否出现在底部的添加组件区域
-        appendable: true,
-
-        // 是否可以编辑，UMP里面有些地方config是不能编辑的
-        // editable: true,
-
-        configurable: false,
-
-        highlightWhenSelect: false
-    }),
-
-    Design.group('基础'),
-    richtextConf,
-    imageAdConf,
+    goodsConf,
 
     Design.group('其他'),
     Object.assign({ limit: 1 }, whitespaceConf),
     Object.assign({ limit: 2 }, lineConf)
 ];
 
-export default class ProdMoudule extends React.Component {
+export default class ProdMouduleSet extends React.Component {
     state = {
-        grouped: true,
         value: [
             {
                 type: configConf.type,
@@ -79,36 +77,26 @@ export default class ProdMoudule extends React.Component {
     };
 
     onChange = newValue => {
+        console.log('newValue', newValue)
         this.setState({
             value: newValue
         });
     };
 
     onSettingsChange = newSettings => {
+        console.log('setting', newSettings)
         this.setState({
             settings: newSettings
         });
     };
 
-    switchMode = () => {
-        const { grouped } = this.state;
-
-        this.setState({
-            grouped: !grouped
-        });
-    };
-
     render() {
-        const { grouped } = this.state;
-
         return (
             <div>
                 <Design
                     ref={this.saveDesign}
-                    cache
-                    cacheId="zent-design-test"
                     confirmUnsavedLeave={false}
-                    components={grouped ? groupedComponents : components}
+                    components={groupedComponents}
                     value={this.state.value}
                     onChange={this.onChange}
                     settings={this.state.settings}
@@ -116,26 +104,13 @@ export default class ProdMoudule extends React.Component {
                     scrollTopOffset={-270}
                     globalConfig={window._global}
                 />
-                <div className="design-example-actions">
+                <div style={{ marginTop:'10px', textAlign:'center'}}>
                     <Button type="primary" onClick={this.submit}>
                         上架
-                    </Button>
-                    <Button onClick={this.notImplemented}>
-                        保存草稿
-                    </Button>
-                    <Button onClick={this.notImplemented}>
-                        预览
-                    </Button>
-                    <Button onClick={this.switchMode}>
-                        {grouped ? '组件合并显示' : '组件分组显示'}
                     </Button>
                 </div>
             </div>
         );
-    }
-
-    notImplemented() {
-        Notify.error('仅作为演示，功能未开发');
     }
 
     saveDesign = instance => {
@@ -150,7 +125,7 @@ export default class ProdMoudule extends React.Component {
         this.triggerDesignValidation()
             .then(() => {
                 const data = Design.stripUUID(this.state.value);
-                console.log(data);
+                console.log('111',data);
                 // submit this.state.value to server
                 this.design.markAsSaved();
                 Notify.success('提交成功');
