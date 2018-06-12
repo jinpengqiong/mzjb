@@ -2,7 +2,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import ChooseProducts from '../components/ChooseProducts/index';
 import ProdDetails from '../components/ChooseProducts/prodDetails';
 import { Provider } from 'mobx-react'
-import { initStore } from '../store'
+import { initStore  } from '../store'
 import Router from 'next/router';
 import { Tabs, Spin } from 'antd';
 const TabPane = Tabs.TabPane;

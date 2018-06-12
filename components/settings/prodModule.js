@@ -1,9 +1,10 @@
 import { Button, Table } from'antd';
 import { inject, observer } from 'mobx-react'
-import ProdMouduleSet from './prodMouduleSet'
+import dynamic from 'next/dynamic'
+const ProdModuleSet = dynamic(import('./prodModuleSet'))
 
 @inject('store') @observer
-export default class ProdMoudule extends React.Component {
+export default class ProdModule extends React.Component {
     constructor(props){
         super(props);
     }
@@ -13,11 +14,12 @@ export default class ProdMoudule extends React.Component {
     }
 
     render() {
+        // console.log('props', this.props)
         return (
             <div>
                 {
                     this.props.store.isShown?
-                        <ProdMouduleSet />
+                        <ProdModuleSet />
                         :
                         <div>
                             <Button type='primary' onClick={this.handleMouduleSet}>新建微页面</Button>

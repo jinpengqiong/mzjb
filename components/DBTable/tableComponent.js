@@ -227,7 +227,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            // console.log('111', res)
+            console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
