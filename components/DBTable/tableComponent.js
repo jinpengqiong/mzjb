@@ -256,8 +256,6 @@ export default class ProdTable extends React.Component {
                         values.isDisplay = true;
                         Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res)=>{
-                                // console.log('res', res);
-                                // this.refs.form.resetFields();
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
@@ -306,6 +304,7 @@ export default class ProdTable extends React.Component {
                                 this.props.store.getMainImage('')
                                 this.props.store.getimageId('')
                                 this.props.store.getRichTextContent(null)
+                                this.props.store.getTabOption('1')
                                 notification.success({
                                     message: '新增成功',
                                     duration: 3,

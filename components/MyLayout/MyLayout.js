@@ -1,10 +1,8 @@
-import { Layout, Menu, Icon } from 'antd';
-const { Header, Sider, Content } = Layout;
+import { Layout } from 'antd';
+const { Content } = Layout;
 import MyFooter from '../Footer/Footer';
 import MySider from '../Sider/Sider';
 import MyHeader from '../Header/Header';
-import Router from 'next/router';
-const SubMenu = Menu.SubMenu;
 import { inject, observer } from 'mobx-react'
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';

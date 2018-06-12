@@ -7,8 +7,8 @@ import whitespaceConf from 'zan-design/lib/components/whitespace';
 // import storeConf from 'zan-design/lib/components/store';
 import lineConf from 'zan-design/lib/components/line';
 import imageAdConf from 'zan-design/lib/components/image-ad';
-// import linkConf from 'zan-design/lib/components/link';
 import goodsConf from 'zan-design/lib/components/goods';
+// import linkConf from 'zan-design/lib/components/link';
 // import goodsListConf from 'zan-design/lib/components/goods-list';
 // import tagListConf from 'zan-design/lib/components/tag-list';
 // import titleConf from 'zan-design/lib/components/title';
@@ -28,14 +28,15 @@ import 'zan-design/css/line/index.css';
 import 'zan-design/css/image-ad/index.css';
 import 'zan-design/css/link/index.css';
 import 'zan-design/css/goods/index.css';
+import 'zan-design/css/richtext/index.css';
+import 'zan-design/css/title/index.css';
 // import 'zan-design/css/goods-list/index.css';
 // import 'zan-design/css/tag-list/index.css';
 // import 'zan-design/css/text-nav/index.css';
 // import 'zan-design/css/showcase/index.css';
 // import 'zan-design/css/cube/index.css';
 // import 'zan-design/css/nav/index.css';
-import 'zan-design/css/richtext/index.css';
-import 'zan-design/css/title/index.css';
+
 const { Row, Col } = Layout;
 
 const groupedComponents = [
@@ -62,6 +63,12 @@ const groupedComponents = [
     Object.assign({ limit: 1 }, whitespaceConf),
     Object.assign({ limit: 2 }, lineConf)
 ];
+
+const globalConfig = assign({}, _global, {
+    url: {
+        www: 'http://imagemediatest.muzhiyun.cn/',
+    }
+});
 
 export default class ProdMouduleSet extends React.Component {
     state = {

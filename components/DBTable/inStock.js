@@ -240,7 +240,7 @@ export default class InStock extends React.Component {
 
     handleOk = () => {
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
-            this.refs.form.validateFields((err, values) => {
+            this.refs.form1.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
                 }else{
@@ -292,13 +292,13 @@ export default class InStock extends React.Component {
                                 res.createProduct.mainImage = this.props.store.mainImage;
                                 res.createProduct.key = res.createProduct.id;
                                 this.queryProdData(1);
-                                // document.getElementById('ossfile3').innerHTML = '';
                                 this.setState({
                                     visible: false
                                 });
                                 this.props.store.getMainImage('')
                                 this.props.store.getimageId('')
                                 this.props.store.getRichTextContent(null)
+                                this.props.store.getTabOption('1')
                                 notification.success({
                                     message: '新增成功',
                                     duration: 3,
@@ -330,8 +330,6 @@ export default class InStock extends React.Component {
                             }
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
-                            // console.log('res', res);
-                            // this.refs.form1.resetFields();
                             res.updateProduct.key = res.updateProduct.id;
                             delete res.updateProduct.imagesUrls;
                             delete res.updateProduct.images;

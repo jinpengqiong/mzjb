@@ -20,6 +20,8 @@ const shopTags = `
         }
       }
 `;
+
+
 export default class Products extends React.Component {
   constructor (props) {
     super(props)
