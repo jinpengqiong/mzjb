@@ -268,7 +268,7 @@ export default class AutoReply extends React.Component {
                 <Row>
                     <Col span={6}>
                         <div style={{ width:'300px'}}>
-                            <p>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
+                            <p style={{ marginBottom:"8px"}}>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
                             <div className='main' key={UUIDGen.uuid(8, 10)}>
                                 <img style={{ width:'300px', height:"200px"}}
                                      src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://via.placeholder.com/350x150?text=cover" }

@@ -5,7 +5,7 @@ import whitespaceConf from 'zan-design/lib/components/whitespace';
 import lineConf from 'zan-design/lib/components/line';
 import imageAdConf from 'zan-design/lib/components/image-ad';
 import goodsConf from 'zan-design/lib/components/goods';
-import Request from '../../utils/graphql_request';
+import NoticeEditor from '../imag_ad/index';
 
 
 
@@ -35,10 +35,10 @@ const { Row, Col } = Layout;
 
 const _global = {
     url: {
-        demo: 'http://imagemediatest.muzhiyun.cn',
-        www: '//imagemediatest.muzhiyun.cn',
-        imgcdn: '//imagemediatest.muzhiyun.cn',
-        byzcdn: '//imagemediatest.muzhiyun.cn'
+        demo: 'https://www.youzanyun.com/zanui/demo/zent',
+        www: '//www.youzan.com',
+        imgcdn: '//img.yzcdn.cn',
+        byzcdn: '//b.yzcdn.cn'
     },
     kdt_id: 1,
     user_id: '9066245',
@@ -130,19 +130,20 @@ export default class ProdModuleSet extends React.Component {
 
             Design.group('基础组件'),
             // imageAdConf,
-            goodsConf,
             Object.assign({}, imageAdConf, {
                 editorProps: {
                     uploadConfig: UPLOAD_CONFIG,
                     linkMenuItems: LINK_MENU_CONFIG
                 }
             }),
-
+            goodsConf,
+            NoticeEditor,
             Design.group('其他'),
             Object.assign({ limit: 1 }, whitespaceConf),
             Object.assign({ limit: 2 }, lineConf)
         ];
-        console.log('111',groupedComponents )
+        console.log('NoticeEditor', NoticeEditor )
+        console.log('goodsConf', goodsConf )
         return (
             <div>
                 <Design
