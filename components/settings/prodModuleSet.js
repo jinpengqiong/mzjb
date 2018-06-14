@@ -3,14 +3,13 @@ import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
 import whitespaceConf from 'zan-design/lib/components/whitespace';
 import lineConf from 'zan-design/lib/components/line';
-import imageAdConf from 'zan-design/lib/components/image-ad';
+import imageAdConf from '../image-ad';
 import goodsConf from 'zan-design/lib/components/goods';
-import NoticeEditor from '../imag_ad/index';
-
 
 
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
+import 'zent/css/design-image-ad.css';
 import 'zan-design/css/index.css';
 import 'zan-design/css/whitespace/index.css';
 import 'zan-design/css/store/index.css';
@@ -19,7 +18,7 @@ import 'zan-design/css/image-ad/index.css';
 import 'zan-design/css/link/index.css';
 import 'zan-design/css/goods/index.css';
 import 'zan-design/css/title/index.css';
-
+import { inject, observer } from 'mobx-react'
 
 const shopTags = `
     query ($shopId:ID!) {
@@ -58,7 +57,7 @@ const _global = {
     },
 }
 
-
+@inject('store') @observer
 export default class ProdModuleSet extends React.Component {
     constructor(props) {
         super(props);
@@ -137,17 +136,16 @@ export default class ProdModuleSet extends React.Component {
                 }
             }),
             goodsConf,
-            NoticeEditor,
             Design.group('其他'),
             Object.assign({ limit: 1 }, whitespaceConf),
             Object.assign({ limit: 2 }, lineConf)
         ];
-        console.log('NoticeEditor', NoticeEditor )
-        console.log('goodsConf', goodsConf )
+        // console.log('NoticeEditor', NoticeEditor )
+        // console.log('goodsConf', goodsConf )
+        console.log('value', this.state.value )
         return (
             <div>
                 <Design
-                    ref={this.saveDesign}
                     confirmUnsavedLeave={false}
                     components={groupedComponents}
                     value={this.state.value}
@@ -165,10 +163,6 @@ export default class ProdModuleSet extends React.Component {
             </div>
         );
     }
-
-    saveDesign = instance => {
-        this.design = instance && instance.getDecoratedComponentInstance();
-    };
 
     triggerDesignValidation() {
         return this.design.validate();
