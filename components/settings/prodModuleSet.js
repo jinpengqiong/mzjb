@@ -5,7 +5,7 @@ import whitespaceConf from 'zan-design/lib/components/whitespace';
 import lineConf from 'zan-design/lib/components/line';
 import imageAdConf from '../image-ad';
 import goodsConf from 'zan-design/lib/components/goods';
-
+import Request from '../../utils/graphql_request';
 
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
@@ -20,13 +20,13 @@ import 'zan-design/css/goods/index.css';
 import 'zan-design/css/title/index.css';
 import { inject, observer } from 'mobx-react'
 
-const shopTags = `
-    query ($shopId:ID!) {
-        shopTags(shopId:$shopId){
+const createShoppage = `
+    mutation ($shopId:ID!, $detail: [PageSection], $name: String!) {
+        createShoppage(shopId:$shopId, name:$name, detail:$detail){
           id
-          insertedAt
           name
-          weight
+          detail
+          insertedAt
         }
       }
 `;
@@ -128,24 +128,22 @@ export default class ProdModuleSet extends React.Component {
             }),
 
             Design.group('基础组件'),
-            // imageAdConf,
             Object.assign({}, imageAdConf, {
                 editorProps: {
                     uploadConfig: UPLOAD_CONFIG,
                     linkMenuItems: LINK_MENU_CONFIG
                 }
             }),
-            goodsConf,
+            // goodsConf,
             Design.group('其他'),
             Object.assign({ limit: 1 }, whitespaceConf),
             Object.assign({ limit: 2 }, lineConf)
         ];
-        // console.log('NoticeEditor', NoticeEditor )
-        // console.log('goodsConf', goodsConf )
         console.log('value', this.state.value )
         return (
             <div>
                 <Design
+                    ref={this.saveDesign}
                     confirmUnsavedLeave={false}
                     components={groupedComponents}
                     value={this.state.value}
@@ -164,7 +162,11 @@ export default class ProdModuleSet extends React.Component {
         );
     }
 
-    triggerDesignValidation() {
+    saveDesign = instance => {
+        this.design = instance && instance.getDecoratedComponentInstance();
+    };
+
+    triggerDesignValidation () {
         return this.design.validate();
     }
 
@@ -173,9 +175,20 @@ export default class ProdModuleSet extends React.Component {
             .then(() => {
                 const data = Design.stripUUID(this.state.value);
                 console.log('111',data);
-                // submit this.state.value to server
-                this.design.markAsSaved();
-                Notify.success('提交成功');
+                Request.GraphQlRequest(createShoppage,
+                    {
+                        shopId:parseInt(localStorage.getItem('shopID')),
+                        name:data[0].title,
+                        detail: JSON.stringify(data)
+                    }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    (res) => {
+                        console.log('createShoppage', res)
+                        // submit this.state.value to server
+                        this.design.markAsSaved();
+                        this.props.store.changeSettingDisplay();
+                        Notify.success('提交成功');
+                    }
+                )
             })
             .catch(validations => {
                 console.log(validations);
