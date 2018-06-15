@@ -186,7 +186,9 @@ export default class ProdModuleSet extends React.Component {
                         // submit this.state.value to server
                         this.design.markAsSaved();
                         this.props.store.changeSettingDisplay();
+                        this.props.refeshTable();
                         Notify.success('提交成功');
+
                     }
                 )
             })

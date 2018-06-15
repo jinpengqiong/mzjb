@@ -112,7 +112,7 @@ class PicList extends React.Component {
                 onChange={this.onChange}
                 pageSize={10}
                 total={this.state.data.totalEntries}
-                style={{ marginLeft: "80%", marginTop: "10px"}}/>
+                style={{ float:"right", marginTop: "10px"}}/>
                 }
         </div>
         );

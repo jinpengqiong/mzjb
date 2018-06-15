@@ -84,7 +84,7 @@ export default class ProdModule extends React.Component {
             <div>
                 {
                     this.props.store.isShown?
-                        <ProdModuleSet />
+                        <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }}/>
                         :
                     this.state.ShoppageData?
                         <div>

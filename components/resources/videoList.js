@@ -129,7 +129,7 @@ class VideoList extends React.Component {
                     current={this.state.data.pageNumber}
                     onChange={this.onChange}
                     total={this.state.data? this.state.data.totalEntries : 1}
-                    style={{ marginLeft: "80%", marginTop: "10px"}}/>
+                    style={{ float:"right", marginTop: "10px"}}/>
             }
         </div>
         );

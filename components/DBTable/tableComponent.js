@@ -325,37 +325,68 @@ export default class ProdTable extends React.Component {
                         values.desc = this.props.store.richTextContent;
                     }
                     // console.log('values', values);
-                    Request.GraphQlRequest(UpdateProduct,
-                        {
-                            baseinfo: values,
-                            shopId: localStorage.getItem('shopID'),
-                            id: this.state.productID,
-                            type:this.props.store.prodType,
-                            youzan:{
-                                itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
-                                imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                    if(this.props.store.prodType === 'YOUZAN'){
+                        Request.GraphQlRequest(UpdateProduct,
+                            {
+                                baseinfo: values,
+                                shopId: localStorage.getItem('shopID'),
+                                id: this.state.productID,
+                                type:this.props.store.prodType,
+                                youzan:{
+                                    itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
+                                    imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                                }
+                            }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                            (res) => {
+                                // console.log('res', res);
+                                // this.refs.form.resetFields();
+                                res.updateProduct.key = res.updateProduct.id;
+                                delete res.updateProduct.imagesUrls;
+                                delete res.updateProduct.images;
+                                this.queryProdData(1);
+                                this.setState({
+                                    visible: false,
+                                    modalName:null
+                                });
+                                this.props.store.getProductFieldsData(null);
+                                this.props.store.getimageId('');
+                                this.props.store.getMainImage('')
+                                notification.success({
+                                    message: '更新成功',
+                                    duration: 3,
+                                });
                             }
-                        }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                        (res) => {
-                            // console.log('res', res);
-                            // this.refs.form.resetFields();
-                            res.updateProduct.key = res.updateProduct.id;
-                            delete res.updateProduct.imagesUrls;
-                            delete res.updateProduct.images;
-                            this.queryProdData(1);
-                            this.setState({
-                                visible: false,
-                                modalName:null
-                            });
-                            this.props.store.getProductFieldsData(null);
-                            this.props.store.getimageId('');
-                            this.props.store.getMainImage('')
-                            notification.success({
-                                message: '更新成功',
-                                duration: 3,
-                            });
-                        }
-                    ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                    }else{
+                        Request.GraphQlRequest(UpdateProduct,
+                            {
+                                baseinfo: values,
+                                shopId: localStorage.getItem('shopID'),
+                                id: this.state.productID,
+                                type:this.props.store.prodType,
+                            }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                            (res) => {
+                                // console.log('res', res);
+                                // this.refs.form.resetFields();
+                                res.updateProduct.key = res.updateProduct.id;
+                                delete res.updateProduct.imagesUrls;
+                                delete res.updateProduct.images;
+                                this.queryProdData(1);
+                                this.setState({
+                                    visible: false,
+                                    modalName:null
+                                });
+                                this.props.store.getProductFieldsData(null);
+                                this.props.store.getimageId('');
+                                this.props.store.getMainImage('')
+                                notification.success({
+                                    message: '更新成功',
+                                    duration: 3,
+                                });
+                            }
+                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                    }
+
                 }
             })
         }
@@ -584,7 +615,7 @@ export default class ProdTable extends React.Component {
             defaultCurrent={1}
             onChange={this.onPageChange}
             total={this.state.data? this.state.totalEntries : 1} 
-            style={{ marginLeft: "80%", marginTop: "10px"}}/>
+            style={{ float:"right", marginTop: "10px"}}/>
             }
         </div>
     )
