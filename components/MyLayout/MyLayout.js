@@ -34,7 +34,7 @@ export default class MyLayout extends React.Component {
               <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }}>
                 {this.props.children}
               </Content>
-            <MyFooter/> 
+            <MyFooter />
           </Layout>
         </Layout>
       </LocaleProvider>

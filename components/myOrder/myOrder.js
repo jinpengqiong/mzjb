@@ -178,7 +178,7 @@ export default class OrderManagement extends React.Component {
             (this.state.data && this.state.data.totalResults !==0)
             &&
             <Pagination 
-            defaultCurrent={1} 
+            defaultCurrent={1}
             onChange={this.onChange}
             total={this.state.data? this.state.data.totalResults : 1} 
             style={{ float: "right", marginTop: "10px"}}/>

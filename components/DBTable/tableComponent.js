@@ -137,6 +137,7 @@ export default class ProdTable extends React.Component {
         totalEntries:null,
         groupModalVisible:false,
         radioValue:null,
+        curPage:'1',
         columns : [
             {
                 dataIndex: 'id',
@@ -231,7 +232,8 @@ export default class ProdTable extends React.Component {
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
-                totalEntries:res.shopProducts.totalEntries
+                totalEntries:res.shopProducts.totalEntries,
+                curPage:res.shopProducts.pageNumber
             });
         }
     )
@@ -351,6 +353,7 @@ export default class ProdTable extends React.Component {
                                 this.props.store.getProductFieldsData(null);
                                 this.props.store.getimageId('');
                                 this.props.store.getMainImage('')
+                                this.props.store.getProdType(null)
                                 notification.success({
                                     message: '更新成功',
                                     duration: 3,
@@ -611,10 +614,12 @@ export default class ProdTable extends React.Component {
             {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')
             &&
-            <Pagination 
+            <Pagination
             defaultCurrent={1}
+            current={this.state.curPage}
+            pageSize={8}
             onChange={this.onPageChange}
-            total={this.state.data? this.state.totalEntries : 1} 
+            total={this.state.data? this.state.totalEntries : 1}
             style={{ float:"right", marginTop: "10px"}}/>
             }
         </div>

@@ -93,8 +93,8 @@ class RegistrationForm extends React.Component {
               </FormItem>
           }
         {
-        this.props.store.prodType !== 'YOUZAN'
-          &&
+            (this.props.store.prodType !== 'YOUZAN' || this.props.updateState !== '更新商品')
+                &&
           <FormItem
           {...formItemLayout}
           label="链接地址"

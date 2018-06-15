@@ -135,6 +135,7 @@ export default class InStock extends React.Component {
             productID:null,
             modalName:null,
             totalEntries:null,
+            curPage:'1',
             groupModalVisible:false,
             radioValue:null,
             columns : [
@@ -228,7 +229,8 @@ export default class InStock extends React.Component {
                 this.props.store.getProductData(res.shopProducts.entries);
                 this.setState({
                     data: res.shopProducts.entries,
-                    totalEntries:res.shopProducts.totalEntries
+                    totalEntries:res.shopProducts.totalEntries,
+                    curPage:res.shopProducts.pageNumber
                 });
             }
         )
@@ -340,6 +342,9 @@ export default class InStock extends React.Component {
                                     modalName:null
                                 });
                                 this.props.store.getProductFieldsData(null);
+                                this.props.store.getimageId('');
+                                this.props.store.getMainImage('')
+                                this.props.store.getProdType(null)
                                 notification.success({
                                     message: '更新成功',
                                     duration: 3,
@@ -364,6 +369,8 @@ export default class InStock extends React.Component {
                                     modalName:null
                                 });
                                 this.props.store.getProductFieldsData(null);
+                                this.props.store.getimageId('');
+                                this.props.store.getMainImage('')
                                 notification.success({
                                     message: '更新成功',
                                     duration: 3,
@@ -382,9 +389,11 @@ export default class InStock extends React.Component {
             visible: false,
             modalName:null
         });
+        this.props.store.getProdType(null)
         this.props.store.getProductFieldsData(null)
         this.props.store.getTabOption('1')
         this.props.store.getRichTextContent(null)
+
     }
 
     callback = (key) => {
@@ -593,6 +602,8 @@ export default class InStock extends React.Component {
                     &&
                     <Pagination
                         defaultCurrent={1}
+                        current={this.state.curPage}
+                        pageSize={8}
                         onChange={this.onPageChange}
                         total={this.state.data? this.state.totalEntries : 1}
                         style={{ float:"right", marginTop: "10px"}}/>

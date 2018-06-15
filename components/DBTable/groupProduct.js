@@ -223,7 +223,7 @@ export default class GroupProduct extends React.Component {
                 >
                     <StockProdForm ref='form' GroupData={this.state.groupFieldsData}  />
                 </Modal>
-                <Table bordered dataSource={this.state.data? this.state.data : null } columns={this.state.columns}/>
+                <Table bordered dataSource={this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>
             </div>
         )
     }

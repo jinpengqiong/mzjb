@@ -3,7 +3,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
 import ProdModule from '../components/settings/prodModule'
-
+import Router from 'next/router';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin, Tabs } from 'antd';
@@ -50,7 +50,7 @@ export default class Settings extends React.Component {
                             <TabPane tab='自动回复' key="2" >
                                 <AutoReply />
                             </TabPane>
-                            <TabPane tab='商品页模版' key="3" >
+                            <TabPane tab='微页面模版' key="3" >
                                 <ProdModule />
                             </TabPane>
                         </Tabs>

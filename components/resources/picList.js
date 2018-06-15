@@ -107,7 +107,7 @@ class PicList extends React.Component {
                 (this.state.data && this.state.data.totalEntries !==0)
                 &&
                 <Pagination 
-                defaultCurrent={1} 
+                defaultCurrent={1}
                 current={this.state.data.pageNumber}
                 onChange={this.onChange}
                 pageSize={10}

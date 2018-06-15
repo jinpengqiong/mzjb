@@ -1,4 +1,4 @@
-import { Design, Button, Layout, Notify } from 'zent';
+import { Design, Button, Notify } from 'zent';
 import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
 import whitespaceConf from 'zan-design/lib/components/whitespace';
@@ -6,6 +6,7 @@ import lineConf from 'zan-design/lib/components/line';
 import imageAdConf from '../image-ad';
 import goodsConf from 'zan-design/lib/components/goods';
 import Request from '../../utils/graphql_request';
+import noticeConf from 'zan-design/lib/components/notice';
 
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
@@ -17,7 +18,7 @@ import 'zan-design/css/line/index.css';
 import 'zan-design/css/image-ad/index.css';
 import 'zan-design/css/link/index.css';
 import 'zan-design/css/goods/index.css';
-import 'zan-design/css/title/index.css';
+import 'zan-design/css/notice/index.css';
 import { inject, observer } from 'mobx-react'
 
 const createShoppage = `
@@ -30,20 +31,12 @@ const createShoppage = `
         }
       }
 `;
-const { Row, Col } = Layout;
 
 const _global = {
     url: {
-        demo: 'https://www.youzanyun.com/zanui/demo/zent',
-        www: '//www.youzan.com',
-        imgcdn: '//img.yzcdn.cn',
-        byzcdn: '//b.yzcdn.cn'
+        demo: 'http://shop.muzhiyun.cn/rest/',
+        www: 'http://shop.muzhiyun.cn/rest/',
     },
-    kdt_id: 1,
-    user_id: '9066245',
-    run_mode: 'online',
-    debug: false,
-    online_debug: false,
     js: {
         js_compress: true,
         css_compress: true,
@@ -55,6 +48,14 @@ const _global = {
         qn_public: 'kdt_img',
         qn_private: 'kdt-private'
     },
+    shop_id: '122',
+    shop_type: 1,
+    isNewUI: true,
+    isSuperStore: false,
+    sourceType: 0,
+    isWishOpen: 1,
+    lock_create_showcase: false,
+    paidcontent_auth: true
 }
 
 @inject('store') @observer
@@ -94,20 +95,9 @@ export default class ProdModuleSet extends React.Component {
     render() {
         const LINK_MENU_CONFIG = ['GoodsAndTag', 'HomePage', 'Link'];
 
-        const UPLOAD_CONFIG = {
-            mediaListUrl: `${_global.url
-                .demo}/api/shop/paper/upload/media/medialist.json`,
-            categoryListUrl: `${_global.url
-                .demo}/api/shop/paper/upload/category/categorylist.json`,
-            fetchUrl: `${_global.url.demo}/api/shop/paper/upload/dock/fetch.json`,
-            tokenUrl: localStorage.getItem('accessToken'),
-            uploadUrl: `${_global.url.demo}/api/shop/paper/upload/upload.json`
-        };
-
         const globalConfig = Object.assign({}, _global, {
             url: {
-                www: `${_global.url.demo}/api/shop/paper`,
-                imgcdn: _global.url.imgcdn
+                www: `${_global.url.demo}`,
             }
         });
 
@@ -130,14 +120,15 @@ export default class ProdModuleSet extends React.Component {
             Design.group('基础组件'),
             Object.assign({}, imageAdConf, {
                 editorProps: {
-                    uploadConfig: UPLOAD_CONFIG,
                     linkMenuItems: LINK_MENU_CONFIG
                 }
             }),
-            // goodsConf,
+            goodsConf,
+
             Design.group('其他'),
             Object.assign({ limit: 1 }, whitespaceConf),
-            Object.assign({ limit: 2 }, lineConf)
+            Object.assign({ limit: 2 }, lineConf),
+            noticeConf
         ];
         console.log('value', this.state.value )
         return (
