@@ -21,7 +21,7 @@ export default class EmbeddedAndSharing extends React.Component {
     const url = `http://wxshop.muzhiyun.cn/auth.html?state=${localStorage.getItem('shopID')}`
         return (
             <div >
-                <h3>微信链接地址</h3>
+                <h2>微信链接地址</h2>
                 <div style={{ height:"300px", background:"#f0f2f5"}}>
                     <Row>
                         <Col span={10}>

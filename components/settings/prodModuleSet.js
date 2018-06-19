@@ -206,6 +206,7 @@ export default class ProdModuleSet extends React.Component {
                             this.props.store.changeSettingDisplay();
                             this.props.refeshTable();
                             this.props.store.getModuleType(null);
+                            this.props.store.getModuleValue(null)
                             Notify.success('更新成功');
                         }
                     )
