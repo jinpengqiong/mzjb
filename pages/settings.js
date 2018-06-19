@@ -3,6 +3,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
 import ProdModule from '../components/settings/prodModule'
+import EmbeddedAndSharing from '../components/settings/enbedded_and_sharing'
 import Router from 'next/router';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -52,6 +53,9 @@ export default class Settings extends React.Component {
                             </TabPane>
                             <TabPane tab='微页面模版' key="3" >
                                 <ProdModule />
+                            </TabPane>
+                            <TabPane tab='嵌入/分享' key="4" >
+                                <EmbeddedAndSharing />
                             </TabPane>
                         </Tabs>
                     </MyLayout>

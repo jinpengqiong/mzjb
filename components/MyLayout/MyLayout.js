@@ -12,15 +12,9 @@ import 'moment/locale/zh-cn';
 export default class MyLayout extends React.Component {
   constructor (props){
     super(props)
-      this.state={
-          localStor:null
-      }
   }
   
   componentDidMount (){
-    this.setState({
-      localStor : localStorage
-    })
     this.props.store.getRoleInfo(localStorage.getItem('role'));
   }
 

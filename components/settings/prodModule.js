@@ -12,6 +12,7 @@ const listShoppage = `
                 insertedAt
                 name
                 id
+                detail
            }
             pageNumber
             totalEntries
@@ -45,6 +46,7 @@ export default class ProdModule extends React.Component {
         super(props);
         this.state= {
             ShoppageData:null,
+            ID:null,
             columns : [{
                 title: 'ID',
                 dataIndex: 'id',
@@ -67,6 +69,8 @@ export default class ProdModule extends React.Component {
                         <a href="#">设为当前模版</a>
                       </Popconfirm>
                       <Divider type="vertical" />
+                        <a href="#" onClick={ () => { this.EditModule(record.detail, record.id)} }>编辑</a>
+                      <Divider type="vertical" />
                         <Popconfirm title="确实要执行此操作吗?" onConfirm={ () => { this.DeleteConfirm(record.id) }} >
                         <a href="#">删除</a>
                       </Popconfirm>
@@ -79,6 +83,17 @@ export default class ProdModule extends React.Component {
 
     componentDidMount(){
         this.queryShoppage(1)
+    }
+
+    //edit module
+    EditModule = (value, id) => {
+        // console.log('www', value)
+        this.setState({
+            ID: id
+        })
+        this.props.store.getModuleValue(value);
+        this.props.store.getModuleType('编辑模版');
+        this.props.store.changeSettingDisplay();
     }
 
     //query autoReply list
@@ -98,7 +113,8 @@ export default class ProdModule extends React.Component {
         )
     }
 
-    handleMouduleSet = () => {
+    handleModuleSet = () => {
+        this.props.store.getModuleType('新建模版');
         this.props.store.changeSettingDisplay();
     }
 
@@ -131,12 +147,12 @@ export default class ProdModule extends React.Component {
             <div>
                 {
                     this.props.store.isShown?
-                        <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }}/>
+                        <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
                         :
                         (this.state.ShoppageData && JSON.stringify(this.state.ShoppageData.entries) !== '[]')?
                         <div>
-                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleMouduleSet}>新建模版</Button>
-                            <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} agination={false}/>
+                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
+                            <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                             <Pagination
                                 current={this.state.ShoppageData.pageNumber}
                                 onChange={this.onPageChange}
@@ -147,8 +163,8 @@ export default class ProdModule extends React.Component {
                         </div>
                         :
                         <div>
-                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleMouduleSet}>新建模版</Button>
-                            <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} agination={false}/>
+                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
+                            <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                         </div>
                 }
             </div>

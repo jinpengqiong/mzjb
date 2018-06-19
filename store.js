@@ -29,8 +29,12 @@ class Store {
   @observable activeKey = '1';
   //rich text content
   @observable richTextContent = null;
-  //mouduleSetting isShown
+  //moduleSetting isShown
   @observable isShown = false;
+  //moduleValue
+  @observable moduleValue = null;
+  //moduleSubmitType
+  @observable moduleType = null;
 
   constructor (isServer) {
   }
@@ -117,6 +121,14 @@ class Store {
 
   @action changeSettingDisplay = () => {
       this.isShown = !this.isShown;
+  }
+
+  @action getModuleValue = (data) => {
+      this.moduleValue = data;
+  }
+
+  @action getModuleType = (data) => {
+      this.moduleType = data;
   }
 
 }
