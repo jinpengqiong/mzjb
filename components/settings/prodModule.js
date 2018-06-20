@@ -100,7 +100,7 @@ export default class ProdModule extends React.Component {
     queryShoppage = (page) => {
         Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listShoppage', res.listShoppage)
+                // console.log('listShoppage', res.listShoppage)
                 res.listShoppage.entries.map(
                     (entry) => {
                        entry.key = entry.id
@@ -121,7 +121,7 @@ export default class ProdModule extends React.Component {
     SetConfirm = (ID) => {
         Request.GraphQlRequest(setShoppage, {shopId:parseInt(localStorage.getItem('shopID')), shoppageId:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listShoppage', res.listShoppage)
+                // console.log('listShoppage', res.listShoppage)
                 message.success('设置成功！')
             }
         )
@@ -130,7 +130,7 @@ export default class ProdModule extends React.Component {
     DeleteConfirm = (ID) => {
         Request.GraphQlRequest(deleteShoppage, {shopId:parseInt(localStorage.getItem('shopID')), id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listShoppage', res.listShoppage)
+                // console.log('listShoppage', res.listShoppage)
                 message.success('删除成功！')
                 this.queryShoppage(1)
             }

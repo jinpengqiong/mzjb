@@ -128,7 +128,7 @@ export default class ImageAdEditor extends DesignEditor {
           </a>
         )}
         <div className={`${prefix}-design-component-image-ad-editor__hint`}>
-          最多添加 {IMAGE_AD_LIMIT} 个广告
+          建议上传比例为16：9的图片，最多添加 {IMAGE_AD_LIMIT} 个广告
         </div>
       </div>
     );

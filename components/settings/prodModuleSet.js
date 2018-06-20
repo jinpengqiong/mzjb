@@ -45,12 +45,9 @@ const updateShoppage = `
 
 const _global = {
     url: {
-        demo: 'http://shop.muzhiyun.cn/rest/',
-        www: 'http://shop.muzhiyun.cn/rest/',
+        demo: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
+        www: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
     },
-    kdt_id: 1,
-    user_id: '9066245',
-    run_mode: 'online',
     debug: false,
     online_debug: false,
     isNewUI: true,
@@ -79,9 +76,11 @@ export default class ProdModuleSet extends React.Component {
         };
     }
     componentDidMount(){
+
     }
 
     onChange = newValue => {
+        // console.log('aaa', newValue)
         this.props.store.getModuleValue( JSON.stringify(newValue) );
     };
 
@@ -89,7 +88,6 @@ export default class ProdModuleSet extends React.Component {
         this.setState({
             settings: newSettings
         });
-        this.props.store.getModuleValue(newSettings)
     };
 
     render() {
@@ -130,7 +128,7 @@ export default class ProdModuleSet extends React.Component {
             Object.assign({ limit: 2 }, lineConf),
             noticeConf
         ];
-        console.log('value', this.props.store.moduleValue)
+        // console.log('2222', this.props.store.moduleValue)
         return (
             <div>
                 <h1 style={{ marginBottom:"10px"}}>{ this.props.store.moduleType}</h1>
@@ -163,10 +161,10 @@ export default class ProdModuleSet extends React.Component {
     }
 
     submit = () => {
+        const data = Design.stripUUID(JSON.parse(this.props.store.moduleValue));
         if(this.props.store.moduleType ==='新建模版'){
             this.triggerDesignValidation()
                 .then(() => {
-                    const data = Design.stripUUID(JSON.parse(this.props.store.moduleValue));
                     // console.log('111',data);
                     Request.GraphQlRequest(createShoppage,
                         {
@@ -175,7 +173,7 @@ export default class ProdModuleSet extends React.Component {
                             detail: this.props.store.moduleValue
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
-                            console.log('createShoppage', res)
+                            // console.log('createShoppage', res)
                             // submit this.state.value to server
                             this.props.store.changeSettingDisplay();
                             this.props.refeshTable();
@@ -191,8 +189,6 @@ export default class ProdModuleSet extends React.Component {
         }else if(this.props.store.moduleType ==='编辑模版'){
             this.triggerDesignValidation()
                 .then(() => {
-                    const data = Design.stripUUID(JSON.parse(this.props.store.moduleValue));
-                    // console.log('111',data);
                     Request.GraphQlRequest(updateShoppage,
                         {
                             shopId:parseInt(localStorage.getItem('shopID')),
@@ -201,7 +197,7 @@ export default class ProdModuleSet extends React.Component {
                             detail: this.props.store.moduleValue
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
-                            console.log('createShoppage', res)
+                            // console.log('createShoppage', res)
                             // submit this.state.value to server
                             this.props.store.changeSettingDisplay();
                             this.props.refeshTable();

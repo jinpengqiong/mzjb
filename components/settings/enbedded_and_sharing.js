@@ -34,7 +34,6 @@ export default class EmbeddedAndSharing extends React.Component {
                                 <Alert message="此地址可用作 Tab页 或子菜单的形式放在官方微信公众号中" type="info" style={{ width:"90%", marginTop:"130px"}}/>
                                 <h4>{ url }</h4>
                             </div>
-
                         </Col>
                     </Row>
                 </div>
