@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Button } from 'antd';
+import { message } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';

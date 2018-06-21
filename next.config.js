@@ -30,6 +30,14 @@ module.exports = {
                 test: /\.less/,
                 loader: `babel-loader!raw-loader!postcss-loader!less-loader`
             },
+            {
+                test: /\.es6$/,
+                exclude: /node_modules/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                }
+            }
         );
         return config;
     },

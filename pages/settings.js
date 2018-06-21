@@ -3,7 +3,6 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
 import ProdModule from '../components/settings/prodModule'
-import EmbeddedAndSharing from '../components/settings/enbedded_and_sharing'
 import Router from 'next/router';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -45,17 +44,14 @@ export default class Settings extends React.Component {
                             tabPosition="left"
                             // onChange={this.onTabsChange}
                             hideAdd>
-                            <TabPane tab='绑定直播间' key="1">
-                                <BindLiveRoom />
-                            </TabPane>
-                            <TabPane tab='自动回复' key="2" >
-                                <AutoReply />
-                            </TabPane>
-                            <TabPane tab='微页面模版' key="3" >
+                            <TabPane tab='微页面模版' key="1" >
                                 <ProdModule />
                             </TabPane>
-                            <TabPane tab='嵌入/分享' key="4" >
-                                <EmbeddedAndSharing />
+                            <TabPane tab='绑定直播间' key="2">
+                                <BindLiveRoom />
+                            </TabPane>
+                            <TabPane tab='自动回复' key="3" >
+                                <AutoReply />
                             </TabPane>
                         </Tabs>
                     </MyLayout>

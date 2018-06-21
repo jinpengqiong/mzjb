@@ -1,4 +1,5 @@
-import { Design, Button, Notify } from 'zent';
+import { Design, Notify } from 'zent';
+import { Button } from 'antd'
 import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
 import whitespaceConf from 'zan-design/lib/components/whitespace';
@@ -7,13 +8,14 @@ import imageAdConf from '../image-ad';
 import goodsConf from 'zan-design/lib/components/goods';
 import Request from '../../utils/graphql_request';
 import noticeConf from 'zan-design/lib/components/notice';
+import titleConf from 'zan-design/lib/components/title';
 
+import 'zan-design/css/title/index.css';
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
 import 'zent/css/design-image-ad.css';
 import 'zan-design/css/index.css';
 import 'zan-design/css/whitespace/index.css';
-import 'zan-design/css/store/index.css';
 import 'zan-design/css/line/index.css';
 import 'zan-design/css/image-ad/index.css';
 import 'zan-design/css/link/index.css';
@@ -45,9 +47,12 @@ const updateShoppage = `
 
 const _global = {
     url: {
-        demo: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
-        www: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
+        demo: `http://testshop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
+        www: `http://testshop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
     },
+    kdt_id: 1,
+    user_id: '9066245',
+    run_mode: 'online',
     debug: false,
     online_debug: false,
     isNewUI: true,
@@ -90,6 +95,13 @@ export default class ProdModuleSet extends React.Component {
         });
     };
 
+    exit = () => {
+        this.props.store.changeSettingDisplay();
+        this.props.refeshTable();
+        this.props.store.getModuleType(null);
+        this.props.store.getModuleValue( null );
+    }
+
     render() {
         const LINK_MENU_CONFIG = ['GoodsAndTag', 'HomePage', 'Link'];
 
@@ -122,6 +134,11 @@ export default class ProdModuleSet extends React.Component {
                 }
             }),
             goodsConf,
+            Object.assign({}, titleConf, {
+                editorProps: {
+                    linkMenuItems: LINK_MENU_CONFIG
+                }
+            }),
 
             Design.group('其他'),
             Object.assign({ limit: 1 }, whitespaceConf),
@@ -144,8 +161,11 @@ export default class ProdModuleSet extends React.Component {
                     globalConfig={globalConfig}
                 />
                 <div style={{ marginTop:'10px', textAlign:'center'}}>
-                    <Button type="primary" onClick={this.submit}>
+                    <Button type="primary" onClick={this.submit} style={{ marginRight:"10px"}}>
                         上架
+                    </Button>
+                    <Button type="primary" onClick={this.exit}>
+                        退出编辑
                     </Button>
                 </div>
             </div>

@@ -13,7 +13,6 @@ import {
 } from './constants';
 import { ImageEntry, createEmptyImageEntry } from './ImageEntry';
 import { inject, observer } from 'mobx-react'
-import uuid from '../../utils/uuid_generator';
 const RadioGroup = Radio.Group;
 
 

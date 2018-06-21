@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic'
 const ProdModuleSet = dynamic(import('./prodModuleSet'))
 import Request from '../../utils/graphql_request';
 import moment from 'moment'
+import EmbeddedAndSharing from './enbedded_and_sharing'
+
 
 const listShoppage = `
     query ($shopId: Int!, $page: Int, $pageSize: Int ) {
@@ -146,11 +148,14 @@ export default class ProdModule extends React.Component {
         return (
             <div>
                 {
-                    this.props.store.isShown?
-                        <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
-                        :
-                        (this.state.ShoppageData && JSON.stringify(this.state.ShoppageData.entries) !== '[]')?
-                        <div>
+                this.props.store.isShown?
+                    <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
+                    :
+                    (this.state.ShoppageData && JSON.stringify(this.state.ShoppageData.entries) !== '[]')?
+                    <div>
+                        <EmbeddedAndSharing />
+                        <div style={{ marginTop:"20px"}}>
+                            <h3>模版列表</h3>
                             <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
                             <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                             <Pagination
@@ -161,11 +166,16 @@ export default class ProdModule extends React.Component {
                                 style={{ float: "right", marginTop: "10px"}}
                             />
                         </div>
-                        :
-                        <div>
+                    </div>
+                    :
+                    <div>
+                        <EmbeddedAndSharing />
+                        <div style={{ marginTop:"20px"}}>
+                            <h3>模版列表</h3>
                             <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
                             <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                         </div>
+                    </div>
                 }
             </div>
         );
