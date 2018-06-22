@@ -81,7 +81,15 @@ export default class ProdModule extends React.Component {
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                      <Popconfirm title="确实要执行此操作吗?" onConfirm={ () => { this.SetConfirm(record.id) }} >
+                      <Popconfirm title="确实要执行此操作吗?" onConfirm={
+                          () => {
+                              if(record.id === this.state.curShopPage){
+                                message.info('此模版已经为当前模版了！')
+                              }else{
+                                  this.SetConfirm(record.id)
+                              }
+                          }
+                      } >
                         <a href="#">设为当前模版</a>
                       </Popconfirm>
                       <Divider type="vertical" />
