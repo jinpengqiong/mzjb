@@ -1,4 +1,4 @@
-import { Button, Table, Divider, Popconfirm, message, Pagination } from'antd';
+import { Button, Table, Divider, Popconfirm, message, Pagination, Tag } from'antd';
 import { inject, observer } from 'mobx-react'
 import dynamic from 'next/dynamic'
 const ProdModuleSet = dynamic(import('./prodModuleSet'))
@@ -6,6 +6,13 @@ import Request from '../../utils/graphql_request';
 import moment from 'moment'
 import EmbeddedAndSharing from './enbedded_and_sharing'
 
+const getShop = `
+    query ($id: ID!) {
+        getShop(id:$id){
+           curShoppage
+        }
+    }
+`;
 
 const listShoppage = `
     query ($shopId: Int!, $page: Int, $pageSize: Int ) {
@@ -48,6 +55,7 @@ export default class ProdModule extends React.Component {
         super(props);
         this.state= {
             ShoppageData:null,
+            curShopPage:null,
             ID:null,
             columns : [{
                 title: 'ID',
@@ -57,6 +65,12 @@ export default class ProdModule extends React.Component {
                 title: '名称',
                 dataIndex: 'name',
                 key: 'name',
+                render: (text, record) => (
+                    <div>
+                        <span style={{ marginRight:"8px"}}>{text}</span>
+                        <span>{ record.id === this.state.curShopPage? <Tag color="blue">当前模版</Tag>:null}</span>
+                    </div>
+                ),
             }, {
                 title: '创建时间',
                 dataIndex: 'insertedAt',
@@ -85,6 +99,19 @@ export default class ProdModule extends React.Component {
 
     componentDidMount(){
         this.queryShoppage(1)
+        this.queryCurShoppage()
+    }
+
+    //query current shoppage
+    queryCurShoppage = () => {
+        Request.GraphQlRequest(getShop, {id:localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('getShop', res)
+                this.setState({
+                    curShopPage: res.getShop.curShoppage
+                })
+            }
+        )
     }
 
     //edit module
@@ -123,7 +150,8 @@ export default class ProdModule extends React.Component {
     SetConfirm = (ID) => {
         Request.GraphQlRequest(setShoppage, {shopId:parseInt(localStorage.getItem('shopID')), shoppageId:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('listShoppage', res.listShoppage)
+                this.queryShoppage(1)
+                this.queryCurShoppage()
                 message.success('设置成功！')
             }
         )
