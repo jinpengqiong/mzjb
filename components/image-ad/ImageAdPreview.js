@@ -45,8 +45,7 @@ export default class ImageAdPreview extends Component {
                 <a
                   key={id}
                   className={`${prefix}-design-component-image-ad-preview__image`}
-                  href={url}
-                  target="_blank"
+                  href="javascript:void(0);"
                   rel="noopener noreferrer"
                 >
                   <div
