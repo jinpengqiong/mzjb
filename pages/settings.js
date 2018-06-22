@@ -3,6 +3,7 @@ import MyLayout from '../components/MyLayout/MyLayout';
 import BindLiveRoom from '../components/settings/bindLiveRoom'
 import AutoReply from '../components/settings/autoReply'
 import ProdModule from '../components/settings/prodModule'
+import GrantAdmin from '../components/settings/admin_grant'
 import Router from 'next/router';
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -54,7 +55,7 @@ export default class Settings extends React.Component {
                                 <AutoReply />
                             </TabPane>
                             <TabPane tab='管理员' key="4" >
-                                1111
+                                <GrantAdmin />
                             </TabPane>
                         </Tabs>
                     </MyLayout>

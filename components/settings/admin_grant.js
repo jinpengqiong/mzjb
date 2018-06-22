@@ -1,32 +1,42 @@
-import { Card, Affix, Button,message, Modal, Radio, Popconfirm } from 'antd';
+import { Row, Col, Tag, Icon, Popover, Input, Radio, Spin, message, Button } from 'antd';
 import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
 
-const ownedRooms = `
-    query ($shopId: ID!) {
-        ownedRooms(shopId:$shopId){
-            desc
-            id
-            name
+
+const getShop = `
+    query ($id: ID!) {
+        getShop(id:$id){
+           staffs{
+                desc
+                id
+                name
+                role
+                userId
+                user{
+                    phone
+                }
+           }
         }
     }
 `;
 
-const listShoproom = `
-    query ($shopId: Int!) {
-        listShoproom(shopId:$shopId){
-            roomId
-            roomName
+const findOneUser = `
+    query ($type: SearchUserType!, $value: String!) {
+        findOneUser(type:$type, value:$value){
+            nickname
             id
+            phone
         }
     }
 `;
 
-const addShoproom = `
-    mutation ($shopId: Int!,$roomId:Int!) {
-        addShoproom(shopId:$shopId, roomId:$roomId){
-            id
-            roomId
+const addStaff = `
+    mutation ($shopId: Int!,$userId:Int!, $role: StaffRole!) {
+        addStaff(shopId:$shopId, userId:$userId, role:$role){
+            user{
+                phone
+            }
+            userId
         }
     }
 `;
@@ -44,19 +54,138 @@ export default class GrantAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            RadioValue:'USER_PHONE',
+            InputValue:'',
+            loading:false,
+            userData:null,
+            staffsData:null
         }
     }
 
     componentDidMount(){
+        this.queryStaffs();
+    }
+
+    queryStaffs = () => {
+        Request.GraphQlRequest(getShop, {id:localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('getShop', res)
+                this.setState({
+                    staffsData: res.getShop,
+                });
+            }
+        )
+    }
+
+    //radio change
+    onRadioChange = (e) => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            RadioValue: e.target.value,
+        });
+    }
+
+    //searchStaff
+    searchStaff = () => {
+        if(this.state.InputValue ===''){
+            message.info('请先输入搜索内容！')
+        }else{
+            this.setState({
+                loading: true,
+            });
+            Request.GraphQlRequest(findOneUser, {type:this.state.RadioValue, value:this.state.InputValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                (res) => {
+                    console.log('findOneUser', res)
+                    this.setState({
+                        userData:res.findOneUser,
+                        loading: false
+                    });
+                }
+            )
+        }
+    }
+
+    //get input value
+    InputChange = (e) => {
+        console.log('111',e.target.value)
+        this.setState({
+            InputValue:e.target.value
+        })
+    }
+
+    //add Staff
+    addStaff = (ID) => {
+        Request.GraphQlRequest(addStaff, {shopId: parseInt(localStorage.getItem('shopID')),userId:parseInt(ID), role:'SUPER_ADMIN'}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                console.log('addStaff', res)
+                this.setState({
+                    staffData: res.addStaff,
+                    userData:null,
+                    InputValue:''
+                })
+                this.queryStaffs();
+                message.success('添加成功！')
+            }
+        )
     }
 
 
-
     render() {
+        const text = <span><Icon type="user-add" /> 搜索用户</span>;
+        const content = (
+            <div>
+                <div onClick={this.searchStaff} style={{ marginBottom:"10px"}}>
+                    <Input style={{ width:"150px", marginRight:"10px"}} onChange={this.InputChange} value={this.state.InputValue}/>
+                    <Button type="primary" shape="circle" icon="search" />
+                </div>
+                <div>
+                    <RadioGroup onChange={this.onRadioChange} value={this.state.RadioValue}>
+                        <Radio value='USER_PHONE'>手机号</Radio>
+                        <Radio value='USER_ACCOUNTID'>账号id</Radio>
+                    </RadioGroup>
+                </div>
+                <Spin spinning={this.state.loading}>
+                    <div>
+                        {
+                            this.state.userData?
+                                <div style={{ marginTop:"20px"}}>
+                                    <Tag color="#2db7f5">{this.state.userData.phone}</Tag>
+                                        <Button  type="primary" onClick={ () => { this.addStaff(this.state.userData.id) } }>添加</Button>
+                                </div>
+                                :
+                                null
+                        }
+                    </div>
+                </Spin>
+            </div>
+        );
+        const staffInfo = this.state.staffsData && this.state.staffsData.staffs.map(
+            (staff) => {
+                return <Tag color="#2db7f5" key={staff.userId}>{staff.user.phone}</Tag>
+            }
+        )
+
         return (
             <div>
-
+                <Row>
+                    <Col span={8} offset={2}>
+                        <h3><Icon type="user" />创建者</h3>
+                        <p>{localStorage.getItem('nickname')}</p>
+                    </Col>
+                    <Col span={14}>
+                        <h3><Icon type="usergroup-add" />管理员</h3>
+                        <div>
+                            { staffInfo }
+                            <Popover placement="rightTop" title={text} content={content} trigger="click">
+                                <Tag
+                                    style={{ background: '#fff', borderStyle: 'dashed' }}
+                                >
+                                    <Icon type="plus" /> 添加
+                                </Tag>
+                            </Popover>
+                        </div>
+                    </Col>
+                </Row>
             </div>
 
         )
