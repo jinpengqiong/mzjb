@@ -117,7 +117,6 @@ function getConfig(config) {
             };
         },
         formatData: function formatData(data) {
-            console.log('data', data)
             return {
                 data: data.data_list,
                 pageSize: 8,

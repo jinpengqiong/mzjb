@@ -1,5 +1,5 @@
-import { Design, Notify } from 'zent';
-import { Button } from 'antd'
+import { Design } from 'zent';
+import { Button, Popconfirm, message } from 'antd'
 import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
 import whitespaceConf from 'zan-design/lib/components/whitespace';
@@ -164,9 +164,12 @@ export default class ProdModuleSet extends React.Component {
                     <Button type="primary" onClick={this.submit} style={{ marginRight:"10px"}}>
                         上架
                     </Button>
-                    <Button type="primary" onClick={this.exit}>
-                        退出编辑
-                    </Button>
+                    <Popconfirm title="确定要放弃提交吗?" onConfirm={this.exit} >
+                        <Button type="primary" >
+                            退出编辑
+                        </Button>
+                    </Popconfirm>
+
                 </div>
             </div>
         );
@@ -198,7 +201,7 @@ export default class ProdModuleSet extends React.Component {
                             this.props.store.changeSettingDisplay();
                             this.props.refeshTable();
                             this.props.store.getModuleType(null);
-                            Notify.success('新建成功');
+                            message.success('新建成功');
 
                         }
                     )
@@ -223,7 +226,7 @@ export default class ProdModuleSet extends React.Component {
                             this.props.refeshTable();
                             this.props.store.getModuleType(null);
                             this.props.store.getModuleValue(null)
-                            Notify.success('更新成功');
+                            message.success('更新成功');
                         }
                     )
                 })
