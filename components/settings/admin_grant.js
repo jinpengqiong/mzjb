@@ -33,9 +33,6 @@ const findOneUser = `
 const addStaff = `
     mutation ($shopId: Int!,$userId:Int!, $role: StaffRole!) {
         addStaff(shopId:$shopId, userId:$userId, role:$role){
-            user{
-                phone
-            }
             userId
         }
     }
@@ -129,6 +126,7 @@ export default class GrantAdmin extends React.Component {
         )
     }
 
+    // delete staff
     lunchDelete = () => {
         this.setState({
             isClosable:true
@@ -202,7 +200,7 @@ export default class GrantAdmin extends React.Component {
                                 </Tag>
                             </Popover>
                             {
-                                JSON.stringify(this.state.staffsData.staffs) !== '[]'
+                                (this.state.staffsData && JSON.stringify(this.state.staffsData.staffs) !== '[]')
                                 &&
                                 <Tag
                                     style={{ background: '#fff', borderStyle: 'dashed' }}

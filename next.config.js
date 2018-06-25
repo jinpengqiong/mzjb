@@ -6,7 +6,7 @@ module.exports = {
             '/login': { page: '/login' },
             '/order': { page: '/order' },
             '/userList': { page: '/userList' },
-            '/resources': { page: '/resources' },
+            // '/resources': { page: '/resources' },
             '/products': { page: '/products' },
             '/settings': { page: '/settings' },
         }
