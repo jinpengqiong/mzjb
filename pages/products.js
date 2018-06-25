@@ -50,7 +50,7 @@ export default class Products extends React.Component {
     }
   }
     onChange = (e) => {
-      console.log('e',e.target.value)
+      // console.log('e',e.target.value)
         this.setState({
             tagName:e.target.value
         })
@@ -65,7 +65,7 @@ export default class Products extends React.Component {
     queryTags = () =>{
         Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('tagData', res)
+                // console.log('tagData', res)
                 this.setState({
                     tagData: res.shopTags
                 })
@@ -83,7 +83,7 @@ export default class Products extends React.Component {
                   tabPosition="left"
                   onChange={this.onTabsChange}
                   hideAdd>
-                  <TabPane tab='商品管理' key="1">
+                  <TabPane tab='商品管理' key="商品管理">
                       <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
                           <Radio.Button value="出售中">出售中</Radio.Button>
                           <Radio.Button value="仓库中">仓库中</Radio.Button>
@@ -97,7 +97,7 @@ export default class Products extends React.Component {
                               :null
                       }
                   </TabPane>
-                  <TabPane tab='商品分组' key="2" >
+                  <TabPane tab='商品分组' key="商品分组" >
                       <GroupProduct />
                   </TabPane>
               </Tabs>

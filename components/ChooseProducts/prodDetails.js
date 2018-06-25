@@ -1,5 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
+import { Carousel } from 'antd';
 import { Button, Col, Row, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
@@ -73,15 +74,28 @@ export default class ProdDetails extends React.Component {
 
     render() {
         if(this.props.store.ProdDetailData){
+            const imgsItems = this.props.store.ProdDetailData.item.itemImgs.map(
+                (item) => {
+                   return(
+                       <div>
+                           <img src={item.medium} style={{ width:'450px' }}/>
+                       </div>
+                   )
+                }
+            )
             return (
                 <div>
                     <Row>
-                        <Col span={10} offset={2}>
-                            <img src={this.props.store.ProdDetailData.item.itemImgs[0].url} style={{ width:"350px"}}/>
+                        <Col span={10} offset={1}>
+                            <Carousel autoplay effect="fade" speed='4000'>
+                                { imgsItems }
+                            </Carousel>
                         </Col>
-                        <Col span={12}>
-                            <h3>{this.props.store.ProdDetailData.item.title}</h3>
+                        <Col span={11} offset={1}>
+                            <h2>{this.props.store.ProdDetailData.item.title}</h2>
                             <p>价格：{'¥'+this.props.store.ProdDetailData.item.price}</p>
+                            <p>运费： {this.props.store.ProdDetailData.item.postFee ===0? "包邮" : '¥'+(this.props.store.ProdDetailData.item.postFee/100).toFixed(2) }</p>
+                            <p>总销量：{ this.props.store.ProdDetailData.item.soldNum + '件'}</p>
                             <p>总库存：{this.props.store.ProdDetailData.item.quantity}</p>
                             {/*<p>创建时间：{this.props.store.ProdDetailData.item.createTime}</p>*/}
                             {
@@ -95,6 +109,16 @@ export default class ProdDetails extends React.Component {
                             }
                         </Col>
                     </Row>
+                    <style jsx>{`
+                        .ant-carousel .slick-slide {
+                          text-align: center;
+                          height: 500px;
+                          line-height: 400px;
+                          background: transparent;
+                          overflow: hidden;
+                        }
+                    `}
+                    </style>
                 </div>
             )
         }else{

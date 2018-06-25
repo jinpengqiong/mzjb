@@ -47,8 +47,8 @@ const updateShoppage = `
 
 const _global = {
     url: {
-        demo: `http://testshop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
-        www: `http://testshop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
+        demo: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
+        www: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
     },
     kdt_id: 1,
     user_id: '9066245',

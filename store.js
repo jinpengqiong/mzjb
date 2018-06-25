@@ -14,7 +14,7 @@ class Store {
   // wethear show the product detail
   @observable isShown = false;
   //product tab will shown
-  @observable activeKey = '1';
+  @observable chooseProdKey = '1';
   //Youxuan Product detail data
   @observable ProdDetailData = null;
   // replyBody saved here
@@ -26,7 +26,7 @@ class Store {
   //prod type for prod update
   @observable prodType = null;
   //activeKey for prod
-  @observable activeKey = '1';
+  @observable activeKey = '商品管理';
   //rich text content
   @observable richTextContent = null;
   //moduleSetting isShown
@@ -80,7 +80,7 @@ class Store {
   }
 
   @action changeKey = (keyID) => {
-    this.activeKey = keyID;
+    this.chooseProdKey = keyID;
   }
 
   @action getProdDetailData = (data) => {

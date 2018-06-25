@@ -130,7 +130,7 @@ class YouzanUploader extends React.Component {
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
               Request.GraphQlRequest(createMediaAndUploadYouzan, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('res',res)
+                    // console.log('res',res)
                     self.props.store.getMainImage(url);
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);

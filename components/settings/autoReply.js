@@ -65,7 +65,7 @@ export default class AutoReply extends React.Component {
     queryAutoReply = (page) => {
         Request.GraphQlRequest(listAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 3}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('listAutoreply', res.listAutoreply)
+                // console.log('listAutoreply', res.listAutoreply)
                 this.setState({
                     autoReplyData: res.listAutoreply
                 })
@@ -97,7 +97,7 @@ export default class AutoReply extends React.Component {
             if (err) {
                 message.error(err);
             }else{
-                console.log('values', values)
+                // console.log('values', values)
                 const replyBody = {
                     "title": values.title,
                     "description": values.description,
@@ -123,7 +123,7 @@ export default class AutoReply extends React.Component {
         }else{
             Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:this.state.keyWord, replyBody:JSON.stringify(this.props.store.replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('Autoreply', res)
+                    // console.log('Autoreply', res)
                     message.success('设置成功！')
                     this.setState({
                         keyWord: ''
@@ -160,13 +160,13 @@ export default class AutoReply extends React.Component {
     }
     //query paged qutoreply list
     onPageChange = (page) => {
-        console.log('page', page)
+        // console.log('page', page)
         this.queryAutoReply(page)
     }
 
     render() {
         const rBodies = JSON.stringify(this.props.store.replyBody)!=="[]"?  this.props.store.replyBody.toJS(): null;
-        console.log('111',this.state.autoReplyData);
+        // console.log('111',this.state.autoReplyData);
         const autoReplyLists = this.state.autoReplyData && this.state.autoReplyData.entries.map(
             (item) => {
                 const ReplyBody = JSON.parse(item.replyBody)

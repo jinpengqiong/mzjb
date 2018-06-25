@@ -31,8 +31,9 @@ export default class Products extends React.Component {
         this.store.getCurPagePath('素材');
     }
   }
+
   callback(key) {
-    console.log(key);
+    // console.log(key);
   }
   render () {
     return (

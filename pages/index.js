@@ -42,7 +42,7 @@ export default class MainPage extends React.Component {
                 <Spin spinning={this.state.loading} size="large">
                     <MyLayout>
                         <Tabs
-                        activeKey={this.store.activeKey}
+                        activeKey={this.store.chooseProdKey}
                         tabPosition="left"
                         onChange={this.onChange}
                         hideAdd>

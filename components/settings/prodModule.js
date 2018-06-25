@@ -114,7 +114,7 @@ export default class ProdModule extends React.Component {
     queryCurShoppage = () => {
         Request.GraphQlRequest(getShop, {id:localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('getShop', res)
+                // console.log('getShop', res)
                 this.setState({
                     curShopPage: res.getShop.curShoppage
                 })

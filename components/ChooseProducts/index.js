@@ -64,13 +64,13 @@ const querySpecificPROD = `
               itemType
               quantity
               title
-              origin
+              desc
+              itemNo
+              num
+              postFee
+              soldNum
               itemImgs{
-                combine
-                created
                 medium
-                thumbnail
-                url
               }
             }
           }
@@ -85,7 +85,8 @@ export default class ChooseProducts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:null
+            data:null,
+            shopID:null
         };
     }
 
@@ -93,8 +94,10 @@ export default class ChooseProducts extends React.Component {
         if (!localStorage.getItem('accessToken')) {
             Router.push('/login')
         } else{
-          this.getData(1);
           this.queryYouxuanProd(1)
+          if(!localStorage.getItem('shopID') ){
+              this.getData(1)
+          }
         }
     }
 
@@ -105,9 +108,11 @@ export default class ChooseProducts extends React.Component {
         };
         Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('res',res);
+                // console.log('queryShops',res);
                 this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
-                localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
+                if(!localStorage.getItem('shopID')){
+                    localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
+                }
             }
         )
     }
@@ -116,6 +121,11 @@ export default class ChooseProducts extends React.Component {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 // console.log('res',res);
+                res.youxuanProducts.items.map(
+                    (item) => {
+                        item.price = (item.price/100).toFixed(2)
+                    }
+                )
                 this.setState({
                     data: res.youxuanProducts
                 })
@@ -145,10 +155,11 @@ export default class ChooseProducts extends React.Component {
                         </Card>
                         <div className="cover">
                             <Button onClick={
-                                () =>{
-                                Request.GraphQlRequest(querySpecificPROD, { shopId:parseInt(localStorage.getItem('shopID')), itemId:(item.itemId).toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                                () => {
+                                Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId:(item.itemId).toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                                     (res) => {
-                                        // console.log('res',res);
+                                        // console.log('111', res)
+                                        res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
                                         this.props.store.changeShown();
                                         this.props.store.changeKey('2');
                                         this.props.store.getProdDetailData(res.getYouxuanProduct)
@@ -161,10 +172,9 @@ export default class ChooseProducts extends React.Component {
                 )
             }
         )
-        console.log('2222', this.state.data)
         return (
             <div>
-                <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
+                <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px", display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                     {
                         (this.state.data && JSON.stringify(this.state.data.items) !== '[]')?
                             youzanPROD

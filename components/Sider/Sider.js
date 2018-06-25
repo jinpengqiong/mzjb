@@ -53,14 +53,14 @@ export default class MySider extends React.Component {
                                 <span>商品</span>
                             </div>
                         </Menu.Item>
-                        <Menu.Item key="素材">
-                            <div onClick={()=>{
-                                Router.prefetch('/resources');
-                                Router.push('/resources')}}>
-                                <Icon type="picture" />
-                                <span>素材</span>
-                            </div>
-                        </Menu.Item>
+                        {/*<Menu.Item key="素材">*/}
+                            {/*<div onClick={()=>{*/}
+                                {/*Router.prefetch('/resources');*/}
+                                {/*Router.push('/resources')}}>*/}
+                                {/*<Icon type="picture" />*/}
+                                {/*<span>素材</span>*/}
+                            {/*</div>*/}
+                        {/*</Menu.Item>*/}
                         <Menu.Item key="订单">
                             <div onClick={()=>{
                                 Router.prefetch('/order');

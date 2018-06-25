@@ -41,11 +41,10 @@ const addStaff = `
     }
 `;
 
-const delShoproom = `
+const delStaff = `
     mutation ($shopId: Int!,$id:ID!) {
-        delShoproom(shopId:$shopId, id:$id){
+        delStaff(shopId:$shopId, id:$id){
             id
-            roomId
         }
     }
 `;
@@ -58,7 +57,8 @@ export default class GrantAdmin extends React.Component {
             InputValue:'',
             loading:false,
             userData:null,
-            staffsData:null
+            staffsData:null,
+            isClosable:false
         }
     }
 
@@ -69,7 +69,7 @@ export default class GrantAdmin extends React.Component {
     queryStaffs = () => {
         Request.GraphQlRequest(getShop, {id:localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('getShop', res)
+                // console.log('getShop', res)
                 this.setState({
                     staffsData: res.getShop,
                 });
@@ -79,7 +79,7 @@ export default class GrantAdmin extends React.Component {
 
     //radio change
     onRadioChange = (e) => {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         this.setState({
             RadioValue: e.target.value,
         });
@@ -95,7 +95,7 @@ export default class GrantAdmin extends React.Component {
             });
             Request.GraphQlRequest(findOneUser, {type:this.state.RadioValue, value:this.state.InputValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                 (res) => {
-                    console.log('findOneUser', res)
+                    // console.log('findOneUser', res)
                     this.setState({
                         userData:res.findOneUser,
                         loading: false
@@ -107,7 +107,7 @@ export default class GrantAdmin extends React.Component {
 
     //get input value
     InputChange = (e) => {
-        console.log('111',e.target.value)
+        // console.log('111',e.target.value)
         this.setState({
             InputValue:e.target.value
         })
@@ -117,7 +117,7 @@ export default class GrantAdmin extends React.Component {
     addStaff = (ID) => {
         Request.GraphQlRequest(addStaff, {shopId: parseInt(localStorage.getItem('shopID')),userId:parseInt(ID), role:'SUPER_ADMIN'}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                console.log('addStaff', res)
+                // console.log('addStaff', res)
                 this.setState({
                     staffData: res.addStaff,
                     userData:null,
@@ -129,14 +129,32 @@ export default class GrantAdmin extends React.Component {
         )
     }
 
+    lunchDelete = () => {
+        this.setState({
+            isClosable:true
+        })
+    }
+
+    deleteAdmin = ID => {
+        Request.GraphQlRequest(delStaff, {shopId: parseInt(localStorage.getItem('shopID')),id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+                // console.log('addStaff', res)
+                this.setState({
+                    isClosable:false
+                })
+                this.queryStaffs();
+                message.success('删除成功！')
+            }
+        )
+    }
 
     render() {
         const text = <span><Icon type="user-add" /> 搜索用户</span>;
         const content = (
             <div>
-                <div onClick={this.searchStaff} style={{ marginBottom:"10px"}}>
+                <div style={{ marginBottom:"10px"}}>
                     <Input style={{ width:"150px", marginRight:"10px"}} onChange={this.InputChange} value={this.state.InputValue}/>
-                    <Button type="primary" shape="circle" icon="search" />
+                    <Button type="primary" shape="circle" icon="search" onClick={this.searchStaff}/>
                 </div>
                 <div>
                     <RadioGroup onChange={this.onRadioChange} value={this.state.RadioValue}>
@@ -150,7 +168,7 @@ export default class GrantAdmin extends React.Component {
                             this.state.userData?
                                 <div style={{ marginTop:"20px"}}>
                                     <Tag color="#2db7f5">{this.state.userData.phone}</Tag>
-                                        <Button  type="primary" onClick={ () => { this.addStaff(this.state.userData.id) } }>添加</Button>
+                                    <Button  type="primary" onClick={ () => { this.addStaff(this.state.userData.id) } }>添加</Button>
                                 </div>
                                 :
                                 null
@@ -161,7 +179,7 @@ export default class GrantAdmin extends React.Component {
         );
         const staffInfo = this.state.staffsData && this.state.staffsData.staffs.map(
             (staff) => {
-                return <Tag color="#2db7f5" key={staff.userId}>{staff.user.phone}</Tag>
+                return <Tag color="#2db7f5" key={staff.userId} closable={ this.state.isClosable } onClose={ () => { this.deleteAdmin(staff.id)}}>{staff.user.phone}</Tag>
             }
         )
 
@@ -183,6 +201,16 @@ export default class GrantAdmin extends React.Component {
                                     <Icon type="plus" /> 添加
                                 </Tag>
                             </Popover>
+                            {
+                                JSON.stringify(this.state.staffsData.staffs) !== '[]'
+                                &&
+                                <Tag
+                                    style={{ background: '#fff', borderStyle: 'dashed' }}
+                                    onClick={ this.lunchDelete}
+                                >
+                                    <Icon type="minus" /> 删除
+                                </Tag>
+                            }
                         </div>
                     </Col>
                 </Row>
