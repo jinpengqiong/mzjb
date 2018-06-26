@@ -98,6 +98,13 @@ export default class GrantAdmin extends React.Component {
                         loading: false
                     });
                 }
+            ).catch(
+                () => {
+                    message.info('此查询未找到！')
+                    this.setState({
+                        loading: false
+                    });
+                }
             )
         }
     }
@@ -195,6 +202,7 @@ export default class GrantAdmin extends React.Component {
                             <Popover placement="rightTop" title={text} content={content} trigger="click">
                                 <Tag
                                     style={{ background: '#fff', borderStyle: 'dashed' }}
+                                    color="orange"
                                 >
                                     <Icon type="plus" /> 添加
                                 </Tag>
@@ -204,6 +212,7 @@ export default class GrantAdmin extends React.Component {
                                 &&
                                 <Tag
                                     style={{ background: '#fff', borderStyle: 'dashed' }}
+                                    color="orange"
                                     onClick={ this.lunchDelete}
                                 >
                                     <Icon type="minus" /> 删除

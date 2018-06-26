@@ -102,7 +102,12 @@ export default class GroupProduct extends React.Component {
     queryTags = () =>{
         Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('res', res)
+                console.log('res', res)
+                res.shopTags.map(
+                    entry => {
+                        entry.key = entry.id
+                    }
+                )
                 this.setState({
                     data: res.shopTags
                 })

@@ -3,11 +3,7 @@ import Router from 'next/router';
 const FormItem = Form.Item;
 import { request } from 'graphql-request'
 import uri from '../../utils/uri';
-// const uri = 'http://testshop.muzhiyun.cn/api/graphiql';
 
-var opts = {
-  // custom fetch options
-}
 
 
 class NormalLoginForm extends React.Component {
@@ -38,11 +34,12 @@ class NormalLoginForm extends React.Component {
           };
           request(uri, mutation, variables).then(
             (res)=>{
-                // console.log('res', res)
+                console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
+                    localStorage.setItem('mzAccountid', res.login.user.mzAccountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
                     localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('phone', res.login.user.phone);

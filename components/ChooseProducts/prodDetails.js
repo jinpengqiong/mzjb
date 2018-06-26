@@ -3,6 +3,7 @@ import Router from 'next/router';
 import { Carousel } from 'antd';
 import { Button, Col, Row, message } from 'antd';
 import { inject, observer } from 'mobx-react';
+import UUIDGen from '../../utils/uuid_generator'
 import Request from '../../utils/graphql_request';
 
 const createProduct = `
@@ -78,7 +79,7 @@ export default class ProdDetails extends React.Component {
                 (item) => {
                    return(
                        <div>
-                           <img src={item.medium} style={{ width:'450px' }}/>
+                           <img src={item.medium} style={{ width:'450px' }} key={UUIDGen.uuid(6,10)}/>
                        </div>
                    )
                 }

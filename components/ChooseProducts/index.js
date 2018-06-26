@@ -142,7 +142,7 @@ export default class ChooseProducts extends React.Component {
         const youzanPROD = this.state.data && this.state.data.items.map(
             (item) => {
                 return (
-                    <div className='card_entity' style={{ marginRight:'20px', marginBottom:'20px'}}>
+                    <div className='card_entity' style={{ marginRight:'20px', marginBottom:'20px'}} key={item.itemId}>
                         <Card
                             key={item.itemId}
                             style={{ width: '220px', height: '320px' }}

@@ -42,7 +42,7 @@ export default class MyHeader extends React.Component {
                             mode="horizontal"
                             style={{ lineHeight: '45px', float: 'right' }}
                         >
-                            <SubMenu title={<span>你好，{this.state.localStor!= null && localStorage.getItem('nickname')}</span>}>
+                            <SubMenu title={<span>{this.state.localStor!= null? '您好，'+ localStorage.getItem('nickname') : null}</span>}>
                                 <Menu.Item key="1" >{<span onClick={this.handleLogout} style={{ display: 'block',width:"130px", textAlign:"center"}}><Icon type="logout" />退出登录</span>}</Menu.Item>
                             </SubMenu>
                         </Menu>
