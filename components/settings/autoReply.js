@@ -171,14 +171,16 @@ export default class AutoReply extends React.Component {
             (item) => {
                 const ReplyBody = JSON.parse(item.replyBody)
                 return (
-                    <div style={{ width:'300px', marginLeft:"30px", marginTop:"25px"}} id={item.id} key={UUIDGen.uuid(8, 10)}>
-                        <p>关键词：<span style={{color:"red"}}>{item.keyWord}</span>
-                            <Tooltip title="删除">
-                                <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
-                                    <Icon type="delete" style={{float:"right"}}/>
-                                </Popconfirm>
-                            </Tooltip>
-                        </p>
+                    <div style={{ width:'300px', marginLeft:"30px", marginTop:"25px", border:'2px solid #ECECEC'}} id={item.id} key={UUIDGen.uuid(8, 10)}>
+                        <div style={{ marginTop:"10px", marginBottom:'10px'}}>
+                            <p>关键词：<span style={{color:"red" }}>{item.keyWord}</span>
+                                <Tooltip title="删除">
+                                    <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
+                                        <Icon type="delete" style={{float:"right"}}/>
+                                    </Popconfirm>
+                                </Tooltip>
+                            </p>
+                        </div>
                         <div className='main' key={UUIDGen.uuid(8, 10)}>
                             <img style={{ width:'300px', height:"200px"}}
                                  src={ReplyBody[0].picurl}
@@ -267,7 +269,7 @@ export default class AutoReply extends React.Component {
             <div>
                 <Row>
                     <Col span={6}>
-                        <div style={{ width:'300px'}}>
+                        <div style={{ width:'300px', border:'2px dashed #ECECEC'}}>
                             <p style={{ marginBottom:"8px"}}>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
                             <div className='main' key={UUIDGen.uuid(8, 10)}>
                                 <img style={{ width:'300px', height:"200px"}}
@@ -360,7 +362,7 @@ export default class AutoReply extends React.Component {
                         <SelfReplyForm ref='form'/>
                     </Modal>
                     <Col span={17} offset={1}>
-                        <p>已创建的回复列表：</p>
+                        <h3>已创建的回复列表：</h3>
                         <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                             { ( this.state.autoReplyData &&JSON.stringify(this.state.autoReplyData.entries) !=="[]" )? autoReplyLists : "暂无" }
                         </div>

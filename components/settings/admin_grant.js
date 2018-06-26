@@ -186,7 +186,7 @@ export default class GrantAdmin extends React.Component {
                 <Row>
                     <Col span={8} offset={2}>
                         <h3><Icon type="user" />创建者</h3>
-                        <p>{localStorage.getItem('nickname')}</p>
+                        <Tag color="#2db7f5" >{localStorage.getItem('phone')}</Tag>
                     </Col>
                     <Col span={14}>
                         <h3><Icon type="usergroup-add" />管理员</h3>
