@@ -29,12 +29,13 @@ export default class ProdDetails extends React.Component {
     }
 
     addToShop = () => {
+        console.log('ccc', this.props.store.ProdDetailData)
         const baseinfo = {
             desc: this.props.store.ProdDetailData.item.title,
             detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:true,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
-            price:this.props.store.ProdDetailData.item.price,
+            price:parseInt(this.props.store.ProdDetailData.item.price),
             title:this.props.store.ProdDetailData.item.title
         };
         Request.GraphQlRequest(createProduct, {
@@ -47,7 +48,7 @@ export default class ProdDetails extends React.Component {
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
             }
-        ).catch(()=>{message.error('出错了，请联系管理员！')})
+        ).catch((err)=>{console.error(err)})
     }
 
     addToStock  = () => {

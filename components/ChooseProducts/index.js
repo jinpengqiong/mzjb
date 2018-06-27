@@ -71,6 +71,7 @@ const querySpecificPROD = `
               soldNum
               itemImgs{
                 medium
+                thumbnail
               }
             }
           }
