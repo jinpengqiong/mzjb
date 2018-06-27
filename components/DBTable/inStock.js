@@ -268,7 +268,7 @@ export default class InStock extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        )
+                        ).catch(()=>{message.error('新增失败！')})
                     }
                 }
             })

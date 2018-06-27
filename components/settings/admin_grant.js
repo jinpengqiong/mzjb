@@ -136,7 +136,7 @@ export default class GrantAdmin extends React.Component {
     // delete staff
     lunchDelete = () => {
         this.setState({
-            isClosable:true
+            isClosable:!this.state.isClosable
         })
     }
 
@@ -215,7 +215,7 @@ export default class GrantAdmin extends React.Component {
                                     color="orange"
                                     onClick={ this.lunchDelete}
                                 >
-                                    <Icon type="minus" /> 删除
+                                    <Icon type="minus" /> { this.state.isClosable? '取消删除':'删除'}
                                 </Tag>
                             }
                         </div>
