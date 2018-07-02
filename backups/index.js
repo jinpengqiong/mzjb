@@ -163,21 +163,21 @@ var GoodsStyleEditor = function (_Component) {
                 { name: 'size_type', value: '0' },
                 '\u5361\u7247'
               ),
-              size === '1' && _react2['default'].createElement(
-                _radio2['default'],
-                { name: 'size_type', value: '1' },
-                '\u7011\u5E03\u6D41'
-              ),
-              _react2['default'].createElement(
-                _radio2['default'],
-                { name: 'size_type', value: '2' },
-                '\u6781\u7B80'
-              ),
-              size === '1' && _react2['default'].createElement(
-                _radio2['default'],
-                { name: 'size_type', value: '3' },
-                '\u4FC3\u9500'
-              )
+              // size === '1' && _react2['default'].createElement(
+              //   _radio2['default'],
+              //   { name: 'size_type', value: '1' },
+              //   '\u7011\u5E03\u6D41'
+              // ),
+              // _react2['default'].createElement(
+              //   _radio2['default'],
+              //   { name: 'size_type', value: '2' },
+              //   '\u6781\u7B80'
+              // ),
+              // size === '1' && _react2['default'].createElement(
+              //   _radio2['default'],
+              //   { name: 'size_type', value: '3' },
+              //   '\u4FC3\u9500'
+              // )
             )
           ),
           sizeType !== '3' && (sizeType !== '2' || size === '3') && _react2['default'].createElement(
@@ -211,21 +211,21 @@ var GoodsStyleEditor = function (_Component) {
                   { name: 'buy_btn_type', value: '1' },
                   '\u6837\u5F0F1'
                 ),
-                _react2['default'].createElement(
-                  _radio2['default'],
-                  { name: 'buy_btn_type', value: '2' },
-                  '\u6837\u5F0F2'
-                ),
-                !(size === '3' && sizeType === '2') && _react2['default'].createElement(
-                  _radio2['default'],
-                  { name: 'buy_btn_type', value: '3' },
-                  '\u6837\u5F0F3'
-                ),
-                _react2['default'].createElement(
-                  _radio2['default'],
-                  { name: 'buy_btn_type', value: '4' },
-                  '\u6837\u5F0F4'
-                )
+                // _react2['default'].createElement(
+                //   _radio2['default'],
+                //   { name: 'buy_btn_type', value: '2' },
+                //   '\u6837\u5F0F2'
+                // ),
+                // !(size === '3' && sizeType === '2') && _react2['default'].createElement(
+                //   _radio2['default'],
+                //   { name: 'buy_btn_type', value: '3' },
+                //   '\u6837\u5F0F3'
+                // ),
+                // _react2['default'].createElement(
+                //   _radio2['default'],
+                //   { name: 'buy_btn_type', value: '4' },
+                //   '\u6837\u5F0F4'
+                // )
               )
             )
           ),
