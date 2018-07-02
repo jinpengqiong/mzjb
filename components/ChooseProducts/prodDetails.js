@@ -57,7 +57,7 @@ export default class ProdDetails extends React.Component {
             detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:false,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
-            price:this.props.store.ProdDetailData.item.price,
+            price:parseInt(this.props.store.ProdDetailData.item.price),
             title:this.props.store.ProdDetailData.item.title
         };
         Request.GraphQlRequest(createProduct, {
