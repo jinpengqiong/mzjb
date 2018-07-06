@@ -3,7 +3,7 @@ const FormItem = Form.Item;
 import { inject, observer } from 'mobx-react'
 import YouzanUploader from '../FileUploader/youzanUpload'
 import dynamic from 'next/dynamic'
-const RichText = dynamic(import('../richText/richText'))
+const RichText = dynamic(import('../richText/richText'),{ ssr:false })
 
 @inject('store') @observer
 class RegistrationForm extends React.Component {

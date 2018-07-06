@@ -1,7 +1,7 @@
 import { Button, Table, Divider, Popconfirm, message, Pagination, Tag } from'antd';
 import { inject, observer } from 'mobx-react'
 import dynamic from 'next/dynamic'
-const ProdModuleSet = dynamic(import('./prodModuleSet'))
+const ProdModuleSet = dynamic(import('./prodModuleSet'), {ssr: false})
 import Request from '../../utils/graphql_request';
 import moment from 'moment'
 import EmbeddedAndSharing from './enbedded_and_sharing'
