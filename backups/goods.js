@@ -73,7 +73,7 @@ function getConfig(config) {
             bodyRender: function bodyRender(data) {
                 var goodsType = data.goods_type;
 
-                var isFenxiao = +goodsType === 10;
+        var isFenxiao = +goodsType === 10;
 
                 return _react2['default'].createElement(
                     'div',

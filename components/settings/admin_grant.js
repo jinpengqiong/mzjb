@@ -192,16 +192,20 @@ export default class GrantAdmin extends React.Component {
             <div>
                 <Row>
                     <Col span={8} offset={2}>
-                        <h3><Icon type="user" />创建者</h3>
-                        <Tag color="#2db7f5" >{localStorage.getItem('phone')}</Tag>
+                        <h3>
+                            <Icon type="user" />创建者
+                        </h3>
+                        <Tag color="#2db7f5" style={{ marginTop:'15px' }}>{localStorage.getItem('phone')}</Tag>
                     </Col>
                     <Col span={14}>
-                        <h3><Icon type="usergroup-add" />管理员</h3>
+                        <h3>
+                            <Icon type="usergroup-add" />管理员
+                        </h3>
                         <div>
                             { staffInfo }
                             <Popover placement="rightTop" title={text} content={content} trigger="click">
                                 <Tag
-                                    style={{ background: '#fff', borderStyle: 'dashed' }}
+                                    style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
                                     color="orange"
                                 >
                                     <Icon type="plus" /> 添加
@@ -211,7 +215,7 @@ export default class GrantAdmin extends React.Component {
                                 (this.state.staffsData && JSON.stringify(this.state.staffsData.staffs) !== '[]')
                                 &&
                                 <Tag
-                                    style={{ background: '#fff', borderStyle: 'dashed' }}
+                                    style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
                                     color="orange"
                                     onClick={ this.lunchDelete}
                                 >
