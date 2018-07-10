@@ -609,7 +609,6 @@ export default class ProdTable extends React.Component {
                 dataSource = {this.state.data? this.state.data : null }
                 columns={this.state.columns}
                 pagination={false}
-                scroll={{ y: 550 }}
             />
             {
             (this.state.data && JSON.stringify(this.state.data) !=='[]')

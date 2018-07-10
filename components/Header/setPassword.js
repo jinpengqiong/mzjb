@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react'
 import { request } from 'graphql-request'
 import uri from '../../utils/uri';
 
-
 const querySmsCode = `
   mutation($phone: String!) {
     smsCode(phone:$phone){

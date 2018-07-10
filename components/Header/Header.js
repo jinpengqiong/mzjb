@@ -1,11 +1,14 @@
-import { Layout, Menu, Icon, Modal, message } from 'antd';
+import { Layout, Menu, Icon, Modal, message, Radio } from 'antd';
 const { Header } = Layout;
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
 import { inject, observer } from 'mobx-react'
 import SetPassword from './setPassword'
-import { request } from 'graphql-request'
+import Request from '../../utils/graphql_request';
 import uri from '../../utils/uri';
+import isEmpty from 'lodash/isEmpty';
+
+const RadioGroup = Radio.Group;
 
 const resetPassword = `
 mutation ($phone:String!, $code: String!, $password: String!) {
@@ -16,6 +19,16 @@ mutation ($phone:String!, $code: String!, $password: String!) {
 }
 `;
 
+const manageShops = `
+  query($page: Int, $pageSize:Int) {
+    manageShops(page:$page, pageSize:$pageSize){
+      entries{
+        id
+        name
+      }
+  }
+}`;
+
 
 @inject('store') @observer
 export default class MyHeader extends React.Component {
@@ -23,13 +36,16 @@ export default class MyHeader extends React.Component {
       super(props)
       this.state={
           localStor:null,
-          visible:false
+          visible:false,
+          visible1:false,
+          shopsData:null,
+          radioValue:null,
       }
   }
 
   componentDidMount (){
       this.setState({
-          localStor : localStorage
+        localStor : localStorage,
       })
   }
 
@@ -45,6 +61,8 @@ export default class MyHeader extends React.Component {
       this.props.store.getRoleInfo('');
   }
 
+
+  //reset password
   handleOk = (e) => {
     this.refs.form.validateFields(
         (err, values) => {
@@ -64,7 +82,6 @@ export default class MyHeader extends React.Component {
               console.error(err)
             }
         )
-
       }
     }
     )
@@ -73,7 +90,7 @@ export default class MyHeader extends React.Component {
   handleCancel = (e) => {
     this.refs.form.resetFields();
     this.setState({
-      visible: false,
+      visible: false
     });
   }
 
@@ -83,19 +100,49 @@ export default class MyHeader extends React.Component {
     });
   }
 
-  render() {
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    // const { getFieldDecorator } = this.props.form;
 
+  //swtich shops
+  swtichShopsOk = () => {
+    localStorage.setItem('shopID', this.state.radioValue)
+    this.setState({
+      visible1: false,
+      radioValue:null
+    });
+  }
+
+  swtichShopsCancel = () => {
+    this.setState({
+      visible1: false,
+      radioValue:null
+    });
+  }
+
+  switchShops = () => {
+    this.setState({
+      visible1: true,
+    })
+    Request.GraphQlRequest(manageShops, {page:1, pageSize:20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        (res) => {
+          console.log('res', res)
+          this.setState({
+            shopsData : res.manageShops.entries,
+          })
+        }
+    ).catch(
+        (err) => {
+          console.error(err)
+        }
+    )
+  }
+
+  onRadioChange = (e) => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      radioValue: e.target.value,
+    });
+  }
+
+  render() {
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>
@@ -117,6 +164,12 @@ export default class MyHeader extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="2" >
                           {
+                              <span onClick={this.switchShops} style={{ display: 'block',width:"130px", textAlign:"center"}}>
+                              <Icon type="shop" />切换店铺</span>
+                          }
+                        </Menu.Item>
+                        <Menu.Item key="3" >
+                          {
                               <span onClick={this.handleLogout} style={{ display: 'block',width:"130px", textAlign:"center"}}>
                               <Icon type="logout" />退出登录</span>
                           }
@@ -130,6 +183,29 @@ export default class MyHeader extends React.Component {
                     onCancel={this.handleCancel}
                 >
                   <SetPassword ref="form"/>
+                </Modal>
+              <Modal
+                  title="切换店铺"
+                  visible={this.state.visible1}
+                  onOk={this.swtichShopsOk}
+                  onCancel={this.swtichShopsCancel}
+                >
+                <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+                  <Radio value={this.props.store.shopID} key={this.props.store.shopID}>创建的店铺</Radio>
+                  <br/>
+                  <br/>
+                  <h3>管理的店铺：</h3>
+                  {
+                    isEmpty(this.state.shopsData)?
+                      '暂无'
+                        :
+                    this.state.shopsData.map(
+                        (item) => {
+                          return <Radio value={item.id} key={item.id}>{item.name}</Radio>
+                        }
+                    )
+                  }
+                </RadioGroup>
                 </Modal>
             </Header>
             <style jsx>{`
