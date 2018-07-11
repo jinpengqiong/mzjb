@@ -25,7 +25,17 @@ const manageShops = `
       entries{
         id
         name
+        phone
+        staffs{
+        id
+        name
+        user{
+          nickname
+          phone
+          id
+        }
       }
+    }
   }
 }`;
 
@@ -103,11 +113,19 @@ export default class MyHeader extends React.Component {
 
   //swtich shops
   swtichShopsOk = () => {
-    localStorage.setItem('shopID', this.state.radioValue)
+    if(this.state.radioValue === localStorage.getItem('OriginalID')){
+      localStorage.setItem('shopID', localStorage.getItem('OriginalID'))
+      localStorage.setItem('phone', this.state.shopsData[0].staffs[0].user.phone)
+    }else{
+      localStorage.setItem('shopID', parseInt(this.state.radioValue))
+      localStorage.setItem('phone', this.state.shopsData[0].name.split('_')[1])
+    }
+
     this.setState({
       visible1: false,
       radioValue:null
     });
+    Router.push('/');
   }
 
   swtichShopsCancel = () => {
@@ -191,7 +209,7 @@ export default class MyHeader extends React.Component {
                   onCancel={this.swtichShopsCancel}
                 >
                 <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
-                  <Radio value={this.props.store.shopID} key={this.props.store.shopID}>创建的店铺</Radio>
+                  <Radio value={this.state.localStor && this.state.localStor.getItem('OriginalID')} key={this.state.localStor && this.state.localStor.getItem('OriginalID')}>创建的店铺</Radio>
                   <br/>
                   <br/>
                   <h3>管理的店铺：</h3>

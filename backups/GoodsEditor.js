@@ -175,7 +175,7 @@ var GoodsEditor = (_temp2 = _class = function (_DesignEditor) {
         buy_btn_type: '1',
 
         // 是否显示商品名(0: 不显示, 1: 显示)
-        title: '0',
+        title: '1',
 
         // 是否显示价格(0: 不显示, 1: 显示)
         price: '1',

@@ -136,6 +136,11 @@ var GoodsStyleEditor = function (_Component) {
               _radio2['default'],
               { name: 'size', value: '1' },
               '\u5C0F\u56FE'
+            ),
+            _react2['default'].createElement(
+                _radio2['default'],
+                { name: 'size', value: '3' },
+                '\u8BE6\u7EC6\u5217\u8868'
             )
           )
         ),

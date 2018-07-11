@@ -1,6 +1,7 @@
 import { Card, Affix, Button,message, Modal, Radio, Popconfirm } from 'antd';
 import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
+import isEmpty from 'lodash/isEmpty';
 
 const ownedRooms = `
     query ($shopId: ID!) {
@@ -163,7 +164,7 @@ export default class BindLiveRoom extends React.Component {
                     <h4>直播间列表：</h4>
                     <RadioGroup onChange={this.onChange} value={this.state.radioValue}>
                         {
-                            (!this.state.ownedRoom || JSON.stringify(this.state.ownedRoom) ==="[]")?
+                            isEmpty(this.state.ownedRoom) ?
                             '暂无'
                                 :
                             bindableRooms
@@ -173,7 +174,7 @@ export default class BindLiveRoom extends React.Component {
                 <h3 style={{ marginTop:'10px'}}>已绑定的直播间：</h3>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                     {
-                        JSON.stringify(this.state.listShopRoom) ==='[]' || !this.state.listShopRoom?
+                      isEmpty(this.state.listShopRoom)  ?
                             '暂无'
                             :
                         LiveRooms

@@ -3,6 +3,7 @@ import Request from '../../utils/graphql_request';
 import SelfReplyForm from './setAutoreplyForm'
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator'
+import isEmpty from 'lodash/isEmpty';
 
 const listAutoreply = `
     query ($shopId: ID!,$page: Int, $pageSize: Int) {
@@ -82,7 +83,7 @@ export default class AutoReply extends React.Component {
 
     //set SubTitle1
     handleSubTitle1 = () => {
-        if(JSON.stringify(this.props.store.replyBody)==="[]"){
+        if(isEmpty(this.props.store.replyBody)){
             message.error('请先设置封面图文！')
         }else{
             this.setState({
@@ -118,7 +119,7 @@ export default class AutoReply extends React.Component {
     handleSubmit = () => {
         if(this.state.keyWord==='' ){
             message.error('请输入关键词后，再提交！')
-        }else if( JSON.stringify(this.props.store.replyBody)==='[]'){
+        }else if( isEmpty(this.props.store.replyBody)){
             message.error('请设置图文后，再提交！')
         }else{
             Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:this.state.keyWord, replyBody:JSON.stringify(this.props.store.replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -165,7 +166,7 @@ export default class AutoReply extends React.Component {
     }
 
     render() {
-        const rBodies = JSON.stringify(this.props.store.replyBody)!=="[]"?  this.props.store.replyBody.toJS(): null;
+        const rBodies = !isEmpty(this.props.store.replyBody)?  this.props.store.replyBody.toJS(): null;
         // console.log('111',this.state.autoReplyData);
         const autoReplyLists = this.state.autoReplyData && this.state.autoReplyData.entries.map(
             (item) => {
@@ -364,7 +365,7 @@ export default class AutoReply extends React.Component {
                     <Col span={17} offset={1}>
                         <h3>已创建的回复列表：</h3>
                         <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
-                            { ( this.state.autoReplyData &&JSON.stringify(this.state.autoReplyData.entries) !=="[]" )? autoReplyLists : "暂无" }
+                            { ( this.state.autoReplyData && !isEmpty(this.state.autoReplyData.entries) ) ? autoReplyLists : "暂无" }
                         </div>
                     </Col>
                 </Row>

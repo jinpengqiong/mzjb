@@ -111,9 +111,8 @@ export default class ChooseProducts extends React.Component {
             (res) => {
                 // console.log('queryShops',res);
                 this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
-                if(!localStorage.getItem('shopID')){
-                    localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
-                }
+                localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
+                localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
             }
         )
     }
