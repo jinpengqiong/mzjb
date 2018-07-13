@@ -3,6 +3,7 @@ import Router from 'next/router';
 import {Card, Button, Pagination } from 'antd';
 import { inject, observer } from 'mobx-react';
 import Request from '../../utils/graphql_request';
+import isEmpty from 'lodash/isEmpty';
 const { Meta } = Card;
 
 const queryShops = `
@@ -176,7 +177,7 @@ export default class ChooseProducts extends React.Component {
             <div>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px", display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                     {
-                        (this.state.data && JSON.stringify(this.state.data.items) !== '[]')?
+                        (this.state.data && !isEmpty(this.state.data.items))?
                             youzanPROD
                             :
                             '暂无'

@@ -5,7 +5,7 @@ const ProdModuleSet = dynamic(import('./prodModuleSet'))
 import Request from '../../utils/graphql_request';
 import moment from 'moment'
 import EmbeddedAndSharing from './enbedded_and_sharing'
-
+import isEmpty from 'lodash/isEmpty';
 const getShop = `
     query ($id: ID!) {
         getShop(id:$id){
@@ -187,7 +187,7 @@ export default class ProdModule extends React.Component {
                 this.props.store.isShown?
                     <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
                     :
-                    (this.state.ShoppageData && JSON.stringify(this.state.ShoppageData.entries) !== '[]')?
+                    (this.state.ShoppageData && !isEmpty(this.state.ShoppageData.entries))?
                     <div>
                         <EmbeddedAndSharing />
                         <div style={{ marginTop:"20px"}}>

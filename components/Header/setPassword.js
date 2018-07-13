@@ -97,15 +97,15 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="短信验证码"
           >
-            <Row gutter={16}>
-              <Col span={15}>
+            <Row gutter={10}>
+              <Col span={17}>
                 {getFieldDecorator('code', {
                   rules: [{ required: true, message: '请输入验证码!' }],
                 })(
                     <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入验证码" />
                 )}
               </Col>
-              <Col span={9}>
+              <Col span={7}>
                 <Button disabled={count} onClick={this.getSmsCode}>{count ? `${count} s` : '获取验证码'}</Button>
               </Col>
             </Row>

@@ -120,7 +120,7 @@ function getConfig(config) {
             return {
                 data: data.data_list,
                 pageSize: 8,
-                page: 2,
+                page: data.page,
                 total: data.total_items
             };
         },

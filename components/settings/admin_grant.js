@@ -1,7 +1,7 @@
 import { Row, Col, Tag, Icon, Popover, Input, Radio, Spin, message, Button } from 'antd';
 import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
-
+import isEmpty from 'lodash/isEmpty';
 
 const getShop = `
     query ($id: ID!) {
@@ -212,7 +212,7 @@ export default class GrantAdmin extends React.Component {
                                 </Tag>
                             </Popover>
                             {
-                                (this.state.staffsData && JSON.stringify(this.state.staffsData.staffs) !== '[]')
+                              (this.state.staffsData && !isEmpty(this.state.staffsData.staffs))
                                 &&
                                 <Tag
                                     style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
