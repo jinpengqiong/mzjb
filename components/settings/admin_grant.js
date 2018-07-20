@@ -203,25 +203,30 @@ export default class GrantAdmin extends React.Component {
                         </h3>
                         <div>
                             { staffInfo }
-                            <Popover placement="rightTop" title={text} content={content} trigger="click">
-                                <Tag
-                                    style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
-                                    color="orange"
-                                >
-                                    <Icon type="plus" /> 添加
-                                </Tag>
-                            </Popover>
-                            {
-                              (this.state.staffsData && !isEmpty(this.state.staffsData.staffs))
-                                &&
-                                <Tag
-                                    style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
-                                    color="orange"
-                                    onClick={ this.lunchDelete}
-                                >
-                                    <Icon type="minus" /> { this.state.isClosable? '取消删除':'删除'}
-                                </Tag>
-                            }
+                          {
+                              localStorage.getItem('OriginalID') === localStorage.getItem('shopID')
+                              &&
+                              <Popover placement="rightTop" title={text} content={content} trigger="click">
+                                  <Tag
+                                      style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
+                                      color="orange"
+                                  >
+                                      <Icon type="plus" /> 添加
+                                  </Tag>
+                              </Popover>
+                          }
+
+                        {
+                          (this.state.staffsData && !isEmpty(this.state.staffsData.staffs && localStorage.getItem('OriginalID') === localStorage.getItem('shopID')))
+                            &&
+                            <Tag
+                                style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
+                                color="orange"
+                                onClick={ this.lunchDelete}
+                            >
+                                <Icon type="minus" /> { this.state.isClosable? '取消删除':'删除'}
+                            </Tag>
+                        }
                         </div>
                     </Col>
                 </Row>
