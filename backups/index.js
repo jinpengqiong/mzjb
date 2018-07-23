@@ -137,15 +137,10 @@ var GoodsStyleEditor = function (_Component) {
               { name: 'size', value: '1' },
               '\u5C0F\u56FE'
             ),
-            // _react2['default'].createElement(
-            //   _radio2['default'],
-            //   { name: 'size', value: '2' },
-            //   '\u4E00\u5927\u4E24\u5C0F'
-            // ),
             _react2['default'].createElement(
-              _radio2['default'],
-              { name: 'size', value: '3' },
-              '\u8BE6\u7EC6\u5217\u8868'
+                _radio2['default'],
+                { name: 'size', value: '3' },
+                '\u8BE6\u7EC6\u5217\u8868'
             )
           )
         ),
@@ -162,22 +157,7 @@ var GoodsStyleEditor = function (_Component) {
                 _radio2['default'],
                 { name: 'size_type', value: '0' },
                 '\u5361\u7247'
-              ),
-              // size === '1' && _react2['default'].createElement(
-              //   _radio2['default'],
-              //   { name: 'size_type', value: '1' },
-              //   '\u7011\u5E03\u6D41'
-              // ),
-              // _react2['default'].createElement(
-              //   _radio2['default'],
-              //   { name: 'size_type', value: '2' },
-              //   '\u6781\u7B80'
-              // ),
-              // size === '1' && _react2['default'].createElement(
-              //   _radio2['default'],
-              //   { name: 'size_type', value: '3' },
-              //   '\u4FC3\u9500'
-              // )
+              )
             )
           ),
           sizeType !== '3' && (sizeType !== '2' || size === '3') && _react2['default'].createElement(
@@ -210,42 +190,10 @@ var GoodsStyleEditor = function (_Component) {
                   _radio2['default'],
                   { name: 'buy_btn_type', value: '1' },
                   '\u6837\u5F0F1'
-                ),
-                // _react2['default'].createElement(
-                //   _radio2['default'],
-                //   { name: 'buy_btn_type', value: '2' },
-                //   '\u6837\u5F0F2'
-                // ),
-                // !(size === '3' && sizeType === '2') && _react2['default'].createElement(
-                //   _radio2['default'],
-                //   { name: 'buy_btn_type', value: '3' },
-                //   '\u6837\u5F0F3'
-                // ),
-                // _react2['default'].createElement(
-                //   _radio2['default'],
-                //   { name: 'buy_btn_type', value: '4' },
-                //   '\u6837\u5F0F4'
-                // )
+                )
               )
             )
           ),
-          // isWishOpen && _react2['default'].createElement(
-          //   _DesignEditor.ControlGroup,
-          //   {
-          //     showLabel: false,
-          //     focusOnLabelClick: false,
-          //     className: 'controls-card-item-margin'
-          //   },
-          //   _react2['default'].createElement(
-          //     _checkbox2['default'],
-          //     {
-          //       checked: showWishBtn,
-          //       name: 'show_wish_btn',
-          //       onChange: onChange
-          //     },
-          //     '\u52A0\u5165\u5FC3\u613F\u5355\u6309\u94AE'
-          //   )
-          // ),
           sizeType !== '3' && size !== '3' && _react2['default'].createElement(
             'div',
             null,

@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports['default'] = getConfig;
 
@@ -33,16 +33,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var NOT_SUPPORTTED_GOODS_TYPE = [10, 31, 35];
 
 function getConfig(config) {
-    var canSelectRow = function canSelectRow(data) {
-        var goodsType = data.goods_type;
+  var canSelectRow = function canSelectRow(data) {
+    var goodsType = data.goods_type;
 
 
-        if ((0, _includes2['default'])(NOT_SUPPORTTED_GOODS_TYPE, goodsType)) {
-            return false;
-        }
+    if ((0, _includes2['default'])(NOT_SUPPORTTED_GOODS_TYPE, goodsType)) {
+      return false;
+    }
 
-        return true;
-    };
+    return true;
+  };
 
     return {
         title: '已上架商品',
@@ -73,7 +73,7 @@ function getConfig(config) {
             bodyRender: function bodyRender(data) {
                 var goodsType = data.goods_type;
 
-                var isFenxiao = +goodsType === 10;
+        var isFenxiao = +goodsType === 10;
 
                 return _react2['default'].createElement(
                     'div',
@@ -120,7 +120,7 @@ function getConfig(config) {
             return {
                 data: data.data_list,
                 pageSize: 8,
-                page: 2,
+                page: data.page,
                 total: data.total_items
             };
         },

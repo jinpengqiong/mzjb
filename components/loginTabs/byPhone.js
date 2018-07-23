@@ -26,6 +26,7 @@ mutation ($phone:String!, $code: String!) {
   }
 }
 `;
+
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -47,9 +48,10 @@ class NormalLoginForm extends React.Component {
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
                   localStorage.setItem('role', res.smsLogin.user.role);
                   localStorage.setItem('phone', res.smsLogin.user.phone);
+                  localStorage.setItem('lgTime', new Date().getTime());
                   Router.push('/')
               }
-        ).catch(()=>{message.error('登录失败！')})
+        ).catch(()=>{message.error('用户名或密码错误，登录失败！')})
       }
     });
   }

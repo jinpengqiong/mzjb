@@ -29,7 +29,7 @@ export default class ProdDetails extends React.Component {
     }
 
     addToShop = () => {
-        console.log('ccc', this.props.store.ProdDetailData)
+        // console.log('ccc', this.props.store.ProdDetailData)
         const baseinfo = {
             desc: this.props.store.ProdDetailData.item.title,
             detailUrl:this.props.store.ProdDetailData.item.detailUrl,
@@ -45,10 +45,11 @@ export default class ProdDetails extends React.Component {
             type:'YOUXUAN'
         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
+                // console.log(res)
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
             }
-        ).catch((err)=>{console.error(err)})
+        ).catch(err => console.error('error', err))
     }
 
     addToStock  = () => {
@@ -71,7 +72,7 @@ export default class ProdDetails extends React.Component {
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
             }
-        ).catch(()=>{message.error('出错了，请联系管理员！')})
+        ).catch(err =>console.error('error',err) )
     }
 
     render() {

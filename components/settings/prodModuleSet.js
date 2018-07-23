@@ -9,7 +9,9 @@ import goodsConf from 'zan-design/lib/components/goods';
 import Request from '../../utils/graphql_request';
 import noticeConf from 'zan-design/lib/components/notice';
 import titleConf from 'zan-design/lib/components/title';
+import goodsListConf from 'zan-design/lib/components/goods-list';
 
+import 'zan-design/css/goods-list/index.css';
 import 'zan-design/css/title/index.css';
 import 'zent/css/index.css';
 import 'zent/css/design-config.css';
@@ -22,6 +24,8 @@ import 'zan-design/css/link/index.css';
 import 'zan-design/css/goods/index.css';
 import 'zan-design/css/notice/index.css';
 import { inject, observer } from 'mobx-react'
+
+
 
 const createShoppage = `
     mutation ($shopId:ID!, $detail: String!, $name: String!) {
@@ -50,6 +54,7 @@ const _global = {
         demo: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
         www: `http://shop.muzhiyun.cn/rest/shop_products_yz?shop_id=${localStorage.getItem('shopID')}`,
     },
+    tag: `http://shop.muzhiyun.cn/rest/shop_tags_yz?shop_id=${localStorage.getItem('shopID')}`,
     kdt_id: 1,
     user_id: '9066245',
     run_mode: 'online',
@@ -134,6 +139,7 @@ export default class ProdModuleSet extends React.Component {
                 }
             }),
             goodsConf,
+            goodsListConf,
             Object.assign({}, titleConf, {
                 editorProps: {
                     linkMenuItems: LINK_MENU_CONFIG
@@ -145,7 +151,7 @@ export default class ProdModuleSet extends React.Component {
             Object.assign({ limit: 2 }, lineConf),
             noticeConf
         ];
-        // console.log('2222', this.props.store.moduleValue)
+        console.log('2222', JSON.parse(this.props.store.moduleValue))
         return (
             <div>
                 <h1 style={{ marginBottom:"10px"}}>{ this.props.store.moduleType}</h1>

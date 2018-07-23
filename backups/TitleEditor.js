@@ -189,16 +189,7 @@ var TitleEditor = (_temp = _class = function (_DesignEditor) {
             { onClick: _this.onColorReset },
             '\u91CD\u7F6E'
           )
-        ),
-        // _react2['default'].createElement(_textEditor2['default'], {
-        //   linkMenuItems: linkMenuItems,
-        //   globalConfig: globalConfig,
-        //   data: subEntry,
-        //   canAdd: subEntry.length < 1,
-        //   onChange: _this.onNavChange,
-        //   showError: showError,
-        //   error: validation.nav
-        // })
+        )
       );
     };
 
@@ -348,12 +339,7 @@ var TitleEditor = (_temp = _class = function (_DesignEditor) {
               _radio2['default'],
               { name: 'title_template', value: '0' },
               '\u4F20\u7EDF\u6837\u5F0F'
-            ),
-            // _react2['default'].createElement(
-            //   _radio2['default'],
-            //   { name: 'title_template', value: '1' },
-            //   '\u6A21\u4EFF\u5FAE\u4FE1\u56FE\u6587\u9875\u6837\u5F0F'
-            // )
+            )
           )
         ),
         +titleTemplate === 0 ? this.renderNormal() : this.renderWx()

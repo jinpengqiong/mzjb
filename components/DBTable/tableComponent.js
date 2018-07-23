@@ -3,6 +3,7 @@ import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 import YouzanProdForm from './youzanProdForm'
+import isEmpty from 'lodash/isEmpty';
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -609,10 +610,9 @@ export default class ProdTable extends React.Component {
                 dataSource = {this.state.data? this.state.data : null }
                 columns={this.state.columns}
                 pagination={false}
-                scroll={{ y: 550 }}
             />
             {
-            (this.state.data && JSON.stringify(this.state.data) !=='[]')
+            !isEmpty(this.state.data)
             &&
             <Pagination
             defaultCurrent={1}

@@ -181,7 +181,7 @@ var GoodsEditor = (_temp2 = _class = function (_DesignEditor) {
         price: '1',
 
         // 显示心愿单按钮(0: 不显示, 1: 显示)
-        show_wish_btn: '0',
+        // show_wish_btn: '0',
 
         // 是否显示商品描述(0: 不显示, 1: 显示)
         show_sub_title: '0'

@@ -25,7 +25,7 @@ export default class MyLayout extends React.Component {
           <MySider />
           <Layout style={{  marginLeft: this.props.store.collapsed? '100px' :'140px' }}>
             <MyHeader />
-              <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 320 }}>
+              <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 'calc(88vh - 69px)' }}>
                 {this.props.children}
               </Content>
             <MyFooter />
