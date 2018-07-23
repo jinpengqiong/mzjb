@@ -152,9 +152,13 @@ export default class BindLiveRoom extends React.Component {
         // console.log('bindableRooms',bindableRooms)
         return (
             <div>
+              {
+                localStorage.getItem('OriginalID') === localStorage.getItem('shopID')
+                &&
                 <Affix>
-                    <Button type="primary" onClick={this.openModal} >新增绑定</Button>
+                  <Button type="primary" onClick={this.openModal} >新增绑定</Button>
                 </Affix>
+              }
                 <Modal
                     title="新增绑定"
                     visible={this.state.visible}
@@ -171,7 +175,7 @@ export default class BindLiveRoom extends React.Component {
                         }
                     </RadioGroup>
                 </Modal>
-                <h3 style={{ marginTop:'10px'}}>已绑定的直播间：</h3>
+              <h3 style={{ marginTop:'10px'}}>已绑定的直播间：</h3>
                 <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
                     {
                       isEmpty(this.state.listShopRoom)  ?
@@ -181,7 +185,6 @@ export default class BindLiveRoom extends React.Component {
                     }
                 </div>
             </div>
-
         )
     }
 }

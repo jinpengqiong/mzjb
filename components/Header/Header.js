@@ -56,6 +56,7 @@ export default class MyHeader extends React.Component {
   componentDidMount (){
       this.setState({
         localStor : localStorage,
+        radioValue:localStorage.getItem('shopID')
       })
   }
 
@@ -123,8 +124,8 @@ export default class MyHeader extends React.Component {
 
     this.setState({
       visible1: false,
-      radioValue:null
     });
+    message.success('店铺切换成功')
     Router.push('/');
   }
 
@@ -161,6 +162,7 @@ export default class MyHeader extends React.Component {
   }
 
   render() {
+    // console.log('state', this.state.radioValue)
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>

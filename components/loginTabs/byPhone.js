@@ -51,7 +51,7 @@ class NormalLoginForm extends React.Component {
                   localStorage.setItem('lgTime', new Date().getTime());
                   Router.push('/')
               }
-        ).catch(()=>{message.error('登录失败！')})
+        ).catch(()=>{message.error('用户名或密码错误，登录失败！')})
       }
     });
   }

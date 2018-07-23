@@ -47,7 +47,7 @@ class NormalLoginForm extends React.Component {
                     Router.push('/')
                 }
             }
-        ).catch( err => console.log(err))
+        ).catch(()=>{message.error('用户名或密码错误，登录失败！')})
       }
     });
   }
