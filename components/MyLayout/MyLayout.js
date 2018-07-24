@@ -2,7 +2,10 @@ import { Layout } from 'antd';
 const { Content } = Layout;
 import MyFooter from '../Footer/Footer';
 import MySider from '../Sider/Sider';
-import MyHeader from '../Header/Header';
+import dynamic from 'next/dynamic'
+const MyHeader = dynamic(import('../Header/Header'), {
+  ssr: false
+})
 import { inject, observer } from 'mobx-react'
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';

@@ -184,7 +184,7 @@ export default class GrantAdmin extends React.Component {
         );
         const staffInfo = this.state.staffsData && this.state.staffsData.staffs.map(
             (staff) => {
-                return <Tag color="#2db7f5" key={staff.userId} closable={ this.state.isClosable } onClose={ () => { this.deleteAdmin(staff.id)}}>{staff.user.phone}</Tag>
+                return <Tag style={{ marginTop:'15px' }} color="#2db7f5" key={staff.userId} closable={ this.state.isClosable } onClose={ () => { this.deleteAdmin(staff.id)}}>{staff.user.phone}</Tag>
             }
         )
 

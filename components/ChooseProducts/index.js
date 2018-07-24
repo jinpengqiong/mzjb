@@ -110,7 +110,7 @@ export default class ChooseProducts extends React.Component {
         };
         Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('queryShops',res);
+                console.log('queryShops',res);
                 this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
                 localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
                 localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))

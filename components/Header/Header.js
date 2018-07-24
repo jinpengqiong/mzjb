@@ -1,4 +1,4 @@
-import { Layout, Menu, Icon, Modal, message, Radio } from 'antd';
+import { Layout, Menu, Icon, Modal, message, Radio, Tag } from 'antd';
 const { Header } = Layout;
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
@@ -50,13 +50,14 @@ export default class MyHeader extends React.Component {
           visible1:false,
           shopsData:null,
           radioValue:null,
+          curShopName:null
       }
   }
 
   componentDidMount (){
-      this.setState({
-        localStor : localStorage,
-        radioValue:localStorage.getItem('shopID')
+    this.setState({
+        radioValue:localStorage.getItem('shopID'),
+        curShopName: localStorage.getItem('OriginalName')
       })
   }
 
@@ -65,8 +66,7 @@ export default class MyHeader extends React.Component {
   }
 
   handleLogout = () => {
-      const stor = this.state.localStor;
-      stor!= null && stor.clear();
+      localStorage.clear();
       Router.push('/login');
       this.props.store.getShopID('');
       this.props.store.getRoleInfo('');
@@ -78,9 +78,8 @@ export default class MyHeader extends React.Component {
     this.refs.form.validateFields(
         (err, values) => {
       if (!err) {
-        // console.log('Received values of form: ', values);
         request(uri, resetPassword, {phone: values.phone, code:values.code, password:values.password }).then(
-            (res) => {
+            res => {
               // console.log('res', res)
               message.success('密码设置成功！');
               this.refs.form.resetFields();
@@ -115,11 +114,17 @@ export default class MyHeader extends React.Component {
   //swtich shops
   swtichShopsOk = () => {
     if(this.state.radioValue === localStorage.getItem('OriginalID')){
-      localStorage.setItem('shopID', localStorage.getItem('OriginalID'))
+      localStorage.setItem('shopID', parseInt(localStorage.getItem('OriginalID')) )
       localStorage.setItem('phone', this.state.shopsData[0].staffs[0].user.phone)
+      this.setState({
+        curShopName: localStorage.getItem('OriginalName')
+      })
     }else{
       localStorage.setItem('shopID', parseInt(this.state.radioValue))
       localStorage.setItem('phone', this.state.shopsData[0].name.split('_')[1])
+      this.setState({
+        curShopName: this.state.shopsData[0].name
+      })
     }
 
     this.setState({
@@ -154,6 +159,7 @@ export default class MyHeader extends React.Component {
     )
   }
 
+
   onRadioChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -162,7 +168,7 @@ export default class MyHeader extends React.Component {
   }
 
   render() {
-    // console.log('state', this.state.radioValue)
+    console.log('state', this.state.curShopName)
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>
@@ -175,7 +181,11 @@ export default class MyHeader extends React.Component {
                     mode="horizontal"
                     style={{ lineHeight: '45px', float: 'right' }}
                 >
-                    <SubMenu title={<span>{this.state.localStor!= null? '您好，'+ localStorage.getItem('nickname') : null}</span>}>
+                  <Menu.Item key="inShop" disabled>
+                    当前店铺：
+                    <Tag color="#2db7f5">{ this.state.curShopName &&  this.state.curShopName}</Tag>
+                  </Menu.Item>
+                    <SubMenu title={<span>{ '您好，'+ localStorage.getItem('nickname')}</span>}>
                         <Menu.Item key="1" >
                           {
                               <span onClick={this.setPassword} style={{ display: 'block',width:"130px", textAlign:"center"}}>
@@ -211,10 +221,11 @@ export default class MyHeader extends React.Component {
                   onCancel={this.swtichShopsCancel}
                 >
                 <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
-                  <Radio value={this.state.localStor && this.state.localStor.getItem('OriginalID')} key={this.state.localStor && this.state.localStor.getItem('OriginalID')}>创建的店铺</Radio>
+                  <h3>自有店铺：</h3>
+                  <Radio value={localStorage.getItem('OriginalID')} key={localStorage.getItem('OriginalID')}>{ localStorage.getItem('OriginalName') }</Radio>
                   <br/>
                   <br/>
-                  <h3>管理的店铺：</h3>
+                  <h3>可管理店铺：</h3>
                   {
                     isEmpty(this.state.shopsData)?
                       '暂无'
