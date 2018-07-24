@@ -96,7 +96,7 @@ export default class ProdDetails extends React.Component {
                         </Col>
                         <Col span={11} offset={1}>
                             <h2>{this.props.store.ProdDetailData.item.title}</h2>
-                            <p>价格：{'¥'+this.props.store.ProdDetailData.item.price}</p>
+                            <p>单价：{'¥'+this.props.store.ProdDetailData.item.price}</p>
                             <p>运费： {this.props.store.ProdDetailData.item.postFee ===0? "包邮" : '¥'+(this.props.store.ProdDetailData.item.postFee/100).toFixed(2) }</p>
                             <p>总销量：{ this.props.store.ProdDetailData.item.soldNum + '件'}</p>
                             <p>总库存：{this.props.store.ProdDetailData.item.quantity}</p>

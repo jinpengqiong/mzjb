@@ -46,7 +46,7 @@ export default class MainPage extends React.Component {
                         tabPosition="left"
                         onChange={this.onChange}
                         hideAdd>
-                            <TabPane tab='优选商品' key="1">
+                            <TabPane tab='优选商城' key="1">
                                 <ChooseProducts />
                             </TabPane>
                             {

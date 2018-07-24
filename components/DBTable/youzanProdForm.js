@@ -64,13 +64,13 @@ class RegistrationForm extends React.Component {
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
-                    label="价格"
+                    label="单价"
                 >
                     {getFieldDecorator('price', {
                         rules: [{
-                            type: 'string', message: '请输入价格!',
+                            type: 'string', message: '请输入单价!',
                         }, {
-                            required: true, message: '请输入价格!',
+                            required: true, message: '请输入单价!',
                         }],
                     })(
                         <Input/>

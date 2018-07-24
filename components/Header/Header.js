@@ -147,7 +147,7 @@ export default class MyHeader extends React.Component {
     })
     Request.GraphQlRequest(manageShops, {page:1, pageSize:20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
-          console.log('res', res)
+          // console.log('res', res)
           this.setState({
             shopsData : res.manageShops.entries,
           })
@@ -161,14 +161,14 @@ export default class MyHeader extends React.Component {
 
 
   onRadioChange = (e) => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.setState({
       radioValue: e.target.value,
     });
   }
 
   render() {
-    console.log('state', this.state.curShopName)
+    // console.log('state', this.state.curShopName)
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>

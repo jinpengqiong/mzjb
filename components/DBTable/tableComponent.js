@@ -163,7 +163,7 @@ export default class ProdTable extends React.Component {
             },
             {
                 dataIndex: 'price',
-                title: '价格',
+                title: '单价',
                 dataType: 'varchar',
                 width: 100,
                 validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
