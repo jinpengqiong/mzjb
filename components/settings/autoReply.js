@@ -177,13 +177,13 @@ export default class AutoReply extends React.Component {
                             <p>关键词：<span style={{color:"red" }}>{item.keyWord}</span>
                                 <Tooltip title="删除">
                                     <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
-                                        <Icon type="delete" style={{float:"right"}}/>
+                                        <Icon type="delete" style={{float:"right", marginRight:'10px'}}/>
                                     </Popconfirm>
                                 </Tooltip>
                             </p>
                         </div>
                         <div className='main' key={UUIDGen.uuid(8, 10)}>
-                            <img style={{ width:'300px', height:"200px"}}
+                            <img style={{ width:'295px', height:"200px"}}
                                  src={ReplyBody[0].picurl}
                                  alt="封面"/>
                             <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>
@@ -273,7 +273,7 @@ export default class AutoReply extends React.Component {
                         <div style={{ width:'300px', border:'2px dashed #ECECEC'}}>
                             <p style={{ marginBottom:"8px"}}>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
                             <div className='main' key={UUIDGen.uuid(8, 10)}>
-                                <img style={{ width:'300px', height:"200px"}}
+                                <img style={{ width:'295px', height:"200px"}}
                                      src={(rBodies && rBodies[0])? rBodies[0].picurl :"http://via.placeholder.com/350x145?text=cover" }
                                      alt="封面"/>
                                 <span style={{ height:"20px", width:"300px", textAlign:"center",position:"absolute", top:"180px", left:"0px", background:'#fff'}}>

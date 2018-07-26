@@ -56,7 +56,6 @@ const _global = {
     },
     tag: `http://shop.muzhiyun.cn/rest/shop_tags_yz?shop_id=${localStorage.getItem('shopID')}`,
     kdt_id: 1,
-    user_id: '9066245',
     run_mode: 'online',
     debug: false,
     online_debug: false,

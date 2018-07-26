@@ -159,28 +159,29 @@ export default class OrderManagement extends React.Component {
   };
 
   onChange(pageNumber) {
+    let startTime = null
       if(this.state.optionValue==="7days"){
-          const startTime = parseInt(moment().subtract(7, 'days').format('X'));
+          startTime = parseInt(moment().subtract(7, 'days').format('X'));
           this.queryOrderData(pageNumber, startTime);
       }else if(value==="30days"){
-          const startTime = parseInt(moment().subtract(30, 'days').format('X'));
+          startTime = parseInt(moment().subtract(1, 'months').format('X'));
           this.queryOrderData(pageNumber, startTime);
       }else if(value==="90days"){
-          const startTime = parseInt(moment().subtract(90, 'days').format('X'));
+          startTime = parseInt(moment().subtract(3, 'months').format('X'));
           this.queryOrderData(pageNumber, startTime);
       }else if(value==="365days"){
-          const startTime = parseInt(moment().subtract(365, 'days').format('X'));
+          startTime = parseInt(moment().subtract(1, 'years').format('X'));
           this.queryOrderData(pageNumber, startTime);
       }
   }
 
   //handle select change
     handleChange = (value) => {
-        // console.log(`selected ${value}`);
+        console.log(`selected ${value}`);
         this.setState({
             optionValue: value
         })
-        if(this.state.optionValue==="7days"){
+        if(value==="7days"){
             const startTime = parseInt(moment().subtract(7, 'days').format('X'));
             this.queryOrderData(1, startTime);
         }else if(value==="30days"){
@@ -230,7 +231,7 @@ export default class OrderManagement extends React.Component {
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
                 <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}>刷新</Button>
                 <Select value={this.state.optionValue} style={{ width: 120 }} onChange={this.handleChange}>
-                    <Option value="7days">近七天</Option>
+                    <Option value="7days">近7天</Option>
                     <Option value="30days">近30天</Option>
                     <Option value="90days">近90天</Option>
                     <Option value="365days">近一年</Option>

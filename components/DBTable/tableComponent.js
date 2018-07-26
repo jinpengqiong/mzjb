@@ -151,7 +151,6 @@ export default class ProdTable extends React.Component {
                 dataIndex: 'title',
                 title: '商品名称',
                 dataType: 'varchar',
-                validator: [{type: 'string', message: '请输入商品名称',required:true}],
                 width: 150,
             },
             {
@@ -166,7 +165,6 @@ export default class ProdTable extends React.Component {
                 title: '单价',
                 dataType: 'varchar',
                 width: 100,
-                validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
                 render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
             },
             {
@@ -180,7 +178,7 @@ export default class ProdTable extends React.Component {
                 title: '链接',
                 dataType: 'varchar',
                 width: 200,
-                render: text => <a href={text} target="_blank">{text}</a>,
+                render: text => <a href={text} target="_blank">{text.length<75? text : text.slice(0, 75)+'...'}</a>,
             },
             {
                 title: '操作',
@@ -245,77 +243,94 @@ export default class ProdTable extends React.Component {
   }
 
     handleOk = () => {
+      const priceRegEx = /^\d+(\.\d{1,2})?$/
+      const linkRegEx = /^(https?|http):\/\/.+$/
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
             this.refs.form.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
+                    return
                 }else{
                     // console.log('1112', values);
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
-                    }else{
-                        values.mainImage = this.props.store.mainImage;
-                        values.price = parseInt(parseFloat(values.price)*100);
-                        values.isDisplay = true;
-                        Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res)=>{
-                                res.createProduct.mainImage = this.props.store.mainImage;
-                                res.createProduct.key = res.createProduct.id;
-                                this.queryProdData(1);
-                                this.setState({
-                                    visible: false
-                                });
-                                // document.getElementById('ossfile').innerHTML = '';
-                                this.props.store.getMainImage('')
-                                this.props.store.getRichTextContent(null)
-                                notification.success({
-                                    message: '新增成功',
-                                    duration: 3,
-                                });
-                            }
-                        )
+                        return
                     }
+                    if(!priceRegEx.exec(values.price)){
+                      message.error('请输入正确的价格！')
+                      return
+                    }
+                    if(!linkRegEx.exec(values.detailUrl)){
+                      message.error('请输入正确的链接！')
+                      return
+                    }
+                    values.mainImage = this.props.store.mainImage;
+                    values.price = parseInt(parseFloat(values.price)*100);
+                    values.isDisplay = true;
+                    Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                        (res)=>{
+                            res.createProduct.mainImage = this.props.store.mainImage;
+                            res.createProduct.key = res.createProduct.id;
+                            this.queryProdData(1);
+                            this.setState({
+                                visible: false
+                            });
+                            // document.getElementById('ossfile').innerHTML = '';
+                            this.props.store.getMainImage('')
+                            this.props.store.getRichTextContent(null)
+                            notification.success({
+                                message: '新增成功',
+                                duration: 3,
+                            });
+                        }
+                    )
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
             this.refs.form1.validateFields((err, values) => {
-                if (err) {
-                    message.error(err);
-                }else{
-                    if(!this.props.store.mainImage){
-                        message.error('请先上传图片，再提交！')
-                    }else{
-                        // console.log('values', values);
-                        values.mainImage = this.props.store.mainImage;
-                        values.price = parseInt(parseFloat(values.price)*100);
-                        values.isDisplay = true;
-                        if(this.props.store.richTextContent){
-                            values.desc = this.props.store.richTextContent;
-                        }
-                        Request.GraphQlRequest(addProduct,
-                            { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res)=>{
-                                // console.log('res', res);
-                                // this.refs.form1.resetFields();
-                                res.createProduct.mainImage = this.props.store.mainImage;
-                                res.createProduct.key = res.createProduct.id;
-                                this.queryProdData(1);
-                                // document.getElementById('ossfile3').innerHTML = '';
-                                this.setState({
-                                    visible: false
-                                });
-                                this.props.store.getMainImage('')
-                                this.props.store.getimageId('')
-                                this.props.store.getRichTextContent(null)
-                                this.props.store.getTabOption('1')
-                                notification.success({
-                                    message: '新增成功',
-                                    duration: 3,
-                                });
-                            }
-                        ).catch(()=>{message.error('新增失败！')})
-                    }
+              if (err) {
+                message.error(err);
+                  return
+              }else{
+                console.log('1112', values);
+                if(!this.props.store.mainImage){
+                  message.error('请先上传图片，再提交！')
+                  return
                 }
+                if(!priceRegEx.exec(values.price)){
+                  message.error('请输入正确的价格！')
+                  return
+                }
+                // console.log('values', values);
+                values.mainImage = this.props.store.mainImage;
+                values.price = parseInt(parseFloat(values.price)*100);
+                values.isDisplay = true;
+                if(this.props.store.richTextContent){
+                    values.desc = this.props.store.richTextContent;
+                }
+                Request.GraphQlRequest(addProduct,
+                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    (res)=>{
+                        // console.log('res', res);
+                        // this.refs.form1.resetFields();
+                        res.createProduct.mainImage = this.props.store.mainImage;
+                        res.createProduct.key = res.createProduct.id;
+                        this.queryProdData(1);
+                        // document.getElementById('ossfile3').innerHTML = '';
+                        this.setState({
+                            visible: false
+                        });
+                        this.props.store.getMainImage('')
+                        this.props.store.getimageId('')
+                        this.props.store.getRichTextContent(null)
+                        this.props.store.getTabOption('1')
+                        notification.success({
+                            message: '新增成功',
+                            duration: 3,
+                        });
+                    }
+                ).catch(()=>{message.error('新增失败！')})
+              }
             })
         }else if(this.state.modalName ==='更新商品') {
             this.refs.form.validateFields((err, values) => {
@@ -329,6 +344,10 @@ export default class ProdTable extends React.Component {
                     }
                     // console.log('values', values);
                     if(this.props.store.prodType === 'YOUZAN'){
+                        if(!priceRegEx.exec(values.price)){
+                          message.error('请输入正确的价格！')
+                          return
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -362,6 +381,14 @@ export default class ProdTable extends React.Component {
                             }
                         ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
                     }else{
+                        if(!priceRegEx.exec(values.price)){
+                          message.error('请输入正确的价格！')
+                          return
+                        }
+                        if(!linkRegEx.exec(values.detailUrl)){
+                          message.error('请输入正确的链接！')
+                          return
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -405,7 +432,7 @@ export default class ProdTable extends React.Component {
         this.props.store.getProductFieldsData(null)
         this.props.store.getTabOption('1')
         this.props.store.getRichTextContent(null)
-
+        this.props.store.getMainImage('')
     }
 
   callback = (key) => {

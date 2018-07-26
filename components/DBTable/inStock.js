@@ -180,7 +180,7 @@ export default class InStock extends React.Component {
                     title: '链接',
                     dataType: 'varchar',
                     width: 200,
-                    render: text => <a href={text} target="_blank">{text}</a>,
+                    render: text => <a href={text} target="_blank">{text.length<75? text : text.slice(0, 75)+'...'}</a>,
                 },
                 {
                     title: '操作',
@@ -242,74 +242,93 @@ export default class InStock extends React.Component {
     }
 
     handleOk = () => {
+      const priceRegEx = /^\d+(\.\d{1,2})?$/
+      const linkRegEx = /^(https?|http):\/\/.+$/
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
             this.refs.form1.validateFields((err, values) => {
                 if (err) {
                     message.error(err);
+                    return
                 }else{
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
-                    }else{
-                        values.mainImage = this.props.store.mainImage;
-                        values.price = parseInt(parseFloat(values.price)*100);
-                        values.isDisplay = false;
-                        Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res)=>{
-                                // console.log('res', res);
-                                res.createProduct.mainImage = this.props.store.mainImage;
-                                res.createProduct.key = res.createProduct.id;
-                                this.queryProdData(1);
-                                this.setState({
-                                    visible: false
-                                });
-                                this.props.store.getRichTextContent(null)
-                                this.props.store.getMainImage('')
-                                notification.success({
-                                    message: '新增成功',
-                                    duration: 3,
-                                });
-                            }
-                        ).catch(()=>{message.error('新增失败！')})
+                        return
                     }
+                    if(!priceRegEx.exec(values.price)){
+                      message.error('请输入正确的价格！')
+                      return
+                    }
+                    if(!linkRegEx.exec(values.detailUrl)){
+                      message.error('请输入正确的链接！')
+                      return
+                    }
+                    values.mainImage = this.props.store.mainImage;
+                    values.price = parseInt(parseFloat(values.price)*100);
+                    values.isDisplay = false;
+                    Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                        (res)=>{
+                            res.createProduct.mainImage = this.props.store.mainImage;
+                            res.createProduct.key = res.createProduct.id;
+                            this.queryProdData(1);
+                            this.setState({
+                                visible: false
+                            });
+                            // document.getElementById('ossfile').innerHTML = '';
+                            this.props.store.getMainImage('')
+                            this.props.store.getRichTextContent(null)
+                            notification.success({
+                                message: '新增成功',
+                                duration: 3,
+                            });
+                        }
+                    )
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
             this.refs.form1.validateFields((err, values) => {
-                if (err) {
-                    message.error(err);
-                }else{
-                    if(!this.props.store.mainImage){
-                        message.error('请先上传图片，再提交！')
-                    }else{
-                        values.mainImage = this.props.store.mainImage;
-                        values.price = parseInt(parseFloat(values.price)*100);
-                        values.isDisplay = false;
-                        if(this.props.store.richTextContent){
-                            values.desc = this.props.store.richTextContent;
-                        }
-                        Request.GraphQlRequest(addProduct,
-                            { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res)=>{
-                                // console.log('res', res);
-                                // this.refs.form1.resetFields();
-                                res.createProduct.mainImage = this.props.store.mainImage;
-                                res.createProduct.key = res.createProduct.id;
-                                this.queryProdData(1);
-                                this.setState({
-                                    visible: false
-                                });
-                                this.props.store.getMainImage('')
-                                this.props.store.getimageId('')
-                                this.props.store.getRichTextContent(null)
-                                this.props.store.getTabOption('1')
-                                notification.success({
-                                    message: '新增成功',
-                                    duration: 3,
-                                });
-                            }
-                        ).catch(()=>{message.error('新增失败！')})
-                    }
+              if (err) {
+                message.error(err);
+                  return
+              }else{
+                console.log('1112', values);
+                if(!this.props.store.mainImage){
+                  message.error('请先上传图片，再提交！')
+                  return
                 }
+                if(!priceRegEx.exec(values.price)){
+                  message.error('请输入正确的价格！')
+                  return
+                }
+                // console.log('values', values);
+                values.mainImage = this.props.store.mainImage;
+                values.price = parseInt(parseFloat(values.price)*100);
+                values.isDisplay = false;
+                if(this.props.store.richTextContent){
+                    values.desc = this.props.store.richTextContent;
+                }
+                Request.GraphQlRequest(addProduct,
+                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    (res)=>{
+                        // console.log('res', res);
+                        // this.refs.form1.resetFields();
+                        res.createProduct.mainImage = this.props.store.mainImage;
+                        res.createProduct.key = res.createProduct.id;
+                        this.queryProdData(1);
+                        // document.getElementById('ossfile3').innerHTML = '';
+                        this.setState({
+                            visible: false
+                        });
+                        this.props.store.getMainImage('')
+                        this.props.store.getimageId('')
+                        this.props.store.getRichTextContent(null)
+                        this.props.store.getTabOption('1')
+                        notification.success({
+                            message: '新增成功',
+                            duration: 3,
+                        });
+                    }
+                ).catch(()=>{message.error('新增失败！')})
+              }
             })
         }else if(this.state.modalName ==='更新商品') {
             this.refs.form1.validateFields((err, values) => {
@@ -322,6 +341,10 @@ export default class InStock extends React.Component {
                         values.desc = this.props.store.richTextContent;
                     }
                     if(this.props.store.prodType === 'YOUZAN'){
+                        if(!priceRegEx.exec(values.price)){
+                          message.error('请输入正确的价格！')
+                          return
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -353,6 +376,14 @@ export default class InStock extends React.Component {
                             }
                         ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
                     }else{
+                        if(!priceRegEx.exec(values.price)){
+                          message.error('请输入正确的价格！')
+                          return
+                        }
+                        if(!linkRegEx.exec(values.detailUrl)){
+                          message.error('请输入正确的链接！')
+                          return
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -379,6 +410,7 @@ export default class InStock extends React.Component {
                             }
                         ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
                     }
+
                 }
             })
         }
@@ -394,7 +426,7 @@ export default class InStock extends React.Component {
         this.props.store.getProductFieldsData(null)
         this.props.store.getTabOption('1')
         this.props.store.getRichTextContent(null)
-
+        this.props.store.getMainImage('')
     }
 
     callback = (key) => {
@@ -448,30 +480,33 @@ export default class InStock extends React.Component {
     }
 
     handleChange = (key) => {
-        // console.log('key', key)
-        if(key==='-1'){
-            this.queryProdData(1);
-        }else{
-            Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                res => {
-                    // console.log('111', res)
-                    res.tagProducts.products.map(
-                        (prod) => {
-                            prod.key = prod.id;
-                            if(prod.type === 'youxuan'){
-                                prod.type ="优选商品"
-                            }
-                            if(prod.type === 'link'){
-                                prod.type ="自有商品"
-                            }
+      // console.log('key', key)
+      if(key==='-1'){
+        this.queryProdData(1);
+      }else{
+        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            res => {
+                // console.log('111', res)
+                res.tagProducts.products.map(
+                    (prod) => {
+                        prod.key = prod.id;
+                        if(prod.type === 'youxuan'){
+                            prod.type ="优选商品"
                         }
-                    )
-                    this.setState({
-                        data: res.tagProducts.products,
-                    })
-                }
-            )
-        }
+                        if(prod.type === 'link'){
+                            prod.type ="外链商品"
+                        }
+                        if(prod.type === 'youzan'){
+                            prod.type ="自有商品"
+                        }
+                    }
+                )
+                this.setState({
+                    data: res.tagProducts.products,
+                })
+            }
+        )
+      }
     }
 
     unShlfConfirm = (ID) => {
@@ -481,7 +516,7 @@ export default class InStock extends React.Component {
                 shopId: localStorage.getItem('shopID'),
                 id: ID
             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('2223', res)
                 message.success('上架成功！');
                 this.queryProdData(1);

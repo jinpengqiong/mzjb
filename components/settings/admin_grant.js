@@ -217,7 +217,7 @@ export default class GrantAdmin extends React.Component {
                           }
 
                         {
-                          (this.state.staffsData && !isEmpty(this.state.staffsData.staffs && localStorage.getItem('OriginalID') === localStorage.getItem('shopID')))
+                          (this.state.staffsData && !isEmpty(this.state.staffsData.staffs) && localStorage.getItem('OriginalID') === localStorage.getItem('shopID'))
                             &&
                             <Tag
                                 style={{ background: '#fff', borderStyle: 'dashed', marginTop:'15px' }}
