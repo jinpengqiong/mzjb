@@ -7,6 +7,7 @@ import SetPassword from './setPassword'
 import Request from '../../utils/graphql_request';
 import uri from '../../utils/uri';
 import isEmpty from 'lodash/isEmpty';
+import { request } from 'graphql-request'
 
 const RadioGroup = Radio.Group;
 
