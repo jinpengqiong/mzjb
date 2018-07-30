@@ -111,6 +111,18 @@ export default class ProdDetails extends React.Component {
                             }
                         </Col>
                     </Row>
+                    <Row>
+                        <h2>商品详情</h2>
+                        <Col span={10} offset={1}>
+                          {
+                            this.props.store.ProdDetailData.item.desc?
+                                <div dangerouslySetInnerHTML={{ __html: this.props.store.ProdDetailData.item.desc }} />
+                                :
+                                '暂无'
+                          }
+
+                        </Col>
+                    </Row>
                     <style jsx>{`
                         .ant-carousel .slick-slide {
                           text-align: center;

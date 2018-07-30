@@ -32,7 +32,7 @@ export default class EmbeddedAndSharing extends React.Component {
                         </Col>
                         <Col span={12} >
                             <div >
-                                <Alert message="此地址可用作 Tab页 或子菜单的形式放在官方微信公众号中" type="info" style={{ width:"90%", marginTop:"130px"}}/>
+                                <Alert message="手机扫描左边二维码或输入链接，可查看手机端店铺首页" type="info" style={{ width:"90%", marginTop:"130px"}}/>
                                 <h4>{ this.state.url && this.state.url }</h4>
                             </div>
                         </Col>

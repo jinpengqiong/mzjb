@@ -184,6 +184,7 @@ export default class ChooseProducts extends React.Component {
   querySpecificPROD = (ID) => {
     Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
+          console.log('res', res)
           res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
           this.props.store.switchTabShown(true);
           this.props.store.changeKey('-1');

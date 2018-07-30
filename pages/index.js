@@ -102,7 +102,7 @@ export default class MainPage extends React.Component {
     }
 
     onRadioChange = (e) => {
-      console.log('e',e.target.value)
+      // console.log('e',e.target.value)
       this.setState({
         tagId:e.target.value
       })
@@ -128,7 +128,7 @@ export default class MainPage extends React.Component {
                                     tag => {
                                         return (
                                             <TabPane tab={tag.name} key={tag.id}>
-                                              <Affix offsetTop={10}>
+                                              <Affix offsetTop={10} >
                                                 <Radio.Group value={this.state.tagId} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
                                                   {
                                                     this.state.tagListData && this.state.tagListData.map(
