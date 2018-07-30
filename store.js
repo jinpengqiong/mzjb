@@ -11,10 +11,8 @@ class Store {
   @observable TabOption = "1";
   @observable bindRoomData = null;
   @observable mainImage = null;
-  // wethear show the product detail
-  @observable isShown = false;
   //product tab will shown
-  @observable chooseProdKey = '1';
+  @observable chooseProdKey = '0';
   //Youxuan Product detail data
   @observable ProdDetailData = null;
   // replyBody saved here
@@ -35,6 +33,8 @@ class Store {
   @observable moduleValue = null;
   //moduleSubmitType
   @observable moduleType = null;
+  //swtich the prod detail tab display
+  @observable isTabOpen = false;
 
   constructor (isServer) {
   }
@@ -73,10 +73,6 @@ class Store {
 
   @action getMainImage = (data) => {
       this.mainImage = data;
-  }
-
-  @action changeShown = () => {
-    this.isShown = true;
   }
 
   @action changeKey = (keyID) => {
@@ -129,6 +125,10 @@ class Store {
 
   @action getModuleType = (data) => {
       this.moduleType = data;
+  }
+
+  @action switchTabShown = (bool) => {
+      this.isTabOpen = bool;
   }
 
 }

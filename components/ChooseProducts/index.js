@@ -79,7 +79,25 @@ const querySpecificPROD = `
         }
       `;
 
-
+const queryYouzanProducts = `
+      query ($orderBy: String, $pageNo: Int, $pageSize: Int, $q: String,$tagId: Int){
+        youzanProducts(orderBy:$orderBy,pageNo:$pageNo, pageSize:$pageSize, q:$q, tagId:$tagId){
+              count
+              items{
+                  itemId
+                  detailUrl
+                  item_no
+                  price
+                  title
+                  quantity
+                  itemImgs{
+                    thumbnail
+                    url
+              }
+          }
+        }
+      }
+      `;
 
 
 @inject('store') @observer
@@ -96,11 +114,22 @@ export default class ChooseProducts extends React.Component {
         if (!localStorage.getItem('accessToken')) {
             Router.push('/login')
         } else{
-          this.queryYouxuanProd(1)
           if(!localStorage.getItem('shopID') ){
               this.getData(1)
           }
+          if(this.props.store.chooseProdKey === '0'){
+            this.queryYouxuanProd(1)
+          }else{
+            this.queryYouZanProd(1, parseInt(this.props.tagId))
+          }
         }
+    }
+
+    componentWillReceiveProps(nextProps, nextState){
+      console.log('nextProps', nextProps)
+      if(this.props.store.chooseProdKey !== '0'){
+        this.queryYouZanProd(1, parseInt(nextProps.tagId))
+      }
     }
 
     getData = (page) => {
@@ -121,7 +150,7 @@ export default class ChooseProducts extends React.Component {
     queryYouxuanProd = (page) => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('res',res);
+                console.log('queryYouXuanProd',res);
                 res.youxuanProducts.items.map(
                     (item) => {
                         item.price = (item.price/100).toFixed(2)
@@ -134,8 +163,37 @@ export default class ChooseProducts extends React.Component {
         )
     }
 
+    queryYouZanProd = (page, tagID) => {
+      if(tagID){
+        Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize: 20, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            (res) => {
+              console.log('queryYouZanProd',res);
+              res.youzanProducts.items.map(
+                  (item) => {
+                    item.price = (item.price/100).toFixed(2)
+                  }
+              )
+              this.setState({
+                data: res.youzanProducts
+              })
+            }
+        )
+      }
+    }
+
+  querySpecificPROD = (ID) => {
+    Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
+          this.props.store.switchTabShown(true);
+          this.props.store.changeKey('-1');
+          this.props.store.getProdDetailData(res.getYouxuanProduct)
+
+        }
+    )
+  }
+
     onChange = (page) => {
-        // console.log('page', page)
         this.getData(page);
     }
 
@@ -155,18 +213,7 @@ export default class ChooseProducts extends React.Component {
                             />
                         </Card>
                         <div className="cover">
-                            <Button onClick={
-                                () => {
-                                Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId:(item.itemId).toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                                    (res) => {
-                                        // console.log('111', res)
-                                        res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
-                                        this.props.store.changeShown();
-                                        this.props.store.changeKey('2');
-                                        this.props.store.getProdDetailData(res.getYouxuanProduct)
-                                    }
-                                )
-                            }}>查看详情</Button>
+                            <Button onClick={ () => {this.querySpecificPROD(item.itemId)} }>查看详情</Button>
                             <h4>{item.title}</h4>
                         </div>
                     </div>

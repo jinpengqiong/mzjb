@@ -6,7 +6,7 @@ import GroupProduct from '../components/DBTable/groupProduct'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { Tabs, Spin, Radio } from 'antd';
+import { Tabs, Spin, Radio, Affix } from 'antd';
 import Request from "../utils/graphql_request";
 const TabPane = Tabs.TabPane;
 
@@ -84,10 +84,12 @@ export default class Products extends React.Component {
                   onChange={this.onTabsChange}
                   hideAdd>
                   <TabPane tab='商品管理' key="商品管理">
-                      <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
-                          <Radio.Button value="出售中">出售中</Radio.Button>
-                          <Radio.Button value="仓库中">仓库中</Radio.Button>
-                      </Radio.Group>
+                      <Affix offsetTop={10}>
+                        <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
+                            <Radio.Button value="出售中">出售中</Radio.Button>
+                            <Radio.Button value="仓库中">仓库中</Radio.Button>
+                        </Radio.Group>
+                      </Affix>
                       {
                           this.state.tagName ==='出售中'?
                               <ProdTable shopTags={this.state.tagData}/>

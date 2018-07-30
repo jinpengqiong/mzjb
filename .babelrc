@@ -7,11 +7,12 @@
   ],
   "plugins": [
     "transform-decorators-legacy",
-    ["import" , [{ "libraryName": "antd" }]]
-  ],
-  "env": {
-    "development" : {
-      "compact": true
-    }
-  }
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "less"
+      }
+    ]
+  ]
 }

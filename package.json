@@ -5,6 +5,7 @@
     "build": "next build && next export",
     "start": "next start"
   },
+  "license": "ISC",
   "dependencies": {
     "@zeit/next-less": "^0.1.2",
     "all": "^0.0.0",

@@ -1,15 +1,16 @@
 import { Layout } from 'antd';
-const { Content } = Layout;
 import MyFooter from '../Footer/Footer';
 import MySider from '../Sider/Sider';
 import dynamic from 'next/dynamic'
-const MyHeader = dynamic(import('../Header/Header'), {
-  ssr: false
-})
 import { inject, observer } from 'mobx-react'
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
+const { Content } = Layout;
+const MyHeader = dynamic(import('../Header/Header'), {
+  ssr: false
+})
+
 
 @inject('store') @observer
 export default class MyLayout extends React.Component {
