@@ -126,7 +126,7 @@ export default class ChooseProducts extends React.Component {
     }
 
     componentWillReceiveProps(nextProps, nextState){
-      console.log('nextProps', nextProps)
+      // console.log('nextProps', nextProps)
       if(this.props.store.chooseProdKey !== '0'){
         this.queryYouZanProd(1, parseInt(nextProps.tagId))
       }
@@ -138,8 +138,8 @@ export default class ChooseProducts extends React.Component {
             pageSize: 20,
         };
         Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                console.log('queryShops',res);
+            res => {
+                // console.log('queryShops',res);
                 this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
                 localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
                 localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
@@ -149,8 +149,8 @@ export default class ChooseProducts extends React.Component {
 
     queryYouxuanProd = (page) => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                console.log('queryYouXuanProd',res);
+            res => {
+                // console.log('queryYouXuanProd',res);
                 res.youxuanProducts.items.map(
                     (item) => {
                         item.price = (item.price/100).toFixed(2)
@@ -166,8 +166,8 @@ export default class ChooseProducts extends React.Component {
     queryYouZanProd = (page, tagID) => {
       if(tagID){
         Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize: 20, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-              console.log('queryYouZanProd',res);
+            res => {
+              // console.log('queryYouZanProd',res);
               res.youzanProducts.items.map(
                   (item) => {
                     item.price = (item.price/100).toFixed(2)
@@ -199,7 +199,7 @@ export default class ChooseProducts extends React.Component {
 
     render() {
         const youzanPROD = this.state.data && this.state.data.items.map(
-            (item) => {
+            item => {
                 return (
                     <div className='card_entity' style={{ marginRight:'20px', marginBottom:'20px'}} key={item.itemId}>
                         <Card

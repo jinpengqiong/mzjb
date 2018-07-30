@@ -60,7 +60,7 @@ export default class MainPage extends React.Component {
     queryCategory = () => {
       Request.GraphQlRequest(queryCategories, { type: 'PRODUCT' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-            console.log('queryCategories',res);
+            // console.log('queryCategories',res);
             this.setState({
               categoryData: res.categories.entries
             })
@@ -71,7 +71,7 @@ export default class MainPage extends React.Component {
     queryTagList = () => {
       Request.GraphQlRequest( queryTagList, null, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-            console.log('queryTagList',res);
+            // console.log('queryTagList',res);
             this.setState({
               tagListData: res.youzanTaglist
             })
@@ -81,8 +81,9 @@ export default class MainPage extends React.Component {
 
     onChange = (activeKey) => {
         this.store.changeKey(activeKey)
-        const tagId = this.state.tagListData.find(
-            value => {
+        if(activeKey !== '0'){
+          const tagId = this.state.tagListData.find(
+              value => {
                 const tag = this.state.categoryData.find(
                     item => {
                       if(item.id === activeKey){
@@ -90,13 +91,14 @@ export default class MainPage extends React.Component {
                       }
                     })
                 if(tag.name === value.name){
-                      return value
+                  return value
                 }
-            }
-        )
-        this.setState({
-          tagId:tagId.id
-        })
+              }
+          )
+          this.setState({
+            tagId:tagId.id
+          })
+        }
     }
 
     onRadioChange = (e) => {

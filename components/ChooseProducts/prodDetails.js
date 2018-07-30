@@ -80,8 +80,8 @@ export default class ProdDetails extends React.Component {
             const imgsItems = this.props.store.ProdDetailData.item.itemImgs.map(
                 (item) => {
                    return(
-                       <div>
-                           <img src={item.medium} style={{ width:'450px' }} key={UUIDGen.uuid(6,10)}/>
+                       <div key={UUIDGen.uuid(6,10)}>
+                           <img src={item.medium} style={{ width:'450px' }} />
                        </div>
                    )
                 }
