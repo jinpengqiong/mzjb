@@ -19,6 +19,7 @@ class RegistrationForm extends React.Component {
       count: false
     };
   }
+
   componentDidMount(){
 
   }
@@ -33,7 +34,7 @@ class RegistrationForm extends React.Component {
               message.success('验证码发送成功！');
             }
           }
-      )
+      ).catch(err => console.error(err))
     }else{
       message.error("请输入正确手机号");
     }

@@ -52,7 +52,7 @@ class YouzanUploader extends React.Component {
               data: res.ossPolicy,
           })
         }
-      );
+      ).catch(err => console.error(err))
   }
 
   get_suffix(filename) {

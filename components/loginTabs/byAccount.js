@@ -33,7 +33,7 @@ class NormalLoginForm extends React.Component {
             password: values.password
           };
           request(uri, mutation, variables).then(
-            (res)=>{
+            res => {
                 console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');

@@ -7,8 +7,8 @@ import UUIDGen from '../../utils/uuid_generator'
 import Request from '../../utils/graphql_request';
 
 const createProduct = `
-      mutation ($baseinfo: ProductBaseinfo!, $itemId: String, $shopId: ID!, $type: ProductType!, $youzan: ProductYouzanArgs) {
-        createProduct(baseinfo:$baseinfo, itemId:$itemId, shopId:$shopId, type:$type,youzan:$youzan){
+      mutation ($baseinfo: ProductBaseinfo!, $itemId: String, $shopId: ID!, $type: ProductType!, $youzan: ProductYouzanArgs, $categoryId: ID) {
+        createProduct(baseinfo:$baseinfo, itemId:$itemId, shopId:$shopId, type:$type,youzan:$youzan, categoryId:$categoryId){
             detailUrl
             id
             insertedAt
@@ -42,6 +42,7 @@ export default class ProdDetails extends React.Component {
             baseinfo,
             itemId:(this.props.store.ProdDetailData.item.itemId).toString(),
             shopId:localStorage.getItem('shopID'),
+            categoryId: this.props.store.ProdDetailData.tabId, // take the tabId fro addToShpp or addToStock
             type:'YOUXUAN'
         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
@@ -65,9 +66,10 @@ export default class ProdDetails extends React.Component {
             baseinfo,
             itemId:(this.props.store.ProdDetailData.item.itemId).toString(),
             shopId:localStorage.getItem('shopID'),
+            categoryId: this.props.store.ProdDetailData.tabId,  // take the tabId fro addToShpp or addToStock
             type:'YOUXUAN'
         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('res',res);
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
@@ -78,7 +80,7 @@ export default class ProdDetails extends React.Component {
     render() {
         if(this.props.store.ProdDetailData){
             const imgsItems = this.props.store.ProdDetailData.item.itemImgs.map(
-                (item) => {
+                item => {
                    return(
                        <div key={UUIDGen.uuid(6,10)}>
                            <img src={item.medium} style={{ width:'450px' }} />
@@ -113,7 +115,7 @@ export default class ProdDetails extends React.Component {
                     </Row>
                     <Row>
                         <h2>商品详情</h2>
-                        <Col span={10} offset={1}>
+                        <Col span={10} offset={2}>
                           {
                             this.props.store.ProdDetailData.item.desc?
                                 <div dangerouslySetInnerHTML={{ __html: this.props.store.ProdDetailData.item.desc }} />

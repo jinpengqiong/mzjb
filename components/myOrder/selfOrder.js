@@ -58,11 +58,6 @@ const columns = [
         title: '订单状态',
         dataIndex: 'statusStr',
         key: 'statusStr',
-        // render: (text, record) => (
-        //     <div>
-        //         <p>{text===3? "待付款" :text===5? "已付款" : text===6? "已发货" : text===100? "交易完成" :null}</p>
-        //     </div>
-        // )
     },
     {
         title: '订单总额(元)',
@@ -80,6 +75,7 @@ export default class SelfOrder extends React.Component {
             isSpin:false
         }
     }
+
     componentDidMount(){
         this.queryOrderData(1);
     }
@@ -100,12 +96,13 @@ export default class SelfOrder extends React.Component {
                     isSpin:false
                 })
             }
-        ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
+        ).catch(()=>{message.error('出错了，请联系管理员')})
     };
 
     onChange(pageNumber) {
         this.queryUserData(pageNumber);
     }
+
     refresh =() => {
         this.setState({
             isSpin:true
@@ -114,7 +111,7 @@ export default class SelfOrder extends React.Component {
     }
 
     render() {
-        console.log('data', this.state.data)
+        // console.log('data', this.state.data)
         return (
             <div>
                 <div style={{ textAlign:"right", marginBottom:"10px"}}>

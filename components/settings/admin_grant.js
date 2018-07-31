@@ -71,7 +71,7 @@ export default class GrantAdmin extends React.Component {
                     staffsData: res.getShop,
                 });
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     //radio change
@@ -130,7 +130,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('添加成功！')
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     // delete staff
@@ -150,7 +150,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('删除成功！')
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     render() {

@@ -4,7 +4,7 @@ import ProdDetails from '../components/ChooseProducts/prodDetails';
 import { Provider } from 'mobx-react'
 import { initStore  } from '../store'
 import Router from 'next/router';
-import { Tabs, Spin, Radio, Affix } from 'antd';
+import { Tabs, Spin, Radio } from 'antd';
 const TabPane = Tabs.TabPane;
 import { observer } from 'mobx-react'
 import Request from '../utils/graphql_request';
@@ -80,6 +80,7 @@ export default class MainPage extends React.Component {
     }
 
     onChange = (activeKey) => {
+      // console.log('activeKey',activeKey)
         this.store.changeKey(activeKey)
         if(activeKey !== '0'){
           const tagId = this.state.tagListData.find(
@@ -117,6 +118,7 @@ export default class MainPage extends React.Component {
                         activeKey={this.store.chooseProdKey}
                         tabPosition="left"
                         onChange={this.onChange}
+                        style={{ height: 800 }}
                         hideAdd>
                             <TabPane tab='优选商城' key="0">
                                   <ChooseProducts />
@@ -128,7 +130,6 @@ export default class MainPage extends React.Component {
                                     tag => {
                                         return (
                                             <TabPane tab={tag.name} key={tag.id}>
-                                              <Affix offsetTop={10} >
                                                 <Radio.Group value={this.state.tagId} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
                                                   {
                                                     this.state.tagListData && this.state.tagListData.map(
@@ -163,7 +164,6 @@ export default class MainPage extends React.Component {
                                                     )
                                                   }
                                                 </Radio.Group>
-                                              </Affix>
                                               <ChooseProducts tagId={this.state.tagId}/>
                                             </TabPane>
                                         )

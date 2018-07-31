@@ -11,7 +11,7 @@ module.exports = {
       '/settings': { page: '/settings' },
     }
   },
-  webpack: (config, options) => {
+  webpack: (config, dev) => {
     config.module.rules.push(
         {
           test: /\.(css|less)/,

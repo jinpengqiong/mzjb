@@ -56,10 +56,17 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount (){
-    this.setState({
+    if(localStorage.getItem('shopID') === localStorage.getItem('OriginalID')){
+      this.setState({
         radioValue:localStorage.getItem('shopID'),
-        curShopName: localStorage.getItem('OriginalName')
+        curShopName: 'shop_' + localStorage.getItem('phone') + '(自有）'
       })
+    }else{
+      this.setState({
+        radioValue:localStorage.getItem('shopID'),
+        curShopName: 'shop_' + localStorage.getItem('phone') + '(管理)'
+      })
+    }
   }
 
   toggle = () => {
@@ -75,7 +82,7 @@ export default class MyHeader extends React.Component {
 
 
   //reset password
-  handleOk = (e) => {
+  handleOk = e => {
     this.refs.form.validateFields(
         (err, values) => {
       if (!err) {
@@ -88,17 +95,13 @@ export default class MyHeader extends React.Component {
                 visible: false,
               });
             }
-        ).catch(
-            (err) => {
-              console.error(err)
-            }
-        )
+        ).catch(err => console.error(err))
       }
     }
     )
   }
 
-  handleCancel = (e) => {
+  handleCancel = e => {
     this.refs.form.resetFields();
     this.setState({
       visible: false
@@ -118,13 +121,21 @@ export default class MyHeader extends React.Component {
       localStorage.setItem('shopID', parseInt(localStorage.getItem('OriginalID')) )
       localStorage.setItem('phone', this.state.shopsData[0].staffs[0].user.phone)
       this.setState({
-        curShopName: localStorage.getItem('OriginalName')
+        curShopName: localStorage.getItem('OriginalName')+'(自有)'
       })
     }else{
+      const i = this.state.shopsData.findIndex(
+          index => {
+            if(index.id === this.state.radioValue){
+              return index
+            }
+          }
+      )
+      console.log('i', i)
       localStorage.setItem('shopID', parseInt(this.state.radioValue))
-      localStorage.setItem('phone', this.state.shopsData[0].name.split('_')[1])
+      localStorage.setItem('phone', this.state.shopsData[i].name.split('_')[1])
       this.setState({
-        curShopName: this.state.shopsData[0].name
+        curShopName: this.state.shopsData[i].name + '(管理)'
       })
     }
 
@@ -147,29 +158,24 @@ export default class MyHeader extends React.Component {
       visible1: true,
     })
     Request.GraphQlRequest(manageShops, {page:1, pageSize:20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
+        res => {
           // console.log('res', res)
           this.setState({
             shopsData : res.manageShops.entries,
           })
         }
-    ).catch(
-        (err) => {
-          console.error(err)
-        }
-    )
+    ).catch(err => console.error(err))
   }
 
 
   onRadioChange = (e) => {
-    // console.log('radio checked', e.target.value);
+    console.log('radio checked', e.target.value);
     this.setState({
       radioValue: e.target.value,
     });
   }
 
   render() {
-    // console.log('state', this.state.curShopName)
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>
@@ -232,7 +238,7 @@ export default class MyHeader extends React.Component {
                       '暂无'
                         :
                     this.state.shopsData.map(
-                        (item) => {
+                        item => {
                           return <Radio value={item.id} key={item.id}>{item.name}</Radio>
                         }
                     )

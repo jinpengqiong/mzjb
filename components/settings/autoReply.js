@@ -71,7 +71,7 @@ export default class AutoReply extends React.Component {
                     autoReplyData: res.listAutoreply
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     //set MainTitle
@@ -123,7 +123,7 @@ export default class AutoReply extends React.Component {
             message.error('请设置图文后，再提交！')
         }else{
             Request.GraphQlRequest(addAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), keyWord:this.state.keyWord, replyBody:JSON.stringify(this.props.store.replyBody) }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                (res) => {
+                res => {
                     // console.log('Autoreply', res)
                     message.success('设置成功！')
                     this.setState({
@@ -132,7 +132,7 @@ export default class AutoReply extends React.Component {
                     this.queryAutoReply(1)
                     this.props.store.clearReplyBody()
                 }
-            )
+            ).catch(err => console.error(err))
         }
     }
     //modal cancel action
@@ -150,7 +150,7 @@ export default class AutoReply extends React.Component {
                 message.success('删除成功！')
                 this.queryAutoReply(1)
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     // save keyword

@@ -64,7 +64,7 @@ export default class BindLiveRoom extends React.Component {
                     listShopRoom:res.listShoproom
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     //open modal click
@@ -79,7 +79,7 @@ export default class BindLiveRoom extends React.Component {
                     ownedRoom:res.ownedRooms
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
     //radio select change
     onChange = (e) => {
@@ -119,7 +119,7 @@ export default class BindLiveRoom extends React.Component {
                 message.success('取消绑定成功！')
                 this.queryLiveRooms()
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     render() {
@@ -149,7 +149,6 @@ export default class BindLiveRoom extends React.Component {
                     )
             }
         )
-        // console.log('bindableRooms',bindableRooms)
         return (
             <div>
               {

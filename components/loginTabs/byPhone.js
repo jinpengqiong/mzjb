@@ -40,16 +40,15 @@ class NormalLoginForm extends React.Component {
       if (!err) {
         // console.log('Received values of form: ', values);
         request(uri, submitByPhone,{ phone: values.phone, code: values.SmsCode}).then(
-          (res)=>{
+          res => {
                   message.success('登录成功！')
-                  // console.log('res', res);
                   localStorage.setItem('accessToken', res.smsLogin.accessToken);
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
                   localStorage.setItem('role', res.smsLogin.user.role);
                   localStorage.setItem('phone', res.smsLogin.user.phone);
                   localStorage.setItem('lgTime', new Date().getTime());
-                  localStorage.setItem('OriginalName', 'shop_' + res.login.user.phone)
+                  localStorage.setItem('OriginalName', 'shop_' + res.smsLogin.user.phone)
                   Router.push('/')
               }
         ).catch(()=>{message.error('用户名或密码错误，登录失败！')})
@@ -78,6 +77,7 @@ class NormalLoginForm extends React.Component {
       }
     }, 1000);
   }
+
   componentWillUnmount() {
     clearInterval(this.interval);
   }

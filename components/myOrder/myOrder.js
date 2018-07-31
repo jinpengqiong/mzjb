@@ -214,7 +214,7 @@ export default class OrderManagement extends React.Component {
                     visible:true
                 })
             }
-        ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
+        ).catch(()=>{message.error('出错了，请联系管理员')})
     }
 
     handleCancel = () => {

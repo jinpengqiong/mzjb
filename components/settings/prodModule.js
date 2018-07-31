@@ -113,13 +113,13 @@ export default class ProdModule extends React.Component {
     //query current shoppage
     queryCurShoppage = () => {
         Request.GraphQlRequest(getShop, {id:localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('getShop', res)
                 this.setState({
                     curShopPage: res.getShop.curShoppage
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     //edit module
@@ -147,7 +147,7 @@ export default class ProdModule extends React.Component {
                     ShoppageData: res.listShoppage
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     handleModuleSet = () => {
@@ -162,7 +162,7 @@ export default class ProdModule extends React.Component {
                 this.queryCurShoppage()
                 message.success('设置成功！')
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     DeleteConfirm = (ID) => {
@@ -172,7 +172,7 @@ export default class ProdModule extends React.Component {
                 message.success('删除成功！')
                 this.queryShoppage(1)
             }
-        )
+        ).catch(err => console.error(err))
     }
 
     onPageChange = (page) => {

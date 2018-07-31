@@ -227,7 +227,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            console.log('111', res)
+            // console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -235,7 +235,7 @@ export default class ProdTable extends React.Component {
                 curPage:res.shopProducts.pageNumber
             });
         }
-    )
+    ).catch(err => console.error(err))
   }
 
   onPageChange = (pageNumber) => {
@@ -283,7 +283,7 @@ export default class ProdTable extends React.Component {
                                 duration: 3,
                             });
                         }
-                    )
+                    ).catch(() => message.error('新增失败'))
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
@@ -379,7 +379,10 @@ export default class ProdTable extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                        ).catch(
+                            ()=>{message.error('更新失败！');
+                            this.props.store.getProductFieldsData(null)
+                          })
                     }else{
                         if(!priceRegEx.exec(values.price)){
                           message.error('请输入正确的价格！')
@@ -396,7 +399,7 @@ export default class ProdTable extends React.Component {
                                 id: this.state.productID,
                                 type:this.props.store.prodType,
                             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res) => {
+                            res => {
                                 // console.log('res', res);
                                 // this.refs.form.resetFields();
                                 res.updateProduct.key = res.updateProduct.id;
@@ -415,7 +418,10 @@ export default class ProdTable extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                        ).catch(
+                            ()=>{message.error('更新失败！');
+                            this.props.store.getProductFieldsData(null)
+                          })
                     }
 
                 }
@@ -444,7 +450,7 @@ export default class ProdTable extends React.Component {
       // console.log('id', id)
       Request.GraphQlRequest(deleteProduct,
           { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) =>{
+        res =>{
                 message.success('删除成功！');
                 this.queryProdData(1);
         }
@@ -511,7 +517,7 @@ export default class ProdTable extends React.Component {
                     data: res.tagProducts.products,
                 })
             }
-        )
+        ).catch(err => console.error(err))
       }
     }
 
@@ -567,7 +573,7 @@ export default class ProdTable extends React.Component {
                   message.success('添加成功！')
                   this.queryProdData(1);
               }
-          )
+          ).catch(() => message.error('添加失败'))
       }
     }
 

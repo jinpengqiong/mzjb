@@ -234,7 +234,7 @@ export default class InStock extends React.Component {
                     curPage:res.shopProducts.pageNumber
                 });
             }
-        )
+        ).catch( err => console.log(err))
     }
 
     onPageChange = (pageNumber) => {
@@ -266,7 +266,7 @@ export default class InStock extends React.Component {
                     values.price = parseInt(parseFloat(values.price)*100);
                     values.isDisplay = false;
                     Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                        (res)=>{
+                        res => {
                             res.createProduct.mainImage = this.props.store.mainImage;
                             res.createProduct.key = res.createProduct.id;
                             this.queryProdData(1);
@@ -281,7 +281,7 @@ export default class InStock extends React.Component {
                                 duration: 3,
                             });
                         }
-                    )
+                    ).catch(()=>{message.error('新增失败！')})
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
@@ -374,7 +374,10 @@ export default class InStock extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                        ).catch(()=>{
+                          message.error('更新失败！');
+                          this.props.store.getProductFieldsData(null)
+                        })
                     }else{
                         if(!priceRegEx.exec(values.price)){
                           message.error('请输入正确的价格！')
@@ -408,7 +411,10 @@ export default class InStock extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{message.error('更新失败！');this.props.store.getProductFieldsData(null);})
+                        ).catch(()=>{
+                          message.error('更新失败！')
+                          this.props.store.getProductFieldsData(null)
+                        })
                     }
 
                 }
@@ -505,7 +511,7 @@ export default class InStock extends React.Component {
                     data: res.tagProducts.products,
                 })
             }
-        )
+        ).catch(err => console.error(err))
       }
     }
 
@@ -561,7 +567,7 @@ export default class InStock extends React.Component {
                     message.success('添加成功！')
                     this.queryProdData(1);
                 }
-            )
+            ).catch(err => console.error(err))
         }
     }
 

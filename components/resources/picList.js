@@ -41,9 +41,11 @@ class PicList extends React.Component {
             data:null
         };
     }
+
     componentDidMount() {
         this.getData(1);
     }
+
     getData = ( page ) => {
         const variables = {
             page, 
@@ -52,14 +54,15 @@ class PicList extends React.Component {
             type:'PIC'
         };
         Request.GraphQlRequest(queryShopMedia, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('res',res)
                 this.setState({
                     data: res.shopMedias
                 })
             }
-        )
+        ).catch(err => console.error(err))
     }
+
     confirm(id) {
         Request.GraphQlRequest(deleteMedia, { id, shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {

@@ -144,7 +144,7 @@ export default class ChooseProducts extends React.Component {
                 localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
                 localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
             }
-        )
+        ).catch(err => console.log('getData err',err))
     }
 
     queryYouxuanProd = (page) => {
@@ -160,7 +160,7 @@ export default class ChooseProducts extends React.Component {
                     data: res.youxuanProducts
                 })
             }
-        )
+        ).catch(err => console.log('queryYouxuanProd err',err))
     }
 
     queryYouZanProd = (page, tagID) => {
@@ -177,21 +177,21 @@ export default class ChooseProducts extends React.Component {
                 data: res.youzanProducts
               })
             }
-        )
+        ).catch(err => console.log('queryYouZanProd err',err))
       }
     }
 
   querySpecificPROD = (ID) => {
     Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          console.log('res', res)
           res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
+          res.getYouxuanProduct.tabId = this.props.store.chooseProdKey
           this.props.store.switchTabShown(true);
           this.props.store.changeKey('-1');
           this.props.store.getProdDetailData(res.getYouxuanProduct)
-
+          console.log('querySpecificPROD', res)
         }
-    )
+    ).catch(err => console.log('querySpecificPROD err',err))
   }
 
     onChange = (page) => {

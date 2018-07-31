@@ -84,7 +84,7 @@ export default class UserList extends React.Component {
                 data: res.allUsers
             })
         }
-    )
+      ).catch(err => console.error(err))
   }
 
   grantUser( userId){
@@ -93,7 +93,7 @@ export default class UserList extends React.Component {
             message.success('授权成功！');
             this.queryUserData(1);
         }
-    )
+      ).catch(err => console.error(err))
   }
 
   confirm(id) {

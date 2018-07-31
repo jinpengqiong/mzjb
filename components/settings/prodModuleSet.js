@@ -150,7 +150,7 @@ export default class ProdModuleSet extends React.Component {
             Object.assign({ limit: 2 }, lineConf),
             noticeConf
         ];
-        console.log('2222', JSON.parse(this.props.store.moduleValue))
+        // console.log('2222', JSON.parse(this.props.store.moduleValue))
         return (
             <div>
                 <h1 style={{ marginBottom:"10px"}}>{ this.props.store.moduleType}</h1>
@@ -210,10 +210,7 @@ export default class ProdModuleSet extends React.Component {
 
                         }
                     )
-                })
-                .catch(validations => {
-                    console.log(validations);
-                });
+                }).catch(err => console.error(err))
         }else if(this.props.store.moduleType ==='编辑模版'){
             this.triggerDesignValidation()
                 .then(() => {
@@ -234,11 +231,8 @@ export default class ProdModuleSet extends React.Component {
                             message.success('更新成功');
                         }
                     )
-                })
-                .catch(validations => {
-                    console.log(validations);
-                });
-        }
+                }).catch(err => console.error(err))
+            }
 
-    };
-}
+        };
+    }
