@@ -202,7 +202,7 @@ export default class ChooseProducts extends React.Component {
                     }
                 )
                 res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
-                console.log('querySpecificPROD', res)
+                // console.log('querySpecificPROD', res)
                 this.props.store.switchTabShown(true);
                 this.props.store.changeKey('-1');
                 this.props.store.getProdDetailData(res.getYouxuanProduct)

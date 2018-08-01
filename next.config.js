@@ -1,4 +1,6 @@
 const withLess = require('@zeit/next-less')
+const DefinePlugin = require('webpack/lib/DefinePlugin')
+const UglifyJSPlugin = require('webpack/lib/optimize/UglifyJSPlugin')
 
 module.exports = {
   exportPathMap: () => {
@@ -39,6 +41,17 @@ module.exports = {
           }
         }
     );
+    config.plugins.push(
+        new DefinePlugin({
+          'process.env.NODE_ENV': !dev ? "production" : "development",
+        }),
+        new UglifyJSPlugin({
+          compress:{
+            warnings:false,
+            drop_console:false
+          }
+        })
+    )
     return config;
   }
 }
