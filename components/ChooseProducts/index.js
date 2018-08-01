@@ -185,25 +185,24 @@ export default class ChooseProducts extends React.Component {
       if(this.props.store.chooseProdKey === '0'){
           Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
               res => {
-                console.log('querySpecificPROD', res)
-                const tagName = this.props.store.tagListData.find(
-                    item => {
-                      if(item.id === res.getYouxuanProduct.item.tagIds[1]){
-                        return item
-                      }
-                    }
-                )
-                console.log('tagName', tagName.name)
-                const ID = this.props.store.categories.find(
+                this.props.store.categories.forEach(
                     ID => {
-                      if(ID.name === tagName.name){
-                          return ID
-                      }
+                      this.props.store.tagListData.forEach(
+                          item => {
+                            if(item.id === res.getYouxuanProduct.item.tagIds[1]){
+                              if(item.name.indexOf('-特价')){
+                                item.name = item.name.split('-')[0]
+                              }
+                              if(ID.name === item.name){
+                                res.getYouxuanProduct.tabId = ID.id
+                              }
+                            }
+                          }
+                      )
                     }
                 )
-                console.log('ID', ID)
-                res.getYouxuanProduct.tabId = ID.id
                 res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
+                console.log('querySpecificPROD', res)
                 this.props.store.switchTabShown(true);
                 this.props.store.changeKey('-1');
                 this.props.store.getProdDetailData(res.getYouxuanProduct)

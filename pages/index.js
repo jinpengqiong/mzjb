@@ -79,7 +79,7 @@ export default class MainPage extends React.Component {
     }
 
     onChange = (activeKey) => {
-      // console.log('activeKey',activeKey)
+      console.log('activeKey',activeKey)
         this.store.changeKey(activeKey)
         if(activeKey !== '0'){
           const tagId = this.store.tagListData.find(
