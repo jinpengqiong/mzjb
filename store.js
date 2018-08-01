@@ -35,6 +35,9 @@ class Store {
   @observable moduleType = null;
   //swtich the prod detail tab display
   @observable isTabOpen = false;
+  //prod categories
+  @observable categories = null;
+  @observable tagListData = null;
 
   constructor (isServer) {
   }
@@ -129,6 +132,14 @@ class Store {
 
   @action switchTabShown = (bool) => {
       this.isTabOpen = bool;
+  }
+
+  @action getCategories = (data) => {
+        this.categories = data
+  }
+
+  @action getTagListData = (data) => {
+          this.tagListData = data
   }
 
 }

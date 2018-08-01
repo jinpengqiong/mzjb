@@ -70,6 +70,7 @@ const querySpecificPROD = `
               num
               postFee
               soldNum
+              tagIds
               itemImgs{
                 medium
                 thumbnail
@@ -126,7 +127,6 @@ export default class ChooseProducts extends React.Component {
     }
 
     componentWillReceiveProps(nextProps, nextState){
-      // console.log('nextProps', nextProps)
       if(this.props.store.chooseProdKey !== '0'){
         this.queryYouZanProd(1, parseInt(nextProps.tagId))
       }
@@ -182,16 +182,45 @@ export default class ChooseProducts extends React.Component {
     }
 
   querySpecificPROD = (ID) => {
-    Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        res => {
-          res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
-          res.getYouxuanProduct.tabId = this.props.store.chooseProdKey
-          this.props.store.switchTabShown(true);
-          this.props.store.changeKey('-1');
-          this.props.store.getProdDetailData(res.getYouxuanProduct)
-          console.log('querySpecificPROD', res)
-        }
-    ).catch(err => console.log('querySpecificPROD err',err))
+      if(this.props.store.chooseProdKey === '0'){
+          Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+              res => {
+                console.log('querySpecificPROD', res)
+                const tagName = this.props.store.tagListData.find(
+                    item => {
+                      if(item.id === res.getYouxuanProduct.item.tagIds[1]){
+                        return item
+                      }
+                    }
+                )
+                console.log('tagName', tagName.name)
+                const ID = this.props.store.categories.find(
+                    ID => {
+                      if(ID.name === tagName.name){
+                          return ID
+                      }
+                    }
+                )
+                console.log('ID', ID)
+                res.getYouxuanProduct.tabId = ID.id
+                res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
+                this.props.store.switchTabShown(true);
+                this.props.store.changeKey('-1');
+                this.props.store.getProdDetailData(res.getYouxuanProduct)
+              }
+          ).catch(err => console.log('querySpecificPROD err',err))
+      }else {
+        Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            res => {
+              res.getYouxuanProduct.item.price = (res.getYouxuanProduct.item.price/100).toFixed(2);
+              res.getYouxuanProduct.tabId = this.props.store.chooseProdKey
+              this.props.store.switchTabShown(true);
+              this.props.store.changeKey('-1');
+              this.props.store.getProdDetailData(res.getYouxuanProduct)
+              console.log('querySpecificPROD', res)
+            }
+        ).catch(err => console.log('querySpecificPROD err',err))
+      }
   }
 
     onChange = (page) => {

@@ -34,12 +34,9 @@ const queryTagList = `
 export default class MainPage extends React.Component {
     constructor (props) {
         super(props)
-        // console.log('props', props)
         this.store = initStore(props.isServer)
         this.state = {
             loading:true,
-            categoryData:null,
-            tagListData:null,
             tagId:null
         }
     }
@@ -61,6 +58,7 @@ export default class MainPage extends React.Component {
       Request.GraphQlRequest(queryCategories, { type: 'PRODUCT' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
             // console.log('queryCategories',res);
+            this.store.getCategories(res.categories.entries)
             this.setState({
               categoryData: res.categories.entries
             })
@@ -72,6 +70,7 @@ export default class MainPage extends React.Component {
       Request.GraphQlRequest( queryTagList, null, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
             // console.log('queryTagList',res);
+            this.store.getTagListData(res.youzanTaglist)
             this.setState({
               tagListData: res.youzanTaglist
             })
@@ -83,9 +82,9 @@ export default class MainPage extends React.Component {
       // console.log('activeKey',activeKey)
         this.store.changeKey(activeKey)
         if(activeKey !== '0'){
-          const tagId = this.state.tagListData.find(
+          const tagId = this.store.tagListData.find(
               value => {
-                const tag = this.state.categoryData.find(
+                const tag = this.store.categories.find(
                     item => {
                       if(item.id === activeKey){
                         return item
@@ -124,15 +123,15 @@ export default class MainPage extends React.Component {
                                   <ChooseProducts />
                             </TabPane>
                             {
-                                this.state.categoryData
+                                this.store.categories
                                 &&
-                                this.state.categoryData.map(
+                                this.store.categories.map(
                                     tag => {
                                         return (
                                             <TabPane tab={tag.name} key={tag.id}>
                                                 <Radio.Group value={this.state.tagId} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
                                                   {
-                                                    this.state.tagListData && this.state.tagListData.map(
+                                                    this.store.tagListData && this.store.tagListData.map(
                                                         item => {
                                                           if(item.name === tag.name){
                                                             return (
@@ -148,7 +147,7 @@ export default class MainPage extends React.Component {
                                                     )
                                                   }
                                                   {
-                                                    this.state.tagListData && this.state.tagListData.map(
+                                                    this.store.tagListData && this.store.tagListData.map(
                                                         item => {
                                                           if(item.name === tag.name+'-特价'){
                                                             return (
