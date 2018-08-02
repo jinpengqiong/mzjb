@@ -1,9 +1,8 @@
 import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
 import Router from 'next/router';
-const SubMenu = Menu.SubMenu;
 import { inject, observer } from 'mobx-react'
-
+// import { fax } from "react-icons/fa";
 
 @inject('store') @observer
 export default class MySider extends React.Component {

@@ -130,11 +130,13 @@ export default class BindLiveRoom extends React.Component {
                           hoverable
                           key={room.id}
                           extra={
+                                localStorage.getItem('OriginalID') === localStorage.getItem('shopID')
+                                  &&
                                 <Popconfirm title="确定要取消绑定吗?"
                                     onConfirm={()=> {this.deleteRoom(room.id)}} okText="确定" cancelText="取消">
                                     <a href="#">取消绑定</a>
                                 </Popconfirm>
-                            }
+                                }
                           style={{ width: 300 , marginRight:"10px", marginBottom:"10px"}}>
                         <p>房间ID：{room.roomId}</p>
                         <p>简要描述：{room.desc}</p>

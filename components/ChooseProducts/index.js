@@ -6,30 +6,6 @@ import Request from '../../utils/graphql_request';
 import isEmpty from 'lodash/isEmpty';
 const { Meta } = Card;
 
-const queryShops = `
-      query ($page:Int, $pageSize: Int) {
-        myShops(page:$page,pageSize:$pageSize){
-          totalEntries
-          totalPages
-          pageNumber
-          pageSize
-          entries{
-              desc
-              id
-              name
-              phone
-              mainImage
-              bizTimeEnd
-              bizTimeStart
-              facilities
-              categories{
-                name
-                id
-              }
-          }
-        }
-      }
-      `;
 
 const queryYouxuanPROD = `
       query ($orderBy: String, $pageNo: Int, $pageSize: Int, $q: String) {
@@ -115,9 +91,6 @@ export default class ChooseProducts extends React.Component {
         if (!localStorage.getItem('accessToken')) {
             Router.push('/login')
         } else{
-          if(!localStorage.getItem('shopID') ){
-              this.getData(1)
-          }
           if(this.props.store.chooseProdKey === '0'){
             this.queryYouxuanProd(1)
           }else{
@@ -132,27 +105,12 @@ export default class ChooseProducts extends React.Component {
       }
     }
 
-    getData = (page) => {
-        const variables = {
-            page,
-            pageSize: 20,
-        };
-        Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            res => {
-                // console.log('queryShops',res);
-                this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
-                localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
-                localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
-            }
-        ).catch(err => console.log('getData err',err))
-    }
-
-    queryYouxuanProd = (page) => {
+    queryYouxuanProd = page => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
                 // console.log('queryYouXuanProd',res);
                 res.youxuanProducts.items.map(
-                    (item) => {
+                    item => {
                         item.price = (item.price/100).toFixed(2)
                     }
                 )
@@ -169,7 +127,7 @@ export default class ChooseProducts extends React.Component {
             res => {
               // console.log('queryYouZanProd',res);
               res.youzanProducts.items.map(
-                  (item) => {
+                  item => {
                     item.price = (item.price/100).toFixed(2)
                   }
               )
@@ -181,7 +139,7 @@ export default class ChooseProducts extends React.Component {
       }
     }
 
-  querySpecificPROD = (ID) => {
+  querySpecificPROD = ID => {
       if(this.props.store.chooseProdKey === '0'){
           Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
               res => {
@@ -216,14 +174,20 @@ export default class ChooseProducts extends React.Component {
               this.props.store.switchTabShown(true);
               this.props.store.changeKey('-1');
               this.props.store.getProdDetailData(res.getYouxuanProduct)
-              console.log('querySpecificPROD', res)
+              // console.log('querySpecificPROD', res)
             }
         ).catch(err => console.log('querySpecificPROD err',err))
       }
   }
 
-    onChange = (page) => {
-        this.getData(page);
+    onChange = page => {
+      console.log('page', page)
+      console.log('chooseProdKey', this.props.store.chooseProdKey)
+      if(this.props.store.chooseProdKey === '0'){
+        this.queryYouxuanProd(page)
+      }else {
+        this.queryYouZanProd(page, parseInt(this.props.tagId))
+      }
     }
 
     render() {
