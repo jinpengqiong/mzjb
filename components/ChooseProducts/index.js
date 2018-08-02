@@ -181,8 +181,6 @@ export default class ChooseProducts extends React.Component {
   }
 
     onChange = page => {
-      console.log('page', page)
-      console.log('chooseProdKey', this.props.store.chooseProdKey)
       if(this.props.store.chooseProdKey === '0'){
         this.queryYouxuanProd(page)
       }else {

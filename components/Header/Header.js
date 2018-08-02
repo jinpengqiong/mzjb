@@ -1,4 +1,4 @@
-import { Layout, Menu, Icon, Modal, message, Radio, Tag, Input } from 'antd';
+import { Layout, Menu, Icon, Modal, message, Radio, Tag, Input, Tooltip } from 'antd';
 const { Header } = Layout;
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
@@ -34,53 +34,53 @@ const queryShops = `
           }
         }
       }
-      `;
+    `;
 
 
 const resetPassword = `
-mutation ($phone:String!, $code: String!, $password: String!) {
-  resetPassword(phone:$phone, code: $code, password:$password){
-    phone
-    nickname
-  }
-}
-`;
+        mutation ($phone:String!, $code: String!, $password: String!) {
+          resetPassword(phone:$phone, code: $code, password:$password){
+            phone
+            nickname
+          }
+        }
+        `;
 
 const updateShop = `
-  mutation ($id:Int!, $name: String) {
-    updateShop(id:$id, name: $name){
-      name
-      id
-    }
-  }
-`;
-
-const manageShops = `
-  query($page: Int, $pageSize:Int) {
-    manageShops(page:$page, pageSize:$pageSize){
-      entries{
-        id
-        name
-        phone
-        staffs{
-        id
-        name
-        user{
-          nickname
-          phone
+      mutation ($id:Int!, $name: String) {
+        updateShop(id:$id, name: $name){
+          name
           id
         }
       }
-    }
-  }
-}`;
+    `;
+
+const manageShops = `
+      query($page: Int, $pageSize:Int) {
+        manageShops(page:$page, pageSize:$pageSize){
+          entries{
+            id
+            name
+            phone
+            staffs{
+            id
+            name
+            user{
+              nickname
+              phone
+              id
+            }
+          }
+        }
+      }
+    }`;
 
 
 @inject('store') @observer
 export default class MyHeader extends React.Component {
   constructor (props){
       super(props)
-      this.state={
+      this.state = {
           visible:false,
           visible1:false,
           visible2:false,
@@ -91,11 +91,8 @@ export default class MyHeader extends React.Component {
       }
   }
 
-  componentWillMount(){
-    this.getData()
-  }
   componentDidMount (){
-    this.getData()
+    this.getData();
     if(localStorage.getItem('shopID') === localStorage.getItem('OriginalID')){
       this.setState({
         radioValue:localStorage.getItem('shopID'),
@@ -115,7 +112,7 @@ export default class MyHeader extends React.Component {
     };
     Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          console.log('queryShops',res);
+          // console.log('queryShops',res);
           this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
           localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
           localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
@@ -295,7 +292,9 @@ export default class MyHeader extends React.Component {
                   <Menu.Item key="inShop">
                     当前店铺：
                     <Tag color="#2db7f5">{ this.state.curShopName &&  this.state.curShopName}</Tag>
-                    <Icon type="edit" onClick={this.changeShopName}/>
+                    <Tooltip title="更新店铺名">
+                      <Icon type="edit" onClick={this.changeShopName}/>
+                    </Tooltip>
                   </Menu.Item>
                     <SubMenu title={<span>{ '您好，'+ localStorage.getItem('nickname')}</span>}>
                         <Menu.Item key="1" >
@@ -327,7 +326,7 @@ export default class MyHeader extends React.Component {
                   <SetPassword ref="form"/>
                 </Modal>
                 <Modal
-                    title="更新店铺名称"
+                    title="更新店铺名"
                     visible={this.state.visible2}
                     onOk={this.handleNameChange}
                     onCancel={this.handleNameCancel}
