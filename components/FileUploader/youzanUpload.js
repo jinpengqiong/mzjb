@@ -153,7 +153,6 @@ class YouzanUploader extends React.Component {
     return (
       <div>
         <div id="ossfile3"></div>
-        <br/>
         <div id="container">
             <Button id="selectfiles3" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
             <Button id="postfiles3" href="javascript:void(0);" >开始上传</Button>

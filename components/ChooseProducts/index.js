@@ -229,7 +229,7 @@ export default class ChooseProducts extends React.Component {
                 pageSize={20}
                 onChange={this.onChange}
                 total={this.state.data? this.state.data.count : 1}
-                style={{ float: "right", marginTop: "10px"}}/>
+                style={{ float: "right", marginTop: "10px", marginRight:'15px'}}/>
                 }
                 <style jsx>{
                     `

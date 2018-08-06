@@ -146,7 +146,6 @@ class ShopImgUploader extends React.Component {
         return (
             <div>
                 <div id="ossfile"></div>
-                <br/>
                 <div id="container">
                     <Button id="selectfiles" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
                     <Button id="postfiles" href="javascript:void(0);" >开始上传</Button>

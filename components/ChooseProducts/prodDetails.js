@@ -77,6 +77,11 @@ export default class ProdDetails extends React.Component {
         ).catch(err =>console.error('error',err) )
     }
 
+    backToPrime = () => {
+        this.props.store.switchTabShown(false)
+        this.props.store.changeKey('0')
+    }
+
     render() {
         if(this.props.store.ProdDetailData){
             const imgsItems = this.props.store.ProdDetailData.item.itemImgs.map(
@@ -91,12 +96,15 @@ export default class ProdDetails extends React.Component {
             return (
                 <div>
                     <Row>
+                        <Col span={2}>
+                            <Button type="primary" onClick={this.backToPrime}>返回</Button>
+                        </Col>
                         <Col span={10} offset={1}>
                             <Carousel autoplay effect="fade" speed='4000'>
                                 { imgsItems }
                             </Carousel>
                         </Col>
-                        <Col span={11} offset={1}>
+                        <Col span={9} offset={1}>
                             <h2>{this.props.store.ProdDetailData.item.title}</h2>
                             <p>单价：{'¥'+this.props.store.ProdDetailData.item.price}</p>
                             <p>运费： {this.props.store.ProdDetailData.item.postFee ===0? "包邮" : '¥'+(this.props.store.ProdDetailData.item.postFee/100).toFixed(2) }</p>
@@ -115,7 +123,7 @@ export default class ProdDetails extends React.Component {
                     </Row>
                     <Row>
                         <h2>商品详情</h2>
-                        <Col span={10} offset={2}>
+                        <Col span={12} offset={5}>
                           {
                             this.props.store.ProdDetailData.item.desc?
                                 <div dangerouslySetInnerHTML={{ __html: this.props.store.ProdDetailData.item.desc }} />

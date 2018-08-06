@@ -113,22 +113,26 @@ export default class MainPage extends React.Component {
             <Provider store={this.store}>
                 <Spin spinning={this.state.loading} size="large">
                     <MyLayout>
-                        <Tabs
-                        activeKey={this.store.chooseProdKey}
-                        tabPosition="left"
-                        onChange={this.onChange}
-                        style={{ height: 800 }}
-                        hideAdd>
-                            <TabPane tab='优选商城' key="0">
-                                  <ChooseProducts />
-                            </TabPane>
-                            {
-                                this.store.categories
-                                &&
-                                this.store.categories.map(
-                                    tag => {
-                                        return (
-                                            <TabPane tab={tag.name} key={tag.id}>
+                          {
+                            this.store.isTabOpen?
+                              <ProdDetails />
+                                :
+                                <Tabs
+                                    activeKey={this.store.chooseProdKey}
+                                    tabPosition="left"
+                                    onChange={this.onChange}
+                                    style={{ height: 800, overflowY: 'scroll' }}
+                                    hideAdd>
+                                  <TabPane tab='优选商城' key="0">
+                                    <ChooseProducts />
+                                  </TabPane>
+                                  {
+                                    this.store.categories
+                                    &&
+                                    this.store.categories.map(
+                                        tag => {
+                                          return (
+                                              <TabPane tab={tag.name} key={tag.id}>
                                                 <Radio.Group value={this.state.tagId} onChange={this.onRadioChange} style={{ marginBottom: 16 }}>
                                                   {
                                                     this.store.tagListData && this.store.tagListData.map(
@@ -163,20 +167,14 @@ export default class MainPage extends React.Component {
                                                     )
                                                   }
                                                 </Radio.Group>
-                                              <ChooseProducts tagId={this.state.tagId}/>
-                                            </TabPane>
-                                        )
-                                    }
-                                )
-                            }
-                          {
-                            this.store.isTabOpen
-                            &&
-                            <TabPane tab='商品详情' key="-1" >
-                              <ProdDetails />
-                            </TabPane>
+                                                <ChooseProducts tagId={this.state.tagId}/>
+                                              </TabPane>
+                                          )
+                                        }
+                                    )
+                                  }
+                                </Tabs>
                           }
-                        </Tabs>
                     </MyLayout>
                 </Spin>
             </Provider>
