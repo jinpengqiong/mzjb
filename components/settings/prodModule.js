@@ -75,7 +75,7 @@ export default class ProdModule extends React.Component {
                 title: '创建时间',
                 dataIndex: 'insertedAt',
                 key: 'insertedAt',
-                render: text => <a href="javascript:;">{moment(text).format('YYYY-MM-DD hh:mm:ss')}</a>,
+                render: text => <a href="javascript:;">{moment(text).format('YYYY-MM-DD hh:mm')}</a>,
             }, {
                 title: '操作',
                 key: 'action',
@@ -136,8 +136,8 @@ export default class ProdModule extends React.Component {
     //query autoReply list
     queryShoppage = (page) => {
         Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                // console.log('listShoppage', res.listShoppage)
+            res => {
+                console.log('listShoppage', res)
                 res.listShoppage.entries.map(
                     (entry) => {
                        entry.key = entry.id

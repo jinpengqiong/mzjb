@@ -1,7 +1,7 @@
-const withLess = require('@zeit/next-less')
-const compose = require('next-compose')
-const DefinePlugin = require('webpack/lib/DefinePlugin')
-const UglifyJSPlugin = require('webpack/lib/optimize/UglifyJSPlugin')
+// const withLess = require('@zeit/next-less')
+// const compose = require('next-compose')
+// const DefinePlugin = require('webpack/lib/DefinePlugin')
+// const UglifyJSPlugin = require('webpack/lib/optimize/UglifyJSPlugin')
 // const lessConfig = {
 //         cssModules: true,
 //         cssLoaderOptions: {

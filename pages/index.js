@@ -57,7 +57,7 @@ export default class MainPage extends React.Component {
     queryCategory = () => {
       Request.GraphQlRequest(queryCategories, { type: 'PRODUCT' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-            // console.log('queryCategories',res);
+            console.log('queryCategories',res);
             this.store.getCategories(res.categories.entries)
             this.setState({
               categoryData: res.categories.entries

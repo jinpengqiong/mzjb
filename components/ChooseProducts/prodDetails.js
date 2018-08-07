@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import { Carousel } from 'antd';
-import { Button, Col, Row, message } from 'antd';
+import { Button, Col, Row, message, BackTop } from 'antd';
 import { inject, observer } from 'mobx-react';
 import UUIDGen from '../../utils/uuid_generator'
 import Request from '../../utils/graphql_request';
@@ -105,6 +105,7 @@ export default class ProdDetails extends React.Component {
                             </Carousel>
                         </Col>
                         <Col span={9} offset={1}>
+                            <BackTop/>
                             <h2>{this.props.store.ProdDetailData.item.title}</h2>
                             <p>单价：{'¥'+this.props.store.ProdDetailData.item.price}</p>
                             <p>运费： {this.props.store.ProdDetailData.item.postFee ===0? "包邮" : '¥'+(this.props.store.ProdDetailData.item.postFee/100).toFixed(2) }</p>

@@ -150,7 +150,7 @@ export default class ProdModuleSet extends React.Component {
             Object.assign({ limit: 2 }, lineConf),
             noticeConf
         ];
-        // console.log('2222', JSON.parse(this.props.store.moduleValue))
+        console.log('2222', JSON.parse(this.props.store.moduleValue))
         return (
             <div>
                 <h1 style={{ marginBottom:"10px"}}>{ this.props.store.moduleType}</h1>
