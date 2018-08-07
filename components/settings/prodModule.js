@@ -192,7 +192,11 @@ export default class ProdModule extends React.Component {
                         <EmbeddedAndSharing />
                         <div style={{ marginTop:"20px"}}>
                             <h3>模版列表</h3>
+                          {
+                            localStorage.getItem('shopID') === localStorage.getItem('OriginalID')
+                              &&
                             <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
+                          }
                             <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                             <Pagination
                                 current={this.state.ShoppageData.pageNumber}

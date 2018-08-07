@@ -175,11 +175,15 @@ export default class AutoReply extends React.Component {
                     <div style={{ width:'300px', marginLeft:"30px", marginTop:"25px", border:'2px solid #ECECEC'}} id={item.id} key={UUIDGen.uuid(8, 10)}>
                         <div style={{ marginTop:"10px", marginBottom:'10px'}}>
                             <p>关键词：<span style={{color:"red" }}>{item.keyWord}</span>
-                                <Tooltip title="删除">
-                                    <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
-                                        <Icon type="delete" style={{float:"right", marginRight:'10px'}}/>
-                                    </Popconfirm>
-                                </Tooltip>
+                              {
+                                localStorage.getItem('shopID') === localStorage.getItem('OriginalID')
+                                  &&
+                                  <Tooltip title="删除">
+                                      <Popconfirm title="确定要删除吗?" onConfirm={()=>{this.confirm(item.id)}} >
+                                          <Icon type="delete" style={{float:"right", marginRight:'10px'}}/>
+                                      </Popconfirm>
+                                  </Tooltip>
+                              }
                             </p>
                         </div>
                         <div className='main' key={UUIDGen.uuid(8, 10)}>

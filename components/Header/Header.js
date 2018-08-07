@@ -11,32 +11,6 @@ import { request } from 'graphql-request'
 
 const RadioGroup = Radio.Group;
 
-const queryShops = `
-      query ($page:Int, $pageSize: Int) {
-        myShops(page:$page,pageSize:$pageSize){
-          totalEntries
-          totalPages
-          pageNumber
-          pageSize
-          entries{
-              desc
-              id
-              name
-              phone
-              mainImage
-              bizTimeEnd
-              bizTimeStart
-              facilities
-              categories{
-                name
-                id
-              }
-          }
-        }
-      }
-    `;
-
-
 const resetPassword = `
         mutation ($phone:String!, $code: String!, $password: String!) {
           resetPassword(phone:$phone, code: $code, password:$password){
@@ -75,6 +49,30 @@ const manageShops = `
       }
     }`;
 
+const queryShops = `
+      query ($page:Int, $pageSize: Int) {
+        myShops(page:$page,pageSize:$pageSize){
+          totalEntries
+          totalPages
+          pageNumber
+          pageSize
+          entries{
+              desc
+              id
+              name
+              phone
+              mainImage
+              bizTimeEnd
+              bizTimeStart
+              facilities
+              categories{
+                name
+                id
+              }
+          }
+        }
+      }
+    `;
 
 @inject('store') @observer
 export default class MyHeader extends React.Component {
@@ -92,20 +90,11 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount (){
-    this.getData();
-    if(localStorage.getItem('shopID') === localStorage.getItem('OriginalID')){
-      this.setState({
-        radioValue:localStorage.getItem('shopID'),
-      })
-    } else {
-      this.setState({
-        radioValue:localStorage.getItem('shopID'),
-        curShopName: localStorage.getItem('managedShop') + '(管理)'
-      })
-    }
+    this.getShopData()
+
   }
 
-  getData = () => {
+  getShopData = () => {
     const variables = {
       page:1,
       pageSize: 20,
@@ -113,13 +102,23 @@ export default class MyHeader extends React.Component {
     Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
           // console.log('queryShops',res);
-          this.props.store.getShopID(parseInt(res.myShops.entries[0].id))
-          localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
-          localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
-          localStorage.setItem('OriginalName', res.myShops.entries[0].name)
-          this.setState({
-            curShopName: res.myShops.entries[0].name + '(自有）'
-          })
+          // console.log('localStorage',localStorage.getItem('shopID'));
+          if(!localStorage.getItem('shopID')){
+            localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
+            localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
+            localStorage.setItem('OriginalName', res.myShops.entries[0].name)
+          }
+          if(localStorage.getItem('shopID') === localStorage.getItem('OriginalID')){
+            this.setState({
+              radioValue:localStorage.getItem('OriginalID'),
+              curShopName: localStorage.getItem('OriginalName') + '(自有)'
+            })
+          } else {
+            this.setState({
+              radioValue:localStorage.getItem('shopID'),
+              curShopName: localStorage.getItem('managedShop') + '(管理)'
+            })
+          }
         }
     ).catch(err => console.log('getData err',err))
   }
@@ -215,7 +214,7 @@ export default class MyHeader extends React.Component {
         res => {
           console.log('getManagedShops', res)
           this.setState({
-            shopsData : res.manageShops.entries,
+            shopsData : res.manageShops.entries
           })
         }
     ).catch(err => console.error(err))
@@ -291,7 +290,7 @@ export default class MyHeader extends React.Component {
                 >
                   <Menu.Item key="inShop">
                     当前店铺：
-                    <Tag color="#2db7f5">{ this.state.curShopName &&  this.state.curShopName}</Tag>
+                    <Tag color="#2db7f5">{ this.state.curShopName}</Tag>
                     <Tooltip title="更新店铺名">
                       <Icon type="edit" onClick={this.changeShopName}/>
                     </Tooltip>

@@ -26,7 +26,7 @@ export default class Settings extends React.Component {
     }
 
     componentDidMount(){
-        if(!localStorage.getItem('accessToken') || localStorage.getItem('accessToken') === null ){
+        if(!localStorage.getItem('accessToken')){
             Router.push('/login')
         }else{
             this.setState({

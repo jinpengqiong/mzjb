@@ -96,7 +96,7 @@ class NormalLoginForm extends React.Component {
       message.error("请输入正确手机号");
     }
   }
-  
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { count } = this.state;

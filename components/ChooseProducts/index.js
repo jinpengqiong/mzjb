@@ -7,6 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 const { Meta } = Card;
 
 
+
 const queryYouxuanPROD = `
       query ($orderBy: String, $pageNo: Int, $pageSize: Int, $q: String) {
         youxuanProducts(orderBy:$orderBy,pageNo:$pageNo, pageSize:$pageSize, q:$q){
@@ -105,7 +106,10 @@ export default class ChooseProducts extends React.Component {
       }
     }
 
-    queryYouxuanProd = page => {
+
+
+
+  queryYouxuanProd = page => {
         Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
                 // console.log('queryYouXuanProd',res);
