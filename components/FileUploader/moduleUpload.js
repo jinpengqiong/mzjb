@@ -113,7 +113,7 @@ export default class ModuleUploader extends React.Component {
                         const url = self.state.data.host + '/' + file._options.multipart_params.key;
                         self.props.onImageChange(url)
                         Request.GraphQlRequest(createMediaID, { shopId:localStorage.getItem('shopID'), type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res) => {
+                            res => {
                                 message.success('上传成功');
                             }
                         )

@@ -22,6 +22,7 @@ const listShoppage = `
                 name
                 id
                 detail
+                isSystem
            }
             pageNumber
             totalEntries
@@ -80,7 +81,7 @@ export default class ProdModule extends React.Component {
                 title: '操作',
                 key: 'action',
                 render: (text, record) => (
-                    <span>
+                    <div>
                       <Popconfirm title="确实要执行此操作吗?" onConfirm={
                           () => {
                               if(record.id === this.state.curShopPage){
@@ -94,12 +95,17 @@ export default class ProdModule extends React.Component {
                       </Popconfirm>
                       <Divider type="vertical" />
                         <a href="#" onClick={ () => { this.EditModule(record.detail, record.id)} }>编辑</a>
-                      <Divider type="vertical" />
-                        <Popconfirm title="确实要执行此操作吗?" onConfirm={ () => { this.DeleteConfirm(record.id) }} >
-                        <a href="#">删除</a>
-                      </Popconfirm>
-
-                    </span>
+                      {
+                        !text.isSystem
+                            &&
+                        <span>
+                          <Divider type="vertical" />
+                          <Popconfirm title="确实要执行此操作吗?" onConfirm={ () => { this.DeleteConfirm(record.id) }} >
+                            <a href="#">删除</a>
+                          </Popconfirm>
+                        </span>
+                      }
+                    </div>
                 ),
             }]
         }
@@ -137,7 +143,7 @@ export default class ProdModule extends React.Component {
     queryShoppage = (page) => {
         Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
-                console.log('listShoppage', res)
+                console.log('listShoppage', res.listShoppage)
                 res.listShoppage.entries.map(
                     (entry) => {
                        entry.key = entry.id

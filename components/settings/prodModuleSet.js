@@ -1,5 +1,5 @@
 import { Design } from 'zent';
-import { Button, Popconfirm, message } from 'antd'
+import { Button, Popconfirm, message, BackTop } from 'antd'
 import configConf from 'zent/lib/design/components/config';
 import ConfigEditor from 'zent/lib/design/components/config/ConfigEditor';
 import whitespaceConf from 'zan-design/lib/components/whitespace';
@@ -150,10 +150,11 @@ export default class ProdModuleSet extends React.Component {
             Object.assign({ limit: 2 }, lineConf),
             noticeConf
         ];
-        console.log('2222', JSON.parse(this.props.store.moduleValue))
+        console.log('2222', this.props.store.moduleValue )
         return (
             <div>
                 <h1 style={{ marginBottom:"10px"}}>{ this.props.store.moduleType}</h1>
+                <BackTop />
                 <Design
                     ref={this.saveDesign}
                     confirmUnsavedLeave={false}
@@ -200,7 +201,7 @@ export default class ProdModuleSet extends React.Component {
                             name:data[0].title,
                             detail: this.props.store.moduleValue
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                        (res) => {
+                        res => {
                             // console.log('createShoppage', res)
                             // submit this.state.value to server
                             this.props.store.changeSettingDisplay();
