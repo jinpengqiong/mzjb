@@ -86,7 +86,7 @@ export default class GrantAdmin extends React.Component {
     searchStaff = () => {
         if(this.state.InputValue ===''){
             message.info('请先输入搜索内容！')
-        }else{
+        } else {
             this.setState({
                 loading: true,
             });
@@ -198,10 +198,9 @@ export default class GrantAdmin extends React.Component {
                         <Tag color="#2db7f5" style={{ marginTop:'15px' }}>
                           {
                               localStorage.getItem('OriginalID') === localStorage.getItem('shopID')?
-                                  localStorage.getItem('phone')
-                                  :
                                   localStorage.getItem('managedShop')
-                          }
+                                  :
+                                  localStorage.getItem('phone') }
                         </Tag>
                     </Col>
                     <Col span={14}>
