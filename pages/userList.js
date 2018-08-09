@@ -7,11 +7,12 @@ import { Spin } from 'antd';
 import Router from 'next/router';
 
 export default class UserGrant extends React.Component {
-  static getInitialProps ({ req }) {
-    const isServer = !!req
-    const store = initStore(isServer)
-    return { isServer }
-  }
+    static getInitialProps ({ req }) {
+      const isServer = !!req
+      const store = initStore(isServer)
+      return { isServer }
+    }
+
     constructor (props) {
       super(props)
       this.store = initStore(props.isServer)
@@ -34,6 +35,7 @@ export default class UserGrant extends React.Component {
         }
       }
     }
+
   render () {
     return (
     <Provider store={this.store}>

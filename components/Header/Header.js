@@ -10,7 +10,6 @@ import isEmpty from 'lodash/isEmpty';
 import { request } from 'graphql-request'
 
 const RadioGroup = Radio.Group;
-
 const resetPassword = `
         mutation ($phone:String!, $code: String!, $password: String!) {
           resetPassword(phone:$phone, code: $code, password:$password){

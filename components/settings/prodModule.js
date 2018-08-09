@@ -140,7 +140,7 @@ export default class ProdModule extends React.Component {
     }
 
     //query autoReply list
-    queryShoppage = (page) => {
+    queryShoppage = page => {
         Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
                 // console.log('listShoppage', res.listShoppage)
@@ -161,9 +161,9 @@ export default class ProdModule extends React.Component {
         this.props.store.changeSettingDisplay();
     }
 
-    SetConfirm = (ID) => {
+    SetConfirm = ID => {
         Request.GraphQlRequest(setShoppage, {shopId:parseInt(localStorage.getItem('shopID')), shoppageId:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 this.queryShoppage(1)
                 this.queryCurShoppage()
                 message.success('设置成功！')
@@ -171,9 +171,9 @@ export default class ProdModule extends React.Component {
         ).catch(err => console.error(err))
     }
 
-    DeleteConfirm = (ID) => {
+    DeleteConfirm = ID => {
         Request.GraphQlRequest(deleteShoppage, {shopId:parseInt(localStorage.getItem('shopID')), id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('listShoppage', res.listShoppage)
                 message.success('删除成功！')
                 this.queryShoppage(1)
@@ -181,7 +181,7 @@ export default class ProdModule extends React.Component {
         ).catch(err => console.error(err))
     }
 
-    onPageChange = (page) => {
+    onPageChange = page => {
         this.queryShoppage(page)
     }
 
