@@ -4,14 +4,14 @@ import UserList from '../components/userList/list'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import { Spin } from 'antd';
+import Router from 'next/router';
 
-
-export default class MyVouchers extends React.Component {
+export default class UserGrant extends React.Component {
   static getInitialProps ({ req }) {
-      const isServer = !!req
-      const store = initStore(isServer)
-      return { isServer }
-    }
+    const isServer = !!req
+    const store = initStore(isServer)
+    return { isServer }
+  }
     constructor (props) {
       super(props)
       this.store = initStore(props.isServer)
@@ -24,10 +24,14 @@ export default class MyVouchers extends React.Component {
       if(!localStorage.getItem('accessToken')){
         Router.push('/login')
       }else{
+        if(this.store.userRole && this.store.userRole.indexOf('admin') !== -1){
           this.store.getCurPagePath('用户');
           this.setState({
-              loading:false
+            loading:false
           })
+        }else {
+          Router.push('/login')
+        }
       }
     }
   render () {

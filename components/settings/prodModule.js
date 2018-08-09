@@ -143,7 +143,7 @@ export default class ProdModule extends React.Component {
     queryShoppage = (page) => {
         Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
-                console.log('listShoppage', res.listShoppage)
+                // console.log('listShoppage', res.listShoppage)
                 res.listShoppage.entries.map(
                     (entry) => {
                        entry.key = entry.id

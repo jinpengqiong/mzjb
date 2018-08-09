@@ -1,4 +1,4 @@
-import { Table, Input, Popconfirm, Pagination, message } from 'antd';
+import { Table, Popconfirm, Pagination, message } from 'antd';
 import Request from '../../utils/graphql_request';
 
 
@@ -67,13 +67,14 @@ export default class UserList extends React.Component {
           }]
     }
   }
+
   componentDidMount(){
-    this.queryUserData(1);
+    this.queryUserData(1)
   }
 
-  queryUserData(curPage){
+  queryUserData = curPage => {
       Request.GraphQlRequest(queryUsers, {page:curPage, pageSize: 10 }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
+        res => {
             res.allUsers.entries.map(
                 (entry) =>{
                     entry.key = entry.id
@@ -87,7 +88,7 @@ export default class UserList extends React.Component {
       ).catch(err => console.error(err))
   }
 
-  grantUser( userId){
+  grantUser = userId => {
       Request.GraphQlRequest(grantUsers, {userId}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             message.success('授权成功！');
@@ -96,13 +97,13 @@ export default class UserList extends React.Component {
       ).catch(err => console.error(err))
   }
 
-  confirm(id) {
+  confirm = id => {
       // console.log(id)
     this.grantUser(parseInt(id));
   }
 
 
-  onChange = (pageNumber) => {
+  onChange = pageNumber => {
     this.queryUserData(pageNumber);
   }
 

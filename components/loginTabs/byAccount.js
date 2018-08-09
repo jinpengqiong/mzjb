@@ -34,7 +34,7 @@ class NormalLoginForm extends React.Component {
           };
           request(uri, mutation, variables).then(
             res => {
-                console.log('res', res)
+                // console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');
                     localStorage.setItem('accessToken', res.login.accessToken);

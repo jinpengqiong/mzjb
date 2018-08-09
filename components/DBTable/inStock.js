@@ -440,7 +440,7 @@ export default class InStock extends React.Component {
     }
 
     //删除
-    confirm(id) {
+    confirm = id =>  {
         // console.log('id', id)
         Request.GraphQlRequest(deleteProduct,
             { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(

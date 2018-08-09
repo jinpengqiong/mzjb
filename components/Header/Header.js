@@ -120,7 +120,15 @@ export default class MyHeader extends React.Component {
             })
           }
         }
-    ).catch(err => console.log('getData err',err))
+    ).catch(
+        err => {
+          this.setState({
+            curShopName: '普通用户'
+          })
+          message.info('请联系管理员授权，以便进行店铺管理')
+          console.log('getData err',err)
+        }
+    )
   }
 
   toggle = () => {

@@ -268,14 +268,13 @@ export default class ProdTable extends React.Component {
                     values.price = parseInt(parseFloat(values.price)*100);
                     values.isDisplay = true;
                     Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                        (res)=>{
+                        res => {
                             res.createProduct.mainImage = this.props.store.mainImage;
                             res.createProduct.key = res.createProduct.id;
                             this.queryProdData(1);
                             this.setState({
                                 visible: false
                             });
-                            // document.getElementById('ossfile').innerHTML = '';
                             this.props.store.getMainImage('')
                             this.props.store.getRichTextContent(null)
                             notification.success({
@@ -446,7 +445,7 @@ export default class ProdTable extends React.Component {
   }
 
   //删除
-  confirm(id) {
+  confirm = id =>  {
       // console.log('id', id)
       Request.GraphQlRequest(deleteProduct,
           { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(

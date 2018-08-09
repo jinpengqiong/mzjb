@@ -42,10 +42,12 @@ const querySpecificPROD = `
               itemType
               quantity
               title
+              origin
               desc
               itemNo
               num
               postFee
+              postType
               soldNum
               tagIds
               itemImgs{
@@ -147,6 +149,7 @@ export default class ChooseProducts extends React.Component {
       if(this.props.store.chooseProdKey === '0'){
           Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
               res => {
+                // console.log('querySpecificPROD', res)
                 this.props.store.categories.forEach(
                     ID => {
                       this.props.store.tagListData.forEach(
