@@ -137,6 +137,7 @@ export default class AutoReply extends React.Component {
     }
     //modal cancel action
     handleCancel = () => {
+        this.props.store.clearReplyBody()
         this.setState({
             visible:false
         })
@@ -362,6 +363,7 @@ export default class AutoReply extends React.Component {
                         title="设置"
                         visible={this.state.visible}
                         onOk={this.handleOk}
+                        destroyOnClose={true}
                         onCancel={this.handleCancel}
                     >
                         <SelfReplyForm ref='form'/>

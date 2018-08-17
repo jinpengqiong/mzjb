@@ -196,11 +196,12 @@ export default class GrantAdmin extends React.Component {
                             <Icon type="user" />创建者
                         </h3>
                         <Tag color="#2db7f5" style={{ marginTop:'15px' }}>
-                          {
-                              localStorage.getItem('OriginalID') === localStorage.getItem('shopID')?
-                                  localStorage.getItem('managedShop')
-                                  :
-                                  localStorage.getItem('phone') }
+                        {
+                            localStorage.getItem('OriginalID') === localStorage.getItem('shopID')?
+                            localStorage.getItem('phone')  
+                                :
+                            localStorage.getItem('managedShop')
+                        }
                         </Tag>
                     </Col>
                     <Col span={14}>

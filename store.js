@@ -118,8 +118,8 @@ class Store {
       this.richTextContent = data;
   }
 
-  @action changeSettingDisplay = () => {
-      this.isShown = !this.isShown;
+  @action changeSettingDisplay = bool => {
+      this.isShown = bool;
   }
 
   @action getModuleValue = (data) => {

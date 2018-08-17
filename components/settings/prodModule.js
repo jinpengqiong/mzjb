@@ -114,6 +114,7 @@ export default class ProdModule extends React.Component {
     componentDidMount(){
         this.queryShoppage(1)
         this.queryCurShoppage()
+        this.props.store.changeSettingDisplay(false);
     }
 
     //query current shoppage
@@ -136,7 +137,7 @@ export default class ProdModule extends React.Component {
         })
         this.props.store.getModuleValue(value);
         this.props.store.getModuleType('编辑模版');
-        this.props.store.changeSettingDisplay();
+        this.props.store.changeSettingDisplay(true);
     }
 
     //query autoReply list
@@ -158,7 +159,7 @@ export default class ProdModule extends React.Component {
 
     handleModuleSet = () => {
         this.props.store.getModuleType('新建模版');
-        this.props.store.changeSettingDisplay();
+        this.props.store.changeSettingDisplay(true);
     }
 
     SetConfirm = (ID) => {
