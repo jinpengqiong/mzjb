@@ -1,4 +1,6 @@
 import uri from "./uri";
+import Router from 'next/router';
+import {message } from 'antd';
 import { GraphQLClient } from 'graphql-request';
 
 module.exports = {
@@ -20,5 +22,14 @@ module.exports = {
             suffix = filename.substring(pos)
         }
         return suffix;
+    },
+
+    token_auth(err) {
+        const error = err.toString()
+          if(error.indexOf('"code":60013') !== -1){
+              console.log('error', error)
+              message.error('登录已过期，请重新登录')
+              Router.push('/login')
+          }
     }
 };

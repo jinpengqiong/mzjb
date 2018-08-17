@@ -71,7 +71,7 @@ export default class GrantAdmin extends React.Component {
                     staffsData: res.getShop,
                 });
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     //radio change
@@ -99,8 +99,9 @@ export default class GrantAdmin extends React.Component {
                     });
                 }
             ).catch(
-                () => {
+                err => {
                     message.info('此查询未找到！')
+                    Request.token_auth(err)
                     this.setState({
                         loading: false
                     });
@@ -130,7 +131,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('添加成功！')
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     // delete staff
@@ -150,7 +151,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('删除成功！')
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     render() {
@@ -222,7 +223,6 @@ export default class GrantAdmin extends React.Component {
                                   </Tag>
                               </Popover>
                           }
-
                         {
                           (this.state.staffsData && !isEmpty(this.state.staffsData.staffs) && localStorage.getItem('OriginalID') === localStorage.getItem('shopID'))
                             &&

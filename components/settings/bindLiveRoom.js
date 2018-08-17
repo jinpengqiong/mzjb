@@ -64,7 +64,7 @@ export default class BindLiveRoom extends React.Component {
                     listShopRoom:res.listShoproom
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     //open modal click
@@ -79,7 +79,7 @@ export default class BindLiveRoom extends React.Component {
                     ownedRoom:res.ownedRooms
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
     //radio select change
     onChange = (e) => {
@@ -109,7 +109,7 @@ export default class BindLiveRoom extends React.Component {
                 this.queryLiveRooms();
                 // console.log('res', res)
             }
-        ).catch(() =>{message.info('此直播间已绑定, 请选择其他直播间。')})
+        ).catch(() =>{message.info('此直播间已绑定, 请选择其他直播间。'); Request.token_auth(err)})
     }
 
     //delete room
@@ -119,7 +119,7 @@ export default class BindLiveRoom extends React.Component {
                 message.success('取消绑定成功！')
                 this.queryLiveRooms()
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     render() {

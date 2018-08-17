@@ -3,6 +3,7 @@ const FormItem = Form.Item;
 import { inject, observer } from 'mobx-react'
 import { request } from 'graphql-request'
 import uri from '../../utils/uri';
+import Request from '../../utils/graphql_request';
 
 const querySmsCode = `
   mutation($phone: String!) {
@@ -34,7 +35,7 @@ class RegistrationForm extends React.Component {
               message.success('验证码发送成功！');
             }
           }
-      ).catch(err => console.error(err))
+      ).catch(err => Request.token_auth(err))
     }else{
       message.error("请输入正确手机号");
     }

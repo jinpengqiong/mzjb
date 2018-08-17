@@ -122,7 +122,7 @@ export default class ChooseProducts extends React.Component {
                     data: res.youxuanProducts
                 })
             }
-        ).catch(err => console.log('queryYouxuanProd err',err))
+        ).catch(err => Request.token_auth(err))
     }
 
     queryYouZanProd = (page, tagID) => {
@@ -139,7 +139,7 @@ export default class ChooseProducts extends React.Component {
                 data: res.youzanProducts
               })
             }
-        ).catch(err => console.log('queryYouZanProd err',err))
+        ).catch(err => Request.token_auth(err))
       }
     }
 
@@ -169,7 +169,7 @@ export default class ChooseProducts extends React.Component {
                 this.props.store.changeKey('-1');
                 this.props.store.getProdDetailData(res.getYouxuanProduct)
               }
-          ).catch(err => console.log('querySpecificPROD err',err))
+          ).catch(err => Request.token_auth(err))
       }else {
         Request.GraphQlRequest(querySpecificPROD, { shopId: parseInt(localStorage.getItem('shopID')), itemId: ID.toString() }, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
@@ -180,7 +180,7 @@ export default class ChooseProducts extends React.Component {
               this.props.store.getProdDetailData(res.getYouxuanProduct)
               // console.log('querySpecificPROD', res)
             }
-        ).catch(err => console.log('querySpecificPROD err',err))
+        ).catch(err => Request.token_auth(err))
       }
   }
 

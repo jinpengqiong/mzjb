@@ -126,7 +126,7 @@ export default class ProdModule extends React.Component {
                     curShopPage: res.getShop.curShoppage
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     //edit module
@@ -154,7 +154,7 @@ export default class ProdModule extends React.Component {
                     ShoppageData: res.listShoppage
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     handleModuleSet = () => {
@@ -169,7 +169,7 @@ export default class ProdModule extends React.Component {
                 this.queryCurShoppage()
                 message.success('设置成功！')
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     DeleteConfirm = (ID) => {
@@ -179,7 +179,7 @@ export default class ProdModule extends React.Component {
                 message.success('删除成功！')
                 this.queryShoppage(1)
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     onPageChange = (page) => {

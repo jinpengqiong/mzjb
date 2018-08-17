@@ -120,7 +120,7 @@ export default class MyHeader extends React.Component {
             })
           }
         }
-    ).catch(err => console.log('getData err',err))
+    ).catch(err => Request.token_auth(err))
   }
 
   toggle = () => {
@@ -149,7 +149,7 @@ export default class MyHeader extends React.Component {
                   visible: false,
                 });
               }
-          ).catch(err => console.error(err))
+          ).catch(err => Request.token_auth(err))
         }
       }
     )
@@ -217,7 +217,7 @@ export default class MyHeader extends React.Component {
             shopsData : res.manageShops.entries
           })
         }
-    ).catch(err => console.error(err))
+    ).catch(err => Request.token_auth(err))
   }
 
   switchShops = () => {
@@ -265,7 +265,7 @@ export default class MyHeader extends React.Component {
           });
           message.success('更新成功')
         }
-    ).catch(err => console.error(err))
+    ).catch(err => Request.token_auth(err))
   }
 
   handleNameCancel = () => {

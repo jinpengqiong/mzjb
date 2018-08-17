@@ -112,7 +112,7 @@ export default class GroupProduct extends React.Component {
                     data: res.shopTags
                 })
             }
-        ).catch( err => console.log(err))
+        ).catch(err => Request.token_auth(err))
     }
     addGroup = () => {
         this.setState({
@@ -168,7 +168,7 @@ export default class GroupProduct extends React.Component {
                                 })
                                 this.queryTags();
                             }
-                        ).catch( err => console.log(err))
+                        ).catch(err => Request.token_auth(err))
                     }
                 })
         }else if(this.state.ModalName === '更新分组'){
@@ -194,7 +194,7 @@ export default class GroupProduct extends React.Component {
                                 })
                                 this.queryTags();
                             }
-                        ).catch( err => console.log(err))
+                        ).catch(err => Request.token_auth(err))
                     }
                 }
             )
@@ -211,7 +211,7 @@ export default class GroupProduct extends React.Component {
                 message.success('删除成功！');
                 this.queryTags();
             }
-        ).catch( err => console.log(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     render(){
