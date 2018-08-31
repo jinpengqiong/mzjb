@@ -50,7 +50,7 @@ class VideoUploader extends React.Component {
               data: res.ossPolicy,
           })
         }
-      ).catch(err => console.error(err))
+      ).catch(err => Request.token_auth(err))
   }
 
   get_suffix(filename) {
@@ -133,7 +133,7 @@ class VideoUploader extends React.Component {
                 document.getElementById('ossfile2').innerHTML = '';
                 self.props.refreshData();
               }
-            )
+            ).catch(err => Request.token_auth(err))
           }
         },
         Error: function(up, err) {

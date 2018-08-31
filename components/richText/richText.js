@@ -37,7 +37,7 @@ export default class RichText extends React.Component {
                     data: res.ossPolicy,
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     validateFn = (file) => {

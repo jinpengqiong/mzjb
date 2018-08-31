@@ -71,7 +71,7 @@ export default class GrantAdmin extends React.Component {
                     staffsData: res.getShop,
                 });
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     //radio change
@@ -86,12 +86,12 @@ export default class GrantAdmin extends React.Component {
     searchStaff = () => {
         if(this.state.InputValue ===''){
             message.info('请先输入搜索内容！')
-        }else{
+        } else {
             this.setState({
                 loading: true,
             });
             Request.GraphQlRequest(findOneUser, {type:this.state.RadioValue, value:this.state.InputValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                res => {
+                (res) => {
                     // console.log('findOneUser', res)
                     this.setState({
                         userData:res.findOneUser,
@@ -99,8 +99,9 @@ export default class GrantAdmin extends React.Component {
                     });
                 }
             ).catch(
-                () => {
+                err => {
                     message.info('此查询未找到！')
+                    Request.token_auth(err)
                     this.setState({
                         loading: false
                     });
@@ -120,7 +121,7 @@ export default class GrantAdmin extends React.Component {
     //add Staff
     addStaff = (ID) => {
         Request.GraphQlRequest(addStaff, {shopId: parseInt(localStorage.getItem('shopID')),userId:parseInt(ID), role:'SUPER_ADMIN'}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            res => {
+            (res) => {
                 // console.log('addStaff', res)
                 this.setState({
                     staffData: res.addStaff,
@@ -130,7 +131,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('添加成功！')
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     // delete staff
@@ -142,7 +143,7 @@ export default class GrantAdmin extends React.Component {
 
     deleteAdmin = ID => {
         Request.GraphQlRequest(delStaff, {shopId: parseInt(localStorage.getItem('shopID')),id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            res => {
+            (res) => {
                 // console.log('addStaff', res)
                 this.setState({
                     isClosable:false
@@ -150,7 +151,7 @@ export default class GrantAdmin extends React.Component {
                 this.queryStaffs();
                 message.success('删除成功！')
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     render() {
@@ -183,7 +184,7 @@ export default class GrantAdmin extends React.Component {
             </div>
         );
         const staffInfo = this.state.staffsData && this.state.staffsData.staffs.map(
-            staff => {
+            (staff) => {
                 return <Tag style={{ marginTop:'15px' }} color="#2db7f5" key={staff.userId} closable={ this.state.isClosable } onClose={ () => { this.deleteAdmin(staff.id)}}>{staff.user.phone}</Tag>
             }
         )
@@ -196,12 +197,12 @@ export default class GrantAdmin extends React.Component {
                             <Icon type="user" />创建者
                         </h3>
                         <Tag color="#2db7f5" style={{ marginTop:'15px' }}>
-                          {
-                              localStorage.getItem('OriginalID') === localStorage.getItem('shopID')?
-                                  localStorage.getItem('phone')
-                                  :
-                                  localStorage.getItem('managedShop')
-                          }
+                        {
+                            localStorage.getItem('OriginalID') === localStorage.getItem('shopID')?
+                            localStorage.getItem('phone')  
+                                :
+                            localStorage.getItem('managedShop')
+                        }
                         </Tag>
                     </Col>
                     <Col span={14}>
@@ -222,7 +223,6 @@ export default class GrantAdmin extends React.Component {
                                   </Tag>
                               </Popover>
                           }
-
                         {
                           (this.state.staffsData && !isEmpty(this.state.staffsData.staffs) && localStorage.getItem('OriginalID') === localStorage.getItem('shopID'))
                             &&

@@ -59,7 +59,7 @@ class VideoList extends React.Component {
                     data: res.shopMedias
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
     
 
@@ -69,7 +69,7 @@ class VideoList extends React.Component {
                     message.success('删除成功！');
                     this.getData(1);
                 } 
-        ).catch(()=>{message.error('出错了，请重试！')})
+        ).catch(()=>{message.error('出错了，请重试！'); Request.token_auth(err)})
     }
 
 

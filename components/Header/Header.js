@@ -10,6 +10,7 @@ import isEmpty from 'lodash/isEmpty';
 import { request } from 'graphql-request'
 
 const RadioGroup = Radio.Group;
+
 const resetPassword = `
         mutation ($phone:String!, $code: String!, $password: String!) {
           resetPassword(phone:$phone, code: $code, password:$password){
@@ -119,15 +120,7 @@ export default class MyHeader extends React.Component {
             })
           }
         }
-    ).catch(
-        err => {
-          this.setState({
-            curShopName: '普通用户'
-          })
-          message.info('请联系管理员授权，以便进行店铺管理')
-          console.log('getData err',err)
-        }
-    )
+    ).catch(err => console.log('getData err',err))
   }
 
   toggle = () => {

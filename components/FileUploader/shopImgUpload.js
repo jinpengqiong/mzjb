@@ -50,7 +50,7 @@ class ShopImgUploader extends React.Component {
                     data: res.ossPolicy,
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     get_suffix(filename) {
@@ -130,7 +130,7 @@ class ShopImgUploader extends React.Component {
                             (res) => {
                                 message.success('上传成功');
                             }
-                        )
+                        ).catch(err => Request.token_auth(err))
                     }
                 },
                 Error: function(up, err) {

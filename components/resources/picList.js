@@ -60,7 +60,7 @@ class PicList extends React.Component {
                     data: res.shopMedias
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     confirm(id) {
@@ -69,12 +69,12 @@ class PicList extends React.Component {
                     message.success('删除成功！');
                     this.getData(1);
                 } 
-        ).catch(()=>{message.error('出错了，请重试！')})
+        ).catch(err=>{message.error('出错了，请重试！'); Request.token_auth(err)})
       }
 
 
     onChange = (pageNumber) =>  {
-    this.getData(pageNumber)
+        this.getData(pageNumber)
     }
 
     render() {

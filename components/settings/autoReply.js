@@ -71,7 +71,7 @@ export default class AutoReply extends React.Component {
                     autoReplyData: res.listAutoreply
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     //set MainTitle
@@ -132,11 +132,12 @@ export default class AutoReply extends React.Component {
                     this.queryAutoReply(1)
                     this.props.store.clearReplyBody()
                 }
-            ).catch(err => console.error(err))
+            ).catch(err => Request.token_auth(err))
         }
     }
     //modal cancel action
     handleCancel = () => {
+        this.props.store.clearReplyBody()
         this.setState({
             visible:false
         })
@@ -150,7 +151,7 @@ export default class AutoReply extends React.Component {
                 message.success('删除成功！')
                 this.queryAutoReply(1)
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     // save keyword
@@ -362,6 +363,7 @@ export default class AutoReply extends React.Component {
                         title="设置"
                         visible={this.state.visible}
                         onOk={this.handleOk}
+                        destroyOnClose={true}
                         onCancel={this.handleCancel}
                     >
                         <SelfReplyForm ref='form'/>

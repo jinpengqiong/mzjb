@@ -90,7 +90,7 @@ export default class OrderManagement extends React.Component {
                 key: 'title',
             },
             {
-                title: '单价',
+                title: '单价(元)',
                 dataIndex: 'price',
                 key: 'price',
             },
@@ -155,7 +155,7 @@ export default class OrderManagement extends React.Component {
                 isSpin: false
                 })
         }
-    ).catch(()=>{message.error('你还未授权开店，请联系管理员！')})
+    ).catch(err=>{message.error('你还未授权开店，请联系管理员！'); Request.token_auth(err)})
   };
 
   onChange(pageNumber) {
@@ -214,7 +214,7 @@ export default class OrderManagement extends React.Component {
                     visible:true
                 })
             }
-        ).catch(()=>{message.error('出错了，请联系管理员')})
+        ).catch(err=>{message.error('出错了，请联系管理员'); Request.token_auth(err)})
     }
 
     handleCancel = () => {

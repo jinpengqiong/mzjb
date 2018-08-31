@@ -50,7 +50,7 @@ export default class ProdDetails extends React.Component {
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
             }
-        ).catch(err => console.error('error', err))
+        ).catch(err => Request.token_auth(err))
     }
 
     addToStock  = () => {
@@ -74,7 +74,7 @@ export default class ProdDetails extends React.Component {
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
             }
-        ).catch(err =>console.error('error',err) )
+        ).catch(err => Request.token_auth(err))
     }
 
     backToPrime = () => {

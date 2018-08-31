@@ -35,7 +35,7 @@ const columns = [
         key: 'title',
     },
     {
-        title: '单价',
+        title: '单价(元)',
         dataIndex: 'price',
         key: 'price',
     },
@@ -96,7 +96,7 @@ export default class SelfOrder extends React.Component {
                     isSpin:false
                 })
             }
-        ).catch(()=>{message.error('出错了，请联系管理员')})
+        ).catch(err=>{message.error('出错了，请联系管理员'); Request.token_auth(err)})
     };
 
     onChange(pageNumber) {

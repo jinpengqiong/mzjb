@@ -52,7 +52,7 @@ class YouzanUploader extends React.Component {
               data: res.ossPolicy,
           })
         }
-      ).catch(err => console.error(err))
+      ).catch(err => Request.token_auth(err))
   }
 
   get_suffix(filename) {
@@ -137,7 +137,7 @@ class YouzanUploader extends React.Component {
                     message.success('上传成功！');
                     // document.getElementById('ossfile').innerHTML = '';
                   }
-              ).catch(()=>{message.error('上传失败，请联系管理员！')})
+              ).catch(err=>{message.error('上传失败，请联系管理员！'); Request.token_auth(err)})
           }
         },
         Error: function(up, err) {

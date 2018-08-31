@@ -234,7 +234,7 @@ export default class InStock extends React.Component {
                     curPage:res.shopProducts.pageNumber
                 });
             }
-        ).catch( err => console.log(err))
+        ).catch(err => Request.token_auth(err))
     }
 
     onPageChange = (pageNumber) => {
@@ -281,7 +281,7 @@ export default class InStock extends React.Component {
                                 duration: 3,
                             });
                         }
-                    ).catch(()=>{message.error('新增失败！')})
+                    ).catch(err=>{message.error('新增失败！'); Request.token_auth(err)})
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
@@ -327,7 +327,7 @@ export default class InStock extends React.Component {
                             duration: 3,
                         });
                     }
-                ).catch(()=>{message.error('新增失败！')})
+                ).catch(err=>{message.error('新增失败！'); Request.token_auth(err)})
               }
             })
         }else if(this.state.modalName ==='更新商品') {
@@ -374,9 +374,10 @@ export default class InStock extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{
+                        ).catch(err=>{
                           message.error('更新失败！');
-                          this.props.store.getProductFieldsData(null)
+                          this.props.store.getProductFieldsData(null);
+                          Request.token_auth(err)
                         })
                     }else{
                         if(!priceRegEx.exec(values.price)){
@@ -411,9 +412,10 @@ export default class InStock extends React.Component {
                                     duration: 3,
                                 });
                             }
-                        ).catch(()=>{
+                        ).catch(err=>{
                           message.error('更新失败！')
-                          this.props.store.getProductFieldsData(null)
+                          this.props.store.getProductFieldsData(null);
+                          Request.token_auth(err)
                         })
                     }
 
@@ -448,7 +450,7 @@ export default class InStock extends React.Component {
                 message.success('删除成功！');
                 this.queryProdData(1);
             }
-        ).catch(()=>{message.error('删除失败！')})
+        ).catch(err=>{message.error('删除失败！'); Request.token_auth(err)})
     }
 
 
@@ -511,7 +513,7 @@ export default class InStock extends React.Component {
                     data: res.tagProducts.products,
                 })
             }
-        ).catch(err => console.error(err))
+        ).catch(err => Request.token_auth(err))
       }
     }
 
@@ -527,7 +529,7 @@ export default class InStock extends React.Component {
                 message.success('上架成功！');
                 this.queryProdData(1);
             }
-        ).catch(()=>{message.error('上架失败！')})
+        ).catch(err => Request.token_auth(err))
     }
 
 
@@ -567,7 +569,7 @@ export default class InStock extends React.Component {
                     message.success('添加成功！')
                     this.queryProdData(1);
                 }
-            ).catch(err => console.error(err))
+            ).catch(err => Request.token_auth(err))
         }
     }
 
