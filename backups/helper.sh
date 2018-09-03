@@ -23,6 +23,9 @@ cp TitleEditor.js ../node_modules/zan-design/lib/components/title/TitleEditor.js
 echo "copy goods-tag.js"
 cp goods-tag.js ../node_modules/zan-choose-dialog/lib/config/goods-tag.js
 
+echo "copy GoodsListEditor.js"
+cp GoodsListEditor.js ../node_modules/zan-design/lib/components/goods-list/GoodsListEditor.js
+
 
 echo "done!"
 
