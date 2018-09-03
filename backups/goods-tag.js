@@ -48,7 +48,7 @@ function getConfig(config) {
       return {
         data: data.data_list,
         pageSize: 8,
-        page: data.page,
+        page: (0, _compatible.extractCurrentPageFromHtml)(data.page),
         total: data.total_items
       };
     },
