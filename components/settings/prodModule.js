@@ -100,7 +100,15 @@ export default class ProdModule extends React.Component {
                             &&
                         <span>
                           <Divider type="vertical" />
-                          <Popconfirm title="确实要执行此操作吗?" onConfirm={ () => { this.DeleteConfirm(record.id) }} >
+                          <Popconfirm title="确实要执行此操作吗?" onConfirm={
+                              () => {
+                                if(record.id === this.state.curShopPage){
+                                  message.error('不能删除当前模版，请设置其他模版为当前模版后，删除此模版！')
+                                }else{
+                                  this.DeleteConfirm(record.id)
+                                }
+                              }
+                          } >
                             <a href="#">删除</a>
                           </Popconfirm>
                         </span>
