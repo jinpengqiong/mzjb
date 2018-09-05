@@ -44,7 +44,11 @@ class NormalLoginForm extends React.Component {
                     localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('phone', res.login.user.phone);
                     localStorage.setItem('lgTime', new Date().getTime());
-                    Router.push('/')
+                    if(res.login.user.role.indexOf('supplier') === -1){
+                      Router.push('/')
+                    }else {
+                      Router.push('/suppliers')
+                    }
                 }
             }
         ).catch(()=>{message.error('用户名或密码错误，登录失败！')})

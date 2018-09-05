@@ -63,7 +63,7 @@ export default class MainPage extends React.Component {
               categoryData: res.categories.entries
             })
           }
-      ).catch( err => console.error(err))
+      ).catch( err => Request.token_auth(err))
     }
 
     queryTagList = () => {
@@ -75,7 +75,7 @@ export default class MainPage extends React.Component {
               tagListData: res.youzanTaglist
             })
           }
-      ).catch( err => console.error(err))
+      ).catch( err => Request.token_auth(err))
     }
 
     onChange = (activeKey) => {

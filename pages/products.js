@@ -70,7 +70,7 @@ export default class Products extends React.Component {
                     tagData: res.shopTags
                 })
             }
-        )
+        ).catch( err => Request.token_auth(err))
     }
     
   render () {

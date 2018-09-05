@@ -2,7 +2,7 @@ import React from 'react';
 import { message, Tabs, Icon } from 'antd';
 import LoginFormWithPhone from '../components/loginTabs/byPhone';
 import LoginFormWithAccount from '../components/loginTabs/byAccount';
-
+import Router from 'next/router';
 
 
 const TabPane = Tabs.TabPane;

@@ -10,18 +10,18 @@ const TabPane = Tabs.TabPane;
 
 
 export default class MyOrder extends React.Component {
-    static getInitialProps ({ req }) {
-        const isServer = !!req
-        const store = initStore(isServer)
-        return { isServer }
-      }
-      constructor (props) {
-        super(props)
-        this.store = initStore(props.isServer)
-          this.state = {
-              loading:true
-          }
-      }
+  static getInitialProps ({ req }) {
+      const isServer = !!req
+      const store = initStore(isServer)
+      return { isServer }
+    }
+    constructor (props) {
+      super(props)
+      this.store = initStore(props.isServer)
+        this.state = {
+            loading:true
+        }
+    }
 
   componentDidMount(){
     if(!localStorage.getItem('accessToken')){
@@ -34,9 +34,10 @@ export default class MyOrder extends React.Component {
     }
   }
 
-  callback = (key) =>{
+  callback = key =>{
       // console.log(key);
   }
+
   render () {
     return (
     <Provider store={this.store}>

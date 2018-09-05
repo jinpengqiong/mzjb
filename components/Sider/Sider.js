@@ -16,6 +16,7 @@ export default class MySider extends React.Component {
     }
 
     render() {
+        const isDisplay = this.props.store.userRole.indexOf('supplier') === -1
         return (
             <Layout >
                 <Sider
@@ -34,50 +35,74 @@ export default class MySider extends React.Component {
                         mode="inline"
                         onClick={this.handleClick}
                         selectedKeys={[this.props.store.curPagePath === ""? "选货" : this.props.store.curPagePath]}>
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="选货">
                             <div onClick={()=>{
-                                Router.prefetch('/');
-                                Router.push('/')}}>
+                              Router.prefetch('/');
+                              Router.push('/')}}>
                                 <Icon type="shop" />
                                 <span>选货</span>
                             </div>
                         </Menu.Item>
+                      }
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="商品">
                             <div onClick={()=>{
-                                Router.prefetch('/products');
-                                Router.push('/products')
-                                this.props.store.getCurPagePath('店铺');
+                              Router.prefetch('/products');
+                              Router.push('/products')
+                              this.props.store.getCurPagePath('店铺');
                             }}>
                                 <Icon type="appstore" />
                                 <span>商品</span>
                             </div>
                         </Menu.Item>
-                        {/*<Menu.Item key="素材">*/}
-                            {/*<div onClick={()=>{*/}
-                                {/*Router.prefetch('/resources');*/}
-                                {/*Router.push('/resources')}}>*/}
-                                {/*<Icon type="picture" />*/}
-                                {/*<span>素材</span>*/}
-                            {/*</div>*/}
-                        {/*</Menu.Item>*/}
+                      }
+
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="订单">
                             <div onClick={()=>{
-                                Router.prefetch('/order');
-                                Router.push('/order')}}>
+                              Router.prefetch('/order');
+                              Router.push('/order')}}>
                                 <Icon type="shopping-cart" />
                                 <span>订单</span>
                             </div>
                         </Menu.Item>
+                      }
+
+                      {
+                        !isDisplay
+                        &&
+                        <Menu.Item key="供应商订单">
+                            <div onClick={()=>{
+                              Router.prefetch('/suppliers');
+                              Router.push('/suppliers')}}>
+                                <Icon type="shopping-cart" />
+                                <span>供应商订单</span>
+                            </div>
+                        </Menu.Item>
+                      }
+
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="设置">
                             <div onClick={()=>{
-                                Router.prefetch('/settings');
-                                Router.push('/settings')}}>
+                              Router.prefetch('/settings');
+                              Router.push('/settings')}}>
                                 <Icon type="setting" />
                                 <span>设置</span>
                             </div>
                         </Menu.Item>
+                      }
+
                         {
-                            (this.props.store.userRole && this.props.store.userRole.indexOf('admin') !== -1)
+                            (this.props.store.userRole && isDisplay && this.props.store.userRole.indexOf('admin') !== -1 )
                             &&
                             <Menu.Item key="用户">
                                 <div onClick={()=>{
@@ -88,6 +113,7 @@ export default class MySider extends React.Component {
                                 </div>
                             </Menu.Item>
                         }
+
                     </Menu>
                 </Sider>
                 <style jsx>{`

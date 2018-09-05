@@ -276,6 +276,7 @@ export default class MyHeader extends React.Component {
   }
 
   render() {
+    const isDisplay = this.props.store.userRole.indexOf('supplier') === -1
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>
@@ -288,26 +289,39 @@ export default class MyHeader extends React.Component {
                     mode="horizontal"
                     style={{ lineHeight: '45px', float: 'right' }}
                 >
-                  <Menu.Item key="inShop">
-                    当前店铺：
-                    <Tag color="#2db7f5">{ this.state.curShopName}</Tag>
-                    <Tooltip title="更新店铺名">
-                      <Icon type="edit" onClick={this.changeShopName}/>
-                    </Tooltip>
-                  </Menu.Item>
+                  {
+                    isDisplay
+                      &&
+                    <Menu.Item key="inShop">
+                      当前店铺：
+                      <Tag color="#2db7f5">{ this.state.curShopName}</Tag>
+                      <Tooltip title="更新店铺名">
+                        <Icon type="edit" onClick={this.changeShopName}/>
+                      </Tooltip>
+                    </Menu.Item>
+                  }
+
                     <SubMenu title={<span>{ '您好，'+ localStorage.getItem('nickname')}</span>}>
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="1" >
                           {
-                              <span onClick={this.setPassword} style={{ display: 'block',width:"130px", textAlign:"center"}}>
+                            <span onClick={this.setPassword} style={{ display: 'block',width:"130px", textAlign:"center"}}>
                               <Icon type="lock" />设置密码</span>
                           }
                         </Menu.Item>
+                      }
+                      {
+                        isDisplay
+                        &&
                         <Menu.Item key="2" >
                           {
-                              <span onClick={this.switchShops} style={{ display: 'block',width:"130px", textAlign:"center"}}>
+                            <span onClick={this.switchShops} style={{ display: 'block',width:"130px", textAlign:"center"}}>
                               <Icon type="select" />切换店铺</span>
                           }
                         </Menu.Item>
+                      }
                         <Menu.Item key="3" >
                           {
                               <span onClick={this.handleLogout} style={{ display: 'block',width:"130px", textAlign:"center"}}>
