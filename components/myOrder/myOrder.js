@@ -258,10 +258,10 @@ export default class OrderManagement extends React.Component {
                         <p>商品名称：{ this.state.detailInfo.title}</p>
                         <p>商品单价：{ this.state.detailInfo.price}</p>
                         <p>购买数量：{ this.state.detailInfo.num}</p>
-                        <p>邮费：{ this.state.detailInfo.postFee==='0.00'? '包邮': this.state.detailInfo.postFee}</p>
+                        <p>邮费：{ this.state.detailInfo.postFee==='0.00'? '包邮': this.state.detailInfo.postFee }</p>
                         <p>收获地址：{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
-                        <p>状态：{ this.state.detailInfo.statusStr}</p>
-                        <p>创建时间：{ this.state.detailInfo.created}</p>
+                        <p>状态：{ this.state.detailInfo.statusStr }</p>
+                        <p>创建时间：{ this.state.detailInfo.created }</p>
                     </Modal>
                 }
             </Spin>

@@ -3,9 +3,11 @@ import Router from 'next/router';
 const FormItem = Form.Item;
 import { request } from 'graphql-request'
 import uri from '../../utils/uri';
+import { inject, observer } from 'mobx-react'
 
 
 
+@inject('store') @observer
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ class NormalLoginForm extends React.Component {
                   phone
                   role
                   mzAccountid
+                  is_supplier
               }
             }
           }
@@ -34,20 +37,24 @@ class NormalLoginForm extends React.Component {
           };
           request(uri, mutation, variables).then(
             res => {
-                // console.log('res', res)
+                console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');
+                    if(res.login.user.is_supplier){
+                      localStorage.setItem('role', res.login.user.role+',supplier');
+                    }else{
+                      localStorage.setItem('role', res.login.user.role);
+                    }
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('mzAccountid', res.login.user.mzAccountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
-                    localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('phone', res.login.user.phone);
                     localStorage.setItem('lgTime', new Date().getTime());
-                    if(res.login.user.role.indexOf('supplier') === -1){
-                      Router.push('/')
-                    }else {
+                    if(res.login.user.is_supplier){
                       Router.push('/suppliers')
+                    }else {
+                      Router.push('/')
                     }
                 }
             }

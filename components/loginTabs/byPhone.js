@@ -3,7 +3,9 @@ import Router from 'next/router';
 const FormItem = Form.Item;
 import { request, GraphQLClient } from 'graphql-request'
 import uri from '../../utils/uri';
-// const uri = 'http://shop.muzhiyun.cn/api/graphiql';
+import { inject, observer } from 'mobx-react'
+
+
 const querySmsCode = `
   mutation($phone: String!) {
     smsCode(phone:$phone){
@@ -22,11 +24,13 @@ mutation ($phone:String!, $code: String!) {
         phone
         role
         mzAccountid
+        is_supplier
     }
   }
 }
 `;
 
+@inject('store') @observer
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -41,17 +45,23 @@ class NormalLoginForm extends React.Component {
         // console.log('Received values of form: ', values);
         request(uri, submitByPhone,{ phone: values.phone, code: values.SmsCode}).then(
           res => {
+            console.log('res',res)
                   message.success('登录成功！')
+                  this.props.store.showSupplierOrder(res.smsLogin.user.is_supplier)
+                  if(res.smsLogin.user.is_supplier){
+                    localStorage.setItem('role', res.smsLogin.user.role+',supplier');
+                  }else{
+                    localStorage.setItem('role', res.smsLogin.user.role);
+                  }
                   localStorage.setItem('accessToken', res.smsLogin.accessToken);
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
-                  localStorage.setItem('role', res.smsLogin.user.role);
                   localStorage.setItem('phone', res.smsLogin.user.phone);
                   localStorage.setItem('lgTime', new Date().getTime());
-                  if(res.login.user.role.indexOf('supplier') === -1){
-                    Router.push('/')
-                  }else {
+                  if(res.login.user.is_supplier){
                     Router.push('/suppliers')
+                  }else {
+                    Router.push('/')
                   }
               }
         ).catch(()=>{message.error('用户名或密码错误，登录失败！')})

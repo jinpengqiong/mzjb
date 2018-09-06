@@ -1,5 +1,6 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
+import SupplierOrder from '../components/suppliers/supplier_order'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
@@ -32,7 +33,7 @@ export default class Suppliers extends React.Component {
         <Provider store={this.store}>
           <Spin spinning={this.state.loading} size="large">
             <MyLayout>
-              111111
+              <SupplierOrder />
             </MyLayout>
           </Spin>
         </Provider>
