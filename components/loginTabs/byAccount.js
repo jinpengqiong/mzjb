@@ -1,20 +1,10 @@
-import { Form, Icon, Input, Button, message } from 'antd';
+import { Form, Icon, Input, Button, message, Modal, Radio } from 'antd';
 import Router from 'next/router';
 const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 import { request } from 'graphql-request'
 import uri from '../../utils/uri';
-import { inject, observer } from 'mobx-react'
-
-
-
-@inject('store') @observer
-class NormalLoginForm extends React.Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        // console.log('Received values of form: ', values);
-        const mutation = `
+const accountLogin = `
           mutation ($phone:String!, $password: String!) {
             login(phone:$phone,password:$password){
               accessToken
@@ -31,28 +21,44 @@ class NormalLoginForm extends React.Component {
             }
           }
           `;
+
+
+
+
+class NormalLoginForm extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      visible:false,
+      radioValue:1
+    }
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        // console.log('Received values of form: ', values);
+
         const variables = {
             phone: values.userName,
             password: values.password
           };
-          request(uri, mutation, variables).then(
+          request(uri, accountLogin, variables).then(
             res => {
                 console.log('res', res)
                 if(!res.errors){
                     message.success('登录成功！');
-                    if(res.login.user.is_supplier){
-                      localStorage.setItem('role', res.login.user.role+',supplier');
-                    }else{
-                      localStorage.setItem('role', res.login.user.role);
-                    }
+                    localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('mzAccountid', res.login.user.mzAccountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
                     localStorage.setItem('phone', res.login.user.phone);
-                    localStorage.setItem('lgTime', new Date().getTime());
                     if(res.login.user.is_supplier){
-                      Router.push('/suppliers')
+                      this.setState({
+                        visible:true
+                      })
                     }else {
                       Router.push('/')
                     }
@@ -62,6 +68,31 @@ class NormalLoginForm extends React.Component {
       }
     });
   }
+
+  onRadioChange = e => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      radioValue: e.target.value,
+    });
+  }
+
+  handleOk = () => {
+    const role = localStorage.getItem('role')
+    if(this.state.radioValue === 1){
+      Router.push('/')
+    }else if(this.state.radioValue === 2){
+      localStorage.setItem('role', role+',supplier');
+      Router.push('/suppliers')
+    }
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible:false,
+      radioValue:1
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -84,8 +115,20 @@ class NormalLoginForm extends React.Component {
           <Button type="primary" htmlType="submit" style={{width:'300px'}}>
             登录
           </Button>
-          {/* <a href="" style={{float: 'right'}}>现在注册!</a> */}
         </FormItem>
+
+        <Modal
+            title="选择管理页面"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+        >
+          <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+            <Radio value={1}>商品管理页面</Radio>
+            <Radio value={2}>供货商订单管理页面</Radio>
+          </RadioGroup>
+        </Modal>
+
         <style jsx>{`
             .login-form {
                 max-width: 300px;

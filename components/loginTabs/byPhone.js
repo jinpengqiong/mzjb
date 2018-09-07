@@ -1,9 +1,10 @@
-import { Form, Icon, Input, Button, Checkbox, Row, Col, message } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, message, Modal, Radio } from 'antd';
 import Router from 'next/router';
+const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 import { request, GraphQLClient } from 'graphql-request'
 import uri from '../../utils/uri';
-import { inject, observer } from 'mobx-react'
+
 
 
 const querySmsCode = `
@@ -30,12 +31,14 @@ mutation ($phone:String!, $code: String!) {
 }
 `;
 
-@inject('store') @observer
+
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: false
+      count: false,
+      visible:false,
+      radioValue:1
     };
   }
   handleSubmit = (e) => {
@@ -47,19 +50,15 @@ class NormalLoginForm extends React.Component {
           res => {
             console.log('res',res)
                   message.success('登录成功！')
-                  this.props.store.showSupplierOrder(res.smsLogin.user.is_supplier)
-                  if(res.smsLogin.user.is_supplier){
-                    localStorage.setItem('role', res.smsLogin.user.role+',supplier');
-                  }else{
-                    localStorage.setItem('role', res.smsLogin.user.role);
-                  }
+                  localStorage.setItem('role', res.smsLogin.user.role);
                   localStorage.setItem('accessToken', res.smsLogin.accessToken);
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
                   localStorage.setItem('phone', res.smsLogin.user.phone);
-                  localStorage.setItem('lgTime', new Date().getTime());
-                  if(res.login.user.is_supplier){
-                    Router.push('/suppliers')
+                  if(res.smsLogin.user.is_supplier){
+                    this.setState({
+                      visible:true
+                    })
                   }else {
                     Router.push('/')
                   }
@@ -111,6 +110,30 @@ class NormalLoginForm extends React.Component {
     }
   }
 
+  onRadioChange = e => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      radioValue: e.target.value,
+    });
+  }
+
+  handleOk = () => {
+    const role = localStorage.getItem('role')
+    if(this.state.radioValue === 1){
+      Router.push('/')
+    }else if(this.state.radioValue === 2){
+      localStorage.setItem('role', role+',supplier');
+      Router.push('/suppliers')
+    }
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible:false,
+      radioValue:1
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { count } = this.state;
@@ -147,6 +170,17 @@ class NormalLoginForm extends React.Component {
             </Col>
           </Row>
         </FormItem>
+        <Modal
+            title="选择管理页面"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+        >
+          <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+            <Radio value={1}>商品管理页面</Radio>
+            <Radio value={2}>供货商订单管理页面</Radio>
+          </RadioGroup>
+        </Modal>
         {/* <style jsx>{`
             .login-form {
                 max-width: 300px;
