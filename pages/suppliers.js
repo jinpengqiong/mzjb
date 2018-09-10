@@ -4,9 +4,7 @@ import SupplierOrder from '../components/suppliers/supplier_order'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
 import Router from 'next/router';
-import { Spin, Tabs } from 'antd';
-const TabPane = Tabs.TabPane;
-
+import { Spin } from 'antd';
 
 export default class Suppliers extends React.Component {
   constructor (props) {

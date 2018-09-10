@@ -48,8 +48,6 @@ class NormalLoginForm extends React.Component {
         // console.log('Received values of form: ', values);
         request(uri, submitByPhone,{ phone: values.phone, code: values.SmsCode}).then(
           res => {
-            console.log('res',res)
-                  message.success('登录成功！')
                   localStorage.setItem('role', res.smsLogin.user.role);
                   localStorage.setItem('accessToken', res.smsLogin.accessToken);
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
@@ -61,6 +59,7 @@ class NormalLoginForm extends React.Component {
                     })
                   }else {
                     Router.push('/')
+                    message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
                   }
               }
         ).catch(()=>{message.error('用户名或密码错误，登录失败！')})
@@ -99,7 +98,7 @@ class NormalLoginForm extends React.Component {
     if(this.isPoneAvailable(values.phone)){
       this.countDown();
       request(uri, querySmsCode, {phone: values.phone}).then(
-        (res) => {
+        res => {
           if(res.smsCode.result === "OK"){
             message.success('验证码发送成功！');
           }
@@ -121,9 +120,11 @@ class NormalLoginForm extends React.Component {
     const role = localStorage.getItem('role')
     if(this.state.radioValue === 1){
       Router.push('/')
+      message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
     }else if(this.state.radioValue === 2){
       localStorage.setItem('role', role+',supplier');
       Router.push('/suppliers')
+      message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
     }
   }
 

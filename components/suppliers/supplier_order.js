@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -215,7 +215,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   onChange = e => {
-    console.log('e',e.target.value)
+    // console.log('e',e.target.value)
     this.querySupplierOrder(e.target.value)
     this.setState({
       tagName:e.target.value
@@ -223,7 +223,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   sendPost = data => {
-    console.log('data', data)
+    // console.log('data', data)
     this.queryExpressList()
     this.setState({
       postVisible:true,
@@ -238,7 +238,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   onRadioChange = e => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.setState({
       radioValue: e.target.value,
     });
@@ -252,14 +252,14 @@ export default class SupplierOrder extends React.Component {
   }
 
   handleInputChange = e => {
-    console.log('enter',e.target.value)
+    // console.log('enter',e.target.value)
     this.setState({
       InputValue:e.target.value
     })
   }
 
   handlePostSend = tid => {
-    console.log('tid', tid)
+    // console.log('tid', tid)
     if(this.state.radioValue === 2){
       Request.GraphQlRequest(confirmSendProduct,
           {
@@ -268,7 +268,7 @@ export default class SupplierOrder extends React.Component {
           },
           `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-            console.log('222', res)
+            // console.log('222', res)
             if(res.status === 'ok'){
               message.success('发货成功！')
               this.setState({
@@ -290,7 +290,7 @@ export default class SupplierOrder extends React.Component {
           },
           `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-            console.log('222', res)
+            // console.log('222', res)
             if(res.status === 'ok'){
               message.success('发货成功！')
             }
@@ -308,7 +308,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   onPageChange = page => {
-    console.log(page)
+    // console.log(page)
     this.setState({
       curPage:page
     })
@@ -317,9 +317,7 @@ export default class SupplierOrder extends React.Component {
   render() {
     const renderExpress = this.state.expressData && this.state.expressData.map(
         item => {
-          return (
-              <Option value={item.id} key={item.id}>{item.name}</Option>
-          )
+          return (<Option value={item.id} key={item.id}>{item.name}</Option>)
         }
     )
     return (
@@ -334,6 +332,7 @@ export default class SupplierOrder extends React.Component {
                 <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
                 <Radio.Button value="TRADE_CLOSE">已关闭</Radio.Button>
               </Radio.Group>
+              {/*<Icon type="filter" theme="outlined" style={{ marginLeft:'1em'}}/>*/}
             </Affix>
             <Table bordered dataSource={this.state.orderData&& this.state.orderData.slice(4*(this.state.curPage-1),this.state.curPage*4)} columns={this.state.columns} pagination={false}/>
 

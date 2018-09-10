@@ -48,7 +48,6 @@ class NormalLoginForm extends React.Component {
             res => {
                 console.log('res', res)
                 if(!res.errors){
-                    message.success('登录成功！');
                     localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
@@ -61,6 +60,7 @@ class NormalLoginForm extends React.Component {
                       })
                     }else {
                       Router.push('/')
+                      message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
                     }
                 }
             }
@@ -80,9 +80,11 @@ class NormalLoginForm extends React.Component {
     const role = localStorage.getItem('role')
     if(this.state.radioValue === 1){
       Router.push('/')
+      message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
     }else if(this.state.radioValue === 2){
       localStorage.setItem('role', role+',supplier');
       Router.push('/suppliers')
+      message.success(`${localStorage.getItem('nickname')} 欢迎回来`);
     }
   }
 

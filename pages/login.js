@@ -2,9 +2,6 @@ import React from 'react';
 import { message, Tabs, Icon } from 'antd';
 import LoginFormWithPhone from '../components/loginTabs/byPhone';
 import LoginFormWithAccount from '../components/loginTabs/byAccount';
-import Router from 'next/router';
-
-
 const TabPane = Tabs.TabPane;
 /**
  * 定义Login组件
@@ -14,10 +11,10 @@ class Login extends React.Component {
     requesting: false, // 当前是否正在请求服务端接口
   };
 
-  
+
   render(){
     return (
-      <div id="container">
+      <div className="bgImage">
         <div className="login">
           <p>拇指聚宝</p>
           <Tabs defaultActiveKey="1">
@@ -46,6 +43,13 @@ class Login extends React.Component {
             text-align: center;
             padding-bottom: 40px;
           }
+          html, body {
+              width: 100%;
+              height: 100%;
+          }
+          body{
+              background-image: radial-gradient(circle,#99CCCC, #7171B7);
+            }
         ` }</style>
       </div>
     );

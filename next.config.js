@@ -37,6 +37,11 @@ module.exports = {
         }
         ,
         {
+          test: /\.(png|jpg)$/,
+          use: ['file-loader']
+        }
+        ,
+        {
           test: /\.less/,
           loader: `babel-loader!raw-loader!postcss-loader!less-loader`
         }
