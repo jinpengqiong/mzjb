@@ -158,7 +158,7 @@ export default class OrderManagement extends React.Component {
     ).catch(err=>{message.error('你还未授权开店，请联系管理员！'); Request.token_auth(err)})
   };
 
-  onChange(pageNumber) {
+  onPageChange = pageNumber => {
     let startTime = null
       if(this.state.optionValue==="7days"){
           startTime = parseInt(moment().subtract(7, 'days').format('X'));
@@ -270,7 +270,7 @@ export default class OrderManagement extends React.Component {
             &&
             <Pagination 
             defaultCurrent={1}
-            onChange={this.onChange}
+            onChange={this.onPageChange}
             total={this.state.data? this.state.data.totalResults : 1} 
             style={{ float: "right", marginTop: "10px"}}/>
             }

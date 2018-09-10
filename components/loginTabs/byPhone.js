@@ -2,7 +2,7 @@ import { Form, Icon, Input, Button, Row, Col, message, Modal, Radio } from 'antd
 import Router from 'next/router';
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-import { request, GraphQLClient } from 'graphql-request'
+import { request } from 'graphql-request'
 import uri from '../../utils/uri';
 
 
@@ -41,6 +41,7 @@ class NormalLoginForm extends React.Component {
       radioValue:1
     };
   }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -66,6 +67,7 @@ class NormalLoginForm extends React.Component {
       }
     });
   }
+
   //check the phone format
   isPoneAvailable(str) {  
     var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;  

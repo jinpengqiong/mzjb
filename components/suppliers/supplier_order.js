@@ -75,6 +75,7 @@ export default class SupplierOrder extends React.Component {
       InputValue:'',
       selectedValue:'',
       curPage:1,
+      optionValue:"7",
       columns : [
         {
           title: '商品',
@@ -170,10 +171,12 @@ export default class SupplierOrder extends React.Component {
 
 
   querySupplierOrder = type => {
+    const endCreated = moment().format('YYYY-MM-DD HH:mm:ss')
+    const startCreated = moment().subtract(2, 'months').format('YYYY-MM-DD HH:mm:ss')
     Request.GraphQlRequest(supplierTradesList,
         {
-          startCreated:"2018-08-08 00:00:00",
-          endCreated:"2018-09-08 00:00:00",
+          startCreated,
+          endCreated,
           status:type
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
@@ -313,6 +316,7 @@ export default class SupplierOrder extends React.Component {
       curPage:page
     })
   }
+
 
   render() {
     const renderExpress = this.state.expressData && this.state.expressData.map(
