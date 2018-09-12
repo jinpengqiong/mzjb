@@ -40,6 +40,7 @@ const tagProducts = `
                 detailUrl
                 type
             }
+            totalCount
         }
       }
 `;
@@ -499,7 +500,7 @@ export default class ProdTable extends React.Component {
       }else{
         Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
-                // console.log('111', res)
+                console.log('111', res)
                 res.tagProducts.products.map(
                     (prod) => {
                         prod.key = prod.id;
@@ -516,13 +517,14 @@ export default class ProdTable extends React.Component {
                 )
                 this.setState({
                     data: res.tagProducts.products,
+                    totalEntries:res.tagProducts.totalCount
                 })
             }
         ).catch(err => Request.token_auth(err))
       }
     }
 
-    unShlfConfirm = (ID) => {
+    unShlfConfirm = ID => {
         Request.GraphQlRequest(setDisplayProduct,
             {
                 isDisplay: false,
@@ -539,7 +541,7 @@ export default class ProdTable extends React.Component {
 
 
     //add to group
-    changeProductTag = (ID) => {
+    changeProductTag = ID => {
       // console.log('ID',ID)
         this.setState({
             productID:ID,
@@ -548,7 +550,7 @@ export default class ProdTable extends React.Component {
     }
 
     //select Radio to group
-    onRadioChange = (e) => {
+    onRadioChange = e => {
         // console.log('radio checked', e.target.value);
         this.setState({
             radioValue: e.target.value,

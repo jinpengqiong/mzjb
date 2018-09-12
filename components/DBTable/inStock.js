@@ -40,6 +40,7 @@ const tagProducts = `
                 detailUrl
                 type
             }
+            totalCount
         }
       }
 `;
@@ -511,6 +512,7 @@ export default class InStock extends React.Component {
                 )
                 this.setState({
                     data: res.tagProducts.products,
+                    totalEntries:res.tagProducts.totalCount
                 })
             }
         ).catch(err => Request.token_auth(err))
