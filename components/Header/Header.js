@@ -294,7 +294,7 @@ export default class MyHeader extends React.Component {
                       &&
                     <Menu.Item key="inShop">
                       当前店铺：
-                      <Tag color="#2db7f5">{ this.state.curShopName}</Tag>
+                      <Tag color="orange">{ this.state.curShopName}</Tag>
                       <Tooltip title="更新店铺名">
                         <Icon type="edit" onClick={this.changeShopName}/>
                       </Tooltip>
