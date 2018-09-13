@@ -371,7 +371,7 @@ export default class AutoReply extends React.Component {
                     <Col span={17} offset={1}>
                         <h3 style={{ marginLeft:'60px' }}>已创建的回复列表：</h3>
                         <div style={{ padding: '30px', marginTop: "10px",display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
-                            { ( this.state.autoReplyData && !isEmpty(this.state.autoReplyData.entries) ) ? autoReplyLists : "暂无" }
+                            { ( this.state.autoReplyData && !isEmpty(this.state.autoReplyData.entries) ) ? autoReplyLists : <div style={{ marginLeft:30}}>暂无</div> }
                         </div>
                     </Col>
                 </Row>

@@ -19,6 +19,7 @@ module.exports = {
       '/userList': { page: '/userList' },
       '/products': { page: '/products' },
       '/settings': { page: '/settings' },
+      '/suppliers': { page: '/suppliers' },
     }
   },
   webpack: (config, dev) => {
