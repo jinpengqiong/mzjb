@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -66,6 +66,7 @@ export default class SupplierOrder extends React.Component {
       orderData:null,
       tagName:"ALL",
       isSpin:false,
+      isSpin1:false,
       detailInfo:null,
       detailVisible: false,
       postVisible:false,
@@ -173,6 +174,9 @@ export default class SupplierOrder extends React.Component {
   querySupplierOrder = type => {
     const endCreated = moment().format('YYYY-MM-DD HH:mm:ss')
     const startCreated = moment().subtract(2, 'months').format('YYYY-MM-DD HH:mm:ss')
+    this.setState({
+      isSpin1:true
+    })
     Request.GraphQlRequest(supplierTradesList,
         {
           startCreated,
@@ -197,7 +201,8 @@ export default class SupplierOrder extends React.Component {
               }
           )
           this.setState({
-            orderData:res.supplierTradesList
+            orderData:res.supplierTradesList,
+            isSpin1:false
           })
         }
     ).catch( err => Request.token_auth(err) )
@@ -272,7 +277,7 @@ export default class SupplierOrder extends React.Component {
           `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
             // console.log('222', res)
-            if(res.status === 'ok'){
+            if(res.confirmSendProduct.status === 'ok'){
               message.success('发货成功！')
               this.setState({
                 InputValue:'',
@@ -294,7 +299,7 @@ export default class SupplierOrder extends React.Component {
           `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
             // console.log('222', res)
-            if(res.status === 'ok'){
+            if(res.confirmSendProduct.status === 'ok'){
               message.success('发货成功！')
             }
             this.setState({
@@ -317,6 +322,10 @@ export default class SupplierOrder extends React.Component {
     })
   }
 
+  refresh = () => {
+    this.querySupplierOrder(this.state.tagName)
+  }
+
 
   render() {
     const renderExpress = this.state.expressData && this.state.expressData.map(
@@ -336,10 +345,13 @@ export default class SupplierOrder extends React.Component {
                 <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
                 <Radio.Button value="TRADE_CLOSE">已关闭</Radio.Button>
               </Radio.Group>
-              {/*<Icon type="filter" theme="outlined" style={{ marginLeft:'1em'}}/>*/}
             </Affix>
-            <Table bordered dataSource={this.state.orderData&& this.state.orderData.slice(4*(this.state.curPage-1),this.state.curPage*4)} columns={this.state.columns} pagination={false}/>
-
+            <div style={{ textAlign:"right", marginBottom:"10px"}}>
+              <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}>刷新</Button>
+            </div>
+            <Spin spinning={this.state.isSpin1}>
+              <Table bordered dataSource={this.state.orderData&& this.state.orderData.slice(4*(this.state.curPage-1),this.state.curPage*4)} columns={this.state.columns} pagination={false}/>
+            </Spin>
             {
               this.state.detailInfo
               &&
@@ -405,17 +417,19 @@ export default class SupplierOrder extends React.Component {
                 {
                   this.state.radioValue === 1
                     &&
-                  <div>
-                    <strong>物流公司：</strong>
-                    <Select style={{ width: 120 }} onChange={this.handleSelectChange} value={this.state.selectedValue}>
-                      { renderExpress }
-                    </Select>
-                    <strong style={{ marginLeft: '1em' }}>快递单号：</strong>
-                    <Input onChange={this.handleInputChange} value={this.state.InputValue} style={{ width: 180 }}/>
-                  </div>
+                      <div>
+                        <div>
+                          <strong>物流公司：</strong>
+                          <Select style={{ width: 120 }} onChange={this.handleSelectChange} value={this.state.selectedValue}>
+                            { renderExpress }
+                          </Select>
+                          <strong style={{ marginLeft: '1em' }}>快递单号：</strong>
+                          <Input onChange={this.handleInputChange} value={this.state.InputValue} style={{ width: 180 }}/>
+                        </div>
+                        <br/>
+                        <Alert message="请仔细填写物流公司及快递单号，确认后将不可修改" type="info" />
+                      </div>
                 }
-                <br/>
-                <Alert message="请仔细填写物流公司及快递单号，确认后将不可修改" type="info" />
               </Modal>
             }
 

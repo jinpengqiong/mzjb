@@ -377,7 +377,7 @@ export default class MyHeader extends React.Component {
                 line-height: 64px;
                 cursor: pointer;
                 transition: color .3s;
-              }bgy  cv
+              }
               .trigger:hover {
                 color: #1890ff;
               }
