@@ -114,7 +114,7 @@ class RegistrationForm extends React.Component {
           </FormItem>
           <FormItem
               {...formItemLayout}
-              label="登录密码"
+              label="新登录密码"
           >
             {getFieldDecorator('password', {
               rules: [{

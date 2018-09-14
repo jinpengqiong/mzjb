@@ -370,7 +370,7 @@ export default class SupplierOrder extends React.Component {
                 <p><strong>商品名称：</strong>{ this.state.detailInfo.prod.title }</p>
                 <p><strong>商品单价(元)/数量(件)：</strong>{ this.state.detailInfo.price}</p>
                 <p><strong>邮费：</strong>{ this.state.detailInfo.payInfo.postFee==='0.00'? '包邮': this.state.detailInfo.postFee }</p>
-                <p><strong>收获地址：</strong>
+                <p><strong>收货地址：</strong>
                   {
                     this.state.detailInfo.addressInfo.deliveryProvince +
                     this.state.detailInfo.addressInfo.deliveryCity +

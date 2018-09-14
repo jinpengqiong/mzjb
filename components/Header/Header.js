@@ -344,7 +344,7 @@ export default class MyHeader extends React.Component {
                     onOk={this.handleNameChange}
                     onCancel={this.handleNameCancel}
                 >
-                  店铺名：<Input value={this.state.shopNameValue} onChange={this.handleInputChange} style={{ width:'300px'}}/>
+                  新店铺名：<Input value={this.state.shopNameValue} onChange={this.handleInputChange} style={{ width:'300px'}}/>
                 </Modal>
                 <Modal
                     title="切换店铺"
