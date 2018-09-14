@@ -1,4 +1,4 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
@@ -140,6 +140,7 @@ export default class InStock extends React.Component {
             curPage:'1',
             groupModalVisible:false,
             radioValue:null,
+            isSpin:false,
             columns : [
                 {
                     dataIndex: 'id',
@@ -212,6 +213,9 @@ export default class InStock extends React.Component {
     }
 
     queryProdData= (curPage) => {
+        this.setState({
+          isSpin:true
+        });
         Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
                 res.shopProducts.entries.map(
@@ -232,7 +236,8 @@ export default class InStock extends React.Component {
                 this.setState({
                     data: res.shopProducts.entries,
                     totalEntries:res.shopProducts.totalEntries,
-                    curPage:res.shopProducts.pageNumber
+                    curPage:res.shopProducts.pageNumber,
+                    isSpin:false
                 });
             }
         ).catch(err => Request.token_auth(err))
@@ -637,11 +642,13 @@ export default class InStock extends React.Component {
                         {TagRadios}
                     </RadioGroup>
                 </Modal>
-                <Table
-                    dataSource = {this.state.data? this.state.data : null }
-                    columns={this.state.columns}
-                    pagination={false}
-                />
+                <Spin spinning={this.state.isSpin}>
+                  <Table
+                      dataSource = {this.state.data? this.state.data : null }
+                      columns={this.state.columns}
+                      pagination={false}
+                  />
+                </Spin>
                 {
                     (!isEmpty(this.state.data))
                     &&
