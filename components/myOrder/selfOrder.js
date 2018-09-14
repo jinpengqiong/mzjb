@@ -90,7 +90,7 @@ export default class SelfOrder extends React.Component {
                         entry.key = UUIDGen.uuid(8,10);
                     }
                 );
-                // console.log('111', res)
+                console.log('111', res)
                 this.setState({
                     data: res.searchTradesList,
                     isSpin:false
@@ -99,8 +99,8 @@ export default class SelfOrder extends React.Component {
         ).catch(err=>{message.error('出错了，请联系管理员'); Request.token_auth(err)})
     };
 
-    onChange(pageNumber) {
-        this.queryUserData(pageNumber);
+    onChange = pageNumber => {
+        this.queryOrderData(pageNumber);
     }
 
     refresh =() => {
