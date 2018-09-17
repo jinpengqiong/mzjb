@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Button, Spin } from 'antd';
+import { Table, Pagination, message, Button, Spin, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
@@ -115,7 +115,7 @@ export default class SelfOrder extends React.Component {
         return (
             <div>
                 <div style={{ textAlign:"right", marginBottom:"10px"}}>
-                    <Button type="primary" onClick={this.refresh}>刷新</Button>
+                    <Button type="primary" onClick={this.refresh}><Icon type="reload" theme="outlined" />刷新</Button>
                 </div>
                 <Spin spinning={this.state.isSpin}>
                     <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>

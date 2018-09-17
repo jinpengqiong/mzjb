@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import { Carousel } from 'antd';
-import { Button, Col, Row, message, BackTop } from 'antd';
+import { Button, Col, Row, message, BackTop, Icon } from 'antd';
 import { inject, observer } from 'mobx-react';
 import UUIDGen from '../../utils/uuid_generator'
 import Request from '../../utils/graphql_request';
@@ -97,7 +97,7 @@ export default class ProdDetails extends React.Component {
                 <div>
                     <Row>
                         <Col span={2}>
-                            <Button type="primary" onClick={this.backToPrime}>返回</Button>
+                            <Button type="primary" onClick={this.backToPrime}><Icon type="rollback" theme="outlined" />返回</Button>
                         </Col>
                         <Col span={10} offset={1}>
                             <Carousel autoplay effect="fade" speed='4000'>
@@ -119,8 +119,8 @@ export default class ProdDetails extends React.Component {
                                     <Button type="primary" disabled>已添加到店铺</Button>
                                     :
                                     <div>
-                                        <Button type="primary" onClick={this.addToShop} style={{ marginRight: '15px'}}>上架到店铺</Button>
-                                        <Button type="primary" onClick={this.addToStock}>添加到仓库</Button>
+                                        <Button type="primary" onClick={this.addToShop} style={{ marginRight: '15px'}}><Icon type="plus-circle-o"/>上架到店铺</Button>
+                                        <Button type="primary" onClick={this.addToStock}><Icon type="plus-circle-o"/>添加到仓库</Button>
                                     </div>
                             }
                         </Col>

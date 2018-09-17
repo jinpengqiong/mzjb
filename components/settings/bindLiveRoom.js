@@ -1,4 +1,4 @@
-import { Card, Affix, Button,message, Modal, Radio, Popconfirm } from 'antd';
+import { Card, Affix, Button,message, Modal, Radio, Popconfirm, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 const RadioGroup = Radio.Group;
 import isEmpty from 'lodash/isEmpty';
@@ -157,7 +157,7 @@ export default class BindLiveRoom extends React.Component {
                 localStorage.getItem('OriginalID') === localStorage.getItem('shopID')
                 &&
                 <Affix>
-                  <Button type="primary" onClick={this.openModal} >新增绑定</Button>
+                  <Button type="primary" onClick={this.openModal} ><Icon type="plus-circle-o"/>新增绑定</Button>
                 </Affix>
               }
                 <Modal

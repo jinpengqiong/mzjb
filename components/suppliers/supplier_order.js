@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -347,7 +347,7 @@ export default class SupplierOrder extends React.Component {
               </Radio.Group>
             </Affix>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
-              <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}>刷新</Button>
+              <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
             <Spin spinning={this.state.isSpin1}>
               <Table bordered dataSource={this.state.orderData&& this.state.orderData.slice(4*(this.state.curPage-1),this.state.curPage*4)} columns={this.state.columns} pagination={false}/>

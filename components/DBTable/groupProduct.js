@@ -1,4 +1,4 @@
-import { Table, Affix, Popconfirm, Button, Modal, message, Divider } from 'antd';
+import { Table, Affix, Popconfirm, Button, Modal, message, Divider, Icon } from 'antd';
 import StockProdForm from './stockProdForm'
 import Request from '../../utils/graphql_request';
 import moment from 'moment'
@@ -218,7 +218,7 @@ export default class GroupProduct extends React.Component {
         return (
             <div>
                 <Affix>
-                    <Button type="primary" style={{ marginBottom:'10px'}} onClick={this.addGroup}>新增分组</Button>
+                    <Button type="primary" style={{ marginBottom:'10px'}} onClick={this.addGroup}><Icon type="plus-circle-o"/>新增分组</Button>
                 </Affix>
                 <Modal
                     title={this.state.ModalName}

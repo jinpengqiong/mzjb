@@ -1,4 +1,4 @@
-import { Button, Table, Divider, Popconfirm, message, Pagination, Tag } from'antd';
+import { Button, Table, Divider, Popconfirm, message, Pagination, Tag, Icon } from'antd';
 import { inject, observer } from 'mobx-react'
 import dynamic from 'next/dynamic'
 const ProdModuleSet = dynamic(import('./prodModuleSet'))
@@ -210,7 +210,7 @@ export default class ProdModule extends React.Component {
                           {
                             localStorage.getItem('shopID') === localStorage.getItem('OriginalID')
                               &&
-                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}>新建模版</Button>
+                            <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}><Icon type="plus-circle-o"/>新建模版</Button>
                           }
                             <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                             <Pagination

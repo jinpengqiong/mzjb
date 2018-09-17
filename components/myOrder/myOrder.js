@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Button, Spin, Modal } from 'antd';
+import { Table, Pagination, message, Select, Button, Spin, Modal, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
@@ -229,7 +229,7 @@ export default class OrderManagement extends React.Component {
     return (
         <div>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
-                <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}>刷新</Button>
+                <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
                 <Select value={this.state.optionValue} style={{ width: 120 }} onChange={this.handleChange}>
                     <Option value="7days">近7天</Option>
                     <Option value="30days">近30天</Option>
