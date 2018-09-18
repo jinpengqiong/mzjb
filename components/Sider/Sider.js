@@ -83,7 +83,7 @@ export default class MySider extends React.Component {
                               Router.prefetch('/suppliers');
                               Router.push('/suppliers')}}>
                                 <Icon type="shopping-cart" />
-                                <span>供应商订单</span>
+                                <span>供应商管理</span>
                             </div>
                         </Menu.Item>
                       }

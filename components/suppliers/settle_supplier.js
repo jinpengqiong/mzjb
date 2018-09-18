@@ -2,134 +2,181 @@ import { Table, Pagination, message, Button, Spin, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
+import moment from 'moment'
 
 
 
-const searchTradesList = `
-    query ($id: Int!, $keyword: String!,$page: Int, $pageSize: Int) {
-        searchTradesList(keyword:$keyword, id:$id, page:$page,pageSize:$pageSize ){
-            totalResults
-            trades{
-                tid
-                price
-                title
-                statusStr
-                totalFee
-                created
-                receiverMobile
-                num
+const supplierSettleorders = `
+    query ($page: Int,$pageSize: Int) {
+        supplierSettleorders(page:$page,pageSize:$pageSize){
+            totalEntries
+            entries{
+              costPrice
+              insertedAt
+              isAuto
+              itemId
+              num
+              price
+              salemanPhone
+              settlePrice
+              skuId
+              skuPropertiesName
+              supplierName
+              tid
+              title
+              totalFee
+              updatedAt
             }
         }
     }`;
 
 
 const columns = [
-    {
-        title: '订单号',
-        dataIndex: 'tid',
-        key: 'tid',
-    },
-    {
-        title: '商品',
-        dataIndex: 'title',
-        key: 'title',
-    },
-    {
-        title: '单价(元)',
-        dataIndex: 'price',
-        key: 'price',
-    },
-    {
-        title: '数量',
-        dataIndex: 'num',
-        key: 'num',
-    },
-    {
-        title: '手机号',
-        dataIndex: 'receiverMobile',
-        key: 'receiverMobile',
-    },
-    {
-        title: '下单时间',
-        dataIndex: 'created',
-        key: 'created',
-    },
-    {
-        title: '订单状态',
-        dataIndex: 'statusStr',
-        key: 'statusStr',
-    },
-    {
-        title: '订单总额(元)',
-        dataIndex: 'totalFee',
-        key: 'totalFee',
-    }
+  {
+    title: '订单号',
+    dataIndex: 'tid',
+    key: 'tid',
+  },
+  {
+    title: '商品',
+    dataIndex: 'title',
+    key: 'title'
+  },
+
+  {
+    title: '手机号',
+    dataIndex: 'salemanPhone',
+    key: 'salemanPhone',
+  },
+  {
+    title: '结算时间',
+    dataIndex: 'insertedAt',
+    key: 'insertedAt',
+    render: text => (
+        <div>
+          { moment(text).format('YYYY-MM-DD HH:mm') }
+        </div>
+    )
+  },
+  {
+    title: '单价/数量',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text, record) => (
+        <div>
+          { '¥'+text+'/'+record.num+'件' }
+        </div>
+    )
+  },
+  {
+      title: '成本价',
+      dataIndex: 'settlePrice',
+      key: 'settlePrice',
+      render: text => (
+          <div>
+            { '¥'+text }
+          </div>
+      )
+  },
+  {
+      title: '结算价',
+      dataIndex: 'costPrice',
+      key: 'costPrice',
+      render: text => (
+          <div>
+            { '¥'+text }
+          </div>
+      )
+  },
+  {
+    title: '总额(元)',
+    dataIndex: 'totalFee',
+    key: 'totalFee',
+    render: text => (
+        <div>
+          { '¥'+text }
+        </div>
+    )
+  },
+  {
+    title: '自动结算',
+    dataIndex: 'isAuto',
+    key: 'isAuto',
+    render: text => (
+        <div>
+          { text? '是':'否' }
+        </div>
+    )
+  }
 ];
 
 @inject('store') @observer
-export default class SelfOrder extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            data:null,
+export default class SettleSupplier extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      data:null,
+      isSpin:false
+    }
+  }
+
+  componentDidMount(){
+    this.querySettledSupplierOrder(1);
+  }
+
+  querySettledSupplierOrder = curPage => {
+    Request.GraphQlRequest(supplierSettleorders,
+        {
+          page:curPage,
+          pageSize:10
+        },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          res.supplierSettleorders.entries.map(
+              (entry) => {
+                entry.key = UUIDGen.uuid(8,10);
+              }
+          );
+          console.log('res',res)
+          this.setState({
+            data: res.supplierSettleorders,
             isSpin:false
+          })
         }
-    }
+    ).catch(err=>{message.error('出错了，请联系管理员'); Request.token_auth(err)})
+  };
 
-    componentDidMount(){
-        this.queryOrderData(1);
-    }
+  onPageChange = pageNumber => {
+    this.querySettledSupplierOrder(pageNumber);
+  }
 
-    queryOrderData = (curPage) => {
-        // const endTime = parseInt(moment().format('X'));
-        // const startTime = parseInt(moment().subtract(1, 'quarters').format('X'));
-        Request.GraphQlRequest(searchTradesList, {id: parseInt(localStorage.getItem('shopID')), page: curPage, pageSize: 10, keyword: localStorage.getItem('phone')},`Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
-                res.searchTradesList.trades.map(
-                    (entry) => {
-                        entry.key = UUIDGen.uuid(8,10);
-                    }
-                );
-                console.log('111', res)
-                this.setState({
-                    data: res.searchTradesList,
-                    isSpin:false
-                })
-            }
-        ).catch(err=>{message.error('出错了，请联系管理员'); Request.token_auth(err)})
-    };
+  refresh =() => {
+    this.setState({
+      isSpin:true
+    })
+    this.querySettledSupplierOrder(1);
+  }
 
-    onChange = pageNumber => {
-        this.queryOrderData(pageNumber);
-    }
-
-    refresh =() => {
-        this.setState({
-            isSpin:true
-        })
-        this.queryOrderData(1);
-    }
-
-    render() {
-        // console.log('data', this.state.data)
-        return (
-            <div>
-                <div style={{ textAlign:"right", marginBottom:"10px"}}>
-                    <Button type="primary" onClick={this.refresh}><Icon type="reload" theme="outlined" />刷新</Button>
-                </div>
-                <Spin spinning={this.state.isSpin}>
-                    <Table bordered dataSource={this.state.data? this.state.data.trades : null } columns={columns} pagination={false}/>
-                </Spin>
-                {
-                    (this.state.data && this.state.data.totalResults !==0)
-                    &&
-                    <Pagination
-                        defaultCurrent={1}
-                        onChange={this.onChange}
-                        total={this.state.data? this.state.data.totalResults : 1}
-                        style={{ float: "right", marginTop: "10px"}}/>
-                }
+  render() {
+    return (
+        <div>
+            <div style={{ textAlign:"right", marginBottom:"10px"}}>
+                <Button type="primary" onClick={this.refresh}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
-        )
-    }
+            <Spin spinning={this.state.isSpin}>
+                <Table bordered dataSource={this.state.data? this.state.data.entries : null } columns={columns} pagination={false}/>
+            </Spin>
+          {
+            (this.state.data && this.state.data.totalEntries !==0)
+            &&
+            <Pagination
+                defaultCurrent={1}
+                onChange={this.onPageChange}
+                pageSize={10}
+                total={this.state.data? this.state.data.totalEntries : 1}
+                style={{ float: "right", marginTop: "10px"}}/>
+          }
+        </div>
+    )
+  }
 }

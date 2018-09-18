@@ -1,7 +1,6 @@
 import { Table, Pagination, message, Select, Button, Spin, Modal, Icon, Affix, Radio } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
-import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
 const Option = Select.Option;
 
@@ -76,7 +75,7 @@ export default class OrderManagement2 extends React.Component {
         isSpin:false,
         detailInfo:null,
         visible: false,
-        tagName:undefined,
+        tagName: undefined,
         columns : [
             {
                 title: '订单号',
@@ -170,7 +169,10 @@ export default class OrderManagement2 extends React.Component {
   }
 
   refresh = () => {
-      this.queryOrderData(1, this.state.tagName);
+    this.setState({
+      isSpin:true
+    })
+    this.queryOrderData(1, this.state.tagName);
   }
 
   showDetails = ID => {
@@ -248,8 +250,9 @@ export default class OrderManagement2 extends React.Component {
             &&
             <Pagination 
             defaultCurrent={1}
+            pageSize={10}
             onChange={this.onPageChange}
-            total={this.state.data? this.state.data.totalEntries : 1}
+            total={this.state.data? this.state.data.totalEntries : 0}
             style={{ float: "right", marginTop: "10px"}}/>
             }
         </div>

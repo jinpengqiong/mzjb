@@ -15,39 +15,46 @@ const expressList = `
     }
   `
 
-const supplierTradesList = `
-    query ($endCreated: String!, $startCreated: String!, $status: String!) {
-        supplierTradesList(endCreated:$endCreated, startCreated:$startCreated, status:$status){
-           payInfo{
-              totalFee
-              postFee
-            }
-            orderInfo{
-              tid
-              payTypeStr
-              created
-              statusStr
-            }
-            orders{
+const supplierTradesList2 = `
+    query ($page: Int,$pageSize: Int, $status: String) {
+        supplierTradesList2(page:$page, pageSize:$pageSize, status:$status){
+            totalEntries
+            entries{
+              closeType
+              expiredAt
+              isSettle
               title
+              successAt
+              buyerPhone
               price
-              picPath
-              num
-            }
-            buyerInfo{
-              buyerId
-              fansNickname
-            }
-            addressInfo{
-              receiverTel
-              deliveryAddress
-              deliveryDistrict
-              deliveryProvince
-              deliveryCity
+              expiredAtTime
+              salemanPhone
+              createdAt
+              consignAtTime
+              refundState
+              payAt
               receiverName
-              receiverTel
-              deliveryPostalCode
-            }    
+              itemId
+              num
+              totalFee
+              payAtTime
+              isAutoSettle
+              receiverPhone
+              refundStatus
+              confirmAt
+              createdAtTime
+              updatedAt
+              detail
+              confirmAtTime
+              tid
+              successAtTime
+              insertedAt
+              consignAt
+              alias
+              status
+              supplierName
+              expressType
+            }
         }
     }`;
 
@@ -64,7 +71,7 @@ export default class SupplierOrder extends React.Component {
     super(props);
     this.state={
       orderData:null,
-      tagName:"ALL",
+      tagName:undefined,
       isSpin:false,
       isSpin1:false,
       detailInfo:null,
@@ -102,10 +109,15 @@ export default class SupplierOrder extends React.Component {
           )
         },
         {
-          title: '单价(元)/数量(件)',
+          title: '单价/数量',
           dataIndex: 'price',
           key: 'price',
-          width:'15%'
+          width:'10%',
+          render: text => (
+              <div>
+                { '¥'+text+'件'}
+              </div>
+          ),
         },
         {
           title: '下单时间',
@@ -114,38 +126,85 @@ export default class SupplierOrder extends React.Component {
           width:'12%'
         },
         {
+          title: '结算状态',
+          dataIndex: 'isSettle',
+          key: 'isSettle',
+          width:'12%',
+          render: (text,record) => (
+              <div>
+                {
+                  text?
+                      <div>
+                        <p>已结算({ record.isAutoSettle? '自动结算':'手动结算' })</p>
+                      </div>
+                      :
+                      <Button type="primary">结算</Button>
+                }
+              </div>
+          ),
+        },
+        {
           title: '订单状态',
-          dataIndex: 'state',
-          key: 'state',
+          dataIndex: 'status',
+          key: 'status',
+          width:'10%',
           render: (text, record) => {
-            if(text === '待发货') {
+            if(text === "WAIT_SELLER_SEND_GOODS") {
               return (
                   <div>
-                    <p>{text}</p>
+                    <p>待发货</p>
                     <Button type="primary" onClick={ () => {this.sendPost(record)}}>发货</Button>
                   </div>
               )
             }else {
               return (
                   <div>
-                    <p>{text}</p>
+                    <p>{
+                    text==="WAIT_BUYER_PAY"? '待付款'
+                        :
+                    text==="WAIT_BUYER_CONFIRM_GOODS"? '已发货'
+                        :
+                    text==="TRADE_SUCCESS"? '已完成'
+                        :
+                    text==="TRADE_SUCCESS"? '已完成'
+                        :
+                    text==="TRADE_CLOSED"? '已关闭'
+                        :
+                    null
+                  }</p>
                   </div>
               )
             }
           }
         },
         {
-          title: '订单总额(元)',
+          title: '订单总额',
           dataIndex: 'money',
           key: 'money',
-          width:'12%'
+          width:'8%',
+          render: text => (
+              <div>
+                { '¥'+text}
+              </div>
+          )
+        },
+        {
+          title: '售后',
+          dataIndex: 'refundState',
+          key: 'refundState',
+          width:'8%',
+          render: text => (
+              <div>
+                { text===0? null: <Button type="primary">买家发起维权</Button>}
+              </div>
+          ),
         },
         {
           title: '操作',
           key: 'action',
           render: text => (
               <div>
-                  <a href="#" onClick={ () => { this.showDetails(text) } }>详情</a>
+                  <a href="javascript:;" onClick={ () => { this.showDetails(text) } }>详情</a>
               </div>
           ),
         }
@@ -154,7 +213,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   componentDidMount(){
-    this.querySupplierOrder('ALL')
+    this.querySupplierOrder(undefined)
   }
 
   queryExpressList = () => {
@@ -172,36 +231,33 @@ export default class SupplierOrder extends React.Component {
 
 
   querySupplierOrder = type => {
-    const endCreated = moment().format('YYYY-MM-DD HH:mm:ss')
-    const startCreated = moment().subtract(2, 'months').format('YYYY-MM-DD HH:mm:ss')
     this.setState({
       isSpin1:true
     })
-    Request.GraphQlRequest(supplierTradesList,
+    Request.GraphQlRequest(supplierTradesList2,
         {
-          startCreated,
-          endCreated,
           status:type
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          // console.log('222', res)
-          res.supplierTradesList.map(
+          res.supplierTradesList2.entries.map(
               entry => {
+                const detail = JSON.parse(entry.detail)
+                console.log(detail)
                 entry.key = UUIDGen.uuid(8,10);
                 entry.prod = {
-                  tid:entry.orderInfo.tid,
-                  pic:entry.orders[0].picPath,
-                  title:entry.orders[0].title
+                  tid:detail.full_order_info.order_info.tid,
+                  pic:detail.full_order_info.orders[0].pic_path,
+                  title:detail.full_order_info.orders[0].title
                 }
-                entry.price = entry.orders[0].price + '/' + entry.orders[0].num
-                entry.createdAt = entry.orderInfo.created
-                entry.state = entry.orderInfo.statusStr
-                entry.money = entry.payInfo.totalFee
+                entry.price = detail.full_order_info.orders[0].price + '/' + detail.full_order_info.orders[0].num
+                entry.createdAt = detail.full_order_info.order_info.created
+                entry.money = detail.full_order_info.pay_info.total_fee
               }
           )
+          console.log('222', res)
           this.setState({
-            orderData:res.supplierTradesList,
+            orderData:res.supplierTradesList2,
             isSpin1:false
           })
         }
@@ -209,6 +265,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   showDetails = data => {
+    // console.log('data',data)
     this.setState({
       detailInfo:data,
       detailVisible:true
@@ -231,7 +288,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   sendPost = data => {
-    // console.log('data', data)
+    // console.log('sendPost', data)
     this.queryExpressList()
     this.setState({
       postVisible:true,
@@ -253,7 +310,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   handleSelectChange = value => {
-    console.log( typeof value);
+    // console.log( typeof value);
     this.setState({
       selectedValue:value
     })
@@ -334,24 +391,26 @@ export default class SupplierOrder extends React.Component {
           return (<Option value={item.id} key={item.id}>{item.name}</Option>)
         }
     )
+    const detailInfo = this.state.detailInfo && JSON.parse(this.state.detailInfo.detail).full_order_info
+    const detailInfo2 = this.state.postData && JSON.parse(this.state.postData.detail).full_order_info
     return (
         <div>
           <Spin spinning={this.state.isSpin}>
             <Affix offsetTop={10}>
               <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
-                <Radio.Button value="ALL">全部</Radio.Button>
+                <Radio.Button value={undefined}>全部</Radio.Button>
                 <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
                 <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
                 <Radio.Button value="WAIT_BUYER_CONFIRM_GOODS">已发货</Radio.Button>
                 <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
-                <Radio.Button value="TRADE_CLOSE">已关闭</Radio.Button>
+                <Radio.Button value="TRADE_CLOSED">已关闭</Radio.Button>
               </Radio.Group>
             </Affix>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
               <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
             <Spin spinning={this.state.isSpin1}>
-              <Table bordered dataSource={this.state.orderData&& this.state.orderData.slice(8*(this.state.curPage-1),this.state.curPage*8)} columns={this.state.columns} pagination={false}/>
+              <Table bordered dataSource={ this.state.orderData&& this.state.orderData.entries } columns={this.state.columns} pagination={false}/>
             </Spin>
             {
               this.state.detailInfo
@@ -364,21 +423,21 @@ export default class SupplierOrder extends React.Component {
                   footer={null}
               >
                 <h3>基本信息：</h3>
-                <p><strong>下单人：</strong>{ this.state.detailInfo.buyerInfo.fansNickname }</p>
-                <p><strong>手机号：</strong>{ this.state.detailInfo.addressInfo.receiverTel }</p>
+                <p><strong>下单人：</strong>{ detailInfo.buyer_info.fans_nickname }</p>
+                <p><strong>手机号：</strong>{ detailInfo.address_info.receiver_tel }</p>
                 <h3><strong>订单信息：</strong></h3>
                 <p><strong>订单号：</strong>{ this.state.detailInfo.prod.tid}</p>
                 <p><strong>商品名称：</strong>{ this.state.detailInfo.prod.title }</p>
                 <p><strong>商品单价(元)/数量(件)：</strong>{ this.state.detailInfo.price}</p>
-                <p><strong>邮费：</strong>{ this.state.detailInfo.payInfo.postFee==='0.00'? '包邮': this.state.detailInfo.postFee }</p>
+                <p><strong>邮费：</strong>{ detailInfo.pay_info.post_fee==='0.00'? '包邮': detailInfo.pay_info.post_fee }</p>
                 <p><strong>收货地址：</strong>
                   {
-                    this.state.detailInfo.addressInfo.deliveryProvince +
-                    this.state.detailInfo.addressInfo.deliveryCity +
-                    this.state.detailInfo.addressInfo.deliveryDistrict +
-                    this.state.detailInfo.addressInfo.deliveryAddress + '，' +
-                    this.state.detailInfo.addressInfo.receiverName + '，' +
-                    this.state.detailInfo.addressInfo.receiverTel
+                    detailInfo.address_info.delivery_province +
+                    detailInfo.address_info.delivery_city +
+                    detailInfo.address_info.delivery_district +
+                    detailInfo.address_info.delivery_address + '，' +
+                    detailInfo.address_info.receiver_name + '，' +
+                    detailInfo.address_info.receiver_tel
                   }
                 </p>
                 <p><strong>状态：</strong>{ this.state.detailInfo.state}</p>
@@ -399,12 +458,12 @@ export default class SupplierOrder extends React.Component {
                 <p>
                   <strong>收获地址：</strong>
                   {
-                  this.state.postData.addressInfo.deliveryProvince +
-                  this.state.postData.addressInfo.deliveryCity +
-                  this.state.postData.addressInfo.deliveryDistrict +
-                  this.state.postData.addressInfo.deliveryAddress + '，' +
-                  this.state.postData.addressInfo.receiverName + '，' +
-                  this.state.postData.addressInfo.receiverTel
+                    detailInfo2.address_info.delivery_province +
+                    detailInfo2.address_info.delivery_city +
+                    detailInfo2.address_info.delivery_district +
+                    detailInfo2.address_info.delivery_address + '，' +
+                    detailInfo2.address_info.receiver_name + '，' +
+                    detailInfo2.address_info.receiver_tel
                 }</p>
                 <br/>
                 <div>
@@ -442,7 +501,7 @@ export default class SupplierOrder extends React.Component {
                 pageSize={8}
                 current={this.state.curPage}
                 onChange={this.onPageChange}
-                total={this.state.orderData? this.state.orderData.length : 1}
+                total={ this.state.orderData? this.state.orderData.totalEntries:0 }
                 style={{ float: "right", marginTop: "10px"}}/>
           }
         </div>
