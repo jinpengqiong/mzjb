@@ -16,7 +16,7 @@ export default class MySider extends React.Component {
     }
 
     render() {
-        const isDisplay = this.props.store.userRole.indexOf('supplier') === -1
+        const isDisplay = this.props.store.userRole && this.props.store.userRole.indexOf('supplier') === -1
         return (
             <Layout >
                 <Sider

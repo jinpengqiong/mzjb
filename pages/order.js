@@ -1,6 +1,6 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
-import OrderManagement from '../components/myOrder/myOrder'
+import OrderManagement2 from '../components/myOrder/myOrder2'
 import SelfOrder from '../components/myOrder/selfOrder'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -48,7 +48,7 @@ export default class MyOrder extends React.Component {
                   onChange={this.callback}
                   hideAdd>
                   <TabPane tab='客户订单' key="1">
-                      <OrderManagement />
+                      <OrderManagement2 />
                   </TabPane>
                   <TabPane tab='个人订单' key="2" >
                       <SelfOrder />
