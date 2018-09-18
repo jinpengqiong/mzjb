@@ -64,8 +64,6 @@ const shopTradeInfo = `
     }`;
 
 
-
-
 @inject('store') @observer
 export default class OrderManagement2 extends React.Component {
   constructor(props) {

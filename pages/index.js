@@ -126,6 +126,9 @@ export default class MainPage extends React.Component {
                                   <TabPane tab='优选商城' key="0">
                                     <ChooseProducts />
                                   </TabPane>
+                                  <TabPane tab='供货商分组' key="-1">
+                                    <ChooseProducts tagId='103317078'/>
+                                  </TabPane>
                                   {
                                     this.store.categories
                                     &&

@@ -498,7 +498,7 @@ export default class ProdTable extends React.Component {
 
     }
 
-    handleChange = (key) => {
+    handleChange = key => {
       // console.log('key', key)
       if(key==='-1'){
         this.queryProdData(1);
@@ -516,7 +516,7 @@ export default class ProdTable extends React.Component {
                             prod.type ="外链商品"
                         }
                         if(prod.type === 'youzan'){
-                            prod.type ="自有商品"
+                            prod.type = "自有商品"
                         }
                     }
                 )

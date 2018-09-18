@@ -82,8 +82,8 @@ export default class SupplierOrder extends React.Component {
       expressData:null,
       InputValue:'',
       selectedValue:'',
-      curPage:1,
       optionValue:"7",
+      curPage:1,
       columns : [
         {
           title: '商品',
@@ -109,45 +109,16 @@ export default class SupplierOrder extends React.Component {
           )
         },
         {
-          title: '单价/数量',
-          dataIndex: 'price',
-          key: 'price',
-          width:'10%',
-          render: text => (
-              <div>
-                { '¥'+text+'件'}
-              </div>
-          ),
-        },
-        {
           title: '下单时间',
           dataIndex: 'createdAt',
           key: 'createdAt',
-          width:'12%'
-        },
-        {
-          title: '结算状态',
-          dataIndex: 'isSettle',
-          key: 'isSettle',
-          width:'12%',
-          render: (text,record) => (
-              <div>
-                {
-                  text?
-                      <div>
-                        <p>已结算({ record.isAutoSettle? '自动结算':'手动结算' })</p>
-                      </div>
-                      :
-                      <Button type="primary">结算</Button>
-                }
-              </div>
-          ),
+          width:'10%'
         },
         {
           title: '订单状态',
           dataIndex: 'status',
           key: 'status',
-          width:'10%',
+          width:'8%',
           render: (text, record) => {
             if(text === "WAIT_SELLER_SEND_GOODS") {
               return (
@@ -160,22 +131,33 @@ export default class SupplierOrder extends React.Component {
               return (
                   <div>
                     <p>{
-                    text==="WAIT_BUYER_PAY"? '待付款'
-                        :
-                    text==="WAIT_BUYER_CONFIRM_GOODS"? '已发货'
-                        :
-                    text==="TRADE_SUCCESS"? '已完成'
-                        :
-                    text==="TRADE_SUCCESS"? '已完成'
-                        :
-                    text==="TRADE_CLOSED"? '已关闭'
-                        :
-                    null
-                  }</p>
+                      text==="WAIT_BUYER_PAY"? '待付款'
+                          :
+                          text==="WAIT_BUYER_CONFIRM_GOODS"? '已发货'
+                              :
+                              text==="TRADE_SUCCESS"? '已完成'
+                                  :
+                                  text==="TRADE_SUCCESS"? '已完成'
+                                      :
+                                      text==="TRADE_CLOSED"? '已关闭'
+                                          :
+                                          null
+                    }</p>
                   </div>
               )
             }
           }
+        },
+        {
+          title: '单价/数量',
+          dataIndex: 'price',
+          key: 'price',
+          width:'8%',
+          render: text => (
+              <div>
+                { '¥'+text+'件'}
+              </div>
+          ),
         },
         {
           title: '订单总额',
@@ -187,6 +169,24 @@ export default class SupplierOrder extends React.Component {
                 { '¥'+text}
               </div>
           )
+        },
+        {
+          title: '结算状态',
+          dataIndex: 'isSettle',
+          key: 'isSettle',
+          width:'8%',
+          render: (text,record) => (
+              <div>
+                {
+                  text?
+                      <div>
+                        <p>已结算({ record.isAutoSettle? '自动结算':'手动结算' })</p>
+                      </div>
+                      :
+                      <Button type="primary">结算</Button>
+                }
+              </div>
+          ),
         },
         {
           title: '售后',
@@ -202,6 +202,7 @@ export default class SupplierOrder extends React.Component {
         {
           title: '操作',
           key: 'action',
+          width:'10%',
           render: text => (
               <div>
                   <a href="javascript:;" onClick={ () => { this.showDetails(text) } }>详情</a>
@@ -213,7 +214,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   componentDidMount(){
-    this.querySupplierOrder(undefined)
+    this.querySupplierOrder(undefined,1)
   }
 
   queryExpressList = () => {
@@ -221,7 +222,7 @@ export default class SupplierOrder extends React.Component {
         {},
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          console.log('expressList', res)
+          // console.log('expressList', res)
           this.setState({
             expressData:res.expressList
           })
@@ -230,20 +231,22 @@ export default class SupplierOrder extends React.Component {
   }
 
 
-  querySupplierOrder = type => {
+  querySupplierOrder = (type,page) => {
     this.setState({
       isSpin1:true
     })
     Request.GraphQlRequest(supplierTradesList2,
         {
-          status:type
+          status:type,
+          page,
+          pageSize:8
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
           res.supplierTradesList2.entries.map(
               entry => {
                 const detail = JSON.parse(entry.detail)
-                console.log(detail)
+                // console.log(detail)
                 entry.key = UUIDGen.uuid(8,10);
                 entry.prod = {
                   tid:detail.full_order_info.order_info.tid,
@@ -255,7 +258,7 @@ export default class SupplierOrder extends React.Component {
                 entry.money = detail.full_order_info.pay_info.total_fee
               }
           )
-          console.log('222', res)
+          // console.log('222', res)
           this.setState({
             orderData:res.supplierTradesList2,
             isSpin1:false
@@ -281,7 +284,7 @@ export default class SupplierOrder extends React.Component {
 
   onChange = e => {
     // console.log('e',e.target.value)
-    this.querySupplierOrder(e.target.value)
+    this.querySupplierOrder(e.target.value,1)
     this.setState({
       tagName:e.target.value
     })
@@ -342,7 +345,7 @@ export default class SupplierOrder extends React.Component {
                 postVisible:false,
                 radioValue:1
               })
-              this.querySupplierOrder(this.state.tagName)
+              this.querySupplierOrder(this.state.tagName,1)
             }
           }
       ).catch( err => Request.token_auth(err) )
@@ -366,7 +369,7 @@ export default class SupplierOrder extends React.Component {
               postVisible:false,
               radioValue:1
             })
-            this.querySupplierOrder(this.state.tagName)
+            this.querySupplierOrder(this.state.tagName,1)
           }
       ).catch( err => Request.token_auth(err) )
     }else {
@@ -378,10 +381,11 @@ export default class SupplierOrder extends React.Component {
     this.setState({
       curPage:page
     })
+    this.querySupplierOrder(this.state.tagName, page)
   }
 
   refresh = () => {
-    this.querySupplierOrder(this.state.tagName)
+    this.querySupplierOrder(this.state.tagName,1)
   }
 
 
@@ -495,10 +499,11 @@ export default class SupplierOrder extends React.Component {
 
           </Spin>
           {
-            (this.state.orderData && this.state.orderData.length !==0)
+            (this.state.orderData && this.state.orderData.totalEntries !==0)
             &&
             <Pagination
                 pageSize={8}
+                defaultCurrent={1}
                 current={this.state.curPage}
                 onChange={this.onPageChange}
                 total={ this.state.orderData? this.state.orderData.totalEntries:0 }

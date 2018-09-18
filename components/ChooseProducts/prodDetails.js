@@ -35,7 +35,7 @@ export default class ProdDetails extends React.Component {
             detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:true,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
-            price:parseInt(this.props.store.ProdDetailData.item.price),
+            price:parseFloat(this.props.store.ProdDetailData.item.price)*100,
             title:this.props.store.ProdDetailData.item.title
         };
         Request.GraphQlRequest(createProduct, {
@@ -45,7 +45,7 @@ export default class ProdDetails extends React.Component {
             categoryId: this.props.store.ProdDetailData.tabId, // take the tabId fro addToShpp or addToStock
             type:'YOUXUAN'
         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log(res)
                 this.props.store.changeIsExisted();
                 message.success('添加成功！')
@@ -59,7 +59,7 @@ export default class ProdDetails extends React.Component {
             detailUrl:this.props.store.ProdDetailData.item.detailUrl,
             isDisplay:false,
             mainImage:this.props.store.ProdDetailData.item.itemImgs[0].thumbnail,
-            price:parseInt(this.props.store.ProdDetailData.item.price),
+            price:parseFloat(this.props.store.ProdDetailData.item.price)*100,
             title:this.props.store.ProdDetailData.item.title
         };
         Request.GraphQlRequest(createProduct, {
