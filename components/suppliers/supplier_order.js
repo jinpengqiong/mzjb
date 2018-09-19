@@ -1,5 +1,6 @@
 import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
+import cx from 'classnames';
 import { inject, observer } from 'mobx-react'
 import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
@@ -77,6 +78,7 @@ export default class SupplierOrder extends React.Component {
       selectedValue:'',
       curPage:1,
       optionValue:"7",
+      isShown:true,
       columns : [
         {
           title: '商品',
@@ -115,20 +117,26 @@ export default class SupplierOrder extends React.Component {
         },
         {
           title: '订单状态',
-          dataIndex: 'state',
+          dataIndex: 'status',
           key: 'state',
           render: (text, record) => {
-            if(text === '待发货') {
+            if(text === 'WAIT_SELLER_SEND_GOODS') {
               return (
                   <div>
-                    <p>{text}</p>
-                    <Button type="primary" onClick={ () => {this.sendPost(record)}}>发货</Button>
+                    <p>待发货</p>
+                    <a href="javascript:void(0)" onClick={ () => {this.sendPost(record)}}>发货</a>
                   </div>
               )
             }else {
               return (
                   <div>
-                    <p>{text}</p>
+                    <p>{
+                      text==="WAIT_BUYER_PAY"? "待付款"
+                          : text==="WAIT_BUYER_CONFIRM_GOODS"? "已发货"
+                              : text==="TRADE_SUCCESS"? "交易完成"
+                                  : text==="TRADE_CLOSED"? "交易关闭"
+                                      : null
+                    }</p>
                   </div>
               )
             }
@@ -145,7 +153,7 @@ export default class SupplierOrder extends React.Component {
           key: 'action',
           render: text => (
               <div>
-                  <a href="#" onClick={ () => { this.showDetails(text) } }>详情</a>
+                  <a href="javascript:void(0);" onClick={ () => { this.showDetails(text) } }>详情</a>
               </div>
           ),
         }
@@ -209,6 +217,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   showDetails = data => {
+    console.log('111', data)
     this.setState({
       detailInfo:data,
       detailVisible:true
@@ -334,6 +343,17 @@ export default class SupplierOrder extends React.Component {
           return (<Option value={item.id} key={item.id}>{item.name}</Option>)
         }
     )
+    const showRightProtent = cx(
+        {
+          hide:this.state.isShown === false
+        }
+    )
+    const hideList = cx(
+        {
+          hide:this.state.isShown === true
+        }
+    )
+    // console.log('111', this.state.detailInfo )
     return (
         <div>
           <Spin spinning={this.state.isSpin}>
@@ -381,7 +401,6 @@ export default class SupplierOrder extends React.Component {
                     this.state.detailInfo.addressInfo.receiverTel
                   }
                 </p>
-                <p><strong>状态：</strong>{ this.state.detailInfo.state}</p>
                 <p><strong>创建时间：</strong>{ this.state.detailInfo.createdAt}</p>
               </Modal>
             }

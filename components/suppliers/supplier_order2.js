@@ -1,7 +1,7 @@
 import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
+import cx from 'classnames';
 import { inject, observer } from 'mobx-react'
-import moment from 'moment';
 import UUIDGen from '../../utils/uuid_generator.js';
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -58,6 +58,54 @@ const supplierTradesList2 = `
         }
     }`;
 
+const getRefundInfo = `
+    query ($tid: String!) {
+        getRefundInfo(tid:$tid){
+           refunds{
+              refundId
+              created
+              csStatus
+              kdtIt
+              modified
+              reason
+              refundFee
+              returnGoods
+              status
+              tid
+            }
+        }
+    }`;
+
+const getRefundDetail = `
+    query ($refundId: String!) {
+        getRefundDetail(refundId:$refundId){
+            csStatus
+            created
+            desc
+            itemId
+            kdtId
+            logistics {
+              address
+              companyCode
+              logisticsNo
+              mobile
+              receiver
+              telephone
+            }
+            modified
+            oid
+            reason
+            refundFee
+            refundFundDesc
+            refundId
+            refundType
+            returnGoods
+            status
+            tid
+            version
+        }
+    }`;
+
 const confirmSendProduct = `
     mutation ($isNoExpress: Int!,$outSid: String,$outStype: String,$tid: String!) {
         confirmSendProduct(isNoExpress:$isNoExpress,outSid:$outSid,outStype:$outStype,tid:$tid){
@@ -82,8 +130,10 @@ export default class SupplierOrder extends React.Component {
       expressData:null,
       InputValue:'',
       selectedValue:'',
-      optionValue:"7",
       curPage:1,
+      visible:false,
+      refundInfo:null,
+      refundPROD:null, //退款商品的商品信息
       columns : [
         {
           title: '商品',
@@ -124,25 +174,13 @@ export default class SupplierOrder extends React.Component {
               return (
                   <div>
                     <p>待发货</p>
-                    <Button type="primary" onClick={ () => {this.sendPost(record)}}>发货</Button>
+                    <a href="javascript:void(0)" onClick={ () => {this.sendPost(record)}}>发货</a>
                   </div>
               )
             }else {
               return (
                   <div>
-                    <p>{
-                      text==="WAIT_BUYER_PAY"? '待付款'
-                          :
-                          text==="WAIT_BUYER_CONFIRM_GOODS"? '已发货'
-                              :
-                              text==="TRADE_SUCCESS"? '已完成'
-                                  :
-                                  text==="TRADE_SUCCESS"? '已完成'
-                                      :
-                                      text==="TRADE_CLOSED"? '已关闭'
-                                          :
-                                          null
-                    }</p>
+                    <p>{this.getStateStr(text)}</p>
                   </div>
               )
             }
@@ -183,7 +221,7 @@ export default class SupplierOrder extends React.Component {
                         <p>已结算({ record.isAutoSettle? '自动结算':'手动结算' })</p>
                       </div>
                       :
-                      <Button type="primary">结算</Button>
+                      <a href="javascript:void(0)">结算</a>
                 }
               </div>
           ),
@@ -193,9 +231,13 @@ export default class SupplierOrder extends React.Component {
           dataIndex: 'refundState',
           key: 'refundState',
           width:'8%',
-          render: text => (
+          render: (text,record) => (
               <div>
-                { text===0? null: <Button type="primary">买家发起维权</Button>}
+                {
+                  text===0?
+                      null:
+                      <a href="javascript:void(0)" onClick={ () => {this.openRightModal(record)}}>{ this.getRefundStr(record.refundStatus) }</a>
+                }
               </div>
           ),
         },
@@ -258,7 +300,7 @@ export default class SupplierOrder extends React.Component {
                 entry.money = detail.full_order_info.pay_info.total_fee
               }
           )
-          // console.log('222', res)
+          console.log('222', res)
           this.setState({
             orderData:res.supplierTradesList2,
             isSpin1:false
@@ -267,8 +309,30 @@ export default class SupplierOrder extends React.Component {
     ).catch( err => Request.token_auth(err) )
   }
 
+  queryRefundID = tid => {
+    Request.GraphQlRequest(getRefundInfo, { tid },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('getRefundInfo', res.getRefundInfo.refunds[0].refundId)
+          this.queryRefundDetails(res.getRefundInfo.refunds[0].refundId)
+        }
+    ).catch( err => Request.token_auth(err) )
+  }
+
+  queryRefundDetails = refundId => {
+    Request.GraphQlRequest(getRefundDetail, { refundId },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('getRefundDetail', res)
+          this.setState({
+            refundInfo:res.getRefundDetail
+          })
+        }
+    ).catch( err => Request.token_auth(err) )
+  }
+
   showDetails = data => {
-    // console.log('data',data)
+    console.log('data',data)
     this.setState({
       detailInfo:data,
       detailVisible:true
@@ -388,20 +452,149 @@ export default class SupplierOrder extends React.Component {
     this.querySupplierOrder(this.state.tagName,1)
   }
 
+  getStateStr = state => {
+    switch(state){
+      case "WAIT_BUYER_PAY":
+      return '待付款'
+      break;
+      case "WAIT_SELLER_SEND_GOODS":
+      return '待发货'
+      break;
+      case "WAIT_BUYER_CONFIRM_GOODS":
+      return '已发货'
+      break;
+      case "TRADE_SUCCESS":
+      return '已完成'
+      break;
+      case "TRADE_CLOSED":
+      return '已关闭'
+      break;
+      default:
+      null
+    }
+  }
+
+  getRefundReasonStr = state => {
+    switch(state){
+      case 11:
+        return '质量问题'
+        break;
+      case 12:
+        return '拍错/多拍/不喜欢'
+        break;
+      case 13:
+        return '商品描述不符'
+        break;
+      case 14:
+        return '假货'
+        break;
+      case 15:
+        return '商家发错货'
+        break;
+      case 16:
+        return '商品破损/少件'
+        break;
+      case 17:
+        return '其他'
+        break;
+      case 51:
+        return '多买/买错/不想要'
+        break;
+      case 52:
+        return '快递无记录'
+        break;
+      case 53:
+        return '少货/空包裹'
+        break;
+      case 54:
+        return '未按约定时间发货'
+        break;
+      case 55:
+        return '快递一直未送达'
+        break;
+      case 56:
+        return '其他'
+        break;
+      case 101:
+        return '商品破损/少件'
+        break;
+      case 102:
+        return '商家发错货'
+        break;
+      case 103:
+        return '商品描述不符'
+        break;
+      case 104:
+        return '拍错/多拍/不喜欢'
+        break;
+      case 105:
+        return '质量问题'
+        break;
+      case 107:
+        return '其他'
+        break;
+      default:
+        null
+    }
+  }
+
+  getRefundStr = state => {
+    switch(state){
+      case "WAIT_SELLER_AGREE":
+        return '卖家发起维权'
+        break;
+      case "WAIT_BUYER_RETURN_GOODS":
+        return '卖家接受退款，待买家退货'
+        break;
+      case "WAIT_SELLER_CONFIRM_GOODS":
+        return '买家已发货，卖家确认收货'
+        break;
+      case "SELLER_REFUSE_BUYER":
+        return '卖家拒绝退款'
+        break;
+      case "CLOSED":
+        return '退款关闭'
+        break;
+      case "SUCCESS":
+        return '退款成功'
+        break;
+      default:
+        null
+    }
+  }
+
+  openRightModal = data => {
+    console.log('data',data)
+    this.queryRefundID(data.tid)
+    this.setState({
+      visible:true,
+      refundPROD:data
+    })
+
+  }
+
+  handleModalCancel = () => {
+    this.setState({
+      visible:false
+    })
+  }
+
 
   render() {
     const renderExpress = this.state.expressData && this.state.expressData.map(
         item => {
-          return (<Option value={item.id} key={item.id}>{item.name}</Option>)
+          return <Option value={item.id} key={item.id}>{item.name}</Option>
         }
     )
     const detailInfo = this.state.detailInfo && JSON.parse(this.state.detailInfo.detail).full_order_info
     const detailInfo2 = this.state.postData && JSON.parse(this.state.postData.detail).full_order_info
+    const refundInfo =  this.state.refundInfo
+    const refundPROD =  this.state.refundPROD
     return (
         <div>
           <Spin spinning={this.state.isSpin}>
             <Affix offsetTop={10}>
-              <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }}>
+              <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }} >
                 <Radio.Button value={undefined}>全部</Radio.Button>
                 <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
                 <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
@@ -444,7 +637,7 @@ export default class SupplierOrder extends React.Component {
                     detailInfo.address_info.receiver_tel
                   }
                 </p>
-                <p><strong>状态：</strong>{ this.state.detailInfo.state}</p>
+                <p><strong>状态：</strong>{ this.getStateStr(this.state.detailInfo.status) }</p>
                 <p><strong>创建时间：</strong>{ this.state.detailInfo.createdAt}</p>
               </Modal>
             }
@@ -494,6 +687,35 @@ export default class SupplierOrder extends React.Component {
                         <Alert message="请仔细填写物流公司及快递单号，确认后将不可修改" type="info" />
                       </div>
                 }
+              </Modal>
+            }
+
+            {
+              this.state.visible
+                &&
+              <Modal
+                  title="售后维权"
+                  visible={this.state.visible}
+                  onCancel={this.handleModalCancel}
+                  destroyOnClose={true}
+                  footer={null}
+              >
+                <p>
+                  <img src={refundPROD.prod.pic} style={{ width:"8em"}}alt="##"/>
+                  <span>{refundPROD.prod.title}</span>
+                </p>
+                <p>
+                  <strong>期望结果：</strong>
+                  <span>{ (refundInfo && refundInfo.returnGoods)? '退款退货':'仅退款' }</span>
+                </p>
+                <p>
+                  <strong>退款金额：</strong>
+                  <span>{ refundInfo && '¥'+refundInfo.refundFee }</span>
+                </p>
+                <p>
+                  <strong>退款金额：</strong>
+                  <span>{ refundInfo && this.getRefundReasonStr(refundInfo.reason) }</span>
+                </p>
               </Modal>
             }
 

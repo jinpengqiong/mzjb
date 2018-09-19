@@ -108,6 +108,7 @@ export default class OrderManagement2 extends React.Component {
                     <div>
                         <p>{
                         text==="WAIT_BUYER_PAY"? "待付款"
+                          : text==="TRADE_PAID"? "已付款"
                           : text==="WAIT_SELLER_SEND_GOODS"? "待发货"
                           : text==="WAIT_BUYER_CONFIRM_GOODS"? "已发货"
                           : text==="TRADE_SUCCESS"? "交易完成"
@@ -202,8 +203,8 @@ export default class OrderManagement2 extends React.Component {
   render() {
     return (
         <div>
-          <Affix offsetTop={10}>
-            <Radio.Group value={this.state.tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }}>
+          <Affix offsetTop={10} style={{ marginBottom: 16 }}>
+            <Radio.Group value={this.state.tagName} onChange={this.onTabChange} >
               <Radio.Button value={undefined}>全部</Radio.Button>
               <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
               <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
