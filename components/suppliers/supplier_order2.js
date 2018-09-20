@@ -106,6 +106,13 @@ const getRefundDetail = `
         }
     }`;
 
+const returngoodsAgree = `
+    mutation ($address: String!, $name: String!, $phone: String!, $refundId: String!, $tid: String!) {
+        returngoodsAgree(address:$address, name:$name, phone:$phone, refundId:$refundId, tid:$tid){
+            status
+        }
+    }`;
+
 const confirmSendProduct = `
     mutation ($isNoExpress: Int!,$outSid: String,$outStype: String,$tid: String!) {
         confirmSendProduct(isNoExpress:$isNoExpress,outSid:$outSid,outStype:$outStype,tid:$tid){
@@ -132,8 +139,12 @@ export default class SupplierOrder extends React.Component {
       selectedValue:'',
       curPage:1,
       visible:false,
+      isShown:false,
       refundInfo:null,
       refundPROD:null, //退款商品的商品信息
+      refundAddress:null,
+      refundPhone:null,
+      refundName:null,
       columns : [
         {
           title: '商品',
@@ -298,6 +309,9 @@ export default class SupplierOrder extends React.Component {
                 entry.price = detail.full_order_info.orders[0].price + '/' + detail.full_order_info.orders[0].num
                 entry.createdAt = detail.full_order_info.order_info.created
                 entry.money = detail.full_order_info.pay_info.total_fee
+                entry.buyerName = detail.full_order_info.buyer_info.fans_nickname
+                entry.postFee = detail.full_order_info.pay_info.post_fee
+
               }
           )
           console.log('222', res)
@@ -330,6 +344,7 @@ export default class SupplierOrder extends React.Component {
         }
     ).catch( err => Request.token_auth(err) )
   }
+
 
   showDetails = data => {
     console.log('data',data)
@@ -575,8 +590,52 @@ export default class SupplierOrder extends React.Component {
 
   handleModalCancel = () => {
     this.setState({
-      visible:false
+      visible:false,
+      isShown:false
     })
+  }
+
+  acceptGoodsBack = (tid, refundId) => {
+    console.log('ID', tid, refundId)
+    if(!this.state.refundAddress || !this.state.refundPhone || !this.state.refundName){
+      this.setState({
+        isShown:true
+      })
+      message.info('请先输入退货地址，再确认退货')
+    }else{
+      Request.GraphQlRequest(returngoodsAgree,
+          {
+            refundId,
+            tid,
+            address: this.state.refundAddress,
+            name: this.state.refundName,
+            phone: this.state.refundPhone
+          },
+          `Bearer ${localStorage.getItem('accessToken')}`).then(
+          res => {
+            console.log('returngoodsAgree', res)
+          }
+      ).catch( err => Request.token_auth(err) )
+    }
+  }
+
+  handleInputChange = (e,type) => {
+    console.log('e', e.target.value)
+    if(type === 'address'){
+      this.setState({
+        refundAddress:e.target.value
+      })
+    }
+    if(type === 'phone'){
+      this.setState({
+        refundPhone:e.target.value
+      })
+    }
+    if(type === 'name'){
+      this.setState({
+        refundName:e.target.value
+      })
+    }
   }
 
 
@@ -588,8 +647,7 @@ export default class SupplierOrder extends React.Component {
     )
     const detailInfo = this.state.detailInfo && JSON.parse(this.state.detailInfo.detail).full_order_info
     const detailInfo2 = this.state.postData && JSON.parse(this.state.postData.detail).full_order_info
-    const refundInfo =  this.state.refundInfo
-    const refundPROD =  this.state.refundPROD
+    const { refundInfo,refundPROD } =  this.state
     return (
         <div>
           <Spin spinning={this.state.isSpin}>
@@ -705,6 +763,10 @@ export default class SupplierOrder extends React.Component {
                   <span>{refundPROD.prod.title}</span>
                 </p>
                 <p>
+                  <strong>退款状态：</strong>
+                  <span style={{ color: 'red'}}>{ refundInfo && this.getRefundStr(refundInfo.status) }</span>
+                </p>
+                <p>
                   <strong>期望结果：</strong>
                   <span>{ (refundInfo && refundInfo.returnGoods)? '退款退货':'仅退款' }</span>
                 </p>
@@ -713,12 +775,65 @@ export default class SupplierOrder extends React.Component {
                   <span>{ refundInfo && '¥'+refundInfo.refundFee }</span>
                 </p>
                 <p>
-                  <strong>退款金额：</strong>
+                  <strong>维权原因：</strong>
                   <span>{ refundInfo && this.getRefundReasonStr(refundInfo.reason) }</span>
                 </p>
+                <p>
+                  <strong>订单编号：</strong>
+                  <span>{ refundInfo && refundInfo.tid }</span>
+                </p>
+                <p>
+                  <strong>付款时间：</strong>
+                  <span>{ refundInfo && refundInfo.created }</span>
+                </p>
+                <p>
+                  <strong>买家(手机号)：</strong>
+                  <span>{ `${refundPROD.buyerName}(${refundPROD.buyerPhone})` }</span>
+                </p>
+                <p>
+                  <strong>物流信息：</strong>
+                  <span>{ (refundInfo && refundInfo.logistics)? `${refundInfo.logistics.address}，${refundInfo.logistics.receiver}，${refundInfo.logistics.mobile}`:'暂无或无需物流' }</span>
+                </p>
+                <p>
+                  <strong>运费：</strong>
+                  <span>{ '¥'+refundPROD.postFee }</span>
+                </p>
+                <p>
+                  <strong>实收总计：</strong>
+                  <span>{ refundInfo && '¥'+refundInfo.refundFee }</span>
+                </p>
+
+                {
+                  this.state.isShown
+                    &&
+                  <div>
+                    <strong>退货地址：</strong>
+                    <br/>
+                    <Input placeholder="输入退货地址" onChange={ e => { this.handleInputChange(e, 'address')}} />
+                    <Input style={{ marginTop:'1em',width:'12em'}} placeholder="输入卖家电话" onChange={ e => { this.handleInputChange(e, 'phone')}} />
+                    <Input style={{ marginLeft:'1em',width:'10em'}} placeholder="输入卖家名" onChange={ e => { this.handleInputChange(e, 'name')}} />
+                  </div>
+                }
+
+                <div>
+                  {
+                    refundInfo && (refundInfo.status === 'WAIT_SELLER_AGREE')?
+                        <div>
+                          <Button type="primary" style={{ margin:' 1em 4em'}} onClick={ () => { this.acceptGoodsBack(refundInfo.tid, refundInfo.refundId) }}>同意退货，发送退货地址</Button>
+                          <Button type="primary">拒绝退款</Button>
+                        </div>
+                        :
+                    refundInfo && refundInfo.status === ( 'WAIT_BUYER_RETURN_GOODS' || 'WAIT_SELLER_CONFIRM_GOODS' )?
+                        <div>
+                          <Button type="primary">同意退货，发送退货地址</Button>
+                          <Button type="primary">拒绝退款</Button>
+                        </div>
+                        :
+                    null
+                  }
+                </div>
               </Modal>
             }
-
           </Spin>
           {
             (this.state.orderData && this.state.orderData.totalEntries !==0)
