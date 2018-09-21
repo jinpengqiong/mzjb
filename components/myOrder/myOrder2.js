@@ -91,7 +91,7 @@ export default class OrderManagement2 extends React.Component {
                 key: 'price',
             },
             {
-                title: '数量',
+                title: '数量(件)',
                 dataIndex: 'num',
                 key: 'num',
             },
@@ -229,18 +229,19 @@ export default class OrderManagement2 extends React.Component {
                         destroyOnClose={true}
                         footer={null}
                     >
-                        <h3>基本信息：</h3>
-                        <p>下单人：{ this.state.detailInfo.receiverName}</p>
-                        <p>手机号：{ this.state.detailInfo.receiverMobile}</p>
-                        <h3>订单信息：</h3>
-                        <p>订单号：{ this.state.detailInfo.tid}</p>
-                        <p>商品名称：{ this.state.detailInfo.title}</p>
-                        <p>商品单价：{ this.state.detailInfo.price}</p>
-                        <p>购买数量：{ this.state.detailInfo.num}</p>
-                        <p>邮费：{ this.state.detailInfo.postFee==='0.00'? '包邮': this.state.detailInfo.postFee }</p>
-                        <p>收获地址：{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
-                        <p>状态：{ this.state.detailInfo.statusStr }</p>
-                        <p>创建时间：{ this.state.detailInfo.created }</p>
+                        <h2>基本信息：</h2>
+                        <p><strong>下单人：</strong>{ this.state.detailInfo.receiverName}</p>
+                        <p><strong>手机号：</strong>{ this.state.detailInfo.receiverMobile}</p>
+                        <br/>
+                        <h2>订单信息：</h2>
+                        <p><strong>订单号：</strong>{ this.state.detailInfo.tid}</p>
+                        <p><strong>商品名称：</strong>{ this.state.detailInfo.title}</p>
+                        <p><strong>商品单价：</strong>{ '¥'+ this.state.detailInfo.price}</p>
+                        <p><strong>购买数量：</strong>{ this.state.detailInfo.num}</p>
+                        <p><strong>邮费：</strong>{ '¥'+ this.state.detailInfo.postFee }</p>
+                        <p><strong>收获地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
+                        <p><strong>状态：</strong>{ this.state.detailInfo.statusStr }</p>
+                        <p><strong>创建时间：</strong>{ this.state.detailInfo.created }</p>
                     </Modal>
                 }
             </Spin>

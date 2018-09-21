@@ -17,6 +17,7 @@ const accountLogin = `
                   role
                   mzAccountid
                   is_supplier
+                  supplier_name
               }
             }
           }
@@ -54,6 +55,9 @@ class NormalLoginForm extends React.Component {
                     localStorage.setItem('mzAccountid', res.login.user.mzAccountid);
                     localStorage.setItem('nickname', res.login.user.nickname);
                     localStorage.setItem('phone', res.login.user.phone);
+                    if(res.login.user.supplier_name === '供货商测试分组'){
+                      localStorage.setItem('group', '1');
+                    }
                     if(res.login.user.is_supplier){
                       this.setState({
                         visible:true

@@ -42,12 +42,6 @@ const columns = [
     dataIndex: 'title',
     key: 'title'
   },
-
-  {
-    title: '手机号',
-    dataIndex: 'salemanPhone',
-    key: 'salemanPhone',
-  },
   {
     title: '结算时间',
     dataIndex: 'insertedAt',
@@ -64,7 +58,7 @@ const columns = [
     key: 'price',
     render: (text, record) => (
         <div>
-          { '¥'+text+'/'+record.num+'件' }
+          { '¥'+(parseFloat(text)/100).toFixed(2)+'('+record.num+'件)' }
         </div>
     )
   },
@@ -74,7 +68,7 @@ const columns = [
       key: 'settlePrice',
       render: text => (
           <div>
-            { '¥'+text }
+            { '¥'+(parseFloat(text)/100).toFixed(2) }
           </div>
       )
   },
@@ -84,7 +78,7 @@ const columns = [
       key: 'costPrice',
       render: text => (
           <div>
-            { '¥'+text }
+            { '¥'+(parseFloat(text)/100).toFixed(2) }
           </div>
       )
   },
@@ -94,7 +88,7 @@ const columns = [
     key: 'totalFee',
     render: text => (
         <div>
-          { '¥'+text }
+          { '¥'+(parseFloat(text)/100).toFixed(2) }
         </div>
     )
   },

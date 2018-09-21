@@ -37,7 +37,8 @@ export default class MainPage extends React.Component {
         this.store = initStore(props.isServer)
         this.state = {
             loading:true,
-            tagId:null
+            tagId:null,
+            isShown:false
         }
     }
 
@@ -48,6 +49,11 @@ export default class MainPage extends React.Component {
             this.setState({
                 loading:false
             })
+            if(localStorage.getItem('group') == '1'){
+              this.setState({
+                isShown:true
+              })
+            }
             this.store.getCurPagePath('选货');
             this.queryCategory()
             this.queryTagList()
@@ -123,12 +129,16 @@ export default class MainPage extends React.Component {
                                     onChange={this.onChange}
                                     style={{ height: 800, overflowY: 'scroll' }}
                                     hideAdd>
-                                  <TabPane tab='优选商城' key="0">
-                                    <ChooseProducts />
-                                  </TabPane>
-                                  <TabPane tab='供货商分组' key="-1">
-                                    <ChooseProducts tagId='103317078'/>
-                                  </TabPane>
+                                    <TabPane tab='优选商城' key="0">
+                                      <ChooseProducts />
+                                    </TabPane>
+                                  {
+                                    this.state.isShown
+                                      &&
+                                    <TabPane tab='供货商测试分组' key="-1">
+                                      <ChooseProducts tagId='103317078'/>
+                                    </TabPane>
+                                  }
                                   {
                                     this.store.categories
                                     &&

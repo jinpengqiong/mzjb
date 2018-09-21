@@ -59,7 +59,7 @@ const columns = [
         key: 'price',
         render: (text, record) => (
             <div>
-              { '¥'+text+'/'+record.num+'件' }
+              { '¥'+(parseFloat(text)/100).toFixed(2)+'('+record.num+'件)' }
             </div>
         )
     },
@@ -74,12 +74,12 @@ const columns = [
         )
     },
     {
-        title: '总额(元)',
+        title: '总额',
         dataIndex: 'totalFee',
         key: 'totalFee',
         render: text => (
             <div>
-              { '¥'+text }
+              { '¥'+(parseFloat(text)/100).toFixed(2) }
             </div>
         )
     },
