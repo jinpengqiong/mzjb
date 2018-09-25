@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon, Divider } from 'antd';
 import Request from '../../utils/graphql_request';
 import cx from 'classnames';
 import { inject, observer } from 'mobx-react'
@@ -255,7 +255,7 @@ export default class SupplierOrder extends React.Component {
                         <p>已结算({ record.isAutoSettle? '自动结算':'手动结算' })</p>
                       </div>
                       :
-                      <a href="javascript:void(0)">结算</a>
+                      <p>未结算</p>
                 }
               </div>
           ),
@@ -279,9 +279,17 @@ export default class SupplierOrder extends React.Component {
           title: '操作',
           key: 'action',
           width:'10%',
-          render: text => (
+          render: (text,record) => (
               <div>
                   <a href="javascript:;" onClick={ () => { this.showDetails(text) } }>详情</a>
+                  {
+                    !record.isSettle
+                      &&
+                        <span>
+                        <Divider type="vertical" />
+                          <a href="javascript:void(0)">去结算</a>
+                        </span>
+                  }
               </div>
           ),
         }
@@ -617,11 +625,12 @@ export default class SupplierOrder extends React.Component {
   }
 
   acceptGoodsBack = (tid, refundId) => {
-    console.log('ID', tid, refundId)
+    // console.log('ID', tid, refundId)
     if(!this.state.refundAddress || !this.state.refundPhone || !this.state.refundName){
       this.setState({
         showAccept:true,
-        showRefuse:false
+        showRefuse:false,
+        refuseFundsRemarks:''
       })
       message.info('请先输入退货地址，再确认退货')
     }else{
@@ -644,6 +653,7 @@ export default class SupplierOrder extends React.Component {
                 refundAddress:null,
                 refundPhone:null,
                 refundName:null,
+                refuseFundsRemarks:''
               })
               message.success('接受退货成功')
               this.querySupplierOrder(this.state.tagName, 1)
@@ -658,7 +668,7 @@ export default class SupplierOrder extends React.Component {
       showAccept:false,
       showRefuse:true
     })
-    if(this.state.refuseGoodsRemarks){
+    if(this.state.refuseFundsRemarks){
       Request.GraphQlRequest(returngoodsRefuse,
           {
             refundId,
@@ -729,8 +739,7 @@ export default class SupplierOrder extends React.Component {
             this.setState({
               visible: false,
               showRefuse: false,
-              showAccept:false,
-
+              showAccept:false
             })
             message.success('接受退款成功')
             this.querySupplierOrder(this.state.tagName, 1)
@@ -742,7 +751,10 @@ export default class SupplierOrder extends React.Component {
   refuseFundsBack = (tid, refundId) => {
     this.setState({
       showRefuse:true,
-      showAccept:false
+      showAccept:false,
+      refundAddress:null,
+      refundPhone:null,
+      refundName:null
     })
     if(this.state.refuseFundsRemarks){
       Request.GraphQlRequest(refundRefuse,
@@ -802,7 +814,7 @@ export default class SupplierOrder extends React.Component {
             </Spin>
             {
               this.state.detailInfo
-              &&
+                &&
               <Modal
                   title="订单详情"
                   visible={ this.state.detailVisible }
