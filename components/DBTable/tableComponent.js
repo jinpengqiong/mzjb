@@ -1,5 +1,7 @@
 import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
+import dynamic from 'next/dynamic'
+const Clipboard = dynamic(import ('../../utils/clipboard'))
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 import YouzanProdForm from './youzanProdForm'
@@ -7,6 +9,7 @@ import isEmpty from 'lodash/isEmpty';
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
+
 const queryProducts = `
       query ($page:Int, $pageSize: Int, $shopId:Int, $isDisplay:Boolean) {
         shopProducts(page:$page,pageSize:$pageSize,shopId:$shopId, isDisplay:$isDisplay){
@@ -45,26 +48,26 @@ const tagProducts = `
       }
 `;
 const UpdateProduct = `
-mutation (
-    $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
-    ) {
-    updateProduct(
-        id:$id,
-        baseinfo:$baseinfo,
-        shopId: $shopId,
-        youzan:$youzan,
-        type:$type
-    ){
-        id
-        title
-        images
-        price
-        desc
-        detailUrl
-        imagesUrls{
-            url
-        }
-    }
+  mutation (
+      $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
+      ) {
+      updateProduct(
+          id:$id,
+          baseinfo:$baseinfo,
+          shopId: $shopId,
+          youzan:$youzan,
+          type:$type
+      ){
+          id
+          title
+          images
+          price
+          desc
+          detailUrl
+          imagesUrls{
+              url
+          }
+      }
     }
 `;
 
@@ -105,25 +108,25 @@ const changeProductTag = `
     `;
 
 const addProduct = `
-mutation (
-    $baseinfo:ProductBaseinfo!, $shopId: Int!, $type:ProductType!, $youzan:ProductYouzanArgs
-    ) {
-    createProduct(
-        baseinfo:$baseinfo,
-        shopId: $shopId,
-        type:$type,
-        youzan:$youzan
-    ){
-        id
-        title
-        images
-        price
-        desc
-        detailUrl
-        imagesUrls{
-            url
+      mutation (
+          $baseinfo:ProductBaseinfo!, $shopId: Int!, $type:ProductType!, $youzan:ProductYouzanArgs
+          ) {
+          createProduct(
+              baseinfo:$baseinfo,
+              shopId: $shopId,
+              type:$type,
+              youzan:$youzan
+          ){
+              id
+              title
+              images
+              price
+              desc
+              detailUrl
+              imagesUrls{
+                  url
+              }
         }
-    }
     }
 `;
 
@@ -160,7 +163,7 @@ export default class ProdTable extends React.Component {
                 title: '商品图',
                 dataType: 'varchar',
                 width: 150,
-                render: text => <img src={text} style={{ width: 100 }}/>,
+                render: text => <img src={text} style={{ width: 100 }}/>
             },
             {
                 dataIndex: 'price',
@@ -180,42 +183,48 @@ export default class ProdTable extends React.Component {
                 title: '链接',
                 dataType: 'varchar',
                 width: 200,
-                render: text => <a href={text} target="_blank">{text.length<75? text : text.slice(0, 75)+'...'}</a>,
+                render: text => (
+                    <div>
+                      <a href={text} target="_blank">{ text.length<70? text : text.slice(0, 70) + '...' }</a>
+                      <Clipboard  text={text}  />
+                    </div>
+                ),
             },
             {
                 title: '操作',
                 key: 'action',
                 width: 240,
                 render: (text, record) => (
-                    <span>
+                    <div>
                         <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
-                        <a href="#">下架</a>
+                          <a href="#">下架</a>
                         </Popconfirm>
-                    <Divider type="vertical" />
-                        <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
-                    <Divider type="vertical" />
-                        <a href="#" onClick={
-                            ()=>{ this.updateProduct(parseInt(record.id), record.type) }
-                        }>更新</a>
-                    <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
-                        <a href="#" >删除</a>
-                    </Popconfirm>
-                    </span>
+                        <Divider type="vertical" />
+                            <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
+                        <Divider type="vertical" />
+                            <a href="#" onClick={
+                                ()=>{ this.updateProduct(parseInt(record.id), record.type) }
+                            }>更新</a>
+                        <Divider type="vertical" />
+                        <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
+                            <a href="#" >删除</a>
+                        </Popconfirm>
+                    </div>
                 ),
             }
         ]
     }
   }
 
-    componentDidMount(){
-        this.queryProdData(1);
-    }
+  componentDidMount(){
+      this.queryProdData(1);
+  }
 
-  queryProdData= (curPage) => {
+  queryProdData = (curPage) => {
     this.setState({
       isSpin:true
     });
+
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             res.shopProducts.entries.map(
@@ -457,7 +466,7 @@ export default class ProdTable extends React.Component {
       // console.log('id', id)
       Request.GraphQlRequest(deleteProduct,
           { shopId: localStorage.getItem('shopID'), id}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        res =>{
+        res => {
                 message.success('删除成功！');
                 this.queryProdData(1);
         }
@@ -465,7 +474,7 @@ export default class ProdTable extends React.Component {
 }
 
 
-  onClickInsert = () => {
+    onClickInsert = () => {
         this.setState({
             visible: true,
             modalName:"新增商品"
@@ -489,13 +498,11 @@ export default class ProdTable extends React.Component {
             this.props.store.getProdType('LINK')
         }
         this.props.store.getProductFieldsData(fieldData[0])
-        // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
             modalName:"更新商品",
         });
-
     }
 
     handleChange = key => {
@@ -541,13 +548,17 @@ export default class ProdTable extends React.Component {
                   message.success('下架成功！');
                   this.queryProdData(1);
           }
-      ).catch(err=>{message.error('下架失败！');Request.token_auth(err)})
+      ).catch(
+          err=>{
+            message.error('下架失败！');
+            Request.token_auth(err)
+          }
+        )
     }
 
 
     //add to group
     changeProductTag = ID => {
-      // console.log('ID',ID)
         this.setState({
             productID:ID,
             groupModalVisible:true
@@ -561,6 +572,7 @@ export default class ProdTable extends React.Component {
             radioValue: e.target.value,
         });
     }
+
     handleRadioCancel = () => {
         this.setState({
             radioValue: null,
@@ -571,7 +583,7 @@ export default class ProdTable extends React.Component {
     handleGroupModalOk = () => {
       if(this.state.radioValue){
           Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-              (res) => {
+              res => {
                   // console.log('OK', res)
                   this.setState({
                       radioValue: null,
@@ -587,14 +599,14 @@ export default class ProdTable extends React.Component {
 
   render() {
       const Tags = this.props.shopTags && this.props.shopTags.map(
-          (tag) => {
+          tag => {
             return (
                 <Option value={tag.id} key={tag.id}>{tag.name}</Option>
             )
           }
       )
       const TagRadios = this.props.shopTags && this.props.shopTags.map(
-          (tag) => {
+          tag => {
               return (
                   <Radio value={tag.id} key={tag.id}>{tag.name}</Radio>
               )
@@ -611,6 +623,7 @@ export default class ProdTable extends React.Component {
                     {Tags}
                 </Select>
             </Affix>
+
             <Modal
             title={ this.state.modalName}
             visible={this.state.visible}
@@ -636,6 +649,7 @@ export default class ProdTable extends React.Component {
                     <YouzanProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
             }
             </Modal>
+
             <Modal
                 title='加入分组'
                 visible={this.state.groupModalVisible}
@@ -644,27 +658,30 @@ export default class ProdTable extends React.Component {
                 destroyOnClose={true}
             >
                 <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
-                    {TagRadios}
+                    { TagRadios }
                 </RadioGroup>
             </Modal>
+
             <Spin spinning={this.state.isSpin}>
-              <Table
-                  dataSource = {this.state.data? this.state.data : null }
-                  columns={this.state.columns}
-                  pagination={false}
-              />
+                <Table
+                    dataSource = {this.state.data? this.state.data : null }
+                    columns={this.state.columns}
+                    pagination={false}
+                />
             </Spin>
+
             {
-            !isEmpty(this.state.data)
-            &&
-            <Pagination
-            defaultCurrent={1}
-            current={this.state.curPage}
-            pageSize={8}
-            onChange={this.onPageChange}
-            total={this.state.data? this.state.totalEntries : 1}
-            style={{ float:"right", marginTop: "10px"}}/>
+              !isEmpty(this.state.data)
+                &&
+              <Pagination
+              defaultCurrent={1}
+              current={this.state.curPage}
+              pageSize={8}
+              onChange={this.onPageChange}
+              total={this.state.data? this.state.totalEntries : 1}
+              style={{ float:"right", marginTop: "10px"}}/>
             }
+
         </div>
     )
   }

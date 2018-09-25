@@ -2,6 +2,9 @@ import uri from "./uri";
 import Router from 'next/router';
 import {message } from 'antd';
 import { GraphQLClient } from 'graphql-request';
+// import dynamic from 'next/dynamic'
+// const { CopyButton, Button } = dynamic(import('zent'))
+
 
 module.exports = {
     // GraphQl request
@@ -32,4 +35,12 @@ module.exports = {
               Router.push('/login')
           }
     }
+    // ,
+    // getClipboard(text){
+    //   return (
+    //       <CopyButton text={text} onCopySuccess="复制成功啦！">
+    //         <Button type="primary">复制链接</Button>
+    //       </CopyButton>
+    //   )
+    // }
 };

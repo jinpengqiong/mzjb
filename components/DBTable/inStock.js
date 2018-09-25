@@ -1,5 +1,7 @@
 import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
+import dynamic from 'next/dynamic'
+const   Clipboard = dynamic(import ('../../utils/clipboard'))
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 import YouzanProdForm from './youzanProdForm'
@@ -182,7 +184,12 @@ export default class InStock extends React.Component {
                     title: '链接',
                     dataType: 'varchar',
                     width: 200,
-                    render: text => <a href={text} target="_blank">{text.length<75? text : text.slice(0, 75)+'...'}</a>,
+                    render: text => (
+                        <div>
+                          <a href={text} target="_blank">{ text.length<70? text : text.slice(0, 70) + '...' }</a>
+                          <Clipboard  text={text}  />
+                        </div>
+                    ),
                 },
                 {
                     title: '操作',
