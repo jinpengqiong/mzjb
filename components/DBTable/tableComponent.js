@@ -184,9 +184,11 @@ export default class ProdTable extends React.Component {
                 dataType: 'varchar',
                 width: 200,
                 render: text => (
-                    <div>
+                    <div className="col">
                       <a href={text} target="_blank">{ text.length<70? text : text.slice(0, 70) + '...' }</a>
-                      <Clipboard  text={text}  />
+                      <span className="clip">
+                        <Clipboard  text={text}  />
+                      </span>
                     </div>
                 ),
             },
@@ -681,7 +683,17 @@ export default class ProdTable extends React.Component {
               total={this.state.data? this.state.totalEntries : 1}
               style={{ float:"right", marginTop: "10px"}}/>
             }
-
+          <style jsx>{
+            `
+            .clip {
+              display:none
+            }
+            .col:hover .clip {
+              display:inline-block
+            }
+            `
+          }
+          </style>
         </div>
     )
   }
