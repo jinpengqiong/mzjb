@@ -200,7 +200,8 @@ export default class OrderManagement2 extends React.Component {
     console.log('v', e.target.value)
     this.queryOrderData(1, e.target.value)
     this.setState({
-      tagName:e.target.value
+      tagName:e.target.value,
+      curPage:1
     })
   }
 
