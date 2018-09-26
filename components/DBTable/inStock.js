@@ -1,5 +1,6 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin, Popover, Input } from 'antd';
 import Request from '../../utils/graphql_request';
+import  QRCode from 'qrcode.react';
 import dynamic from 'next/dynamic'
 const   Clipboard = dynamic(import ('../../utils/clipboard'))
 import { inject, observer } from 'mobx-react';
@@ -179,38 +180,56 @@ export default class InStock extends React.Component {
                     dataType: 'varchar',
                     width: 100,
                 },
-                {
-                    dataIndex: 'detailUrl',
-                    title: '链接',
-                    dataType: 'varchar',
-                    width: 200,
-                    render: text => (
-                        <div>
-                          <a href={text} target="_blank">{ text.length<70? text : text.slice(0, 70) + '...' }</a>
-                          <Clipboard  text={text}  />
-                        </div>
-                    ),
-                },
-                {
-                    title: '操作',
-                    key: 'action',
-                    width: 240,
-                    render: (text, record) => (
-                        <span>
-                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
-                        <a href="#">上架</a>
-                        </Popconfirm>
-                    <Divider type="vertical" />
-                        <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
-                    <Divider type="vertical" />
-                        <a href="#" onClick={ ()=>{this.updateProduct(parseInt(record.id), record.type)}}>更新</a>
-                    <Divider type="vertical" />
-                    <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
+              {
+                title: '操作',
+                key: 'action',
+                width: 240,
+                render: (text, record) => (
+                    <div>
+                      <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
+                        <a href="#">下架</a>
+                      </Popconfirm>
+                      <Divider type="vertical" />
+                      <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
+                      <Divider type="vertical" />
+                      <a href="#" onClick={
+                        ()=>{ this.updateProduct(parseInt(record.id), record.type) }
+                      }>更新</a>
+                      <Divider type="vertical" />
+                      <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>
-                    </Popconfirm>
-                    </span>
-                    ),
-                }
+                      </Popconfirm>
+                      <Divider type="vertical" />
+                      <Popover
+                          trigger="click"
+                          content={
+                            <Tabs defaultActiveKey="1">
+                              <TabPane tab="商品二维码" key="1">
+                                <div style={{ marginLeft:'5em'}}>
+                                  <QRCode size={100} value={ record.detailUrl } />
+                                </div>
+                              </TabPane>
+                              <TabPane tab="商品链接" key="2">
+                                <div>
+                                  <p>商品页链接</p>
+                                  <Input
+                                      value={ record.detailUrl.length<70? record.detailUrl : record.detailUrl.slice(0, 70) + '...' }
+                                      disabled
+                                      style={{ width:'18em' }}
+                                  />
+                                  <span>
+                                      <Clipboard  text={record.detailUrl}  />
+                                    </span>
+                                </div>
+                              </TabPane>
+                            </Tabs>
+
+                          }>
+                        <a href="javascript:void(0);" >推广商品</a>
+                      </Popover>
+                    </div>
+                ),
+              }
             ]
         }
     }
@@ -657,7 +676,7 @@ export default class InStock extends React.Component {
                   />
                 </Spin>
                 {
-                    (!isEmpty(this.state.data))
+                    !isEmpty(this.state.data)
                     &&
                     <Pagination
                         defaultCurrent={1}

@@ -74,6 +74,7 @@ export default class OrderManagement2 extends React.Component {
         detailInfo:null,
         visible: false,
         tagName: undefined,
+        curPage:1,
         columns : [
             {
                 title: '订单号',
@@ -165,13 +166,16 @@ export default class OrderManagement2 extends React.Component {
 
   onPageChange = pageNumber => {
     this.queryOrderData(pageNumber, this.state.tagName);
+    this.setState({
+      curPage:pageNumber
+    })
   }
 
   refresh = () => {
     this.setState({
       isSpin:true
     })
-    this.queryOrderData(1, this.state.tagName);
+    this.queryOrderData(this.state.curPage, this.state.tagName);
   }
 
   showDetails = ID => {
@@ -248,9 +252,9 @@ export default class OrderManagement2 extends React.Component {
             {
             (this.state.data && this.state.data.totalEntries !==0)
             &&
-            <Pagination 
-            defaultCurrent={1}
+            <Pagination
             pageSize={10}
+            current={this.state.curPage}
             onChange={this.onPageChange}
             total={this.state.data? this.state.data.totalEntries : 0}
             style={{ float: "right", marginTop: "10px"}}/>

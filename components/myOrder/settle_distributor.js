@@ -101,7 +101,8 @@ export default class SettledOrderList extends React.Component {
         super(props);
         this.state={
             data:null,
-            isSpin:false
+            isSpin:false,
+            curPage:1
         }
     }
 
@@ -133,13 +134,16 @@ export default class SettledOrderList extends React.Component {
 
     onPageChange = pageNumber => {
         this.querySettledOrder(pageNumber);
+        this.setState({
+          curPage:pageNumber
+        })
     }
 
     refresh =() => {
         this.setState({
             isSpin:true
         })
-        this.querySettledOrder(1);
+        this.querySettledOrder(this.state.curPage);
     }
 
     render() {

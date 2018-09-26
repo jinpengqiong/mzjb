@@ -110,7 +110,8 @@ export default class SettleSupplier extends React.Component {
     super(props);
     this.state={
       data:null,
-      isSpin:false
+      isSpin:false,
+      curPage:1
     }
   }
 
@@ -142,13 +143,16 @@ export default class SettleSupplier extends React.Component {
 
   onPageChange = pageNumber => {
     this.querySettledSupplierOrder(pageNumber);
+    this.setState({
+      curPage:pageNumber
+    })
   }
 
   refresh =() => {
     this.setState({
       isSpin:true
     })
-    this.querySettledSupplierOrder(1);
+    this.querySettledSupplierOrder(this.state.curPage);
   }
 
   render() {
@@ -164,7 +168,7 @@ export default class SettleSupplier extends React.Component {
             (this.state.data && this.state.data.totalEntries !==0)
             &&
             <Pagination
-                defaultCurrent={1}
+                current={this.state.curPage}
                 onChange={this.onPageChange}
                 pageSize={10}
                 total={this.state.data? this.state.data.totalEntries : 1}

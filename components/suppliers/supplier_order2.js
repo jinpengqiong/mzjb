@@ -392,11 +392,12 @@ export default class SupplierOrder extends React.Component {
     })
   }
 
-  onChange = e => {
+  onTabChange = e => {
     // console.log('e',e.target.value)
-    this.querySupplierOrder(e.target.value,1)
+    this.querySupplierOrder(e.target.value, 1)
     this.setState({
-      tagName:e.target.value
+      tagName:e.target.value,
+      curPage:1
     })
   }
 
@@ -448,7 +449,7 @@ export default class SupplierOrder extends React.Component {
                 postVisible:false,
                 radioValue:1
               })
-              this.querySupplierOrder(this.state.tagName,1)
+              this.querySupplierOrder(this.state.tagName, this.state.curPage)
             }
           }
       ).catch( err => Request.token_auth(err) )
@@ -472,7 +473,7 @@ export default class SupplierOrder extends React.Component {
               postVisible:false,
               radioValue:1
             })
-            this.querySupplierOrder(this.state.tagName,1)
+            this.querySupplierOrder(this.state.tagName, this.state.curPage)
           }
       ).catch( err => Request.token_auth(err) )
     }else {
@@ -488,7 +489,7 @@ export default class SupplierOrder extends React.Component {
   }
 
   refresh = () => {
-    this.querySupplierOrder(this.state.tagName,1)
+    this.querySupplierOrder(this.state.tagName, this.state.curPage)
   }
 
   getStateStr = state => {
@@ -656,7 +657,7 @@ export default class SupplierOrder extends React.Component {
                 refuseFundsRemarks:''
               })
               message.success('接受退货成功')
-              this.querySupplierOrder(this.state.tagName, 1)
+              this.querySupplierOrder(this.state.tagName, this.state.curPage)
             }
           }
       ).catch( err => Request.token_auth(err) )
@@ -688,7 +689,7 @@ export default class SupplierOrder extends React.Component {
                 refundName: null,
               })
               message.success('拒绝退货成功')
-              this.querySupplierOrder(this.state.tagName, 1)
+              this.querySupplierOrder(this.state.tagName, this.state.curPage)
             }
           }
       ).catch( err => Request.token_auth(err) )
@@ -742,7 +743,7 @@ export default class SupplierOrder extends React.Component {
               showAccept:false
             })
             message.success('接受退款成功')
-            this.querySupplierOrder(this.state.tagName, 1)
+            this.querySupplierOrder(this.state.tagName, this.state.curPage)
           }
         }
     ).catch( err => Request.token_auth(err) )
@@ -774,7 +775,7 @@ export default class SupplierOrder extends React.Component {
                 refuseFundsRemarks:''
               })
               message.success('拒绝退款成功')
-              this.querySupplierOrder(this.state.tagName, 1)
+              this.querySupplierOrder(this.state.tagName, this.state.curPage)
             }
           }
       ).catch( err => Request.token_auth(err) )
@@ -797,7 +798,7 @@ export default class SupplierOrder extends React.Component {
         <div>
           <Spin spinning={this.state.isSpin}>
             <Affix offsetTop={10}>
-              <Radio.Group value={this.state.tagName} onChange={this.onChange} style={{ marginBottom: 16 }} >
+              <Radio.Group value={this.state.tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }} >
                 <Radio.Button value={undefined}>全部</Radio.Button>
                 <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
                 <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
@@ -1042,7 +1043,6 @@ export default class SupplierOrder extends React.Component {
             &&
             <Pagination
                 pageSize={8}
-                defaultCurrent={1}
                 current={this.state.curPage}
                 onChange={this.onPageChange}
                 total={ this.state.orderData? this.state.orderData.totalEntries:0 }

@@ -76,7 +76,7 @@ export default class ProdModule extends React.Component {
                 title: '创建时间',
                 dataIndex: 'insertedAt',
                 key: 'insertedAt',
-                render: text => <a href="javascript:;">{moment(text).format('YYYY-MM-DD hh:mm')}</a>,
+                render: text => <a href="javascript:void(0)">{moment(text).format('YYYY-MM-DD hh:mm')}</a>,
             }, {
                 title: '操作',
                 key: 'action',
@@ -91,10 +91,10 @@ export default class ProdModule extends React.Component {
                               }
                           }
                       } >
-                        <a href="#">设为当前模版</a>
+                        <a href="javascript:void(0)">设为当前模版</a>
                       </Popconfirm>
                       <Divider type="vertical" />
-                        <a href="#" onClick={ () => { this.EditModule(record.detail, record.id)} }>编辑</a>
+                        <a href="javascript:void(0)" onClick={ () => { this.EditModule(record.detail, record.id)} }>编辑</a>
                       {
                         !text.isSystem
                             &&
@@ -109,7 +109,7 @@ export default class ProdModule extends React.Component {
                                 }
                               }
                           } >
-                            <a href="#">删除</a>
+                            <a href="javascript:void(0)">删除</a>
                           </Popconfirm>
                         </span>
                       }
