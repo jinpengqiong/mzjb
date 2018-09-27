@@ -286,6 +286,7 @@ export default class MyHeader extends React.Component {
                     onClick={this.toggle}
                 />
                 <Menu
+                    selectedKeys={['']}
                     mode="horizontal"
                     style={{ lineHeight: '45px', float: 'right' }}
                 >
