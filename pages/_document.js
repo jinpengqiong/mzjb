@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
   }
   render() {
     return (
-      <html>
+        <html>
         <Head>
           <meta charSet="utf-8" />
           <meta name="version" content="2.0.0" />
@@ -25,11 +25,10 @@ export default class MyDocument extends Document {
           <title>拇指聚宝</title>
         </Head>
         <body>
-          {this.props.customValue}
           <Main />
           <NextScript />
         </body>
-      </html>
+        </html>
     )
   }
 }

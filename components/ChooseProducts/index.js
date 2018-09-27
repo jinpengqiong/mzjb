@@ -129,7 +129,7 @@ export default class ChooseProducts extends React.Component {
 
     queryYouZanProd = (page, tagID) => {
       if(tagID){
-        Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize: 18, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize:18, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
               // console.log('queryYouZanProd',res);
               res.youzanProducts.items.map(
@@ -199,7 +199,7 @@ export default class ChooseProducts extends React.Component {
         const youzanPROD = this.state.data && this.state.data.items.map(
             item => {
                 return (
-                    <div className='card_entity' style={{ marginRight:'20px', marginBottom:'20px'}} key={item.itemId}>
+                    <div className='card_entity' style={{ marginBottom:'20px'}} key={item.itemId}>
                         <Card
                             key={item.itemId}
                             style={{ width: '220px', height: '320px' }}
@@ -220,7 +220,7 @@ export default class ChooseProducts extends React.Component {
         )
         return (
             <div>
-                <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px", display:"flex", justifyContent:'flex-start', flexWrap:'wrap'}}>
+                <div style={{ background: '#ECECEC', padding: '30px', marginTop: "10px", display:"flex", justifyContent:'space-around', flexWrap:'wrap'}}>
                     {
                         (this.state.data && !isEmpty(this.state.data.items))?
                             youzanPROD
