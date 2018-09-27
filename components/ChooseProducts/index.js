@@ -112,7 +112,7 @@ export default class ChooseProducts extends React.Component {
 
 
   queryYouxuanProd = page => {
-        Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 20}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(queryYouxuanPROD, { pageNo:page, pageSize: 18}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
                 // console.log('queryYouXuanProd',res);
                 res.youxuanProducts.items.map(
@@ -129,7 +129,7 @@ export default class ChooseProducts extends React.Component {
 
     queryYouZanProd = (page, tagID) => {
       if(tagID){
-        Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize: 20, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(queryYouzanProducts, { pageNo:page, pageSize: 18, tagId:tagID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
               // console.log('queryYouZanProd',res);
               res.youzanProducts.items.map(
@@ -203,7 +203,7 @@ export default class ChooseProducts extends React.Component {
                         <Card
                             key={item.itemId}
                             style={{ width: '220px', height: '320px' }}
-                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'220px'}}/>}
+                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'218px'}}/>}
                         >
                             <Meta
                                 title={item.title}
@@ -233,7 +233,7 @@ export default class ChooseProducts extends React.Component {
                 &&
                 <Pagination
                 defaultCurrent={1}
-                pageSize={20}
+                pageSize={18}
                 onChange={this.onChange}
                 total={this.state.data? this.state.data.count : 1}
                 style={{ float: "right", marginTop: "10px", marginRight:'15px'}}/>

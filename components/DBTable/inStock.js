@@ -145,13 +145,13 @@ export default class InStock extends React.Component {
             radioValue:null,
             isSpin:false,
             columns : [
-                {
-                    dataIndex: 'id',
-                    title: 'ID',
-                    dataType: 'int',
-                    width: 60,
-                    primary: true,
-                },
+                // {
+                //     dataIndex: 'id',
+                //     title: 'ID',
+                //     dataType: 'int',
+                //     width: 60,
+                //     primary: true,
+                // },
                 {
                     dataIndex: 'title',
                     title: '商品名称',
@@ -191,10 +191,16 @@ export default class InStock extends React.Component {
                       </Popconfirm>
                       <Divider type="vertical" />
                       <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
-                      <Divider type="vertical" />
-                      <a href="#" onClick={
-                        ()=>{ this.updateProduct(parseInt(record.id), record.type) }
-                      }>更新</a>
+                      {
+                        record.type !== '优选商品'
+                        &&
+                        <span>
+                          <Divider type="vertical" />
+                          <a href="#" onClick={
+                            ()=>{ this.updateProduct(parseInt(record.id), record.type) }
+                          }>更新</a>
+                        </span>
+                      }
                       <Divider type="vertical" />
                       <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
                         <a href="#" >删除</a>

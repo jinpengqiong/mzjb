@@ -244,7 +244,7 @@ export default class OrderManagement2 extends React.Component {
                         <p><strong>商品单价：</strong>{ '¥'+ this.state.detailInfo.price}</p>
                         <p><strong>购买数量：</strong>{ this.state.detailInfo.num}</p>
                         <p><strong>邮费：</strong>{ '¥'+ this.state.detailInfo.postFee }</p>
-                        <p><strong>收获地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
+                        <p><strong>收货地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
                         <p><strong>状态：</strong>{ this.state.detailInfo.statusStr }</p>
                         <p><strong>创建时间：</strong>{ this.state.detailInfo.created }</p>
                     </Modal>

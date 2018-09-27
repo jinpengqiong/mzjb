@@ -23,6 +23,7 @@ export default class EmbeddedAndSharing extends React.Component {
         return (
             <div >
                 <h3>微信链接地址</h3>
+                <br/>
                 <div style={{ height:"300px", background:"#f0f2f5"}}>
                     <Row>
                         <Col span={10}>

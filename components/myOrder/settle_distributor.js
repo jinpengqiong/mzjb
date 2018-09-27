@@ -42,12 +42,6 @@ const columns = [
         dataIndex: 'title',
         key: 'title'
     },
-
-    {
-      title: '手机号',
-      dataIndex: 'salemanPhone',
-      key: 'salemanPhone',
-    },
     {
       title: '供应商',
       dataIndex: 'supplierName',

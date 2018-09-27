@@ -150,9 +150,8 @@ export default class ProdModule extends React.Component {
 
     //query autoReply list
     queryShoppage = page => {
-        Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 8}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(listShoppage, {shopId:parseInt(localStorage.getItem('shopID')), page, pageSize: 6}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
-                // console.log('listShoppage', res.listShoppage)
                 res.listShoppage.entries.map(
                     (entry) => {
                        entry.key = entry.id
@@ -205,18 +204,21 @@ export default class ProdModule extends React.Component {
                     (this.state.ShoppageData && !isEmpty(this.state.ShoppageData.entries))?
                     <div>
                         <EmbeddedAndSharing />
+                        <br/>
                         <div style={{ marginTop:"20px"}}>
                             <h3>模版列表</h3>
+                            <br/>
                           {
                             localStorage.getItem('shopID') === localStorage.getItem('OriginalID')
                               &&
                             <Button type='primary' style={{ marginBottom:"10px"}} onClick={this.handleModuleSet}><Icon type="plus-circle-o"/>新建模版</Button>
                           }
+
                             <Table columns={this.state.columns} dataSource={this.state.ShoppageData && this.state.ShoppageData.entries} pagination={false}/>
                             <Pagination
                                 current={this.state.ShoppageData.pageNumber}
                                 onChange={this.onPageChange}
-                                pageSize={8}
+                                pageSize={6}
                                 total={ this.state.ShoppageData.totalEntries }
                                 style={{ float: "right", marginTop: "10px"}}
                             />

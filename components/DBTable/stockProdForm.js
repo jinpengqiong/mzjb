@@ -1,4 +1,4 @@
-import { Form, Input, Select } from 'antd';
+import { Form, Input, Select, Alert } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { inject, observer } from 'mobx-react'
@@ -63,6 +63,7 @@ class RegistrationForm extends React.Component {
               </Select>
           )}
         </FormItem>
+        <Alert message="分组优先级1为最高，8为最低。" type="info" showIcon/>
       </Form>
     );
   }

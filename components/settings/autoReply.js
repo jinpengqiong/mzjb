@@ -275,6 +275,8 @@ export default class AutoReply extends React.Component {
             <div>
                 <Row>
                     <Col span={6}>
+                        <h3>新建：</h3>
+                        <br/>
                         <div style={{ width:'300px', border:'2px dashed #ECECEC'}}>
                             <p style={{ marginBottom:"8px"}}>关键词：<Input onChange={this.onKeywordChange} value={this.state.keyWord}/></p>
                             <div className='main' key={UUIDGen.uuid(8, 10)}>

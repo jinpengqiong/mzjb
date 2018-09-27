@@ -160,6 +160,7 @@ export default class BindLiveRoom extends React.Component {
                   <Button type="primary" onClick={this.openModal} ><Icon type="plus-circle-o"/>新增绑定</Button>
                 </Affix>
               }
+              <br/>
                 <Modal
                     title="新增绑定"
                     visible={this.state.visible}

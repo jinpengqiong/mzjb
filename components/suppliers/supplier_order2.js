@@ -185,7 +185,6 @@ export default class SupplierOrder extends React.Component {
                   </Col>
                   <Col span={14}>
                     <br/>
-                    <br/>
                     <p>{text.title}</p>
                   </Col>
                 </Row>
@@ -823,13 +822,14 @@ export default class SupplierOrder extends React.Component {
                   destroyOnClose={true}
                   footer={null}
               >
-                <h3>基本信息：</h3>
+                <h2>基本信息：</h2>
                 <p><strong>下单人：</strong>{ detailInfo.buyer_info.fans_nickname }</p>
                 <p><strong>手机号：</strong>{ detailInfo.address_info.receiver_tel }</p>
-                <h3><strong>订单信息：</strong></h3>
+                <br/>
+                <h2>订单信息：</h2>
                 <p><strong>订单号：</strong>{ this.state.detailInfo.prod.tid}</p>
                 <p><strong>商品名称：</strong>{ this.state.detailInfo.prod.title }</p>
-                <p><strong>商品单价/数量：</strong>{ '¥'+this.state.detailInfo.price+'(件)'}</p>
+                <p><strong>商品单价/数量：</strong>{ '¥'+this.state.detailInfo.price+'件)'}</p>
                 <p><strong>邮费：</strong>{ '¥'+detailInfo.pay_info.post_fee }</p>
                 <p><strong>收货地址：</strong>
                   {

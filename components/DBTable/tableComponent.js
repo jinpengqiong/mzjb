@@ -153,13 +153,13 @@ export default class ProdTable extends React.Component {
         curPage:'1',
         isSpin:false,
         columns : [
-            {
-                dataIndex: 'id',
-                title: 'ID',
-                dataType: 'int',
-                width: 60,
-                primary: true,
-            },
+            // {
+            //     dataIndex: 'id',
+            //     title: 'ID',
+            //     dataType: 'int',
+            //     width: 60,
+            //     primary: true,
+            // },
             {
                 dataIndex: 'title',
                 title: '商品名称',
@@ -197,10 +197,16 @@ export default class ProdTable extends React.Component {
                         </Popconfirm>
                         <Divider type="vertical" />
                             <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
-                        <Divider type="vertical" />
-                            <a href="#" onClick={
+                      {
+                        record.type !== '优选商品'
+                          &&
+                            <span>
+                              <Divider type="vertical" />
+                              <a href="#" onClick={
                                 ()=>{ this.updateProduct(parseInt(record.id), record.type) }
-                            }>更新</a>
+                              }>更新</a>
+                            </span>
+                      }
                         <Divider type="vertical" />
                         <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
                             <a href="#" >删除</a>
@@ -638,9 +644,10 @@ export default class ProdTable extends React.Component {
       )
     return (
         <div>
+
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px", textAlign:"right" }}>
                 <Button type="primary" onClick={this.onClickInsert} >
-                    <Icon type="plus-circle-o"/>新增商品
+                  <Icon type="plus-circle-o"/>新增商品
                 </Button>
                 <Select defaultValue="-1" style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
                     <Option value="-1" key='-1'>所有分组</Option>
