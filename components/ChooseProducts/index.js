@@ -225,7 +225,7 @@ export default class ChooseProducts extends React.Component {
                         (this.state.data && !isEmpty(this.state.data.items))?
                             youzanPROD
                             :
-                            '暂无'
+                            <img src="../../static/noprod.jpg" alt="#"/>
                     }
                 </div>
                 {
