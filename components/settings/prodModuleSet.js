@@ -165,6 +165,7 @@ export default class ProdModuleSet extends React.Component {
                     onSettingsChange={this.onSettingsChange}
                     scrollTopOffset={-270}
                     globalConfig={globalConfig}
+                    defaultSelectedIndex={0}
                 />
                 <div style={{ marginTop:'10px', textAlign:'center'}}>
                     <Button type="primary" onClick={this.submit} style={{ marginRight:"10px"}}>
