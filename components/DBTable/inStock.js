@@ -202,10 +202,6 @@ export default class InStock extends React.Component {
                         </span>
                       }
                       <Divider type="vertical" />
-                      <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
-                        <a href="#" >删除</a>
-                      </Popconfirm>
-                      <Divider type="vertical" />
                       <Popover
                           trigger="click"
                           content={
@@ -233,6 +229,10 @@ export default class InStock extends React.Component {
                           }>
                         <a href="javascript:void(0);" >推广商品</a>
                       </Popover>
+                      <Divider type="vertical" />
+                        <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
+                          <a href="#" >删除</a>
+                        </Popconfirm>
                     </div>
                 ),
               }
