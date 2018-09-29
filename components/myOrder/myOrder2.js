@@ -90,11 +90,13 @@ export default class OrderManagement2 extends React.Component {
                 title: '单价(元)',
                 dataIndex: 'price',
                 key: 'price',
+                width:'6%'
             },
             {
                 title: '数量(件)',
                 dataIndex: 'num',
                 key: 'num',
+                width:'6%'
             },
             {
                 title: '下单时间',
@@ -123,10 +125,12 @@ export default class OrderManagement2 extends React.Component {
                 title: '订单总额(元)',
                 dataIndex: 'totalFee',
                 key: 'totalFee',
+                width:'8%'
             },
             {
                 title: '操作',
                 key: 'action',
+                width:'12%',
                 render: (text, record) => (
                     <span>
                         <a href="javascript:;" onClick={ () => { this.showDetails(record.tid) } }>详情</a>
