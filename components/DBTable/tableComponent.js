@@ -655,44 +655,6 @@ export default class ProdTable extends React.Component {
                 </Select>
             </Affix>
 
-            <Modal
-            title={ this.state.modalName}
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            destroyOnClose={true}
-            width = "1000px"
-            >
-            {
-                this.state.modalName ==="新增商品"?
-                    <Tabs defaultActiveKey="1" onChange={this.callback}>
-                        <TabPane tab="外链商品" key="1">
-                            <SelfProdForm ref="form"/>
-                        </TabPane>
-                        <TabPane tab="自有商品" key="2">
-                            <YouzanProdForm ref="form1"/>
-                        </TabPane>
-                    </Tabs>
-                    :
-                this.state.modalName ==="更新商品" && this.props.store.prodType !=='YOUZAN' ?
-                    <SelfProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
-                    :
-                    <YouzanProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
-            }
-            </Modal>
-
-            <Modal
-                title='加入分组'
-                visible={this.state.groupModalVisible}
-                onOk={this.handleGroupModalOk}
-                onCancel={this.handleRadioCancel}
-                destroyOnClose={true}
-            >
-                <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
-                    { TagRadios }
-                </RadioGroup>
-            </Modal>
-
             <Spin spinning={this.state.isSpin}>
                 <Table
                     dataSource = {this.state.data? this.state.data : null }
@@ -712,6 +674,43 @@ export default class ProdTable extends React.Component {
               total={this.state.data? this.state.totalEntries : 1}
               style={{ float:"right", marginTop: "10px"}}/>
             }
+          <Modal
+              title={ this.state.modalName}
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              destroyOnClose={true}
+              width = "1000px"
+          >
+            {
+              this.state.modalName ==="新增商品"?
+                  <Tabs defaultActiveKey="1" onChange={this.callback}>
+                    <TabPane tab="外链商品" key="1">
+                      <SelfProdForm ref="form"/>
+                    </TabPane>
+                    <TabPane tab="自有商品" key="2">
+                      <YouzanProdForm ref="form1"/>
+                    </TabPane>
+                  </Tabs>
+                  :
+                  this.state.modalName ==="更新商品" && this.props.store.prodType !=='YOUZAN' ?
+                      <SelfProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
+                      :
+                      <YouzanProdForm ref="form" productData={this.props.store.productFieldsData} updateState={this.state.modalName}/>
+            }
+          </Modal>
+
+          <Modal
+              title='加入分组'
+              visible={this.state.groupModalVisible}
+              onOk={this.handleGroupModalOk}
+              onCancel={this.handleRadioCancel}
+              destroyOnClose={true}
+          >
+            <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
+              { TagRadios }
+            </RadioGroup>
+          </Modal>
         </div>
     )
   }

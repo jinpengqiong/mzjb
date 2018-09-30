@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 
 module.exports = {
   exportPathMap: () => {
@@ -36,6 +37,17 @@ module.exports = {
           loader: `babel-loader!raw-loader!postcss-loader!less-loader`
         }
     );
+    config.plugins.push(
+        new webpack.DefinePlugin({
+          'process.env.NODE_ENV': !dev ? "production" : "development",
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+          compressor: {
+            warnings: false,
+            drop_console:true
+          }
+        })
+    )
     return config;
   }
 }
