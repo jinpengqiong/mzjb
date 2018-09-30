@@ -28,6 +28,11 @@ export default class Suppliers extends React.Component {
       })
       this.store.getCurPagePath('供应商订单');
     }
+    window.addEventListener('unload', () => localStorage.clear() );
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('unload', () => localStorage.clear());
   }
 
   render () {

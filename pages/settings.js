@@ -34,7 +34,13 @@ export default class Settings extends React.Component {
             });
             this.store.getCurPagePath('设置');
         }
+        window.addEventListener('unload', () => localStorage.clear() );
     }
+
+    componentWillUnmount() {
+      window.removeEventListener('unload', () => localStorage.clear());
+    }
+
     render () {
         return (
             <Provider store={this.store}>

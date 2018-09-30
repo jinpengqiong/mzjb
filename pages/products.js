@@ -48,6 +48,7 @@ export default class Products extends React.Component {
         this.store.getCurPagePath('商品');
         this.queryTags();
     }
+    window.addEventListener('unload', () => localStorage.clear() );
   }
     onChange = (e) => {
       // console.log('e',e.target.value)
@@ -72,6 +73,10 @@ export default class Products extends React.Component {
             }
         ).catch( err => Request.token_auth(err))
     }
+
+  componentWillUnmount() {
+    window.removeEventListener('unload', () => localStorage.clear());
+  }
     
   render () {
     return (

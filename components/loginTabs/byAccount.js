@@ -49,7 +49,7 @@ class NormalLoginForm extends React.Component {
             res => {
                 console.log('res', res)
                 if(!res.errors){
-                    localStorage.setItem('role', res.login.user.role);
+                    localStorage.setItem('role', res.login.user.role.slice(9));
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('mzAccountid', res.login.user.mzAccountid);

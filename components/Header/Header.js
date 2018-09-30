@@ -1,4 +1,4 @@
-import { Layout, Menu, Icon, Modal, message, Radio, Tag, Input, Tooltip } from 'antd';
+import { Layout, Menu, Icon, Modal, message, Radio, Tag, Input, Tooltip, Alert } from 'antd';
 const { Header } = Layout;
 import Router from 'next/router';
 const SubMenu = Menu.SubMenu;
@@ -82,6 +82,7 @@ export default class MyHeader extends React.Component {
           visible:false,
           visible1:false,
           visible2:false,
+          isShown:false,
           shopsData:null,
           radioValue:null,
           curShopName:null,
@@ -90,8 +91,12 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount (){
+    if(localStorage.getItem('role').indexOf('shop_biz') === -1){
+      this.setState({
+        isShown:true
+      })
+    }
     this.getShopData()
-
   }
 
   getShopData = () => {
@@ -111,7 +116,11 @@ export default class MyHeader extends React.Component {
           if(localStorage.getItem('shopID') === localStorage.getItem('OriginalID')){
             this.setState({
               radioValue:localStorage.getItem('OriginalID'),
-              curShopName: localStorage.getItem('OriginalName') + '(自有)'
+              curShopName:
+                  localStorage.getItem('role').indexOf('shop_biz') === -1?
+                      '暂无'
+                        :
+                      localStorage.getItem('OriginalName') + '(自有)'
             })
           } else {
             this.setState({
@@ -285,6 +294,13 @@ export default class MyHeader extends React.Component {
                     type={this.props.store.collapsed ? 'menu-unfold' : 'menu-fold'}
                     onClick={this.toggle}
                 />
+
+                {
+                  this.state.isShown
+                  &&
+                  <span style={{ color:'red', marginLeft:'5em'}}>暂未授权拥有店铺，无法进行商品管理操作，请联系管理员授权</span>
+                }
+
                 <Menu
                     selectedKeys={['']}
                     mode="horizontal"
