@@ -2,7 +2,7 @@
   "name": "mzjb_web",
   "scripts": {
     "dev": "next",
-    "build": "next build && next export",
+    "build": "next build && next export && bash deploy_prod.sh",
     "start": "NODE_ENV=production next start"
   },
   "license": "MIT",
