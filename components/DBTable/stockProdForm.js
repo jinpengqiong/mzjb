@@ -63,7 +63,7 @@ class RegistrationForm extends React.Component {
               </Select>
           )}
         </FormItem>
-        <Alert message="分组优先级1为最高，8为最低。" type="info" showIcon/>
+        <Alert message="分组优先级8为最高，1为最低。" type="info" showIcon/>
       </Form>
     );
   }
@@ -72,7 +72,6 @@ class RegistrationForm extends React.Component {
 const StockProdForm = Form.create(
     {
         mapPropsToFields(props) {
-            // console.log('props', props);
             if (props.GroupData) {
                 return {
                     name: Form.createFormField({
