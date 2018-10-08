@@ -32,15 +32,10 @@ export default class MyOrder extends React.Component {
         })
         this.store.getCurPagePath('订单');
     }
-    window.addEventListener('unload', () => localStorage.clear() );
   }
 
   callback = key =>{
       // console.log(key);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('unload', () => localStorage.clear());
   }
 
   render () {

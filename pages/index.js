@@ -58,11 +58,6 @@ export default class MainPage extends React.Component {
             this.queryCategory()
             this.queryTagList()
         }
-        window.addEventListener('unload', () => localStorage.clear() );
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener('unload', () => localStorage.clear() );
     }
 
 

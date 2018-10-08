@@ -49,7 +49,7 @@ class NormalLoginForm extends React.Component {
             res => {
                 console.log('res', res)
                 if(!res.errors){
-                    localStorage.setItem('role', res.login.user.role.slice(9));
+                    localStorage.setItem('role', res.login.user.role);
                     localStorage.setItem('accessToken', res.login.accessToken);
                     localStorage.setItem('accountid', res.login.user.accountid);
                     localStorage.setItem('mzAccountid', res.login.user.mzAccountid);
@@ -57,6 +57,8 @@ class NormalLoginForm extends React.Component {
                     localStorage.setItem('phone', res.login.user.phone);
                     if(res.login.user.supplier_name === '供货商测试分组'){
                       localStorage.setItem('group', '1');
+                    }else{
+                      localStorage.setItem('group', '0');
                     }
                     if(res.login.user.is_supplier){
                       this.setState({

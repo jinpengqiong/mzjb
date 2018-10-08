@@ -57,6 +57,8 @@ class NormalLoginForm extends React.Component {
                   localStorage.setItem('phone', res.smsLogin.user.phone);
                   if(res.login.smsLogin.supplier_name === '供货商测试分组'){
                     localStorage.setItem('group', '1');
+                  } else {
+                    localStorage.setItem('group', '0');
                   }
                   if(res.smsLogin.user.is_supplier){
                     this.setState({

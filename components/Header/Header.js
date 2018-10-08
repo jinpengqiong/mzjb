@@ -108,7 +108,10 @@ export default class MyHeader extends React.Component {
         res => {
           // console.log('queryShops',res);
           // console.log('localStorage',localStorage.getItem('shopID'));
-          if(!localStorage.getItem('shopID')){
+          if( !localStorage.getItem('shopID')
+                ||
+              localStorage.getItem('OriginalName') !==  res.myShops.entries[0].name
+          ){
             localStorage.setItem('shopID', parseInt(res.myShops.entries[0].id))
             localStorage.setItem('OriginalID', parseInt(res.myShops.entries[0].id))
             localStorage.setItem('OriginalName', res.myShops.entries[0].name)
@@ -285,7 +288,7 @@ export default class MyHeader extends React.Component {
   }
 
   render() {
-    const isDisplay = this.props.store.userRole.indexOf('supplier') === -1
+    const isDisplay = this.props.store.userRole && this.props.store.userRole.indexOf('supplier') === -1
     return (
         <Layout>
             <Header style={{ background: '#fff', padding: 16,marginLeft: this.props.store.collapsed? 15:0 }}>

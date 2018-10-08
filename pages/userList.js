@@ -28,11 +28,6 @@ export default class UserGrant extends React.Component {
           Router.push('/login')
         }
       }
-      window.addEventListener('unload', () => localStorage.clear() );
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener('unload', () => localStorage.clear());
     }
 
   render () {
