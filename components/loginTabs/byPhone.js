@@ -55,7 +55,7 @@ class NormalLoginForm extends React.Component {
                   localStorage.setItem('accountid', res.smsLogin.user.accountid);
                   localStorage.setItem('nickname', res.smsLogin.user.nickname);
                   localStorage.setItem('phone', res.smsLogin.user.phone);
-                  if(res.login.smsLogin.supplier_name === '供货商测试分组'){
+                  if(res.smsLogin.user.supplier_name === '供货商测试分组'){
                     localStorage.setItem('group', '1');
                   } else {
                     localStorage.setItem('group', '0');

@@ -322,16 +322,12 @@ export default class MyHeader extends React.Component {
                   }
 
                     <SubMenu title={<span>{ '您好，'+ localStorage.getItem('nickname')}</span>}>
-                      {
-                        isDisplay
-                        &&
                         <Menu.Item key="1" >
                           {
                             <span onClick={this.setPassword} style={{ display: 'block',width:"130px", textAlign:"center"}}>
                               <Icon type="lock" />设置密码</span>
                           }
                         </Menu.Item>
-                      }
                       {
                         isDisplay
                         &&

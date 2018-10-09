@@ -207,7 +207,19 @@ export default class SupplierOrder extends React.Component {
               return (
                   <div>
                     <p>待发货</p>
-                    <a href="javascript:void(0)" onClick={ () => {this.sendPost(record)}}>发货</a>
+                    <a
+                        href="javascript:void(0)"
+                        onClick={
+                          () => {
+                            if(record.refundState === 1 ){
+                              message.info('维权中商品不支持发货')
+                            } else {
+                              this.sendPost(record)
+                            }
+                          }
+                        }>
+                      发货
+                    </a>
                   </div>
               )
             }else {

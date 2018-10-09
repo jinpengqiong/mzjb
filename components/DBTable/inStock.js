@@ -187,7 +187,7 @@ export default class InStock extends React.Component {
                 render: (text, record) => (
                     <div>
                       <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
-                        <a href="#">下架</a>
+                        <a href="#">上架</a>
                       </Popconfirm>
                       <Divider type="vertical" />
                       <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
