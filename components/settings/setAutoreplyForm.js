@@ -24,7 +24,12 @@ class RegistrationForm extends React.Component {
             <Form>
                 <FormItem
                     {...formItemLayout}
-                    label="商品图(必选)"
+                    label={
+                      <div style={{ display:'inline-block'}}>
+                        <span style={{ color:'red'}}>*</span>
+                        <span>{' '}商品图</span>
+                      </div>
+                    }
                 >
                     {getFieldDecorator('picurl')(
                         <ShopImgUploader />

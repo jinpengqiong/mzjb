@@ -2,6 +2,8 @@ import { Table, Pagination, message, Select, Button, Spin, Modal, Icon, Affix, R
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
+import PostSendModal from '../common_modal/postSend'
+import RefundModal from '../common_modal/refund'
 const Option = Select.Option;
 
 
@@ -18,6 +20,10 @@ const queryOrder = `
                 num
                 status
                 totalFee
+                supplierName
+                refundState
+                refundStatus
+                detail
             }
         }
     }`;
@@ -63,6 +69,53 @@ const shopTradeInfo = `
         }
     }`;
 
+const getRefundInfo = `
+    query ($tid: String!) {
+        getRefundInfo(tid:$tid){
+           refunds{
+              refundId
+              created
+              csStatus
+              kdtIt
+              modified
+              reason
+              refundFee
+              returnGoods
+              status
+              tid
+            }
+        }
+    }`;
+
+const getRefundDetail = `
+    query ($refundId: String!) {
+        getRefundDetail(refundId:$refundId){
+            csStatus
+            created
+            desc
+            itemId
+            kdtId
+            logistics {
+              address
+              companyCode
+              logisticsNo
+              mobile
+              receiver
+              telephone
+            }
+            modified
+            oid
+            reason
+            refundFee
+            refundFundDesc
+            refundId
+            refundType
+            returnGoods
+            status
+            tid
+            version
+        }
+    }`;
 
 @inject('store') @observer
 export default class OrderManagement2 extends React.Component {
@@ -75,6 +128,9 @@ export default class OrderManagement2 extends React.Component {
         visible: false,
         tagName: undefined,
         curPage:1,
+        postData:null,
+        refundInfo:null,
+        refundPROD:null, //退款商品的商品信息
         columns : [
             {
                 title: '订单号',
@@ -90,13 +146,13 @@ export default class OrderManagement2 extends React.Component {
                 title: '单价(元)',
                 dataIndex: 'price',
                 key: 'price',
-                width:'6%'
+                width:'8%'
             },
             {
                 title: '数量(件)',
                 dataIndex: 'num',
                 key: 'num',
-                width:'6%'
+                width:'8%'
             },
             {
                 title: '下单时间',
@@ -107,17 +163,36 @@ export default class OrderManagement2 extends React.Component {
                 title: '订单状态',
                 dataIndex: 'status',
                 key: 'status',
+                width:'13%',
                 render: (text, record) => (
                     <div>
-                        <p>{
+                        {
                         text==="WAIT_BUYER_PAY"? "待付款"
                           : text==="TRADE_PAID"? "已付款"
-                          : text==="WAIT_SELLER_SEND_GOODS"? "待发货"
+                          : (text==="WAIT_SELLER_SEND_GOODS" && record.supplierName) ? "供货商待发货"
+                          : (text==="WAIT_SELLER_SEND_GOODS" && !record.supplierName) ?
+                                    <div>
+                                      <p>自有商品待发货</p>
+                                      <a
+                                          href="javascript:void(0);"
+                                          onClick={
+                                            () => {
+                                              if(record.refundState === 1 ){
+                                                message.info('维权中商品不支持发货')
+                                              } else {
+                                                this.sendPost(record)
+                                              }
+                                            }
+                                          }
+                                      >
+                                        发货
+                                      </a>
+                                    </div>
                           : text==="WAIT_BUYER_CONFIRM_GOODS"? "已发货"
                           : text==="TRADE_SUCCESS"? "交易完成"
                           : text==="TRADE_CLOSED"? "交易关闭"
                           : null
-                    }</p>
+                        }
                     </div>
                 )
             },
@@ -126,6 +201,30 @@ export default class OrderManagement2 extends React.Component {
                 dataIndex: 'totalFee',
                 key: 'totalFee',
                 width:'8%'
+            },
+            {
+              title: '售后',
+              dataIndex: 'refundState',
+              key: 'refundState',
+              width:'8%',
+              render: (text,record) => (
+                  <div>
+                    {
+                      text===0 ?
+                          null
+                          :
+                      record.supplierName?
+                          <p>{ this.getRefundStr(record.refundStatus) }</p>
+                          :
+                          <a
+                              href="javascript:void(0)"
+                              onClick={ () => { this.openRightModal(record)} }
+                          >
+                            { this.getRefundStr(record.refundStatus) }
+                          </a>
+                    }
+                  </div>
+              ),
             },
             {
                 title: '操作',
@@ -154,7 +253,7 @@ export default class OrderManagement2 extends React.Component {
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-                console.log('res',res)
+                // console.log('res',res)
                 res.shopTradesList2.entries.map(
                     entry => {
                         entry.key = UUIDGen.uuid(8,10);
@@ -166,6 +265,14 @@ export default class OrderManagement2 extends React.Component {
                 })
         }
     ).catch(err=>{message.error('你还未授权开店，请联系管理员！'); Request.token_auth(err)})
+  }
+
+  sendPost = data => {
+    // console.log('3444', data)
+    this.setState({
+      postData:data
+    })
+    this.props.store.setModalDisplay('post', true)
   }
 
   onPageChange = pageNumber => {
@@ -209,7 +316,63 @@ export default class OrderManagement2 extends React.Component {
     })
   }
 
+  getRefundStr = state => {
+    switch(state){
+      case "WAIT_SELLER_AGREE":
+        return '买家发起维权'
+        break;
+      case "WAIT_BUYER_RETURN_GOODS":
+        return '卖家接受退款，待买家退货'
+        break;
+      case "WAIT_SELLER_CONFIRM_GOODS":
+        return '买家已发货，卖家确认收货'
+        break;
+      case "SELLER_REFUSE_BUYER":
+        return '卖家拒绝退款'
+        break;
+      case "CLOSED":
+        return '退款关闭'
+        break;
+      case "SUCCESS":
+        return '退款成功'
+        break;
+      default:
+        null
+    }
+  }
+
+  queryRefundID = tid => {
+    Request.GraphQlRequest(getRefundInfo, { tid },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          // console.log('getRefundInfo', res.getRefundInfo.refunds[0].refundId)
+          this.queryRefundDetails(res.getRefundInfo.refunds[0].refundId)
+        }
+    ).catch( err => Request.token_auth(err) )
+  }
+
+  queryRefundDetails = refundId => {
+    Request.GraphQlRequest(getRefundDetail, { refundId },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('getRefundDetail', res)
+          this.setState({
+            refundInfo:res.getRefundDetail
+          })
+        }
+    ).catch( err => Request.token_auth(err) )
+  }
+
+  openRightModal = data => {
+    this.queryRefundID(data.tid)
+    this.setState({
+      refundPROD:data
+    })
+    this.props.store.setModalDisplay('refund', true)
+  }
+
   render() {
+    const { refundInfo, refundPROD, postData } =  this.state
     return (
         <div>
           <Affix offsetTop={10} style={{ marginBottom: 16 }}>
@@ -227,33 +390,45 @@ export default class OrderManagement2 extends React.Component {
             </div>
             <Spin spinning={this.state.isSpin}>
                 <Table bordered dataSource={this.state.data? this.state.data.entries : null } columns={this.state.columns} pagination={false}/>
-
-                {
-                    this.state.detailInfo
-                    &&
-                    <Modal
-                        title="订单详情"
-                        visible={this.state.visible}
-                        onCancel={this.handleCancel}
-                        destroyOnClose={true}
-                        footer={null}
-                    >
-                        <h2>基本信息：</h2>
-                        <p><strong>下单人：</strong>{ this.state.detailInfo.receiverName}</p>
-                        <p><strong>手机号：</strong>{ this.state.detailInfo.receiverMobile}</p>
-                        <br/>
-                        <h2>订单信息：</h2>
-                        <p><strong>订单号：</strong>{ this.state.detailInfo.tid}</p>
-                        <p><strong>商品名称：</strong>{ this.state.detailInfo.title}</p>
-                        <p><strong>商品单价：</strong>{ '¥'+ this.state.detailInfo.price}</p>
-                        <p><strong>购买数量：</strong>{ this.state.detailInfo.num}</p>
-                        <p><strong>邮费：</strong>{ '¥'+ this.state.detailInfo.postFee }</p>
-                        <p><strong>收货地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
-                        <p><strong>状态：</strong>{ this.state.detailInfo.statusStr }</p>
-                        <p><strong>创建时间：</strong>{ this.state.detailInfo.created }</p>
-                    </Modal>
-                }
             </Spin>
+
+            {
+              this.state.detailInfo
+              &&
+              <Modal
+                  title="订单详情"
+                  visible={this.state.visible}
+                  onCancel={this.handleCancel}
+                  destroyOnClose={true}
+                  footer={null}
+              >
+                <h2>基本信息：</h2>
+                <p><strong>下单人：</strong>{ this.state.detailInfo.receiverName}</p>
+                <p><strong>手机号：</strong>{ this.state.detailInfo.receiverMobile}</p>
+                <br/>
+                <h2>订单信息：</h2>
+                <p><strong>订单号：</strong>{ this.state.detailInfo.tid}</p>
+                <p><strong>商品名称：</strong>{ this.state.detailInfo.title}</p>
+                <p><strong>商品单价：</strong>{ '¥'+ this.state.detailInfo.price}</p>
+                <p><strong>购买数量：</strong>{ this.state.detailInfo.num}</p>
+                <p><strong>邮费：</strong>{ '¥'+ this.state.detailInfo.postFee }</p>
+                <p><strong>收货地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
+                <p><strong>状态：</strong>{ this.state.detailInfo.statusStr }</p>
+                <p><strong>创建时间：</strong>{ this.state.detailInfo.created }</p>
+              </Modal>
+            }
+
+          <PostSendModal
+              postData={ postData }
+              querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+          />
+
+          <RefundModal
+              refundPROD={ refundPROD }
+              refundInfo={ refundInfo }
+              querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+          />
+
             {
             (this.state.data && this.state.data.totalEntries !==0)
             &&

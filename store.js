@@ -38,6 +38,11 @@ class Store {
   //prod categories
   @observable categories = null;
   @observable tagListData = null;
+  // common modal display
+  @observable postModalVisible = false;
+  @observable refundModalVisible = false;
+  @observable showAccept = false;
+  @observable showRefuse = false;
 
   constructor (isServer) {
   }
@@ -142,6 +147,20 @@ class Store {
           this.tagListData = data
   }
 
+  @action setModalDisplay = (type, bool) => {
+          if(type === 'post'){
+            this.postModalVisible = bool
+          }
+          if(type === 'refund'){
+            this.refundModalVisible = bool
+          }
+          if(type === 'accept'){
+            this.showAccept = bool
+          }
+          if(type === 'refuse'){
+            this.showRefuse = bool
+          }
+  }
 }
 
 export function initStore (isServer) {

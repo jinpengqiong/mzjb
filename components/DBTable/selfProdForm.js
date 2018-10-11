@@ -48,7 +48,12 @@ class RegistrationForm extends React.Component {
           &&
           <FormItem
             {...formItemLayout}
-            label="商品图"
+            label={
+              <div style={{ display:'inline-block'}}>
+                <span style={{ color:'red'}}>*</span>
+                <span>{' '}商品图</span>
+              </div>
+            }
           >
             {getFieldDecorator('mainImage', {
               rules: [{
