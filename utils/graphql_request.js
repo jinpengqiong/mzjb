@@ -3,7 +3,6 @@ import Router from 'next/router';
 import {message } from 'antd';
 import { GraphQLClient } from 'graphql-request';
 
-
 module.exports = {
     // GraphQl request
     GraphQlRequest( action, variables, localStor){

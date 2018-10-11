@@ -4,6 +4,14 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 import { inject, observer } from 'mobx-react'
 
+const expressList = `
+    query{
+      expressList{
+        id
+        name
+      }
+    }
+  `
 const returngoodsAgree = `
     mutation ($address: String!, $name: String!, $phone: String!, $refundId: String!, $tid: String!) {
         returngoodsAgree(address:$address, name:$name, phone:$phone, refundId:$refundId, tid:$tid){
@@ -41,8 +49,13 @@ export default class RefundModal extends React.Component {
       refundAddress:null,
       refundPhone:null,
       refundName:null,
-      refuseFundsRemarks:''
+      refuseFundsRemarks:'',
+      expressData:null
     }
+  }
+
+  componentDidMount(){
+    this.queryExpressList()
   }
 
   handleModalCancel = () => {
@@ -138,6 +151,9 @@ export default class RefundModal extends React.Component {
       case 105:
         return '质量问题'
         break;
+      case 106:
+        return '假货'
+        break;
       case 107:
         return '其他'
         break;
@@ -218,7 +234,7 @@ export default class RefundModal extends React.Component {
   }
 
   handleInputChange = (e,type) => {
-    console.log('e', e.target.value)
+    // console.log('e', e.target.value)
     if(type === 'address'){
       this.setState({
         refundAddress:e.target.value
@@ -296,9 +312,29 @@ export default class RefundModal extends React.Component {
     }
   }
 
-  componentDidMount(){
+  queryExpressList = () => {
+    Request.GraphQlRequest(expressList,
+        {},
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('expressList', res)
+          this.setState({
+            expressData:res.expressList
+          })
+        }
+    ).catch( err => Request.token_auth(err) )
   }
 
+  getPostCompanyName = ID => {
+    if(this.state.expressData){
+      const obj = this.state.expressData.find(
+          (value, index, arr) => {
+             return value.id === parseInt(ID)
+          }
+      )
+      return obj.name
+    }
+  }
 
   render() {
     const { refundPROD, refundInfo, store } = this.props
@@ -324,31 +360,41 @@ export default class RefundModal extends React.Component {
               </p>
               <p>
                 <strong>期望结果：</strong>
-                <span>{ (refundInfo && refundInfo.returnGoods)? '退款退货':'仅退款' }</span>
+                <span>{ refundInfo.returnGoods? '退款退货':'仅退款' }</span>
               </p>
               <p>
                 <strong>退款金额：</strong>
-                <span>{ refundInfo && '¥'+refundInfo.refundFee }</span>
+                <span>{ '¥'+refundInfo.refundFee }</span>
               </p>
               <p>
                 <strong>维权原因：</strong>
-                <span>{ refundInfo && this.getRefundReasonStr(refundInfo.reason) }</span>
+                <span>{ this.getRefundReasonStr(refundInfo.reason) }</span>
               </p>
               <p>
                 <strong>订单编号：</strong>
-                <span>{ refundInfo && refundInfo.tid }</span>
+                <span>{ refundInfo.tid }</span>
               </p>
               <p>
                 <strong>付款时间：</strong>
-                <span>{ refundInfo && refundInfo.created }</span>
+                <span>{ refundInfo.created }</span>
               </p>
               <p>
                 <strong>买家(手机号)：</strong>
                 <span>{ `${refundPROD.buyerName}(${refundPROD.buyerPhone})` }</span>
               </p>
               <p>
-                <strong>物流信息：</strong>
-                <span>{ (refundInfo && refundInfo.logistics)? `${refundInfo.logistics.address}，${refundInfo.logistics.receiver}，${refundInfo.logistics.mobile}`:'暂无或无需物流' }</span>
+                <strong>发货地址：</strong>
+                <span>{ refundInfo.logistics? `${refundInfo.logistics.address}，${refundInfo.logistics.receiver}，${refundInfo.logistics.mobile}`:'暂无或无需发货' }</span>
+              </p>
+              <p>
+                <strong>退货物流信息：</strong>
+                <span>{
+                  (refundInfo.logistics && refundInfo.logistics.companyCode)?
+                      `${this.getPostCompanyName(refundInfo.logistics.companyCode)}，运单编号：${refundInfo.logistics.logisticsNo}，联系电话：${refundInfo.logistics.mobile}`
+                      :
+                      '暂无物流信息'
+                  }
+                </span>
               </p>
               <p>
                 <strong>运费：</strong>
@@ -356,7 +402,7 @@ export default class RefundModal extends React.Component {
               </p>
               <p>
                 <strong>实收总计：</strong>
-                <span>{ refundInfo && '¥'+refundInfo.refundFee }</span>
+                <span>{ '¥'+refundInfo.refundFee }</span>
               </p>
 
               {
@@ -387,7 +433,7 @@ export default class RefundModal extends React.Component {
                   &&
                   <div>
                     {
-                      refundInfo && (refundInfo.status === 'WAIT_SELLER_AGREE'|| refundInfo.status === 'SELLER_REFUSE_BUYER' )
+                      (refundInfo.status === 'WAIT_SELLER_AGREE'|| refundInfo.status === 'SELLER_REFUSE_BUYER' )
                       &&
                       <Button
                           onClick={ () => { this.acceptFundsBack(refundInfo.tid, refundInfo.refundId) }}
@@ -412,7 +458,7 @@ export default class RefundModal extends React.Component {
                   &&
                   <div>
                     {
-                      refundInfo && (refundInfo.status === 'WAIT_SELLER_AGREE' || refundInfo.status === 'SELLER_REFUSE_BUYER')
+                      (refundInfo.status === 'WAIT_SELLER_AGREE' || refundInfo.status === 'SELLER_REFUSE_BUYER')
                       &&
                       <Button
                           type="primary"

@@ -253,12 +253,25 @@ export default class OrderManagement2 extends React.Component {
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-                // console.log('res',res)
                 res.shopTradesList2.entries.map(
                     entry => {
-                        entry.key = UUIDGen.uuid(8,10);
+                      const detail = JSON.parse(entry.detail)
+                      // console.log(detail)
+                      entry.key = UUIDGen.uuid(8,10);
+                      entry.prod = {
+                        pic:detail.full_order_info.orders[0].pic_path,
+                        title:detail.full_order_info.orders[0].title
+                      }
+                      entry.tid = detail.full_order_info.order_info.tid
+                      entry.price = detail.full_order_info.orders[0].price + '(' + detail.full_order_info.orders[0].num
+                      entry.createdAt = detail.full_order_info.order_info.created
+                      entry.money = detail.full_order_info.pay_info.total_fee
+                      entry.buyerName = detail.full_order_info.buyer_info.fans_nickname
+                      entry.buyerPhone = detail.full_order_info.buyer_info.buyer_phone
+                      entry.postFee = detail.full_order_info.pay_info.post_fee
                     }
                 );
+                console.log('res',res)
                 this.setState({
                   data: res.shopTradesList2,
                   isSpin: false
@@ -268,7 +281,6 @@ export default class OrderManagement2 extends React.Component {
   }
 
   sendPost = data => {
-    // console.log('3444', data)
     this.setState({
       postData:data
     })
@@ -364,6 +376,7 @@ export default class OrderManagement2 extends React.Component {
   }
 
   openRightModal = data => {
+    // console.log('3444', data)
     this.queryRefundID(data.tid)
     this.setState({
       refundPROD:data

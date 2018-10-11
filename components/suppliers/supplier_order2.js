@@ -275,7 +275,6 @@ export default class SupplierOrder extends React.Component {
                 // console.log(detail)
                 entry.key = UUIDGen.uuid(8,10);
                 entry.prod = {
-                  tid:detail.full_order_info.order_info.tid,
                   pic:detail.full_order_info.orders[0].pic_path,
                   title:detail.full_order_info.orders[0].title
                 }
@@ -284,6 +283,7 @@ export default class SupplierOrder extends React.Component {
                 entry.createdAt = detail.full_order_info.order_info.created
                 entry.money = detail.full_order_info.pay_info.total_fee
                 entry.buyerName = detail.full_order_info.buyer_info.fans_nickname
+                entry.buyerPhone = detail.full_order_info.buyer_info.buyer_phone
                 entry.postFee = detail.full_order_info.pay_info.post_fee
 
               }
@@ -488,7 +488,6 @@ export default class SupplierOrder extends React.Component {
                 querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
             />
 
-            }
           </Spin>
           {
             (this.state.orderData && this.state.orderData.totalEntries !==0)
