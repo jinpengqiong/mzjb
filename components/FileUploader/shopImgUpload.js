@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message } from 'antd';
+import { Button, message, Icon } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';
@@ -17,12 +17,10 @@ class ShopImgUploader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fileList: [],
+            fileUrl: null,
             uploading: false,
-            fileUrls: [],
-            upload_confirming: true,
             data: {},
-            value: 1
+            value: 1,
         }
     }
     componentDidMount() {
@@ -83,7 +81,7 @@ class ShopImgUploader extends React.Component {
         let self = this;
         var uploader = new plupload.Uploader({
             runtimes: 'html5,flash,silverlight,html4',
-            browse_button: 'selectfiles',
+            browse_button: 'selectFiles',
             container: document.getElementById('container'),
             flash_swf_url: '../../utils/Moxie.swf',
             silverlight_xap_url: '../../utils/Moxie.xap',
@@ -95,44 +93,30 @@ class ShopImgUploader extends React.Component {
             },
             init: {
                 PostInit: function() {
-                    document.getElementById('ossfile').innerHTML = '';
-                    document.getElementById('postfiles').onclick = function() {
-                        self.set_upload_param(uploader, '', false);
-                        return false;
-                    };
                 },
 
                 FilesAdded: function(up, files) {
+                  // console.log('files', files)
                     plupload.each(files, function(file) {
-                        document.getElementById('ossfile').innerHTML +=
-                            `<div id=${file.id}>
-                                ${file.name} ${plupload.formatSize(file.size)}
-                                <b></b>
-                            </div>`;
+                        self.set_upload_param(up, file.name, true);
                     });
-                  self.setState({
-                    upload_confirming:false
-                  })
                 },
 
                 BeforeUpload: function(up, file) {
-                    self.set_upload_param(up, file.name, true);
                 },
 
                 UploadProgress: function(up, file) {
-                    var d = document.getElementById(file.id);
-                    d.getElementsByTagName('b')[0].innerHTML =
-                        `<span>${file.percent}% 完成上传</span>`;
+
                 },
 
                 FileUploaded: function(up, file, info) {
-                    if (info.status == 200){
+                    if (info.status === 200){
                         const url = self.state.data.host + '/' + file._options.multipart_params.key;
                         self.props.store.getMainImage(url);
                         Request.GraphQlRequest(createMediaID, { shopId:localStorage.getItem('shopID'), type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res) => {
+                            res => {
                                   self.setState({
-                                    upload_confirming:true
+                                    fileUrl:url
                                   })
                                 message.success('上传成功');
                             }
@@ -150,18 +134,18 @@ class ShopImgUploader extends React.Component {
 
     render() {
         return (
-            <div>
-                <div id="ossfile"></div>
                 <div id="container">
-                    <Button id="selectfiles" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
-                    <Button
-                        id="postfiles"
-                        disabled={this.state.upload_confirming}
-                        href="javascript:void(0);" >
-                        开始上传
-                    </Button>
+                     <div id='selectFiles'>
+                       {
+                         this.state.fileUrl?
+                             <img src={this.state.fileUrl} alt="#" style={{ width:'120px'}}/>
+                             :
+                             <Button  href="javascript:void(0);" style={{ marginRight: "10px"}}>
+                               <Icon type="upload" />选择文件
+                             </Button>
+                       }
+                     </div>
                 </div>
-            </div>
         );
     }
 }

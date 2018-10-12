@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Button } from 'antd';
+import { message, Button, Icon } from 'antd';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
 import Request from '../../utils/graphql_request';
@@ -97,34 +97,19 @@ class YouzanUploader extends React.Component {
       },
       init: {
         PostInit: function() {
-          document.getElementById('ossfile3').innerHTML = '';
-          document.getElementById('postfiles3').onclick = function() {
-            self.set_upload_param(uploader, '', false);
-                return false;
-          };
         },
     
         FilesAdded: function(up, files) {
           plupload.each(files, function(file) {
-            document.getElementById('ossfile3').innerHTML +=
-            `<div id=${file.id}>
-                ${file.name} ${plupload.formatSize(file.size)}
-                <b></b>
-            </div>`;
+            self.set_upload_param(up, file.name, true);
           });
-          self.setState({
-            upload_confirming:false
-          })
         },
     
         BeforeUpload: function(up, file) {
-            self.set_upload_param(up, file.name, true);
         },
     
         UploadProgress: function(up, file) {
-          var d = document.getElementById(file.id);
-          d.getElementsByTagName('b')[0].innerHTML = 
-          `<span>${file.percent}% 完成上传</span>`;
+
         },
     
         FileUploaded: function(up, file, info) {
@@ -138,9 +123,9 @@ class YouzanUploader extends React.Component {
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);
                     message.success('上传成功！');
-                  self.setState({
-                    upload_confirming:true
-                  })
+                    self.setState({
+                      fileUrl:url
+                    })
                   }
               ).catch(err=>{message.error('上传失败，请联系管理员！'); Request.token_auth(err)})
           }
@@ -156,22 +141,18 @@ class YouzanUploader extends React.Component {
 
   render() {
     return (
-      <div>
-        <div id="ossfile3"></div>
         <div id="container">
-            <Button
-                id="selectfiles3"
-                href="javascript:void(0);"
-                style={{ marginRight: "10px" }}>
-              选择文件
-            </Button>
-            <Button
-                id="postfiles3"
-                href="javascript:void(0);" disabled={this.state.upload_confirming}>
-              开始上传
-            </Button>
+          <div id='selectfiles3'>
+            {
+              this.state.fileUrl?
+                  <img src={this.state.fileUrl} alt="#" style={{ width:'120px'}}/>
+                  :
+                  <Button  href="javascript:void(0);" style={{ marginRight: "10px"}}>
+                    <Icon type="upload" />选择文件
+                  </Button>
+            }
+          </div>
         </div>
-      </div>
       );
     }
 }
