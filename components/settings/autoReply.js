@@ -107,7 +107,6 @@ export default class AutoReply extends React.Component {
                 };
                 this.props.store.addReplyBody(replyBody); 
                 this.refs.form.resetFields();
-                document.getElementById('ossfile').innerHTML = ''; 
                 this.setState({
                     visible:false
                 })
