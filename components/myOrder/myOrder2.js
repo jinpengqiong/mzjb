@@ -376,7 +376,6 @@ export default class OrderManagement2 extends React.Component {
   }
 
   openRightModal = data => {
-    // console.log('3444', data)
     this.queryRefundID(data.tid)
     this.setState({
       refundPROD:data

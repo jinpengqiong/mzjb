@@ -22,7 +22,7 @@ class YouzanUploader extends React.Component {
       fileList: [],
       uploading: false,
       fileUrls: [],
-      upload_confirming: false,
+      upload_confirming: true,
       data: {},
       value: 1
     }
@@ -112,11 +112,14 @@ class YouzanUploader extends React.Component {
                 <b></b>
             </div>`;
           });
+          self.setState({
+            upload_confirming:false
+          })
         },
     
         BeforeUpload: function(up, file) {
-                self.set_upload_param(up, file.name, true);
-            },
+            self.set_upload_param(up, file.name, true);
+        },
     
         UploadProgress: function(up, file) {
           var d = document.getElementById(file.id);
@@ -135,7 +138,9 @@ class YouzanUploader extends React.Component {
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);
                     message.success('上传成功！');
-                    // document.getElementById('ossfile').innerHTML = '';
+                  self.setState({
+                    upload_confirming:true
+                  })
                   }
               ).catch(err=>{message.error('上传失败，请联系管理员！'); Request.token_auth(err)})
           }
@@ -154,12 +159,21 @@ class YouzanUploader extends React.Component {
       <div>
         <div id="ossfile3"></div>
         <div id="container">
-            <Button id="selectfiles3" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
-            <Button id="postfiles3" href="javascript:void(0);" >开始上传</Button>
+            <Button
+                id="selectfiles3"
+                href="javascript:void(0);"
+                style={{ marginRight: "10px" }}>
+              选择文件
+            </Button>
+            <Button
+                id="postfiles3"
+                href="javascript:void(0);" disabled={this.state.upload_confirming}>
+              开始上传
+            </Button>
         </div>
       </div>
-              );
-            }
+      );
+    }
 }
 
 export default YouzanUploader;

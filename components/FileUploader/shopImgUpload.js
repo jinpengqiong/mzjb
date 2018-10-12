@@ -20,7 +20,7 @@ class ShopImgUploader extends React.Component {
             fileList: [],
             uploading: false,
             fileUrls: [],
-            upload_confirming: false,
+            upload_confirming: true,
             data: {},
             value: 1
         }
@@ -106,10 +106,13 @@ class ShopImgUploader extends React.Component {
                     plupload.each(files, function(file) {
                         document.getElementById('ossfile').innerHTML +=
                             `<div id=${file.id}>
-                ${file.name} ${plupload.formatSize(file.size)}
-                <b></b>
-            </div>`;
+                                ${file.name} ${plupload.formatSize(file.size)}
+                                <b></b>
+                            </div>`;
                     });
+                  self.setState({
+                    upload_confirming:false
+                  })
                 },
 
                 BeforeUpload: function(up, file) {
@@ -128,6 +131,9 @@ class ShopImgUploader extends React.Component {
                         self.props.store.getMainImage(url);
                         Request.GraphQlRequest(createMediaID, { shopId:localStorage.getItem('shopID'), type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res) => {
+                                  self.setState({
+                                    upload_confirming:true
+                                  })
                                 message.success('上传成功');
                             }
                         ).catch(err => Request.token_auth(err))
@@ -148,7 +154,12 @@ class ShopImgUploader extends React.Component {
                 <div id="ossfile"></div>
                 <div id="container">
                     <Button id="selectfiles" href="javascript:void(0);" style={{ marginRight: "10px"}}>选择文件</Button>
-                    <Button id="postfiles" href="javascript:void(0);" >开始上传</Button>
+                    <Button
+                        id="postfiles"
+                        disabled={this.state.upload_confirming}
+                        href="javascript:void(0);" >
+                        开始上传
+                    </Button>
                 </div>
             </div>
         );
