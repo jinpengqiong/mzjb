@@ -141,7 +141,7 @@ class ShopImgUploader extends React.Component {
                              <img src={this.state.fileUrl} alt="#" style={{ width:'120px'}}/>
                              :
                              <Button  href="javascript:void(0);" style={{ marginRight: "10px"}}>
-                               <Icon type="upload" />选择文件
+                               <Icon type="upload" />上传文件
                              </Button>
                        }
                      </div>

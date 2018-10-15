@@ -131,13 +131,6 @@ const addProduct = `
     }
 `;
 
-const content = (
-    <div>
-      <p>Content</p>
-      <p>Content</p>
-    </div>
-);
-
 @inject('store') @observer
 export default class ProdTable extends React.Component {
   constructor(props) {
@@ -250,11 +243,10 @@ export default class ProdTable extends React.Component {
       this.queryProdData(1);
   }
 
-  queryProdData = (curPage) => {
+  queryProdData = curPage => {
     this.setState({
       isSpin:true
     });
-
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
         (res) => {
             res.shopProducts.entries.map(
@@ -283,11 +275,11 @@ export default class ProdTable extends React.Component {
     ).catch(err => Request.token_auth(err))
   }
 
-  onPageChange = (pageNumber) => {
+  onPageChange = pageNumber => {
     this.queryProdData(pageNumber);
   }
 
-    handleOk = () => {
+  handleOk = () => {
       const priceRegEx = /^\d+(\.\d{1,2})?$/
       const linkRegEx = /^(https?|http):\/\/.+$/
         if(this.props.store.TabOption === '1' && this.state.modalName ==='新增商品'){
@@ -476,18 +468,18 @@ export default class ProdTable extends React.Component {
     }
 
 
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-            modalName:null
-        });
-        this.props.store.getProductFieldsData(null)
-        this.props.store.getTabOption('1')
-        this.props.store.getRichTextContent(null)
-        this.props.store.getMainImage('')
-    }
+  handleCancel = () => {
+      this.setState({
+          visible: false,
+          modalName:null
+      });
+      this.props.store.getProductFieldsData(null)
+      this.props.store.getTabOption('1')
+      this.props.store.getRichTextContent(null)
+      this.props.store.getMainImage('')
+  }
 
-  callback = (key) => {
+  callback = key => {
     this.props.store.getTabOption(key)
   }
 
@@ -504,7 +496,7 @@ export default class ProdTable extends React.Component {
 }
 
 
-    onClickInsert = () => {
+  onClickInsert = () => {
         this.setState({
             visible: true,
             modalName:"新增商品"
@@ -512,120 +504,120 @@ export default class ProdTable extends React.Component {
     }
 
   //updateProduct
-    updateProduct = ( ID, type ) => {
-        const fieldData = this.state.data.filter(
-            entry =>{
-                if(parseInt(entry.id) === ID){
-                    return entry
-                }
-            }
-        );
-        if(type ==='自有商品'){
-            this.props.store.getProdType('YOUZAN')
-        }else if(type ==='优选商品'){
-            this.props.store.getProdType('YOUXUAN')
-        }else if(type ==='外链商品'){
-            this.props.store.getProdType('LINK')
-        }
-        this.props.store.getProductFieldsData(fieldData[0])
-        this.setState({
-            visible: true,
-            productID:ID,
-            modalName:"更新商品",
-        });
-    }
-
-    handleChange = key => {
-      // console.log('key', key)
-      if(key==='-1'){
-        this.queryProdData(1);
-      }else{
-        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            res => {
-                console.log('111', res)
-                res.tagProducts.products.map(
-                    (prod) => {
-                        prod.key = prod.id;
-                        if(prod.type === 'youxuan'){
-                            prod.type ="优选商品"
-                        }
-                        if(prod.type === 'link'){
-                            prod.type ="外链商品"
-                        }
-                        if(prod.type === 'youzan'){
-                            prod.type = "自有商品"
-                        }
-                    }
-                )
-                this.setState({
-                    data: res.tagProducts.products,
-                    totalEntries:res.tagProducts.totalCount
-                })
-            }
-        ).catch(err => Request.token_auth(err))
-      }
-    }
-
-    unShlfConfirm = ID => {
-        Request.GraphQlRequest(setDisplayProduct,
-            {
-                isDisplay: false,
-                shopId: localStorage.getItem('shopID'),
-                id: ID
-            }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            res => {
-                // console.log('2223', res)
-                  message.success('下架成功！');
-                  this.queryProdData(1);
-          }
-      ).catch(
-          err=>{
-            message.error('下架失败！');
-            Request.token_auth(err)
-          }
-        )
-    }
-
-
-    //add to group
-    changeProductTag = ID => {
-        this.setState({
-            productID:ID,
-            groupModalVisible:true
-        })
-    }
-
-    //select Radio to group
-    onRadioChange = e => {
-        // console.log('radio checked', e.target.value);
-        this.setState({
-            radioValue: e.target.value,
-        });
-    }
-
-    handleRadioCancel = () => {
-        this.setState({
-            radioValue: null,
-            groupModalVisible:false
-        });
-    }
-
-    handleGroupModalOk = () => {
-      if(this.state.radioValue){
-          Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-              res => {
-                  // console.log('OK', res)
-                  this.setState({
-                      radioValue: null,
-                      groupModalVisible:false,
-                      productID:''
-                  });
-                  message.success('添加成功！')
-                  this.queryProdData(1);
+  updateProduct = ( ID, type ) => {
+      const fieldData = this.state.data.filter(
+          entry =>{
+              if(parseInt(entry.id) === ID){
+                  return entry
               }
-          ).catch(err => {message.error('添加失败'); Request.token_auth(err)})
+          }
+      );
+      if(type ==='自有商品'){
+          this.props.store.getProdType('YOUZAN')
+      }else if(type ==='优选商品'){
+          this.props.store.getProdType('YOUXUAN')
+      }else if(type ==='外链商品'){
+          this.props.store.getProdType('LINK')
       }
+      this.props.store.getProductFieldsData(fieldData[0])
+      this.setState({
+          visible: true,
+          productID:ID,
+          modalName:"更新商品",
+      });
+  }
+
+  handleChange = key => {
+    // console.log('key', key)
+    if(key==='-1'){
+      this.queryProdData(1);
+    }else{
+      Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+          res => {
+              console.log('111', res)
+              res.tagProducts.products.map(
+                  (prod) => {
+                      prod.key = prod.id;
+                      if(prod.type === 'youxuan'){
+                          prod.type ="优选商品"
+                      }
+                      if(prod.type === 'link'){
+                          prod.type ="外链商品"
+                      }
+                      if(prod.type === 'youzan'){
+                          prod.type = "自有商品"
+                      }
+                  }
+              )
+              this.setState({
+                  data: res.tagProducts.products,
+                  totalEntries:res.tagProducts.totalCount
+              })
+          }
+      ).catch(err => Request.token_auth(err))
     }
+  }
+
+  unShlfConfirm = ID => {
+      Request.GraphQlRequest(setDisplayProduct,
+          {
+              isDisplay: false,
+              shopId: localStorage.getItem('shopID'),
+              id: ID
+          }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+          res => {
+              // console.log('2223', res)
+                message.success('下架成功！');
+                this.queryProdData(1);
+        }
+    ).catch(
+        err=>{
+          message.error('下架失败！');
+          Request.token_auth(err)
+        }
+      )
+  }
+
+
+  //add to group
+  changeProductTag = ID => {
+      this.setState({
+          productID:ID,
+          groupModalVisible:true
+      })
+  }
+
+  //select Radio to group
+  onRadioChange = e => {
+      // console.log('radio checked', e.target.value);
+      this.setState({
+          radioValue: e.target.value,
+      });
+  }
+
+  handleRadioCancel = () => {
+      this.setState({
+          radioValue: null,
+          groupModalVisible:false
+      });
+  }
+
+  handleGroupModalOk = () => {
+    if(this.state.radioValue){
+        Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+            res => {
+                // console.log('OK', res)
+                this.setState({
+                    radioValue: null,
+                    groupModalVisible:false,
+                    productID:''
+                });
+                message.success('添加成功！')
+                this.queryProdData(1);
+            }
+        ).catch(err => {message.error('添加失败'); Request.token_auth(err)})
+    }
+  }
 
   render() {
       const Tags = this.props.shopTags && this.props.shopTags.map(
@@ -644,7 +636,6 @@ export default class ProdTable extends React.Component {
       )
     return (
         <div>
-
             <Affix offsetTop={8} target={() => document.getElementById('main-content-div')} style={{ marginBottom:"20px", textAlign:"right" }}>
                 <Button type="primary" onClick={this.onClickInsert} >
                   <Icon type="plus-circle-o"/>新增商品
@@ -667,13 +658,14 @@ export default class ProdTable extends React.Component {
               !isEmpty(this.state.data)
                 &&
               <Pagination
-              defaultCurrent={1}
-              current={this.state.curPage}
-              pageSize={8}
-              onChange={this.onPageChange}
-              total={this.state.data? this.state.totalEntries : 1}
-              style={{ float:"right", marginTop: "10px"}}/>
+                defaultCurrent={1}
+                current={this.state.curPage}
+                pageSize={8}
+                onChange={this.onPageChange}
+                total={this.state.data? this.state.totalEntries : 1}
+                style={{ float:"right", marginTop: "10px"}}/>
             }
+
           <Modal
               title={ this.state.modalName}
               visible={this.state.visible}
