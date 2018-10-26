@@ -143,16 +143,13 @@ export default class OrderManagement2 extends React.Component {
                 key: 'title',
             },
             {
-                title: '单价(元)',
+                title: '单价/数量',
                 dataIndex: 'price',
                 key: 'price',
-                width:'8%'
-            },
-            {
-                title: '数量(件)',
-                dataIndex: 'num',
-                key: 'num',
-                width:'8%'
+                width:'8%',
+                render: (text, record) => (
+                    <span>{'¥'+text+'件）'}</span>
+                ),
             },
             {
                 title: '下单时间',
