@@ -301,6 +301,7 @@ export default class OrderManagement2 extends React.Component {
   showDetails = ID => {
       Request.GraphQlRequest(shopTradeInfo, {id: localStorage.getItem('shopID'), tid:ID },`Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
+            console.log('111', res)
               this.setState({
                   detailInfo:res.shopTradeInfo,
                   visible:true
@@ -381,11 +382,11 @@ export default class OrderManagement2 extends React.Component {
   }
 
   render() {
-    const { refundInfo, refundPROD, postData } =  this.state
+    const { refundInfo, refundPROD, postData, detailInfo, tagName, isSpin, data, columns, visible, curPage } =  this.state
     return (
         <div>
           <div>
-              <Radio.Group value={this.state.tagName} onChange={this.onTabChange} >
+              <Radio.Group value={tagName} onChange={this.onTabChange} >
                 <Radio.Button value={undefined}>全部</Radio.Button>
                 <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
                 <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
@@ -397,55 +398,54 @@ export default class OrderManagement2 extends React.Component {
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
                 <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
-            <Spin spinning={this.state.isSpin}>
-                <Table bordered dataSource={this.state.data? this.state.data.entries : null } columns={this.state.columns} pagination={false}/>
+            <Spin spinning={isSpin}>
+                <Table bordered dataSource={data? data.entries : null } columns={columns} pagination={false}/>
             </Spin>
 
             {
-              this.state.detailInfo
+              detailInfo
               &&
               <Modal
                   title="订单详情"
-                  visible={this.state.visible}
+                  visible={visible}
                   onCancel={this.handleCancel}
                   destroyOnClose={true}
                   footer={null}
               >
-                <h2>基本信息：</h2>
-                <p><strong>下单人：</strong>{ this.state.detailInfo.receiverName}</p>
-                <p><strong>手机号：</strong>{ this.state.detailInfo.receiverMobile}</p>
+                <p>
+                  <img src={detailInfo.picThumbPath} style={{ width:"8em" ,marginRight:'2em' }} alt="##"/>
+                  <span>{detailInfo.title}</span>
+                </p>
                 <br/>
-                <h2>订单信息：</h2>
-                <p><strong>订单号：</strong>{ this.state.detailInfo.tid}</p>
-                <p><strong>商品名称：</strong>{ this.state.detailInfo.title}</p>
-                <p><strong>商品单价：</strong>{ '¥'+ this.state.detailInfo.price}</p>
-                <p><strong>购买数量：</strong>{ this.state.detailInfo.num}</p>
-                <p><strong>邮费：</strong>{ '¥'+ this.state.detailInfo.postFee }</p>
-                <p><strong>收货地址：</strong>{ this.state.detailInfo.buyerArea + this.state.detailInfo.receiverDistrict + this.state.detailInfo.receiverAddress }</p>
-                <p><strong>状态：</strong>{ this.state.detailInfo.statusStr }</p>
-                <p><strong>创建时间：</strong>{ this.state.detailInfo.created }</p>
+                <p><strong>订单号：</strong>{ detailInfo.tid}</p>
+                <p><strong>商品单价：</strong>{ '¥'+ detailInfo.price}</p>
+                <p><strong>购买数量：</strong>{ detailInfo.num}</p>
+                <p><strong>邮费：</strong>{ '¥'+ detailInfo.postFee }</p>
+                <p><strong>收货地址：</strong>{ `${detailInfo.receiverState}${detailInfo.receiverDistrict}${detailInfo.receiverAddress}，${detailInfo.receiverName}，${detailInfo.receiverMobile}`}</p>
+                <p><strong>状态：</strong>{ detailInfo.statusStr }</p>
+                <p><strong>创建时间：</strong>{ detailInfo.created }</p>
               </Modal>
             }
 
           <PostSendModal
               postData={ postData }
-              querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+              querySupplierOrder={ () => { this.querySupplierOrder(tagName, curPage) } }
           />
 
           <RefundModal
               refundPROD={ refundPROD }
               refundInfo={ refundInfo }
-              querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+              querySupplierOrder={ () => { this.querySupplierOrder(tagName, curPage) } }
           />
 
             {
-            (this.state.data && this.state.data.totalEntries !==0)
+            (data && data.totalEntries !==0)
             &&
             <Pagination
             pageSize={10}
-            current={this.state.curPage}
+            current={curPage}
             onChange={this.onPageChange}
-            total={this.state.data? this.state.data.totalEntries : 0}
+            total={data? data.totalEntries : 0}
             style={{ float: "right", marginTop: "10px"}}/>
             }
         </div>
