@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Affix, Button, Input, Alert, Icon, Divider } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Button, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
@@ -238,14 +238,14 @@ export default class SupplierOrder extends React.Component {
           render: (text,record) => (
               <div>
                   <a href="javascript:;" onClick={ () => { this.showDetails(text) } }>详情</a>
-                  {
-                    !record.isSettle
-                      &&
-                        <span>
-                        <Divider type="vertical" />
-                          <a href="javascript:void(0)">去结算</a>
-                        </span>
-                  }
+                  {/*{*/}
+                    {/*!record.isSettle*/}
+                      {/*&&*/}
+                        {/*<span>*/}
+                        {/*<Divider type="vertical" />*/}
+                          {/*<a href="javascript:void(0)">去结算</a>*/}
+                        {/*</span>*/}
+                  {/*}*/}
               </div>
           ),
         }
@@ -304,7 +304,12 @@ export default class SupplierOrder extends React.Component {
           // console.log('getRefundInfo', res.getRefundInfo.refunds[0].refundId)
           this.queryRefundDetails(res.getRefundInfo.refunds[0].refundId)
         }
-    ).catch( err => Request.token_auth(err) )
+    ).catch( err => {
+      Request.token_auth(err)
+      this.setState({
+        refundInfo:null
+      })
+    } )
   }
 
   queryRefundDetails = refundId => {
@@ -427,21 +432,21 @@ export default class SupplierOrder extends React.Component {
     return (
         <div>
           <Spin spinning={this.state.isSpin}>
-            <Affix offsetTop={10}>
-              <Radio.Group value={this.state.tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }} >
-                <Radio.Button value={undefined}>全部</Radio.Button>
-                <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
-                <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
-                <Radio.Button value="WAIT_BUYER_CONFIRM_GOODS">已发货</Radio.Button>
-                <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
-                <Radio.Button value="TRADE_CLOSED">已关闭</Radio.Button>
-              </Radio.Group>
-            </Affix>
+            <div>
+                <Radio.Group value={this.state.tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }} >
+                  <Radio.Button value={undefined}>全部</Radio.Button>
+                  <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
+                  <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
+                  <Radio.Button value="WAIT_BUYER_CONFIRM_GOODS">已发货</Radio.Button>
+                  <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
+                  <Radio.Button value="TRADE_CLOSED">已关闭</Radio.Button>
+                </Radio.Group>
+            </div>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
               <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
             <Spin spinning={this.state.isSpin1}>
-              <Table bordered dataSource={ this.state.orderData&& this.state.orderData.entries } columns={this.state.columns} pagination={false}/>
+              <Table bordered dataSource={ this.state.orderData && this.state.orderData.entries } columns={this.state.columns} pagination={false}/>
             </Spin>
             {
               this.state.detailInfo

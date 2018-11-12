@@ -91,7 +91,7 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount (){
-    if(localStorage.getItem('role').indexOf('shop_biz') === -1){
+    if(localStorage.getItem('role') && localStorage.getItem('role').indexOf('shop_biz') === -1){
       this.setState({
         isShown:true
       })

@@ -384,16 +384,16 @@ export default class OrderManagement2 extends React.Component {
     const { refundInfo, refundPROD, postData } =  this.state
     return (
         <div>
-          <Affix offsetTop={10} style={{ marginBottom: 16 }}>
-            <Radio.Group value={this.state.tagName} onChange={this.onTabChange} >
-              <Radio.Button value={undefined}>全部</Radio.Button>
-              <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
-              <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
-              <Radio.Button value="WAIT_BUYER_CONFIRM_GOODS">已发货</Radio.Button>
-              <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
-              <Radio.Button value="TRADE_CLOSED">已关闭</Radio.Button>
-            </Radio.Group>
-          </Affix>
+          <div>
+              <Radio.Group value={this.state.tagName} onChange={this.onTabChange} >
+                <Radio.Button value={undefined}>全部</Radio.Button>
+                <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
+                <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
+                <Radio.Button value="WAIT_BUYER_CONFIRM_GOODS">已发货</Radio.Button>
+                <Radio.Button value="TRADE_SUCCESS">已完成</Radio.Button>
+                <Radio.Button value="TRADE_CLOSED">已关闭</Radio.Button>
+              </Radio.Group>
+          </div>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
                 <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>

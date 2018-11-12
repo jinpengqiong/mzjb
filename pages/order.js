@@ -1,6 +1,7 @@
 import React from 'react';
 import MyLayout from '../components/MyLayout/MyLayout';
 import OrderManagement2 from '../components/myOrder/myOrder2'
+import SelfOrders from '../components/myOrder/selfOrder'
 import SettleDistributor from '../components/myOrder/settle_distributor'
 import { Provider } from 'mobx-react'
 import { initStore } from '../store'
@@ -50,7 +51,10 @@ export default class MyOrder extends React.Component {
                   <TabPane tab='客户订单' key="1">
                       <OrderManagement2 />
                   </TabPane>
-                  <TabPane tab='结算清单' key="2" >
+                  <TabPane tab='个人订单' key="2">
+                      <SelfOrders />
+                  </TabPane>
+                  <TabPane tab='结算清单' key="3" >
                       <SettleDistributor />
                   </TabPane>
               </Tabs>
