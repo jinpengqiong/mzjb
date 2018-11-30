@@ -72,6 +72,7 @@ class RegistrationForm extends React.Component {
 const StockProdForm = Form.create(
     {
         mapPropsToFields(props) {
+          console.log('props', props)
             if (props.GroupData) {
                 return {
                     name: Form.createFormField({

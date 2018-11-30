@@ -141,17 +141,11 @@ export default class InStock extends React.Component {
             modalName:null,
             totalEntries:null,
             curPage:'1',
+            optionKey:'-1',
             groupModalVisible:false,
             radioValue:null,
             isSpin:false,
             columns : [
-                // {
-                //     dataIndex: 'id',
-                //     title: 'ID',
-                //     dataType: 'int',
-                //     width: 60,
-                //     primary: true,
-                // },
                 {
                     dataIndex: 'title',
                     title: '商品名称',
@@ -171,7 +165,7 @@ export default class InStock extends React.Component {
                     title: '单价',
                     dataType: 'varchar',
                     width: 100,
-                    validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
+                        validator: [{type: 'string', pattern: /^\d+(\.\d{1,2})?$/, message: '只能是数字哦。',required:true}],
                     render: text => `¥${((parseFloat(text)) / 100).toFixed(2)}`,
                 },
                 {
@@ -180,78 +174,78 @@ export default class InStock extends React.Component {
                     dataType: 'varchar',
                     width: 100,
                 },
-              {
-                title: '操作',
-                key: 'action',
-                width: 240,
-                render: (text, record) => (
-                    <div>
-                      <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
-                        <a href="#">上架</a>
-                      </Popconfirm>
-                      <Divider type="vertical" />
-                      <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
-                      {
-                        record.type !== '优选商品'
-                        &&
-                        <span>
-                          <Divider type="vertical" />
-                          <a href="#" onClick={
-                            ()=>{ this.updateProduct(parseInt(record.id), record.type) }
-                          }>更新</a>
-                        </span>
-                      }
-                      <Divider type="vertical" />
-                      <Popover
-                          trigger="click"
-                          content={
-                            <Tabs defaultActiveKey="1">
-                              <TabPane tab="商品二维码" key="1">
-                                <div style={{ marginLeft:'5em'}}>
-                                  <QRCode size={100} value={ record.detailUrl } />
-                                </div>
-                              </TabPane>
-                              <TabPane tab="商品链接" key="2">
-                                <div>
-                                  <p>商品页链接</p>
-                                  <Input
-                                      value={ record.detailUrl.length<70? record.detailUrl : record.detailUrl.slice(0, 70) + '...' }
-                                      disabled
-                                      style={{ width:'18em' }}
-                                  />
-                                  <span>
-                                      <Clipboard  text={record.detailUrl}  />
-                                    </span>
-                                </div>
-                              </TabPane>
-                            </Tabs>
-
-                          }>
-                        <a href="javascript:void(0);" >推广商品</a>
-                      </Popover>
-                      <Divider type="vertical" />
-                        <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
-                          <a href="#" >删除</a>
+                {
+                  title: '操作',
+                  key: 'action',
+                  width: 240,
+                  render: (text, record) => (
+                      <div>
+                        <Popconfirm title="确定要执行此操作吗?" onConfirm={()=>{this.unShlfConfirm(parseInt(record.id))}} >
+                          <a href="#">上架</a>
                         </Popconfirm>
-                    </div>
-                ),
-              }
+                        <Divider type="vertical" />
+                        <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
+                        {
+                          record.type !== '优选商品'
+                          &&
+                          <span>
+                            <Divider type="vertical" />
+                            <a href="#" onClick={
+                              ()=>{ this.updateProduct(parseInt(record.id), record.type) }
+                            }>更新</a>
+                          </span>
+                        }
+                        {/*<Divider type="vertical" />*/}
+                        {/*<Popover*/}
+                            {/*trigger="click"*/}
+                            {/*content={*/}
+                              {/*<Tabs defaultActiveKey="1">*/}
+                                {/*<TabPane tab="商品二维码" key="1">*/}
+                                  {/*<div style={{ marginLeft:'5em'}}>*/}
+                                    {/*<QRCode size={100} value={ record.detailUrl } />*/}
+                                  {/*</div>*/}
+                                {/*</TabPane>*/}
+                                {/*<TabPane tab="商品链接" key="2">*/}
+                                  {/*<div>*/}
+                                    {/*<p>商品页链接</p>*/}
+                                    {/*<Input*/}
+                                        {/*value={ record.detailUrl.length<70? record.detailUrl : record.detailUrl.slice(0, 70) + '...' }*/}
+                                        {/*disabled*/}
+                                        {/*style={{ width:'18em' }}*/}
+                                    {/*/>*/}
+                                    {/*<span>*/}
+                                        {/*<Clipboard  text={record.detailUrl}  />*/}
+                                      {/*</span>*/}
+                                  {/*</div>*/}
+                                {/*</TabPane>*/}
+                              {/*</Tabs>*/}
+
+                            {/*}>*/}
+                          {/*<a href="javascript:void(0);" >推广商品</a>*/}
+                        {/*</Popover>*/}
+                        <Divider type="vertical" />
+                          <Popconfirm title="确定要删除该商品吗?" onConfirm={()=>{ this.confirm(parseInt(record.id))}}>
+                            <a href="#" >删除</a>
+                          </Popconfirm>
+                      </div>
+                  ),
+                }
             ]
         }
     }
 
     componentDidMount(){
-        this.queryProdData(1);
+      this.queryProdData(1);
     }
 
-    queryProdData= (curPage) => {
+    queryProdData= curPage => {
         this.setState({
           isSpin:true
         });
         Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 res.shopProducts.entries.map(
-                    (entry) => {
+                    entry => {
                         entry.key = entry.id;
                         if(entry.type === 'youxuan'){
                             entry.type ="优选商品"
@@ -275,7 +269,7 @@ export default class InStock extends React.Component {
         ).catch(err => Request.token_auth(err))
     }
 
-    onPageChange = (pageNumber) => {
+    onPageChange = pageNumber => {
         this.queryProdData(pageNumber);
     }
 
@@ -433,7 +427,7 @@ export default class InStock extends React.Component {
                                 id: this.state.productID,
                                 type:this.props.store.prodType,
                             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res) => {
+                            res => {
                                 res.updateProduct.key = res.updateProduct.id;
                                 delete res.updateProduct.imagesUrls;
                                 delete res.updateProduct.images;
@@ -475,7 +469,7 @@ export default class InStock extends React.Component {
         this.props.store.getMainImage('')
     }
 
-    callback = (key) => {
+    callback = key => {
         this.props.store.getTabOption(key)
     }
 
@@ -525,8 +519,9 @@ export default class InStock extends React.Component {
 
     }
 
-    handleChange = (key) => {
+    handleChange = key => {
       // console.log('key', key)
+      this.setState({optionKey:key})
       if(key==='-1'){
         this.queryProdData(1);
       }else{
@@ -556,7 +551,7 @@ export default class InStock extends React.Component {
       }
     }
 
-    unShlfConfirm = (ID) => {
+    unShlfConfirm = ID => {
         Request.GraphQlRequest(setDisplayProduct,
             {
                 isDisplay: true,
@@ -566,6 +561,7 @@ export default class InStock extends React.Component {
             res => {
                 // console.log('2223', res)
                 message.success('上架成功！');
+                this.setState({optionKey:'-1'})
                 this.queryProdData(1);
             }
         ).catch(err => Request.token_auth(err))
@@ -573,7 +569,7 @@ export default class InStock extends React.Component {
 
 
     //add to group
-    changeProductTag = (ID) => {
+    changeProductTag = ID => {
         // console.log('ID',ID)
         this.setState({
             productID:ID,
@@ -582,7 +578,7 @@ export default class InStock extends React.Component {
     }
 
     //select Radio to group
-    onRadioChange = (e) => {
+    onRadioChange = e => {
         // console.log('radio checked', e.target.value);
         this.setState({
             radioValue: e.target.value,
@@ -633,7 +629,7 @@ export default class InStock extends React.Component {
                     <Button type="primary" onClick={this.onClickInsert} >
                         <Icon type="plus-circle-o"/>新增商品
                     </Button>
-                    <Select defaultValue="-1" style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
+                    <Select value={this.state.optionKey} style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
                         <Option value="-1" key='-1'>所有分组</Option>
                         {Tags}
                     </Select>
@@ -663,6 +659,7 @@ export default class InStock extends React.Component {
                   onOk={this.handleOk}
                   onCancel={this.handleCancel}
                   destroyOnClose={true}
+                  maskClosable={false}
                   width = "1000px"
               >
                 {
@@ -688,7 +685,7 @@ export default class InStock extends React.Component {
                   onOk={this.handleGroupModalOk}
                   onCancel={this.handleRadioCancel}
                   destroyOnClose={true}
-              >
+                  maskClosable={false}>
                 <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
                   {TagRadios}
                 </RadioGroup>

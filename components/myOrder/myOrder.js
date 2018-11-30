@@ -249,7 +249,7 @@ export default class OrderManagement extends React.Component {
                         onCancel={this.handleCancel}
                         destroyOnClose={true}
                         footer={null}
-                    >
+                        maskClosable={false}>
                         <h3>基本信息：</h3>
                         <p>下单人：{ this.state.detailInfo.receiverName}</p>
                         <p>手机号：{ this.state.detailInfo.receiverMobile}</p>

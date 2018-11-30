@@ -349,7 +349,7 @@ export default class RefundModal extends React.Component {
                 onCancel={this.handleModalCancel}
                 destroyOnClose={true}
                 footer={null}
-            >
+                maskClosable={false}>
               <p>
                 <img src={refundPROD.prod.pic} style={{ width:"8em" ,marginRight:'2em' }} alt="##"/>
                 <span>{refundPROD.prod.title}</span>

@@ -351,7 +351,7 @@ export default class MyHeader extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                >
+                    maskClosable={false}>
                   <SetPassword ref="form"/>
                 </Modal>
                 <Modal
@@ -359,7 +359,7 @@ export default class MyHeader extends React.Component {
                     visible={this.state.visible2}
                     onOk={this.handleNameChange}
                     onCancel={this.handleNameCancel}
-                >
+                    maskClosable={false}>
                   新店铺名：<Input value={this.state.shopNameValue} onChange={this.handleInputChange} style={{ width:'300px'}}/>
                 </Modal>
                 <Modal
@@ -367,7 +367,7 @@ export default class MyHeader extends React.Component {
                     visible={this.state.visible1}
                     onOk={this.swtichShopsOk}
                     onCancel={this.swtichShopsCancel}
-                  >
+                    maskClosable={false}>
                   <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
                     <h3>自有店铺：</h3>
                     <Radio value={localStorage.getItem('OriginalID')} key={localStorage.getItem('OriginalID')}>{ localStorage.getItem('OriginalName') }</Radio>

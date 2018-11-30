@@ -167,7 +167,7 @@ export default class SelfOrder extends React.Component {
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
                     footer={null}
-                >
+                    maskClosable={false}>
                   <p>
                     <img src={detailData.picThumbPath} style={{ width:"8em" ,marginRight:'2em' }} alt="##"/>
                     <span>{detailData.title}</span>

@@ -381,6 +381,7 @@ export default class SupplierOrder extends React.Component {
                   visible={ this.state.detailVisible }
                   onCancel={ this.handleCancel }
                   destroyOnClose={true}
+                  maskClosable={false}
                   footer={null}
               >
                 <h3>基本信息：</h3>
@@ -414,7 +415,7 @@ export default class SupplierOrder extends React.Component {
                   onOk={ () => { this.handlePostSend(this.state.postData.prod.tid) }}
                   onCancel={ this.handlePostCancel }
                   destroyOnClose={true}
-              >
+                  maskClosable={false}>
                 <p>
                   <strong>收获地址：</strong>
                   {

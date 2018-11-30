@@ -166,7 +166,7 @@ export default class BindLiveRoom extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                >
+                    maskClosable={false}>
                     <h4>直播间列表：</h4>
                     <RadioGroup onChange={this.onChange} value={this.state.radioValue}>
                         {

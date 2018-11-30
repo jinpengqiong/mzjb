@@ -88,7 +88,7 @@ class ShopImgUploader extends React.Component {
             filters : {
                 max_file_size : '5mb',
                 mime_types: [
-                    {title : "Image files", extensions : "jpg,gif,png,bmp"},
+                    {title : "Image files", extensions : "jpg,jpeg,gif,png,bmp"},
                 ]
             },
             init: {
@@ -124,7 +124,8 @@ class ShopImgUploader extends React.Component {
                     }
                 },
                 Error: function(up, err) {
-                    message.error('出错了！'+err.response);
+                    console.log(err)
+                    message.error('出错了！'+err);
                 }
             }
         });

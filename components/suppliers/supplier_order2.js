@@ -428,12 +428,12 @@ export default class SupplierOrder extends React.Component {
 
   render() {
     const detailInfo = this.state.detailInfo && JSON.parse(this.state.detailInfo.detail).full_order_info
-    const { refundInfo, refundPROD, postData } =  this.state
+    const { refundInfo, refundPROD, postData, isSpin, isSpin1, tagName, orderData, columns, detailVisible, curPage } =  this.state
     return (
         <div>
-          <Spin spinning={this.state.isSpin}>
+          <Spin spinning={isSpin}>
             <div>
-                <Radio.Group value={this.state.tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }} >
+                <Radio.Group value={tagName} onChange={this.onTabChange} style={{ marginBottom: 16 }} >
                   <Radio.Button value={undefined}>全部</Radio.Button>
                   <Radio.Button value="WAIT_BUYER_PAY">待付款</Radio.Button>
                   <Radio.Button value="WAIT_SELLER_SEND_GOODS">待发货</Radio.Button>
@@ -445,19 +445,19 @@ export default class SupplierOrder extends React.Component {
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
               <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
-            <Spin spinning={this.state.isSpin1}>
-              <Table bordered dataSource={ this.state.orderData && this.state.orderData.entries } columns={this.state.columns} pagination={false}/>
+            <Spin spinning={isSpin1}>
+              <Table bordered dataSource={ orderData && orderData.entries } columns={columns} pagination={false}/>
             </Spin>
             {
-              this.state.detailInfo
+              detailInfo
                 &&
               <Modal
                   title="订单详情"
-                  visible={ this.state.detailVisible }
+                  visible={ detailVisible }
                   onCancel={ this.handleCancel }
                   destroyOnClose={true}
                   footer={null}
-              >
+                  maskClosable={false}>
                 <h2>基本信息：</h2>
                 <p><strong>下单人：</strong>{ detailInfo.buyer_info.fans_nickname }</p>
                 <p><strong>手机号：</strong>{ detailInfo.address_info.receiver_tel }</p>
@@ -484,24 +484,24 @@ export default class SupplierOrder extends React.Component {
 
             <PostSendModal
                 postData={ postData }
-                querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+                querySupplierOrder={ () => { this.querySupplierOrder(tagName, curPage) } }
             />
 
             <RefundModal
                 refundPROD={ refundPROD }
                 refundInfo={ refundInfo }
-                querySupplierOrder={ () => { this.querySupplierOrder(this.state.tagName, this.state.curPage) } }
+                querySupplierOrder={ () => { this.querySupplierOrder(tagName, curPage) } }
             />
 
           </Spin>
           {
-            (this.state.orderData && this.state.orderData.totalEntries !==0)
+            (orderData && orderData.totalEntries !==0)
             &&
             <Pagination
                 pageSize={8}
                 current={this.state.curPage}
                 onChange={this.onPageChange}
-                total={ this.state.orderData? this.state.orderData.totalEntries:0 }
+                total={ orderData? orderData.totalEntries:0 }
                 style={{ float: "right", marginTop: "10px"}}/>
           }
         </div>

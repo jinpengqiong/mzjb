@@ -143,6 +143,14 @@ export default class OrderManagement2 extends React.Component {
                 key: 'title',
             },
             {
+                title: '商品类型',
+                dataIndex: 'supplierName',
+                key: 'supplierName',
+                render: text => (
+                    <span>{ text? '优选商品' : '自有商品'}</span>
+                ),
+            },
+            {
                 title: '单价/数量',
                 dataIndex: 'price',
                 key: 'price',
@@ -411,7 +419,7 @@ export default class OrderManagement2 extends React.Component {
                   onCancel={this.handleCancel}
                   destroyOnClose={true}
                   footer={null}
-              >
+                  maskClosable={false}>
                 <p>
                   <img src={detailInfo.picThumbPath} style={{ width:"8em" ,marginRight:'2em' }} alt="##"/>
                   <span>{detailInfo.title}</span>

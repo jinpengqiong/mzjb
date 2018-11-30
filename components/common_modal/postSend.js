@@ -146,7 +146,7 @@ export default class PostSendModal extends React.Component {
                 }
                 onCancel={ this.handlePostCancel }
                 destroyOnClose={true}
-            >
+                maskClosable={false}>
               <p>
                 <strong>收获地址：</strong>
                 {

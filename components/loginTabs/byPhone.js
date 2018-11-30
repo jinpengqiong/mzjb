@@ -184,7 +184,7 @@ class NormalLoginForm extends React.Component {
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
-        >
+            maskClosable={false}>
           <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
             <Radio value={1}>商品管理页面</Radio>
             <Radio value={2}>供货商订单管理页面</Radio>

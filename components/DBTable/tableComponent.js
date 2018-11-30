@@ -145,6 +145,7 @@ export default class ProdTable extends React.Component {
         radioValue:null,
         curPage:'1',
         isSpin:false,
+        optionKey:'-1',
         columns : [
             // {
             //     dataIndex: 'id',
@@ -529,6 +530,7 @@ export default class ProdTable extends React.Component {
 
   handleChange = key => {
     // console.log('key', key)
+    this.setState({optionKey:key})
     if(key==='-1'){
       this.queryProdData(1);
     }else{
@@ -568,6 +570,7 @@ export default class ProdTable extends React.Component {
           res => {
               // console.log('2223', res)
                 message.success('下架成功！');
+                this.setState({optionKey:'-1'})
                 this.queryProdData(1);
         }
     ).catch(
@@ -640,7 +643,7 @@ export default class ProdTable extends React.Component {
                 <Button type="primary" onClick={this.onClickInsert} >
                   <Icon type="plus-circle-o"/>新增商品
                 </Button>
-                <Select defaultValue="-1" style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
+                <Select value={this.state.optionKey} style={{marginLeft:'5px', width: 120 }} onChange={this.handleChange}>
                     <Option value="-1" key='-1'>所有分组</Option>
                     {Tags}
                 </Select>
@@ -672,6 +675,7 @@ export default class ProdTable extends React.Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
               destroyOnClose={true}
+              maskClosable={false}
               width = "1000px"
           >
             {
@@ -698,7 +702,7 @@ export default class ProdTable extends React.Component {
               onOk={this.handleGroupModalOk}
               onCancel={this.handleRadioCancel}
               destroyOnClose={true}
-          >
+              maskClosable={false}>
             <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
               { TagRadios }
             </RadioGroup>

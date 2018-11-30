@@ -1,7 +1,7 @@
 import { Button, Table, Divider, Popconfirm, message, Pagination, Tag, Icon } from'antd';
 import { inject, observer } from 'mobx-react'
 import dynamic from 'next/dynamic'
-const ProdModuleSet = dynamic(import('./prodModuleSet'))
+const ProdModuleSet = dynamic(import('./prodModuleSet'),{ssr:false})
 import Request from '../../utils/graphql_request';
 import moment from 'moment'
 import EmbeddedAndSharing from './enbedded_and_sharing'
@@ -58,11 +58,9 @@ export default class ProdModule extends React.Component {
             ShoppageData:null,
             curShopPage:null,
             ID:null,
-            columns : [{
-                title: 'ID',
-                dataIndex: 'id',
-                key: 'id',
-            }, {
+            preComp:null,
+            columns : [
+                {
                 title: '名称',
                 dataIndex: 'name',
                 key: 'name',
@@ -123,6 +121,7 @@ export default class ProdModule extends React.Component {
         this.queryShoppage(1)
         this.queryCurShoppage()
         this.props.store.changeSettingDisplay(false);
+        this.setState({ preComp: this.preRender() })
     }
 
     //query current shoppage
@@ -193,13 +192,19 @@ export default class ProdModule extends React.Component {
         this.queryShoppage(page)
     }
 
+    preRender = () => {
+        return (
+            <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
+        )
+    }
+
     render() {
         // console.log('props', this.props)
         return (
             <div>
                 {
-                this.props.store.isShown?
-                    <ProdModuleSet refeshTable={ () => { this.queryShoppage(1) }} ID={ this.state.ID }/>
+                  this.state.preComp && this.props.store.isShown?
+                  this.state.preComp
                     :
                     (this.state.ShoppageData && !isEmpty(this.state.ShoppageData.entries))?
                     <div>

@@ -59,11 +59,6 @@ export default class GroupProduct extends React.Component {
             groupFieldsData:null,
             columns : [
                 {
-                    title: 'ID',
-                    dataIndex: 'id',
-                    key: 'id',
-                },
-                {
                     title: '分组名称',
                     dataIndex: 'name',
                     key: 'name',
@@ -117,7 +112,8 @@ export default class GroupProduct extends React.Component {
     addGroup = () => {
         this.setState({
             visible: true,
-            ModalName:'新增分组'
+            ModalName:'新增分组',
+            groupFieldsData:null
         })
     }
 
@@ -225,7 +221,7 @@ export default class GroupProduct extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                >
+                    maskClosable={false}>
                     <StockProdForm ref='form' GroupData={this.state.groupFieldsData}  />
                 </Modal>
                 <Table bordered dataSource={this.state.data? this.state.data : null } columns={this.state.columns} pagination={false}/>

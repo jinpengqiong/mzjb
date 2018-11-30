@@ -366,7 +366,7 @@ export default class AutoReply extends React.Component {
                         onOk={this.handleOk}
                         destroyOnClose={true}
                         onCancel={this.handleCancel}
-                    >
+                        maskClosable={false}>
                         <SelfReplyForm ref='form'/>
                     </Modal>
                     <Col span={17} offset={1}>
