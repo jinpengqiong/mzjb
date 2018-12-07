@@ -1,6 +1,6 @@
-import { Table, Popconfirm, Pagination, message } from 'antd';
+import { Table, Popconfirm, Pagination, message, Input, Button, Icon } from 'antd';
 import Request from '../../utils/graphql_request';
-
+const Search = Input.Search;
 
 const queryUsers = `
     query ($page: Int, $pageSize: Int) {
@@ -14,6 +14,17 @@ const queryUsers = `
                 phone
                 role
             }
+        }
+    }
+`;
+
+const findOneUser = `
+    query ($type: SearchUserType!, $value: String!) {
+        findOneUser(type:$type,value:$value){
+            id
+            nickname
+            phone
+            role
         }
     }
 `;
@@ -33,12 +44,8 @@ export default class UserList extends React.Component {
     super(props);
     this.state={
         data:null,
+        phoneNumber:'',
         columns : [
-            {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            },
             {
             title: '用户名',
             dataIndex: 'nickname',
@@ -59,9 +66,14 @@ export default class UserList extends React.Component {
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <Popconfirm title="确定要授权该用户开店吗?" onConfirm={() =>{this.confirm(record.id)}} onCancel={this.cancel} okText="Yes" cancelText="No">
-                        <a href="#">授权开店</a>
-                    </Popconfirm>
+                  {
+                    (!record.role || (record.role && record.role.indexOf('shop_biz') === -1))?
+                        <Popconfirm title="确定要授权该用户开店吗?" onConfirm={() =>{this.confirm(record.id)}} onCancel={this.cancel} okText="Yes" cancelText="No">
+                          <a href="#">授权开店</a>
+                        </Popconfirm>
+                        :
+                        '已授权'
+                  }
                 </span>
             ),
           }]
@@ -80,7 +92,7 @@ export default class UserList extends React.Component {
                     entry.key = entry.id
                 }
             )
-            // console.log('res', res)
+            console.log('res', res)
             this.setState({
                 data: res.allUsers
             })
@@ -107,9 +119,58 @@ export default class UserList extends React.Component {
     this.queryUserData(pageNumber);
   }
 
+  refresh = () => {
+    this.setState({
+      phoneNumber:''
+    })
+    this.queryUserData(1);
+  }
+
+  handleSearchChange = e => {
+    console.log('e', e.target.value)
+    this.setState({
+      phoneNumber:e.target.value
+    })
+  }
+
+  findOneUser = value => {
+    Request.GraphQlRequest(findOneUser,
+        {
+          value,
+          type: 'USER_PHONE'
+        },
+        `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('findOneUser', res)
+          let obj = Object.assign({},res.findOneUser)
+          res.entries= []
+          res.entries.push(obj)
+          res.totalEntries =1
+          this.setState({
+            data: res
+          })
+        }
+    ).catch( err => Request.token_auth(err) )
+  }
+
+  searchUser = value => {
+    this.findOneUser(value)
+  }
+
   render() {
     return (
         <div>
+          <div style={{ textAlign:"right", marginBottom:"10px"}}>
+            <Search
+                placeholder="手机号查询"
+                onSearch={value => this.searchUser(value)}
+                style={{ width: 200 }}
+                value={this.state.phoneNumber}
+                onChange={this.handleSearchChange}
+            />
+            {' '}
+            <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
+          </div>
             <Table bordered dataSource={this.state.data? this.state.data.entries : null } columns={this.state.columns} pagination={false}/>
             {
             (this.state.data && this.state.data.totalEntries !==0)
