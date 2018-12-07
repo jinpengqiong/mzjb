@@ -1,8 +1,5 @@
-import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin, Popover, Input } from 'antd';
+import { Table, Select, Popconfirm, Pagination, message, Affix, Button, Icon, Modal, notification, Divider, Radio, Tabs, Spin } from 'antd';
 import Request from '../../utils/graphql_request';
-import  QRCode from 'qrcode.react';
-import dynamic from 'next/dynamic'
-const   Clipboard = dynamic(import ('../../utils/clipboard'))
 import { inject, observer } from 'mobx-react';
 import SelfProdForm from './selfProdForm';
 import YouzanProdForm from './youzanProdForm'
@@ -47,6 +44,17 @@ const tagProducts = `
         }
       }
 `;
+
+const getYouxuanProduct = `
+    query ($shopId: ID!, $itemId: String!) {
+        getYouxuanProduct(shopId:$shopId, itemId:$itemId){
+            item{
+              quantity
+            }
+        }
+      }
+`;
+
 const UpdateProduct = `
 mutation (
     $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
@@ -232,6 +240,7 @@ export default class InStock extends React.Component {
                 }
             ]
         }
+        this.updateProduct = this.updateProduct.bind(this)
     }
 
     componentDidMount(){
@@ -335,12 +344,14 @@ export default class InStock extends React.Component {
                 values.mainImage = this.props.store.mainImage;
                 values.price = parseInt(parseFloat(values.price)*100);
                 values.isDisplay = false;
+                const quantity = parseInt(values.quantity)
+                delete values.quantity
                 if(this.props.store.richTextContent){
                     values.desc = this.props.store.richTextContent;
                 }
                 Request.GraphQlRequest(addProduct,
-                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                    (res)=>{
+                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    res =>{
                         // console.log('res', res);
                         // this.refs.form1.resetFields();
                         res.createProduct.mainImage = this.props.store.mainImage;
@@ -377,6 +388,13 @@ export default class InStock extends React.Component {
                           message.error('请输入正确的价格！')
                           return
                         }
+                        let quantity
+                        try{
+                          quantity = parseInt(values.quantity)
+                          delete values.quantity
+                        }catch(e){
+                          console.log(e)
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -385,7 +403,8 @@ export default class InStock extends React.Component {
                                 type:this.props.store.prodType,
                                 youzan:{
                                     itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
-                                    imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                                    imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId,
+                                    quantity
                                 }
                             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             (res) => {
@@ -494,7 +513,7 @@ export default class InStock extends React.Component {
     }
 
     //updateProduct
-    updateProduct = ( ID, type ) => {
+  async updateProduct( ID, type ){
         const fieldData = this.state.data.filter(
             entry =>{
                 if(parseInt(entry.id) === ID){
@@ -503,20 +522,36 @@ export default class InStock extends React.Component {
             }
         );
         if(type ==='自有商品'){
-            this.props.store.getProdType('YOUZAN')
+          this.props.store.getProdType('YOUZAN')
+          let quantity = await this.queryYouzanQuantity(fieldData[0].itemId)
+          console.log('quantity', quantity)
+          if(quantity){
+            fieldData[0].quantity = quantity
+          }
+          // console.log('fieldData', fieldData)
+          this.props.store.getProductFieldsData(fieldData[0])
         }else if(type ==='优选商品'){
-            this.props.store.getProdType('YOUXUAN')
+          this.props.store.getProdType('YOUXUAN')
+          this.props.store.getProductFieldsData(fieldData[0])
         }else if(type ==='外链商品'){
-            this.props.store.getProdType('LINK')
+          this.props.store.getProdType('LINK')
+          this.props.store.getProductFieldsData(fieldData[0])
         }
-        this.props.store.getProductFieldsData(fieldData[0])
-        // console.log('fieldData',fieldData)
         this.setState({
             visible: true,
             productID:ID,
             modalName:"更新商品",
         });
+    }
 
+    queryYouzanQuantity = itemId => {
+      return Request.GraphQlRequest(getYouxuanProduct,
+          { itemId, shopId: localStorage.getItem('shopID') }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+          res => {
+            console.log('id', res)
+            return  res.getYouxuanProduct.item.quantity
+          }
+      ).catch(err=>{ Request.token_auth(err) })
     }
 
     handleChange = key => {
