@@ -11,7 +11,7 @@ class RegistrationForm extends React.Component {
 
 
   render() {
-      // console.log('props', this.props)
+      console.log('props', this.props)
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {

@@ -81,6 +81,16 @@ class RegistrationForm extends React.Component {
                         <Input/>
                     )}
                 </FormItem>
+
+                <FormItem
+                    {...formItemLayout}
+                    label="库存"
+                >
+                  {getFieldDecorator('quantity')(
+                      <Input/>
+                  )}
+                </FormItem>
+
                 {
                     this.props.updateState !== '更新商品'
                     &&
@@ -125,6 +135,10 @@ const YouzanProdForm = Form.create(
                     price: Form.createFormField({
                         ...props.productData.price,
                         value: (parseInt(props.productData.price)/100).toFixed(2),
+                    }),
+                    quantity: Form.createFormField({
+                        ...props.productData.quantity,
+                        value: props.productData.quantity,
                     })
                 };
             }

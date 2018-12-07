@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Button, Icon } from 'antd';
+import { Table, Pagination, message, Select, Radio, Spin, Modal, Row, Col, Button, Icon, Input } from 'antd';
 import Request from '../../utils/graphql_request';
 import { inject, observer } from 'mobx-react'
 import UUIDGen from '../../utils/uuid_generator.js';
@@ -6,7 +6,7 @@ import PostSendModal from '../common_modal/postSend'
 import RefundModal from '../common_modal/refund'
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
-
+const Search = Input.Search;
 
 const supplierTradesList2 = `
     query ($page: Int,$pageSize: Int, $status: String) {
@@ -99,6 +99,42 @@ const getRefundDetail = `
         }
     }`;
 
+const searchTradeByTid = `
+    query ($tid: String!) {
+        searchTradeByTid(tid:$tid){
+          detail
+          price
+          isAutoSettle
+          closeType
+          updatedAt
+          title
+          successAt
+          refundState
+          receiverName
+          totalFee
+          expiredAtTime
+          expiredAt
+          refundStatus
+          isSettle
+          expressType
+          consignAtTime
+          tid
+          payAt
+          receiverPhone
+          itemId
+          insertedAt
+          buyerPhone
+          createdAt
+          payAtTime
+          salemanPhone
+          supplierName
+          confirmAt
+          createdAtTime
+          status
+          num
+        }
+    }`;
+
 
 @inject('store') @observer
 export default class SupplierOrder extends React.Component {
@@ -114,7 +150,8 @@ export default class SupplierOrder extends React.Component {
       postData:null,
       curPage:1,
       refundInfo:null,
-      refundPROD:null, //退款商品的商品信息
+      refundPROD:null, //退款商品的商品信息,
+      tid:'',
       columns : [
         {
           title: '商品',
@@ -124,7 +161,7 @@ export default class SupplierOrder extends React.Component {
           render: (text, record) => (
               <div>
                 <Row span={24}>
-                  <p>订单号：{ text.tid }</p>
+                  <p>订单号：{ record.tid }</p>
                 </Row>
                 <Row span={24}>
                   <Col span={10}>
@@ -189,8 +226,8 @@ export default class SupplierOrder extends React.Component {
         },
         {
           title: '订单总额',
-          dataIndex: 'money',
-          key: 'money',
+          dataIndex: 'totalFee',
+          key: 'totalFee',
           width:'8%',
           render: text => (
               <div>
@@ -269,6 +306,7 @@ export default class SupplierOrder extends React.Component {
         },
         `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
+          // console.log('111', res)
           res.supplierTradesList2.entries.map(
               entry => {
                 const detail = JSON.parse(entry.detail)
@@ -278,14 +316,9 @@ export default class SupplierOrder extends React.Component {
                   pic:detail.full_order_info.orders[0].pic_path,
                   title:detail.full_order_info.orders[0].title
                 }
-                entry.tid = detail.full_order_info.order_info.tid
                 entry.price = detail.full_order_info.orders[0].price + '(' + detail.full_order_info.orders[0].num
-                entry.createdAt = detail.full_order_info.order_info.created
-                entry.money = detail.full_order_info.pay_info.total_fee
                 entry.buyerName = detail.full_order_info.buyer_info.fans_nickname
-                entry.buyerPhone = detail.full_order_info.buyer_info.buyer_phone
                 entry.postFee = detail.full_order_info.pay_info.post_fee
-
               }
           )
           console.log('222', res)
@@ -295,6 +328,43 @@ export default class SupplierOrder extends React.Component {
           })
         }
     ).catch( err => Request.token_auth(err) )
+  }
+
+  queryOrderByTid = tid => {
+    if(tid !== ''){
+      this.setState({
+        isSpin1:true
+      })
+      Request.GraphQlRequest(searchTradeByTid,
+          { tid },
+          `Bearer ${localStorage.getItem('accessToken')}`).then(
+          res => {
+            const detail = JSON.parse(res.searchTradeByTid.detail)
+            let obj = Object.assign({},res.searchTradeByTid)
+            res.entries= []
+            res.entries.push(obj)
+            res.entries[0].key = UUIDGen.uuid(8,10);
+            res.entries[0].prod = {
+              pic:detail.full_order_info.orders[0].pic_path,
+              title:detail.full_order_info.orders[0].title
+            }
+            res.entries[0].price = detail.full_order_info.orders[0].price + '(' + detail.full_order_info.orders[0].num
+            res.entries[0].buyerName = detail.full_order_info.buyer_info.fans_nickname
+            res.entries[0].postFee = detail.full_order_info.pay_info.post_fee
+            res.totalEntries =1
+            delete res.searchTradeByTid
+            console.log('aaa', res)
+            this.setState({
+              orderData:res,
+              isSpin1:false,
+              tid:''
+            })
+          }
+      ).catch( err => Request.token_auth(err) )
+    }else{
+      message.error('请输入订单号')
+    }
+
   }
 
   queryRefundID = tid => {
@@ -326,7 +396,7 @@ export default class SupplierOrder extends React.Component {
 
 
   showDetails = data => {
-    // console.log('data',data)
+    // console.log('detailInfo',data)
     this.setState({
       detailInfo:data,
       detailVisible:true
@@ -425,6 +495,17 @@ export default class SupplierOrder extends React.Component {
     })
   }
 
+  handleSearchChange = e => {
+    console.log('tid',e.target.value)
+    this.setState({
+      tid:e.target.value
+    })
+  }
+
+  searchOrder = tid => {
+    this.queryOrderByTid(tid)
+  }
+
 
   render() {
     const detailInfo = this.state.detailInfo && JSON.parse(this.state.detailInfo.detail).full_order_info
@@ -443,6 +524,14 @@ export default class SupplierOrder extends React.Component {
                 </Radio.Group>
             </div>
             <div style={{ textAlign:"right", marginBottom:"10px"}}>
+              <Search
+                  placeholder="输入订单号"
+                  onSearch={value => this.searchOrder(value)}
+                  style={{ width: 200 }}
+                  value={this.state.tid}
+                  onChange={this.handleSearchChange}
+              />
+              {' '}
               <Button type="primary" onClick={this.refresh} style={{ marginRight:"5px"}}><Icon type="reload" theme="outlined" />刷新</Button>
             </div>
             <Spin spinning={isSpin1}>
@@ -463,7 +552,7 @@ export default class SupplierOrder extends React.Component {
                 <p><strong>手机号：</strong>{ detailInfo.address_info.receiver_tel }</p>
                 <br/>
                 <h2>订单信息：</h2>
-                <p><strong>订单号：</strong>{ this.state.detailInfo.prod.tid}</p>
+                <p><strong>订单号：</strong>{ this.state.detailInfo.tid}</p>
                 <p><strong>商品名称：</strong>{ this.state.detailInfo.prod.title }</p>
                 <p><strong>商品单价/数量：</strong>{ '¥' + this.state.detailInfo.price + '件)'}</p>
                 <p><strong>邮费：</strong>{ '¥'+detailInfo.pay_info.post_fee }</p>

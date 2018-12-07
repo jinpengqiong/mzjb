@@ -48,6 +48,16 @@ const tagProducts = `
         }
       }
 `;
+
+const getYouxuanProduct = `
+    query ($shopId: ID!, $itemId: String!) {
+        getYouxuanProduct(shopId:$shopId, itemId:$itemId){
+            item{
+              quantity
+            }
+        }
+      }
+`;
 const UpdateProduct = `
   mutation (
       $id:ID!,$baseinfo:ProductBaseinfo!, $shopId: Int!, $youzan:ProductYouzanArgs, $type: ProductType!
@@ -238,6 +248,7 @@ export default class ProdTable extends React.Component {
             }
         ]
     }
+    this.updateProduct = this.updateProduct.bind(this)
   }
 
   componentDidMount(){
@@ -264,7 +275,7 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            // console.log('111', res)
+            console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -289,7 +300,7 @@ export default class ProdTable extends React.Component {
                     message.error(err);
                     return
                 }else{
-                    // console.log('1112', values);
+                    console.log('1112', values);
                     if(!this.props.store.mainImage){
                         message.error('请先上传图片，再提交！')
                         return
@@ -342,11 +353,13 @@ export default class ProdTable extends React.Component {
                 values.mainImage = this.props.store.mainImage;
                 values.price = parseInt(parseFloat(values.price)*100);
                 values.isDisplay = true;
+                const quantity = parseInt(values.quantity)
+                delete values.quantity
                 if(this.props.store.richTextContent){
                     values.desc = this.props.store.richTextContent;
                 }
                 Request.GraphQlRequest(addProduct,
-                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity:1000}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                     (res)=>{
                         // console.log('res', res);
                         // this.refs.form1.resetFields();
@@ -374,6 +387,7 @@ export default class ProdTable extends React.Component {
                 if (err) {
                     message.error(err);
                 } else {
+                  console.log('ssss', values)
                     values.mainImage = this.props.store.mainImage? this.props.store.mainImage : this.props.store.productFieldsData.mainImage;
                     values.price = parseInt(parseFloat(values.price) * 100);
                     if(this.props.store.richTextContent){
@@ -385,6 +399,13 @@ export default class ProdTable extends React.Component {
                           message.error('请输入正确的价格！')
                           return
                         }
+                        let quantity
+                        try{
+                          quantity = parseInt(values.quantity)
+                          delete values.quantity
+                        }catch(e){
+                          console.log(e)
+                        }
                         Request.GraphQlRequest(UpdateProduct,
                             {
                                 baseinfo: values,
@@ -393,12 +414,11 @@ export default class ProdTable extends React.Component {
                                 type:this.props.store.prodType,
                                 youzan:{
                                     itemId: this.props.store.productFieldsData.itemId? parseInt(this.props.store.productFieldsData.itemId):null,
-                                    imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId
+                                    imageIds:this.props.store.imageId === ''? undefined: this.props.store.imageId,
+                                    quantity
                                 }
                             }, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                            (res) => {
-                                // console.log('res', res);
-                                // this.refs.form.resetFields();
+                            res => {
                                 res.updateProduct.key = res.updateProduct.id;
                                 delete res.updateProduct.imagesUrls;
                                 delete res.updateProduct.images;
@@ -505,7 +525,7 @@ export default class ProdTable extends React.Component {
     }
 
   //updateProduct
-  updateProduct = ( ID, type ) => {
+  async updateProduct( ID, type ){
       const fieldData = this.state.data.filter(
           entry =>{
               if(parseInt(entry.id) === ID){
@@ -513,20 +533,41 @@ export default class ProdTable extends React.Component {
               }
           }
       );
+      console.log('fieldData', fieldData)
       if(type ==='自有商品'){
           this.props.store.getProdType('YOUZAN')
+          let quantity = await this.queryYouzanQuantity(fieldData[0].itemId)
+          console.log('quantity', quantity)
+          if(quantity){
+            fieldData[0].quantity = quantity
+          }
+          // console.log('fieldData', fieldData)
+          this.props.store.getProductFieldsData(fieldData[0])
       }else if(type ==='优选商品'){
           this.props.store.getProdType('YOUXUAN')
+          this.props.store.getProductFieldsData(fieldData[0])
       }else if(type ==='外链商品'){
           this.props.store.getProdType('LINK')
+        this.props.store.getProductFieldsData(fieldData[0])
       }
-      this.props.store.getProductFieldsData(fieldData[0])
+
       this.setState({
           visible: true,
           productID:ID,
           modalName:"更新商品",
       });
   }
+
+  queryYouzanQuantity = itemId => {
+    return Request.GraphQlRequest(getYouxuanProduct,
+        { itemId, shopId: localStorage.getItem('shopID') }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        res => {
+          console.log('id', res)
+          return  res.getYouxuanProduct.item.quantity
+        }
+    ).catch(err=>{ Request.token_auth(err) })
+  }
+
 
   handleChange = key => {
     // console.log('key', key)
