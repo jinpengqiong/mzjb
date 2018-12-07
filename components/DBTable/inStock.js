@@ -357,9 +357,9 @@ export default class InStock extends React.Component {
                         res.createProduct.mainImage = this.props.store.mainImage;
                         res.createProduct.key = res.createProduct.id;
                         this.queryProdData(1);
-                        // document.getElementById('ossfile3').innerHTML = '';
                         this.setState({
-                            visible: false
+                            visible: false,
+                            modalName:null
                         });
                         this.props.store.getMainImage('')
                         this.props.store.getimageId('')
@@ -370,7 +370,13 @@ export default class InStock extends React.Component {
                             duration: 3,
                         });
                     }
-                ).catch(err=>{message.error('新增失败！'); Request.token_auth(err)})
+                ).catch(err=>{
+                  message.error('新增失败！');
+                  this.setState({
+                    visible: false,
+                    modalName:null
+                  });
+                  Request.token_auth(err)})
               }
             })
         }else if(this.state.modalName ==='更新商品') {
@@ -427,6 +433,10 @@ export default class InStock extends React.Component {
                             }
                         ).catch(err=>{
                           message.error('更新失败！');
+                          this.setState({
+                            visible: false,
+                            modalName:null
+                          });
                           this.props.store.getProductFieldsData(null);
                           Request.token_auth(err)
                         })
@@ -466,6 +476,10 @@ export default class InStock extends React.Component {
                         ).catch(err=>{
                           message.error('更新失败！')
                           this.props.store.getProductFieldsData(null);
+                          this.setState({
+                            visible: false,
+                            modalName:null
+                          });
                           Request.token_auth(err)
                         })
                     }
