@@ -331,7 +331,15 @@ export default class ProdTable extends React.Component {
                                 duration: 3,
                             });
                         }
-                    ).catch(err => {message.error('新增失败'); Request.token_auth(err)})
+                    ).catch(err => {
+                      message.error('新增失败！');
+                      this.setState({
+                        visible: false,
+                        modalName:null
+                      });
+                      this.props.store.getProdType(null)
+                      Request.token_auth(err)
+                    })
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
@@ -379,7 +387,15 @@ export default class ProdTable extends React.Component {
                             duration: 3,
                         });
                     }
-                ).catch(err=>{message.error('新增失败！'); Request.token_auth(err)})
+                ).catch(err=>{
+                  message.error('新增失败！');
+                  this.setState({
+                    visible: false,
+                    modalName:null
+                  });
+                  this.props.store.getProdType(null)
+                  Request.token_auth(err)
+                })
               }
             })
         }else if(this.state.modalName ==='更新商品') {
@@ -437,9 +453,15 @@ export default class ProdTable extends React.Component {
                                 });
                             }
                         ).catch(
-                            err=>{message.error('更新失败！');
-                            this.props.store.getProductFieldsData(null)
-                            Request.token_auth(err)
+                            err=>{
+                              message.error('更新失败！');
+                              this.setState({
+                                visible: false,
+                                modalName:null
+                              });
+                              this.props.store.getProdType(null)
+                              this.props.store.getProductFieldsData(null);
+                              Request.token_auth(err)
                           })
                     }else{
                         if(!priceRegEx.exec(values.price)){
@@ -477,9 +499,15 @@ export default class ProdTable extends React.Component {
                                 });
                             }
                         ).catch(
-                            err=>{message.error('更新失败！');
-                            this.props.store.getProductFieldsData(null)
-                            Request.token_auth(err)
+                            err=>{
+                              message.error('更新失败！')
+                              this.props.store.getProductFieldsData(null);
+                              this.props.store.getProdType(null)
+                              this.setState({
+                                visible: false,
+                                modalName:null
+                              });
+                              Request.token_auth(err)
                           })
                     }
 
@@ -518,10 +546,11 @@ export default class ProdTable extends React.Component {
 
 
   onClickInsert = () => {
-        this.setState({
-            visible: true,
-            modalName:"新增商品"
-        });
+      this.setState({
+          visible: true,
+          modalName:"新增商品"
+      });
+      this.props.store.getProdType('LINK')
     }
 
   //updateProduct

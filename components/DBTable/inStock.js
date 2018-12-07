@@ -251,7 +251,15 @@ export default class InStock extends React.Component {
         this.setState({
           isSpin:true
         });
-        Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(
+            queryProducts,
+            {
+              page:curPage,
+              pageSize: 8,
+              shopId: localStorage.getItem('shopID'),
+              isDisplay:false
+            }, `Bearer ${localStorage.getItem('accessToken')}`
+        ).then(
             res => {
                 res.shopProducts.entries.map(
                     entry => {
@@ -306,7 +314,14 @@ export default class InStock extends React.Component {
                     values.mainImage = this.props.store.mainImage;
                     values.price = parseInt(parseFloat(values.price)*100);
                     values.isDisplay = false;
-                    Request.GraphQlRequest(addProduct, { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'LINK' }, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    Request.GraphQlRequest(
+                        addProduct,
+                        {
+                          baseinfo: values,
+                          shopId: localStorage.getItem('shopID'),
+                          type: 'LINK'
+                        }, `Bearer ${localStorage.getItem('accessToken')}`
+                    ).then(
                         res => {
                             res.createProduct.mainImage = this.props.store.mainImage;
                             res.createProduct.key = res.createProduct.id;
@@ -322,7 +337,14 @@ export default class InStock extends React.Component {
                                 duration: 3,
                             });
                         }
-                    ).catch(err=>{message.error('新增失败！'); Request.token_auth(err)})
+                    ).catch(err=>{
+                      message.error('新增失败！');
+                      this.setState({
+                        visible: false,
+                        modalName:null
+                      });
+                      this.props.store.getProdType(null)
+                      Request.token_auth(err)})
                 }
             })
         }else if(this.props.store.TabOption === '2' && this.state.modalName ==='新增商品'){
@@ -350,7 +372,16 @@ export default class InStock extends React.Component {
                     values.desc = this.props.store.richTextContent;
                 }
                 Request.GraphQlRequest(addProduct,
-                    { baseinfo: values, shopId: localStorage.getItem('shopID'), type: 'YOUZAN' ,youzan: { imageIds: this.props.store.imageId, quantity}}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+                    {
+                      baseinfo: values,
+                      shopId: localStorage.getItem('shopID'),
+                      type: 'YOUZAN' ,
+                      youzan: {
+                        imageIds: this.props.store.imageId,
+                        quantity
+                      }
+                    }, `Bearer ${localStorage.getItem('accessToken')}`
+                ).then(
                     res =>{
                         // console.log('res', res);
                         // this.refs.form1.resetFields();
@@ -376,6 +407,7 @@ export default class InStock extends React.Component {
                     visible: false,
                     modalName:null
                   });
+                  this.props.store.getProdType(null)
                   Request.token_auth(err)})
               }
             })
@@ -437,6 +469,7 @@ export default class InStock extends React.Component {
                             visible: false,
                             modalName:null
                           });
+                          this.props.store.getProdType(null)
                           this.props.store.getProductFieldsData(null);
                           Request.token_auth(err)
                         })
@@ -476,6 +509,7 @@ export default class InStock extends React.Component {
                         ).catch(err=>{
                           message.error('更新失败！')
                           this.props.store.getProductFieldsData(null);
+                          this.props.store.getProdType(null)
                           this.setState({
                             visible: false,
                             modalName:null
@@ -520,10 +554,11 @@ export default class InStock extends React.Component {
 
 
     onClickInsert = () => {
-        this.setState({
-            visible: true,
-            modalName:"新增商品"
-        });
+      this.setState({
+          visible: true,
+          modalName:"新增商品"
+      });
+      this.props.store.getProdType('LINK')
     }
 
     //updateProduct
@@ -574,7 +609,14 @@ export default class InStock extends React.Component {
       if(key==='-1'){
         this.queryProdData(1);
       }else{
-        Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:false}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(
+            tagProducts,
+            {
+              shopId: localStorage.getItem('shopID'),
+              tagId:key, isDisplay:false
+            },
+            `Bearer ${localStorage.getItem('accessToken')}`
+        ).then(
             res => {
                 // console.log('111', res)
                 res.tagProducts.products.map(
@@ -642,8 +684,16 @@ export default class InStock extends React.Component {
 
     handleGroupModalOk = () => {
         if(this.state.radioValue){
-            Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-                (res) => {
+            Request.GraphQlRequest(
+                changeProductTag,
+                {
+                  id:this.state.productID,
+                  shopId: localStorage.getItem('shopID'),
+                  tagId:this.state.radioValue
+                },
+                `Bearer ${localStorage.getItem('accessToken')}`
+            ).then(
+                res => {
                     // console.log('OK', res)
                     this.setState({
                         radioValue: null,

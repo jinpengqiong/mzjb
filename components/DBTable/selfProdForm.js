@@ -80,7 +80,7 @@ class RegistrationForm extends React.Component {
           )}
         </FormItem>
           {
-              this.props.store.prodType !== 'YOUZAN'
+              this.props.store.prodType === 'LINK'
               &&
               <FormItem
                   {...formItemLayout}
