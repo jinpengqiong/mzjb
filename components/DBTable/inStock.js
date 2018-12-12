@@ -579,6 +579,7 @@ export default class InStock extends React.Component {
           }
           // console.log('fieldData', fieldData)
           this.props.store.getProductFieldsData(fieldData[0])
+          this.props.store.getMainImage(fieldData[0].mainImage)
         }else if(type ==='优选商品'){
           this.props.store.getProdType('YOUXUAN')
           this.props.store.getProductFieldsData(fieldData[0])

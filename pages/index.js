@@ -49,7 +49,7 @@ export default class MainPage extends React.Component {
             this.setState({
                 loading:false
             })
-            if(localStorage.getItem('group') == '1'){
+            if(localStorage.getItem('group') ==='1'){
               this.setState({
                 isShown:true
               })

@@ -94,7 +94,8 @@ export default class UserList extends React.Component {
             )
             console.log('res', res)
             this.setState({
-                data: res.allUsers
+                data: res.allUsers,
+                phoneNumber:''
             })
         }
       ).catch(err => Request.token_auth(err))
@@ -120,9 +121,6 @@ export default class UserList extends React.Component {
   }
 
   refresh = () => {
-    this.setState({
-      phoneNumber:''
-    })
     this.queryUserData(1);
   }
 
@@ -150,7 +148,11 @@ export default class UserList extends React.Component {
             data: res
           })
         }
-    ).catch( err => Request.token_auth(err) )
+    ).catch( err => {
+      message.info('查无此人')
+      this.queryUserData(1);
+      Request.token_auth(err)
+    } )
   }
 
   searchUser = value => {

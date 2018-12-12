@@ -30,8 +30,7 @@ class RegistrationForm extends React.Component {
                 md: { span: 19 },
             },
         };
-
-
+      console.log('props', this.props);
         return (
             <Form>
                 <FormItem
@@ -82,15 +81,6 @@ class RegistrationForm extends React.Component {
                     )}
                 </FormItem>
 
-                <FormItem
-                    {...formItemLayout}
-                    label="库存"
-                >
-                  {getFieldDecorator('quantity')(
-                      <Input/>
-                  )}
-                </FormItem>
-
                 {
                     this.props.updateState !== '更新商品'
                     &&
@@ -111,6 +101,14 @@ class RegistrationForm extends React.Component {
                 }
                 <FormItem
                     {...formItemLayout}
+                    label="库存"
+                >
+                  {getFieldDecorator('quantity')(
+                      <Input/>
+                  )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
                     label="详情"
                 >
                     {getFieldDecorator('detail_Info')(
@@ -125,7 +123,6 @@ class RegistrationForm extends React.Component {
 const YouzanProdForm = Form.create(
     {
         mapPropsToFields(props) {
-            // console.log('props', props);
             if (props.productData) {
                 return {
                     title: Form.createFormField({

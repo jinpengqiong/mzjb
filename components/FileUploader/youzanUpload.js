@@ -21,7 +21,7 @@ class YouzanUploader extends React.Component {
     this.state = {
       fileList: [],
       uploading: false,
-      fileUrls: [],
+      fileUrls: '',
       upload_confirming: true,
       data: {},
       value: 1
@@ -30,6 +30,10 @@ class YouzanUploader extends React.Component {
   componentDidMount() {
     this.getOSSPolicy();
     this.getUploaded();
+  }
+
+  componentWillReceiveProps(nextProps){
+
   }
 
   getOSSPolicy() {
@@ -92,7 +96,7 @@ class YouzanUploader extends React.Component {
       filters : {
         max_file_size : '5mb',
         mime_types: [
-          {title : "Image files", extensions : "jpg,gif,png,bmp,jpeg"},
+          {title : "Image files", extensions : "jpg,jpeg,gif,png,bmp"},
         ]
       },
       init: {
@@ -116,16 +120,21 @@ class YouzanUploader extends React.Component {
           if (info.status === 200){
               const shopId = localStorage.getItem('shopID');
               const url = self.state.data.host + '/' + file._options.multipart_params.key;
-              Request.GraphQlRequest(createMediaAndUploadYouzan, { shopId, type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+              Request.GraphQlRequest(
+                  createMediaAndUploadYouzan,
+                  {
+                    shopId,
+                    type:'PIC',
+                    url
+                  },
+                  `Bearer ${localStorage.getItem('accessToken')}`
+              ).then(
                 res => {
                     // console.log('res',res)
                     self.props.store.getMainImage(url);
                     const imageId = res.createMediaAndUploadYouzan.imageId;
                     self.props.store.getimageId(imageId);
                     message.success('上传成功！');
-                    self.setState({
-                      fileUrl:url
-                    })
                   }
               ).catch(err=>{message.error('上传失败，请联系管理员！'); Request.token_auth(err)})
           }
@@ -138,15 +147,14 @@ class YouzanUploader extends React.Component {
     });
     uploader.init();
   }
-
-
+  
   render() {
     return (
         <div id="container">
           <div id='selectfiles3'>
             {
-              this.state.fileUrl?
-                  <img src={this.state.fileUrl} alt="#" style={{ width:'120px'}}/>
+              this.props.store.mainImage?
+                  <img src={this.props.store.mainImage} alt="#" style={{ width:'120px'}}/>
                   :
                   <Button  href="javascript:void(0);" style={{ marginRight: "10px"}}>
                     <Icon type="upload" />上传文件
