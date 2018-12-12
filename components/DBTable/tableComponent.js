@@ -684,7 +684,8 @@ export default class ProdTable extends React.Component {
                 this.setState({
                     radioValue: null,
                     groupModalVisible:false,
-                    productID:''
+                    productID:'',
+                    optionKey:'-1'
                 });
                 message.success('添加成功！')
                 this.queryProdData(1);

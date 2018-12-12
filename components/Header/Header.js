@@ -36,6 +36,7 @@ const manageShops = `
             id
             name
             phone
+            yzphone
             staffs{
             id
             name
@@ -106,7 +107,7 @@ export default class MyHeader extends React.Component {
     };
     Request.GraphQlRequest(queryShops, variables, `Bearer ${localStorage.getItem('accessToken')}`).then(
         res => {
-          // console.log('queryShops',res);
+          console.log('queryShops',res);
           // console.log('localStorage',localStorage.getItem('shopID'));
           if( !localStorage.getItem('shopID')
                 ||
@@ -197,9 +198,9 @@ export default class MyHeader extends React.Component {
             }
           }
       )
-      // console.log('i', i)
+      console.log('i', i)
       localStorage.setItem('shopID', parseInt(this.state.radioValue))
-      localStorage.setItem('phone', this.state.shopsData[i].name.split('_')[1])
+      localStorage.setItem('phone', this.state.shopsData[i].yzphone)
       localStorage.setItem('managedShop', this.state.shopsData[i].name)
       this.setState({
         curShopName: this.state.shopsData[i].name + '(管理)'
