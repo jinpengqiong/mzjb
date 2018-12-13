@@ -25,6 +25,7 @@ const queryProducts = `
             itemId
             tags{
               id
+              name
             }
           }
         }
@@ -184,6 +185,13 @@ export default class InStock extends React.Component {
                     title: '商品类型',
                     dataType: 'varchar',
                     width: 100,
+                },
+                {
+                  dataIndex: 'tags',
+                  title: '所属分组',
+                  dataType: 'varchar',
+                  width: 100,
+                  render: text => isEmpty(text)? '暂无' : text[0].name,
                 },
                 {
                   title: '操作',
@@ -589,6 +597,7 @@ export default class InStock extends React.Component {
         }else if(type ==='外链商品'){
           this.props.store.getProdType('LINK')
           this.props.store.getProductFieldsData(fieldData[0])
+          this.props.store.getMainImage(fieldData[0].mainImage)
         }
         this.setState({
             visible: true,

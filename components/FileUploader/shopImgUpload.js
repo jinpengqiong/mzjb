@@ -17,7 +17,6 @@ class ShopImgUploader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fileUrl: null,
             uploading: false,
             data: {},
             value: 1,
@@ -112,12 +111,10 @@ class ShopImgUploader extends React.Component {
                 FileUploaded: function(up, file, info) {
                     if (info.status === 200){
                         const url = self.state.data.host + '/' + file._options.multipart_params.key;
-                        self.props.store.getMainImage(url);
+
                         Request.GraphQlRequest(createMediaID, { shopId:localStorage.getItem('shopID'), type:'PIC', url}, `Bearer ${localStorage.getItem('accessToken')}`).then(
                             res => {
-                                  self.setState({
-                                    fileUrl:url
-                                  })
+                                self.props.store.getMainImage(url);
                                 message.success('上传成功');
                             }
                         ).catch(err => Request.token_auth(err))
@@ -138,8 +135,8 @@ class ShopImgUploader extends React.Component {
                 <div id="container">
                      <div id='selectFiles'>
                        {
-                         this.state.fileUrl?
-                             <img src={this.state.fileUrl} alt="#" style={{ width:'120px'}}/>
+                         this.props.store.mainImage?
+                             <img src={this.props.store.mainImage} alt="#" style={{ width:'120px'}}/>
                              :
                              <Button  href="javascript:void(0);" style={{ marginRight: "10px"}}>
                                <Icon type="upload" />上传文件

@@ -29,6 +29,7 @@ const queryProducts = `
             itemId
             tags{
               id
+              name
             }
           }
         }
@@ -192,6 +193,13 @@ export default class ProdTable extends React.Component {
                 title: '商品类型',
                 dataType: 'varchar',
                 width: 100,
+            },
+            {
+                dataIndex: 'tags',
+                title: '所属分组',
+                dataType: 'varchar',
+                width: 100,
+                render: text => isEmpty(text)? '暂无' : text[0].name,
             },
             {
                 title: '操作',
@@ -582,6 +590,7 @@ export default class ProdTable extends React.Component {
       }else if(type ==='外链商品'){
           this.props.store.getProdType('LINK')
           this.props.store.getProductFieldsData(fieldData[0])
+          this.props.store.getMainImage(fieldData[0].mainImage)
       }
 
       this.setState({
@@ -683,7 +692,14 @@ export default class ProdTable extends React.Component {
 
   handleGroupModalOk = () => {
     if(this.state.radioValue){
-        Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
+        Request.GraphQlRequest(
+            changeProductTag,
+            {
+              id:this.state.productID,
+              shopId: localStorage.getItem('shopID'),
+              tagId:this.state.radioValue
+            }, `Bearer ${localStorage.getItem('accessToken')}`
+        ).then(
             res => {
                 this.setState({
                     radioValue: null,

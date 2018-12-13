@@ -43,28 +43,24 @@ class RegistrationForm extends React.Component {
             <Input/>
           )}
         </FormItem>
-        {
-          this.props.updateState !== '更新商品'
-          &&
-          <FormItem
-            {...formItemLayout}
-            label={
-              <div style={{ display:'inline-block'}}>
-                <span style={{ color:'red'}}>*</span>
-                <span>{' '}商品图</span>
-              </div>
+        <FormItem
+          {...formItemLayout}
+          label={
+            <div style={{ display:'inline-block'}}>
+              <span style={{ color:'red'}}>*</span>
+              <span>{' '}商品图</span>
+            </div>
+          }
+        >
+          {getFieldDecorator('mainImage', {
+            rules: [{
+              type: 'string', message: '请输入商家名称!',
             }
-          >
-            {getFieldDecorator('mainImage', {
-              rules: [{
-                type: 'string', message: '请输入商家名称!',
-              }
-            ],
-            })(
-              <ShopImgUploader />
-            )}
-          </FormItem>
-        }
+          ],
+          })(
+            <ShopImgUploader />
+          )}
+        </FormItem>
         <FormItem
           {...formItemLayout}
           label="单价"
