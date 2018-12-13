@@ -27,6 +27,9 @@ const queryProducts = `
             detailUrl
             type
             itemId
+            tags{
+              id
+            }
           }
         }
       }
@@ -200,7 +203,7 @@ export default class ProdTable extends React.Component {
                           <a href="#">下架</a>
                         </Popconfirm>
                         <Divider type="vertical" />
-                            <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
+                            <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id), record.tags)}}>加入分组</a>
                       {
                         record.type !== '优选商品'
                           &&
@@ -260,9 +263,10 @@ export default class ProdTable extends React.Component {
       isSpin:true
     });
     Request.GraphQlRequest(queryProducts, {page:curPage, pageSize: 8, shopId: localStorage.getItem('shopID'),isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-        (res) => {
+        res => {
+          console.log('queryProducts', res)
             res.shopProducts.entries.map(
-                (entry) => {
+                entry => {
                     entry.key = entry.id;
                     if(entry.type === 'youxuan'){
                         entry.type ="优选商品"
@@ -275,7 +279,6 @@ export default class ProdTable extends React.Component {
                     }
                 }
             )
-            console.log('111', res)
             this.props.store.getProductData(res.shopProducts.entries);
             this.setState({
                 data: res.shopProducts.entries,
@@ -654,10 +657,12 @@ export default class ProdTable extends React.Component {
 
 
   //add to group
-  changeProductTag = ID => {
+  changeProductTag = (ID,tagId) => {
+    console.log('222', tagId)
       this.setState({
           productID:ID,
-          groupModalVisible:true
+          groupModalVisible:true,
+          radioValue: isEmpty(tagId)? null : tagId[0].id
       })
   }
 
@@ -680,7 +685,6 @@ export default class ProdTable extends React.Component {
     if(this.state.radioValue){
         Request.GraphQlRequest(changeProductTag, {id:this.state.productID, shopId: localStorage.getItem('shopID'), tagId:this.state.radioValue}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             res => {
-                // console.log('OK', res)
                 this.setState({
                     radioValue: null,
                     groupModalVisible:false,

@@ -23,6 +23,9 @@ const queryProducts = `
             detailUrl
             type
             itemId
+            tags{
+              id
+            }
           }
         }
       }
@@ -192,7 +195,7 @@ export default class InStock extends React.Component {
                           <a href="#">上架</a>
                         </Popconfirm>
                         <Divider type="vertical" />
-                        <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id))}}>加入分组</a>
+                        <a href="#" onClick={ ()=>{this.changeProductTag(parseInt(record.id), record.tags)}}>加入分组</a>
                         {
                           record.type !== '优选商品'
                           &&
@@ -661,11 +664,12 @@ export default class InStock extends React.Component {
 
 
     //add to group
-    changeProductTag = ID => {
+    changeProductTag = (ID, tagId) => {
         // console.log('ID',ID)
         this.setState({
             productID:ID,
-            groupModalVisible:true
+            groupModalVisible:true,
+            radioValue:isEmpty(tagId)? null : tagId[0].id
         })
     }
 

@@ -65,7 +65,7 @@ export default class Products extends React.Component {
     queryTags = () =>{
         Request.GraphQlRequest(shopTags, {shopId: localStorage.getItem('shopID')}, `Bearer ${localStorage.getItem('accessToken')}`).then(
             (res) => {
-                // console.log('tagData', res)
+                console.log('tagData', res)
                 this.setState({
                     tagData: res.shopTags
                 })
