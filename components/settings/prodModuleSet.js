@@ -176,7 +176,6 @@ export default class ProdModuleSet extends React.Component {
                             退出编辑
                         </Button>
                     </Popconfirm>
-
                 </div>
             </div>
         );
@@ -224,8 +223,6 @@ export default class ProdModuleSet extends React.Component {
                             detail: this.props.store.moduleValue
                         }, `Bearer ${localStorage.getItem('accessToken')}`).then(
                         (res) => {
-                            // console.log('createShoppage', res)
-                            // submit this.state.value to server
                             this.props.store.changeSettingDisplay();
                             this.props.refeshTable();
                             this.props.store.getModuleType(null);

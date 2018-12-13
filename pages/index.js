@@ -85,27 +85,18 @@ export default class MainPage extends React.Component {
       ).catch( err => Request.token_auth(err))
     }
 
-    onChange = (activeKey) => {
-      console.log('activeKey',activeKey)
+    onChange = activeKey => {
         this.store.changeKey(activeKey)
-        if(activeKey !== '0'){
-          const tagId = this.store.tagListData.find(
-              value => {
-                const tag = this.store.categories.find(
-                    item => {
-                      if(item.id === activeKey){
-                        return item
-                      }
-                    })
-                if(tag.name === value.name){
-                  return value
-                }
-              }
-          )
+        if(activeKey !== '0' && activeKey !=='-1'){
+          const tag = this.store.categories.find(item => item.id === activeKey)
+          console.log('tag',tag)
+          const tagId = this.store.tagListData.find(value =>  value.name === tag.name )
           this.setState({
             tagId:tagId.id
           })
         }
+
+
     }
 
     onRadioChange = (e) => {
