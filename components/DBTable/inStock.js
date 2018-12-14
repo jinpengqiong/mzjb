@@ -43,6 +43,10 @@ const tagProducts = `
                 desc
                 detailUrl
                 type
+                tags{
+                  id
+                  name
+                }
             }
             totalCount
         }

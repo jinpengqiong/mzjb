@@ -47,6 +47,10 @@ const tagProducts = `
                 desc
                 detailUrl
                 type
+                tags{
+                  id
+                  name
+                }
             }
             totalCount
         }
@@ -619,9 +623,9 @@ export default class ProdTable extends React.Component {
     }else{
       Request.GraphQlRequest(tagProducts, {shopId: localStorage.getItem('shopID'), tagId:key, isDisplay:true}, `Bearer ${localStorage.getItem('accessToken')}`).then(
           res => {
-              console.log('111', res)
+              console.log('tagProducts', res)
               res.tagProducts.products.map(
-                  (prod) => {
+                  prod => {
                       prod.key = prod.id;
                       if(prod.type === 'youxuan'){
                           prod.type ="优选商品"

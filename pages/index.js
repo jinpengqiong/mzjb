@@ -95,8 +95,6 @@ export default class MainPage extends React.Component {
             tagId:tagId.id
           })
         }
-
-
     }
 
     onRadioChange = (e) => {
