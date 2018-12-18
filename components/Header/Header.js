@@ -322,7 +322,7 @@ export default class MyHeader extends React.Component {
                     </Menu.Item>
                   }
 
-                    <SubMenu title={<span>{ '您好，'+ localStorage.getItem('nickname')}</span>}>
+                    <SubMenu title={<span>{ localStorage.getItem('nickname')? '您好，'+ localStorage.getItem('nickname') : ''}</span>}>
                         <Menu.Item key="1" >
                           {
                             <span onClick={this.setPassword} style={{ display: 'block',width:"130px", textAlign:"center"}}>

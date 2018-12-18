@@ -146,6 +146,7 @@ export default class OrderManagement2 extends React.Component {
                 title: '商品类型',
                 dataIndex: 'supplierName',
                 key: 'supplierName',
+                width:'8%',
                 render: text => (
                     <span>{ text? '优选商品' : '自有商品'}</span>
                 ),

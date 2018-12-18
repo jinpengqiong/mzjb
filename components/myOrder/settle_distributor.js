@@ -71,6 +71,7 @@ const columns = [
         title: '总额',
         dataIndex: 'totalFee',
         key: 'totalFee',
+        width:'8%',
         render: text => (
             <div>
               { '¥'+(parseFloat(text)/100).toFixed(2) }

@@ -199,11 +199,11 @@ export default class ChooseProducts extends React.Component {
         const youzanPROD = this.state.data && this.state.data.items.map(
             item => {
                 return (
-                    <div className='card_entity' style={{ margin:'0px 10px 20px 10px'}} key={item.itemId}>
+                    <div className='card_entity' style={{ margin:'0px 10px 10px 10px'}} key={item.itemId}>
                         <Card
                             key={item.itemId}
-                            style={{ width: '220px', height: '320px' }}
-                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'218px'}}/>}
+                            style={{ width: '200px', height: '280px' }}
+                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'198px'}}/>}
                         >
                             <Meta
                                 title={item.title}
@@ -251,9 +251,9 @@ export default class ChooseProducts extends React.Component {
                     .ant-carousel .slick-slide h3 {
                       color: #fff;
                     }
-                    .card_entity{ float: left; width: 220px; height: 320px;position: relative; overflow: hidden; }
+                    .card_entity{ float: left; width: 220px; height: 280px;position: relative; overflow: hidden; }
                     .cover Button { margin: 30px auto; }
-                    .cover { width: 220px; height: 320px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transition:all 0.5s ease 0s; -webkit-transition:all 0.5s ease 0s; -moz-transition:all 0.5s ease 0s;transform:translateY(320px); -webkit-transform:translateY(320px); -moz-transform:translateY(320px);}
+                    .cover { width: 200px; height: 280px; background: rgba(224, 226, 229, 0.7); position: absolute; left: 0px; top: 0px; text-align: center; color: #ffffff; transition:all 0.5s ease 0s; -webkit-transition:all 0.5s ease 0s; -moz-transition:all 0.5s ease 0s;transform:translateY(280px); -webkit-transform:translateY(280px); -moz-transform:translateY(280px);}
                     .cover p { margin-top: 10px; font-size: 14px; }
                     .card_entity:hover .cover { transform:translateY(0px); -webkit-transform:translateY(0px); -moz-transform:translateY(0px)}
                     `
