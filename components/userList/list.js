@@ -178,9 +178,10 @@ export default class UserList extends React.Component {
             (this.state.data && this.state.data.totalEntries !==0)
             &&
             <Pagination 
-            defaultCurrent={1} 
+            defaultCurrent={1}
+            current={this.state.data.pageNumber}
             onChange={this.onChange}
-            total={this.state.data? this.state.data.totalEntries : 1} 
+            total={this.state.data.totalEntries }
             style={{ float: "right", marginTop: "10px"}}/>
             }
         </div>
