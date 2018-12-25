@@ -338,6 +338,8 @@ export default class RefundModal extends React.Component {
 
   render() {
     const { refundPROD, refundInfo, store } = this.props
+    // console.log('refundPROD', refundPROD)
+    // console.log('refundInfo', refundInfo)
     return (
         <div>
           {
@@ -380,7 +382,7 @@ export default class RefundModal extends React.Component {
               </p>
               <p>
                 <strong>买家(手机号)：</strong>
-                <span>{ `${refundPROD.buyerName}(${refundPROD.buyerPhone})` }</span>
+                <span>{ `${refundPROD.buyerName}${refundPROD.buyerPhone? "("+ refundPROD.buyerPhone +")":'(暂无)' }` }</span>
               </p>
               <p>
                 <strong>发货地址：</strong>

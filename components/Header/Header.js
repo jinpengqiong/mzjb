@@ -335,7 +335,7 @@ export default class MyHeader extends React.Component {
                         <Menu.Item key="2" >
                           {
                             <span onClick={this.switchShops} style={{ display: 'block',width:"130px", textAlign:"center"}}>
-                              <Icon type="select" />切换店铺</span>
+                            <Icon type="select" />切换店铺</span>
                           }
                         </Menu.Item>
                       }
