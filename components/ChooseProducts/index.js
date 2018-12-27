@@ -203,7 +203,7 @@ export default class ChooseProducts extends React.Component {
                         <Card
                             key={item.itemId}
                             style={{ width: '200px', height: '280px' }}
-                            cover={<img alt="example" src={item.itemImgs[0].thumbnail} style={{ width:'198px'}}/>}
+                            cover={<img alt="#" src={item.itemImgs[0].thumbnail} style={{ width:'198px',maxHeight:'186px', overflow:'hidden'}}/>}
                         >
                             <Meta
                                 title={item.title}
