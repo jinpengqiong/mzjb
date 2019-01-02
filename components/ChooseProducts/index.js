@@ -211,7 +211,7 @@ export default class ChooseProducts extends React.Component {
                             />
                         </Card>
                         <div className="cover">
-                            <Button onClick={ () => {this.querySpecificPROD(item.itemId)} }>查看详情</Button>
+                            <Button onClick={ () => { this.querySpecificPROD(item.itemId)} }>查看详情</Button>
                             <h4>{item.title}</h4>
                         </div>
                     </div>

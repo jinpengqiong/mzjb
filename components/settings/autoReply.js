@@ -105,7 +105,8 @@ export default class AutoReply extends React.Component {
                     "url": values.url,
                     "picurl": this.props.store.mainImage
                 };
-                this.props.store.addReplyBody(replyBody); 
+                this.props.store.addReplyBody(replyBody);
+                this.props.store.getMainImage('')
                 this.refs.form.resetFields();
                 this.setState({
                     visible:false
@@ -136,7 +137,8 @@ export default class AutoReply extends React.Component {
     }
     //modal cancel action
     handleCancel = () => {
-        this.props.store.clearReplyBody()
+        // this.props.store.clearReplyBody()
+        this.props.store.getMainImage('')
         this.setState({
             visible:false
         })
@@ -145,7 +147,7 @@ export default class AutoReply extends React.Component {
     //delete one autoreply
     confirm = (ID) =>{
         Request.GraphQlRequest(delAutoreply, {shopId:parseInt(localStorage.getItem('shopID')), id:ID}, `Bearer ${localStorage.getItem('accessToken')}`).then(
-            (res) => {
+            res => {
                 // console.log('Autoreply', res)
                 message.success('删除成功！')
                 this.queryAutoReply(1)
@@ -163,6 +165,11 @@ export default class AutoReply extends React.Component {
     onPageChange = (page) => {
         // console.log('page', page)
         this.queryAutoReply(page)
+    }
+
+    reset = () => {
+      this.props.store.clearReplyBody()
+      this.props.store.getMainImage('')
     }
 
     render() {
@@ -358,7 +365,10 @@ export default class AutoReply extends React.Component {
                                 </span>
                             </div>
                         </div>
-                        <Button type='primary' style={{ marginLeft:"100px", marginTop:"15px"}} onClick={this.handleSubmit}>提交</Button>
+                      <div>
+                        <Button type='primary' style={{ marginTop:"15px", marginLeft:'4em'}} onClick={this.handleSubmit}>提交</Button>
+                        <Button type='primary' style={{ marginTop:"15px", marginLeft:'1em'}} onClick={this.reset}>重置</Button>
+                      </div>
                     </Col>
                     <Modal
                         title="设置"
