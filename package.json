@@ -1,5 +1,6 @@
 {
   "name": "mzjb_web",
+  "author":"JinPeng",
   "scripts": {
     "dev": "next",
     "build": "next build && next export && bash deploy_prod.sh",

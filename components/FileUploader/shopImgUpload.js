@@ -77,7 +77,7 @@ class ShopImgUploader extends React.Component {
     }
 
     getUploaded() {
-        let self = this;
+        var self = this;
         var uploader = new plupload.Uploader({
             runtimes: 'html5,flash,silverlight,html4',
             browse_button: 'selectFiles',
@@ -97,7 +97,7 @@ class ShopImgUploader extends React.Component {
                 FilesAdded: function(up, files) {
                   // console.log('files', files)
                     plupload.each(files, function(file) {
-                        self.set_upload_param(up, file.name, true);
+                    self.set_upload_param(up, file.name, true);
                     });
                 },
 

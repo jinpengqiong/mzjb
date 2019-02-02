@@ -14,7 +14,8 @@ const createMediaAndUploadYouzan = `
 `;
 
 
-@inject('store') @observer
+@inject('store') 
+@observer
 class YouzanUploader extends React.Component {
   constructor(props) {
     super(props);

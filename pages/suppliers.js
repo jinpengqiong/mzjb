@@ -15,7 +15,6 @@ export default class Suppliers extends React.Component {
     super(props)
     this.store = initStore(props.isServer)
     this.state = {
-
     }
   }
 
